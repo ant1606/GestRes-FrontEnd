@@ -3,7 +3,8 @@ import TitleContext from '../../Context/TitleContext';
 
 const Dashboard = () => {
 
-  const {title, changeTitle} = useContext(TitleContext);
+  const {changeTitle} = useContext(TitleContext);
+  
   useEffect(()=>{
     changeTitle("Dashboard");
   }, []);

@@ -1,6 +1,24 @@
-import React from "react";
+import {createContext, useState} from "react";
+
+//Uso del context 
+//https://mindsers.blog/post/updating-react-context-from-consumer/
 
 //Creando el context
-const SideBarContext = React.createContext();
+const SideBarContext = createContext();
 
-export default SideBarContext;
+export function SideBarContextProvider({children}){
+
+  const [open, setToggle] = useState(true);
+
+  function toggle() {
+    setToggle(!open);
+  }
+
+  return(
+    <SideBarContext.Provider value={{open, toggle}}>
+      {children}
+    </SideBarContext.Provider>
+  )
+}
+
+export default SideBarContext

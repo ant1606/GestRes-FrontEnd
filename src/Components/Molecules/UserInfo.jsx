@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import SideBarContext from '../../Context/SideBarContext';
 
 const UserInfo = () => {
-  const {open, toggle} = useContext(SideBarContext);
+  const {open } = useContext(SideBarContext);
   return (
     <div className='flex items-center p-4 gap-2.5 text-sm uppercase font-black'>
 

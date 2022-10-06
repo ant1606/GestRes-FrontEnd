@@ -3,7 +3,8 @@ import TitleContext from '../../Context/TitleContext';
 
 const Recursos = () => {
 
-  const {title, changeTitle} = useContext(TitleContext);
+  const {changeTitle} = useContext(TitleContext);
+  
   useEffect(()=>{
     changeTitle("Recursos Educativos");
   }, []);

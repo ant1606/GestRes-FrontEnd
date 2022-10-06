@@ -3,7 +3,8 @@ import TitleContext from '../../Context/TitleContext';
 
 const Etiquetas = () => {
   
-  const {title, changeTitle} = useContext(TitleContext);
+  const {changeTitle} = useContext(TitleContext);
+  
   useEffect(()=>{
     changeTitle("Etiquetas");
   }, []);

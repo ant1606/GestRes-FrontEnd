@@ -3,7 +3,8 @@ import TitleContext from '../../Context/TitleContext';
 
 const Titlebar = () => {
 
-  const {title, changeTitle} = useContext(TitleContext);
+  const {title} = useContext(TitleContext);
+
   return (
     <div className='text-2xl font-semibold h-14 px-6 py-3 shadow-lg'>
       <p>{title}</p>

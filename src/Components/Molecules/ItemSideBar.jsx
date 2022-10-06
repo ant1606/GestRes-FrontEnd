@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import SideBarContext from '../../Context/SideBarContext';
 
 const ItemSideBar = ({title, icon, link, path}) => {
-  const {open, toggle} = useContext(SideBarContext);
+  const {open } = useContext(SideBarContext);
 
   //  ({isActive }) => isActive ? "bg-blue-600" : undefined`}
   return (
