@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const Modal = ({title}) => {
+const Modal = ({title, modalState, handleClickParent}) => {
   const [ toggleModal, setToggleModal ] = useState(false);
 
   const handleClick = (e) =>{
-    // console.log(e.target);
-    setToggleModal(true);
+    setToggleModal(!toggleModal);
+    handleClickParent(!toggleModal);
   }
 
+  useEffect(() => {
+    setToggleModal(modalState)
+  }, []);
+  
   return (
     <>
     {
-      !toggleModal && (
+      toggleModal && (
       <>
         <div className='modal_background_color h-full w-full absolute 
             top-0 left-0 z-40 flex justify-center items-center ' onClick={handleClick}

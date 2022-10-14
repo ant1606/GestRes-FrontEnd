@@ -6,8 +6,6 @@ import RecourseTable from '../../Organisms/RecourseTable';
 import Field from '../../Atoms/Field';
 import Combobox from '../../Atoms/Combobox';
 import { Link } from 'react-router-dom';
-import RecourseForm from '../../Organisms/Recourse/Form';
-import Modal from '../../Molecules/Modal';
 
 const Recursos = () => {
 
@@ -19,7 +17,6 @@ const Recursos = () => {
 
   return (
     <>
-      <Modal title="Modal de Registro" />
 
       {/* //TODO Cuando se accede directamente a la ruta colocandola en la url, los assets del sidebar no son cargados */}
       <Link to="/recursos/new">

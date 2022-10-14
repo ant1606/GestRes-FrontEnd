@@ -2,17 +2,28 @@ import { mdiTrashCan } from '@mdi/js';
 import Icon from '@mdi/react';
 import React, { useContext, useEffect, useState } from 'react'
 import TitleContext from '../../../Context/TitleContext';
+import Modal from '../../Molecules/Modal';
 import Form from '../../Organisms/Recourse/Form'
 
 const Show = () => {
   const {changeTitle} = useContext(TitleContext);
   const [toggleTab, setToggleTab] = useState(1);
+  const [showModalState, setShowModalState] = useState(false);
+  const [showModalProgress, setShowModalProgress] = useState(false);
 
   useEffect(()=>{
     changeTitle("Recursos Educativos / Ver");
   }, []);
 
-  console.log(toggleTab);
+  const handleClickButtonState = () => {
+    setShowModalState(!showModalState);
+  }
+
+  const handleClickButtonProgress = () => {
+    setShowModalProgress(!showModalProgress)
+  }
+
+  // console.log(toggleTab);
 
   return (
     <>
@@ -45,9 +56,17 @@ const Show = () => {
         <div className={`${toggleTab === 2 ? "" : "hidden"}`}>
           <div>
             <button className='bg-gray-900 rounded-xl text-white py-2 px-5 text-2xl font-medium
-          hover:bg-gray-800 mb-4'>
+          hover:bg-gray-800 mb-4'
+              onClick={handleClickButtonState}
+            >
               Registrar nuevo
             </button>
+
+            {
+              showModalState && (
+                <Modal title="Registrar nuevo Estado" modalState={showModalState} handleClickParent={handleClickButtonState}/>
+              )
+            }
 
             <table className='table-auto w-full'>
               <thead>
@@ -101,10 +120,18 @@ const Show = () => {
         <div className={`${toggleTab === 3 ? "" : "hidden"}`}>
         <div>
             <button className='bg-gray-900 rounded-xl text-white py-2 px-5 text-2xl font-medium
-          hover:bg-gray-800 mb-4'>
+          hover:bg-gray-800 mb-4'
+              onClick={handleClickButtonProgress}
+            >
               Registrar nuevo
             </button>
 
+            {
+              showModalProgress&& (
+                <Modal title="Registro de nuevo Progreso" modalState={showModalProgress} handleClickParent={handleClickButtonProgress}/>
+              ) 
+            }
+            
             <table className='table-auto w-full'>
               <thead>
                 <tr className='text-gray-600 border-b-gray-400 border-b-2 font-bold text-uppercase '>
