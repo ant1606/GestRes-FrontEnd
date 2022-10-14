@@ -1,14 +1,14 @@
 import React from 'react'
 
-const Field = ({type, label, id, classBox=''  }) => {
+const Field = ({label, id, classBox=''  }) => {
   return (
     <div className={`relative ${classBox}`}>
-      <input 
-        type={type}
+      <textarea 
         id={id}
         placeholder=" "
         name={id}
-        className="px-3 py-1 border-b-2 border-gray-900  bg-white peer w-full text-base transition-colors h-8
+        rows="1"
+        className="px-3 py-1 h-auto resize-y border-b-2 border-gray-900  bg-white peer w-full text-base transition-colors
         focus:outline-none"
       />
       <label htmlFor={id}

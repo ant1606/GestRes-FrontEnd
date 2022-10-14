@@ -3,7 +3,9 @@ import Icon from '@mdi/react';
 import React, { useContext, useEffect, useState } from 'react'
 import TitleContext from '../../../Context/TitleContext';
 import Modal from '../../Molecules/Modal';
-import Form from '../../Organisms/Recourse/Form'
+import RecourseForm from '../../Organisms/Recourse/Form'
+import StateForm from '../../Organisms/State/Form'
+import ProgressForm from '../../Organisms/Progress/Form'
 
 const Show = () => {
   const {changeTitle} = useContext(TitleContext);
@@ -50,7 +52,7 @@ const Show = () => {
       
       <div className='border-2  h-[32rem] border-gray-900 border-t-0 overflow-y-scroll px-8 py-5' >
         <div className={`${toggleTab === 1 ? "" : "hidden"}`}>
-          <Form />
+          <RecourseForm />
         </div>
 
         <div className={`${toggleTab === 2 ? "" : "hidden"}`}>
@@ -64,7 +66,12 @@ const Show = () => {
 
             {
               showModalState && (
-                <Modal title="Registrar nuevo Estado" modalState={showModalState} handleClickParent={handleClickButtonState}/>
+                <Modal 
+                  title="Registrar nuevo Estado" 
+                  modalState={showModalState} 
+                  handleClickParent={handleClickButtonState}
+                  modalContent={<StateForm />}
+                  />
               )
             }
 
@@ -128,7 +135,12 @@ const Show = () => {
 
             {
               showModalProgress&& (
-                <Modal title="Registro de nuevo Progreso" modalState={showModalProgress} handleClickParent={handleClickButtonProgress}/>
+                <Modal 
+                  title="Registro de nuevo Progreso" 
+                  modalState={showModalProgress} 
+                  handleClickParent={handleClickButtonProgress}
+                  modalContent={<ProgressForm />}
+                />
               ) 
             }
             

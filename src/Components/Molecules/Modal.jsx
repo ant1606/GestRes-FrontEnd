@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const Modal = ({title, modalState, handleClickParent}) => {
+const Modal = ({title, modalState, handleClickParent, modalContent}) => {
   const [ toggleModal, setToggleModal ] = useState(false);
 
   const handleClick = (e) =>{
@@ -23,19 +23,19 @@ const Modal = ({title, modalState, handleClickParent}) => {
         
         <div className={`w-screen h-screen flex justify-center items-center overflow-hidden 
           absolute top-0 left-0 text-gray-900`} >
-          <div className='bg-white max-w-4xl max-h-[32rem] z-50 rounded-3xl'>
-            <div className='px-7 py-3 flex justify-between border-b-2  gap relative' data-name="modal">
-              <p>{title}</p>
-              <div className='bg-slate-600 p-1 w-7 h-7 flex items-center justify-center rounded-full absolute right-3 top-2 cursor-pointer' 
+          <div className='bg-white min-w-[32rem] max-w-4xl max-h-[32rem] z-50 rounded-3xl'>
+            <div className='px-7 py-3 flex justify-center items-center border-b-2 gap relative '>
+              <p className='uppercase text-center text-2xl font-semibold'>{title}</p>
+              <div className='bg-slate-600 p-1 w-7 h-7 flex items-center justify-center rounded-full absolute right-3 top-2 cursor-pointer hover:bg-slate-900' 
                 onClick={handleClick}>
-                <p>X</p>
+                <p className='text-white font-bold'>X</p>
               </div>
             </div>
             <div className='px-7 py-4 max-h-[25rem] overflow-y-scroll'>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis eLorem ipsum dolor, sit amet consectetur adipisicing elit. Ad facilis e
+              {modalContent}
             </div>
             <div className='px-7 py-3 border-t-2'>
-              asdassdad
+              botones
             </div>
           </div>
         </div>  
