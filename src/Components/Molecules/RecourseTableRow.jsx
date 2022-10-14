@@ -13,15 +13,34 @@ import {
   mdiVideoVintage, 
   mdiTimerOutline,
 } from '@mdi/js';
+import { Link } from 'react-router-dom';
+import Modal from './Modal';
 
 const RecourseTableRow = () => {
   const [detail, setDetail] = useState(false);
+  const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
 
   function toggleDetail() {
     setDetail(!detail);
   }
+
+  const handleClickDeleteModal = () => {
+    // console.log("Mostrar modal");
+    setToggleDeleteModal(!toggleDeleteModal)
+  }
+
   return (
     <>
+      {
+        toggleDeleteModal && (
+          <Modal 
+            title="Eliminar recurso" 
+            modalState={toggleDeleteModal} 
+            handleClickParent={handleClickDeleteModal}
+            modalContent={(<p className='text-center text-xl font-medium'>¿Está seguro que desea eliminar el recurso?</p>)}
+          />
+        )
+      }
       {/* Fila de Datos */}
       <tr>
         <td className=' w-48 h-14'>
@@ -34,23 +53,29 @@ const RecourseTableRow = () => {
                 color="white"
               />
             </button>
-            <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
-              <Icon path={mdiEye}
-                title="Down"
-                size={1}
-                color="white"
-              />
-            </button>
+            <Link to="/recursos/show">
+              <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
+                <Icon path={mdiEye}
+                  title="Show"
+                  size={1}
+                  color="white"
+                />
+              </button>
+            </Link>
+            
             <button className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg">
               <Icon path={mdiPencil}
-                title="Down"
+                title="Edit"
                 size={1}
                 color="white"
               />
             </button>
-            <button className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg">
+            <button 
+              className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
+              onClick={handleClickDeleteModal}
+            >
               <Icon path={mdiTrashCan}
-                title="Down"
+                title="Delete"
                 size={1}
                 color="white"
               />

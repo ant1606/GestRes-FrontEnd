@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Button from '../Atoms/Button'
 
 const Modal = ({title, modalState, handleClickParent, modalContent}) => {
   const [ toggleModal, setToggleModal ] = useState(false);
@@ -31,11 +32,12 @@ const Modal = ({title, modalState, handleClickParent, modalContent}) => {
                 <p className='text-white font-bold'>X</p>
               </div>
             </div>
-            <div className='px-7 py-4 max-h-[25rem] overflow-y-scroll'>
+            <div className='px-7 py-6 max-h-[25rem] min-h-[8rem] overflow-y-scroll flex justify-center items-center'>
               {modalContent}
             </div>
-            <div className='px-7 py-3 border-t-2'>
-              botones
+            <div className='px-7 py-3 border-t-2 flex justify-around'>
+              <Button text="Registrar"/>
+              <Button text="Cancelar"/>
             </div>
           </div>
         </div>  
