@@ -14,7 +14,7 @@ const Sidebar = ({children}) => {
     <>
       <div className={`${ open ? "w-80" : "w-18"} 
         h-screen flex flex-col bg-gray-800 text-white 
-        duration-300 ease-in-out`}>
+        duration-300 ease-in-out sticky top-0 left-0`}>
       
         <TitleSideBar />
         <UserInfo />
@@ -36,7 +36,9 @@ const Sidebar = ({children}) => {
 
       <main className='flex flex-col w-full'>
         <Titlebar />
-        {children} 
+        <div className='container h-full pt-4 px-6'>
+          {children} 
+        </div>
       </main>
     </>
   )

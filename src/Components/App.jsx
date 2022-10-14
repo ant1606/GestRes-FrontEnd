@@ -1,13 +1,14 @@
 import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import Sidebar from './Organisms/Sidebar'
-import Titlebar from './Organisms/Titlebar'
 import Dashboard from './Pages/Dashboard'
 import Canales from './Pages/Canales'
-import Recursos from './Pages/Recursos'
+import Recourse from './Pages/Recourse/Main'
 import Etiquetas from './Pages/Etiquetas'
 import { SideBarContextProvider} from '../Context/SideBarContext'
 import { TitleContextProvider } from '../Context/TitleContext'
+import RecourseNew from './Pages/Recourse/New';
+import RecourseShow from './Pages/Recourse/Show';
 const App = () => {
   return (
     <div className='flex'>
@@ -20,8 +21,10 @@ const App = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/canales" element={<Canales />}/>
-              <Route path="/recursos" element={<Recursos />}/>
+              <Route path="/recursos" element={<Recourse />}/>
               <Route path="/etiquetas" element={<Etiquetas />}/>
+              <Route path="/recursos/new" element={<RecourseNew />}/>
+              <Route path="/recursos/show" element={<RecourseShow />}/>
             </Routes>
           </Sidebar>
         </TitleContextProvider>
