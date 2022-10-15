@@ -1,4 +1,4 @@
-import RecourseTableRow from '../Molecules/RecourseTableRow';
+import RecourseTableRow from '../../Molecules/Recourse/RecourseTableRow';
 
 const RecourseTable = () => {
   return (

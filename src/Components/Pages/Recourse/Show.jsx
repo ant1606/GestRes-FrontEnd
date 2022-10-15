@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import TitleContext from '../../../Context/TitleContext';
 import RecourseForm from '../../Organisms/Recourse/Form'
-import StateMain from '../../Organisms/State/Main'
+import StatusMain from '../../Organisms/Status/Main'
 import ProgressMain from '../../Organisms/Progress/Main'
 
 const Show = () => {
@@ -54,7 +54,7 @@ const Show = () => {
         </div>
 
         <div className={`${toggleTab === 2 ? "" : "hidden"}`}>
-          <StateMain 
+          <StatusMain 
             handleClickParent={handleClickButtonState}
             modalState={showModalState}
           />
@@ -73,7 +73,5 @@ const Show = () => {
     </>
   )
 }
-
-// https://www.youtube.com/watch?v=9DwGahSqcEc MOdal en React
 
 export default Show

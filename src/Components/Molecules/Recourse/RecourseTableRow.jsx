@@ -14,7 +14,7 @@ import {
   mdiTimerOutline,
 } from '@mdi/js';
 import { Link } from 'react-router-dom';
-import Modal from './Modal';
+import Modal from '../Modal';
 
 const RecourseTableRow = () => {
   const [detail, setDetail] = useState(false);
