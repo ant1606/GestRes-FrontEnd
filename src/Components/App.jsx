@@ -10,6 +10,17 @@ import { TitleContextProvider } from '../Context/TitleContext'
 import RecourseNew from './Pages/Recourse/New';
 import RecourseShow from './Pages/Recourse/Show';
 const App = () => {
+
+  fetch("http://localhost/api/settings", {
+    method: 'post',
+    body: JSON.stringify({
+      value: 'type'
+    }),
+    headers: { 'Content-type': 'application/json' }
+  })
+    .then((response) => response.json())
+    .then(({data})=>console.log(data));
+
   return (
     <div className='flex'>
 

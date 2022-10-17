@@ -10,10 +10,10 @@ services:
     command: yarn dev
     tty: true
     networks:
-      - pygesres
+      - pygesres_net
     extra_hosts:
       - 'host.docker.interal:host-gateway'
 networks:
-    pygesres:
+    pygesres_net:
         name: pygesres
         external: true
