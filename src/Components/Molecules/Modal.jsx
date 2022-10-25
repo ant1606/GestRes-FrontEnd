@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from '../Atoms/Button'
 
-const Modal = ({title, modalState, handleClickParent, modalContent}) => {
+const Modal = ({title, modalState, handleClickParent, modalContent, handleClickAcceptButton}) => {
   const [ toggleModal, setToggleModal ] = useState(false);
 
   const handleClick = (e) =>{
@@ -22,8 +22,8 @@ const Modal = ({title, modalState, handleClickParent, modalContent}) => {
             top-0 left-0 z-40 flex justify-center items-center ' onClick={handleClick}
         />
         
-        <div className={`w-screen h-screen flex justify-center items-center overflow-hidden 
-          absolute top-0 left-0 text-gray-900`} >
+        <div className="w-full h-screen flex justify-center items-center overflow-hidden 
+          absolute top-0 left-0 text-gray-900" >
           <div className='bg-white min-w-[32rem] max-w-4xl max-h-[32rem] z-50 rounded-3xl'>
             <div className='px-7 py-3 flex justify-center items-center border-b-2 gap relative '>
               <p className='uppercase text-center text-2xl font-semibold'>{title}</p>
@@ -36,8 +36,8 @@ const Modal = ({title, modalState, handleClickParent, modalContent}) => {
               {modalContent}
             </div>
             <div className='px-7 py-3 border-t-2 flex justify-around'>
-              <Button text="Registrar"/>
-              <Button text="Cancelar"/>
+              <Button text="Registrar" handleClick={handleClickAcceptButton}/>
+              <Button text="Cancelar" handleClick={handleClick}/>
             </div>
           </div>
         </div>  
