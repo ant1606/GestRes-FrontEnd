@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Button = ({text, btnType, handleClick, type="button"}) => {
+const Button = ({text, btnType, handleClick, type}) => {
 
   const btnColors = {
     main: 'bg-gray-900',
@@ -26,7 +26,8 @@ const Button = ({text, btnType, handleClick, type="button"}) => {
 // }
 
 Button.defaultProps = {
-  btnType : "main"
+  btnType : "main",
+  type: "button"
 }
 
 export default Button

@@ -6,6 +6,7 @@ import Icon from '@mdi/react';
 import { mdiMagnify, mdiPencil, mdiTrashCan } from '@mdi/js';
 import { json } from 'react-router-dom';
 import Modal from '../../Molecules/Modal';
+import { data } from 'autoprefixer';
 
 const Etiquetas = () => {
 
@@ -16,8 +17,6 @@ const Etiquetas = () => {
   const [editTag, setEditTag] = useState({})
   const [deleteTag, setDeleteTag] = useState({})
   const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
-  const inputRef = useRef();
-  
 
   const query ={
     filter: filter,
@@ -34,20 +33,40 @@ const Etiquetas = () => {
   
   const handleSubmit= (e)=>{
     e.preventDefault();
+    
     const sendData = {
       "name" : e.target.etiqueta.value,
       "style" :"bg-gray-700"
     }
-    fetch('http://localhost/api/tag',{
-      method: 'post',       
-      body: JSON.stringify(sendData),
-      headers: {
-        "Content-Type": "application/json",
-        "accept" : "application/json"
-      }
-    })
-    .then(resp => resp.json())
-    .then(data=> setTags([...tags, data.data]));
+
+    if(JSON.stringify(editTag) !== "{}") {
+      fetch(`http://localhost/api/tag/${editTag.id}`,{
+        method: 'put',       
+        body: JSON.stringify({
+          ...sendData, 
+          id:editTag.id
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "accept" : "application/json"
+        }
+      })
+      .then(resp => resp.json())
+      .then(data => setTags((tags) => tags.map(tag => tag.id===editTag.id ? data.data : tag)));
+      setEditTag({});
+    }
+    else {
+      fetch('http://localhost/api/tag',{
+        method: 'post',       
+        body: JSON.stringify(sendData),
+        headers: {
+          "Content-Type": "application/json",
+          "accept" : "application/json"
+        }
+      })
+      .then(resp => resp.json())
+      .then(data=> setTags([...tags, data.data]));
+    }
 
     e.target.etiqueta.value='';
     // e.target.etiqueta.value.focus();
@@ -71,6 +90,8 @@ const Etiquetas = () => {
   }
 
   const handleClickCancel = () =>{
+
+    // console.log(JSON.stringify(editTag) === "{}");
     setEditTag({});
     document.querySelector('#etiqueta').value = "";
     document.querySelector('#etiqueta').select();
@@ -130,16 +151,17 @@ const Etiquetas = () => {
               text="GUARDAR"
               type='submit'
               btnType="main"
-              onClick={handleSubmit}
+              
             />
+            
             {
-              editTag&&
+              JSON.stringify(editTag) !== "{}" &&(
                 <Button
-                  text="cancelar"
-                  type='submit'
+                  text="CANCELAR"
                   btnType="warning"
-                  onClick={handleClickCancel}
+                  handleClick={handleClickCancel} 
                 />
+                )
             }
           </div>
         </form>
