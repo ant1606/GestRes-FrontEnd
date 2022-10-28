@@ -4,16 +4,25 @@ import Form from '../../Organisms/Recourse/Form'
 import { Link } from 'react-router-dom';
 
 const New = () => {
+  
   return (
     <>
-      <Form />
-      <div className='flex justify-around'>
-        <Button text="Registrar" />
+      <Form endpoint={"http://localhost/api/recourses"}>
+        <div className='flex justify-around'>
+          <Button 
+              type="submit"
+              text="Registrar" 
+          />
 
-        <Link to="/recursos">
-          <Button text="Cancelar" btnType="danger" />
-        </Link>
-      </div> 
+          <Link to="/recursos">
+            <Button 
+                btnType="danger" 
+                text="Cancelar" 
+          />
+          </Link>
+        </div> 
+      </Form>
+      
     </>
   )
 }
