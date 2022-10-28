@@ -4,7 +4,7 @@ import SideBar from '../Components/Organisms/Sidebar'
 import Dashboard from '../Components/Pages/Dashboard'
 import Canales from '../Components/Pages/Canales'
 import Recourse from '../Components/Pages/Recourse/Main'
-import Etiquetas from '../Components/Pages/Etiquetas/Main'
+import Tags from '../Components/Pages/Tag/Main'
 import RecourseNew from '../Components/Pages/Recourse/New';
 import RecourseShow from '../Components/Pages/Recourse/Show';
 import Titlebar from '../Components/Organisms/Titlebar'
@@ -22,7 +22,7 @@ const AppRouter = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/canales" element={<Canales />}/>
               <Route path="/recursos" element={<Recourse />}/>
-              <Route path="/etiquetas" element={<Etiquetas />}/>
+              <Route path="/etiquetas" element={<Tags />}/>
               <Route path="/recursos/new" element={<RecourseNew />}/>
               <Route path="/recursos/show" element={<RecourseShow />}/>
               <Route path="/" element={<Dashboard />} />

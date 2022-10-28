@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import Icon from '@mdi/react';
+import { mdiMagnify, mdiPencil, mdiTrashCan } from '@mdi/js';
 import TitleContext from '../../../Context/TitleContext';
 import Field from '../../Atoms/Field';
 import Button from '../../Atoms/Button';
-import Icon from '@mdi/react';
-import { mdiMagnify, mdiPencil, mdiTrashCan } from '@mdi/js';
-import { json } from 'react-router-dom';
 import Modal from '../../Molecules/Modal';
-import { data } from 'autoprefixer';
+import Filter from '../../Organisms/Tag/Filter';
+import Form from '../../Organisms/Tag/Form';
 
 const Etiquetas = () => {
 
@@ -71,8 +71,14 @@ const Etiquetas = () => {
     e.target.etiqueta.value='';
     // e.target.etiqueta.value.focus();
     document.querySelector('#etiqueta').select();
-    
   }
+
+  const handleClickCancel = () =>{
+    setEditTag({});
+    document.querySelector('#etiqueta').value = "";
+    document.querySelector('#etiqueta').select();
+  }
+
 
   const handleChangeFilter = (e) => {
     let filter =e.target.value;
@@ -89,20 +95,12 @@ const Etiquetas = () => {
     // console.log(editTag);
   }
 
-  const handleClickCancel = () =>{
-
-    // console.log(JSON.stringify(editTag) === "{}");
-    setEditTag({});
-    document.querySelector('#etiqueta').value = "";
-    document.querySelector('#etiqueta').select();
-  }
 
   const handleClickDelete = (tag) => {
     setDeleteTag(tag);
     setToggleDeleteModal(!toggleDeleteModal);
     
   }
-
   const handleClickDeleteModal = () => {
     //TODO ver como limpiar el state deleteTag luego de cerrar el modal
     setToggleDeleteModal(!toggleDeleteModal);
@@ -137,6 +135,7 @@ const Etiquetas = () => {
           />
         )
       }
+     
       <div className='shadow-2xl p-4 rounded-xl flex flex-col gap-2 mb-14'>
         <h3 className='text-center text-2xl'>Mantenimiento de Etiquetas</h3>
         <form onSubmit={handleSubmit}>
@@ -166,22 +165,8 @@ const Etiquetas = () => {
           </div>
         </form>
       </div>
-      {/* Filter */}
-      <div className='flex mb-8'>
-        <Icon 
-          path={mdiMagnify}
-          title="Search"
-          size={1.50}
-          color="black"
-        />
-        <Field
-          type="text"
-          label="Buscar Etiqueta"
-          name="buscarEtiqueta"
-          classBox=""
-          handleChange={handleChangeFilter}
-        />
-      </div>
+
+      <Filter handleChangeFilter={handleChangeFilter}/>
 
       {/* Tabla */}
       <table className='table-auto w-full'>
