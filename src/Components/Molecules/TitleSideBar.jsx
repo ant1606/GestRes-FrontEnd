@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { useState } from 'react'
 import SideBarContext from '../../Context/SideBarContext'
 
 const TitleSideBar = () => {
