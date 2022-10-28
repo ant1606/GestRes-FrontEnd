@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Icon from '@mdi/react';
-import { mdiPencil, mdiTrashCan } from '@mdi/js';
 import TitleContext from '../../../Context/TitleContext';
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
