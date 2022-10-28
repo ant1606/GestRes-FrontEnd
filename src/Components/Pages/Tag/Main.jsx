@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Icon from '@mdi/react';
-import { mdiMagnify, mdiPencil, mdiTrashCan } from '@mdi/js';
+import { mdiPencil, mdiTrashCan } from '@mdi/js';
 import TitleContext from '../../../Context/TitleContext';
-import Field from '../../Atoms/Field';
-import Button from '../../Atoms/Button';
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
 import Form from '../../Organisms/Tag/Form';
@@ -13,6 +11,7 @@ const Etiquetas = () => {
   const {changeTitle} = useContext(TitleContext);
   
   const [filter, setFilter] = useState('');
+
   const [tags, setTags] = useState([]);
   const [editTag, setEditTag] = useState({})
   const [deleteTag, setDeleteTag] = useState({})
@@ -72,13 +71,11 @@ const Etiquetas = () => {
     // e.target.etiqueta.value.focus();
     document.querySelector('#etiqueta').select();
   }
-
   const handleClickCancel = () =>{
     setEditTag({});
     document.querySelector('#etiqueta').value = "";
     document.querySelector('#etiqueta').select();
   }
-
 
   const handleChangeFilter = (e) => {
     let filter =e.target.value;
@@ -94,13 +91,12 @@ const Etiquetas = () => {
     document.querySelector('#etiqueta').select();
     // console.log(editTag);
   }
-
-
   const handleClickDelete = (tag) => {
     setDeleteTag(tag);
     setToggleDeleteModal(!toggleDeleteModal);
     
   }
+  
   const handleClickDeleteModal = () => {
     //TODO ver como limpiar el state deleteTag luego de cerrar el modal
     setToggleDeleteModal(!toggleDeleteModal);
@@ -135,36 +131,12 @@ const Etiquetas = () => {
           />
         )
       }
-     
-      <div className='shadow-2xl p-4 rounded-xl flex flex-col gap-2 mb-14'>
-        <h3 className='text-center text-2xl'>Mantenimiento de Etiquetas</h3>
-        <form onSubmit={handleSubmit}>
-          <div className='flex justify-between items-end gap-10 w-full'>
-            <Field
-              type="text"
-              label="Ingrese Etiqueta"
-              name="etiqueta"
-              classBox="grow"
-            />
-            <Button
-              text="GUARDAR"
-              type='submit'
-              btnType="main"
-              
-            />
-            
-            {
-              JSON.stringify(editTag) !== "{}" &&(
-                <Button
-                  text="CANCELAR"
-                  btnType="warning"
-                  handleClick={handleClickCancel} 
-                />
-                )
-            }
-          </div>
-        </form>
-      </div>
+
+      <Form 
+        handleSubmit={handleSubmit}
+        handleClickCancel ={handleClickCancel}
+        editTag ={editTag}
+      />
 
       <Filter handleChangeFilter={handleChangeFilter}/>
 
