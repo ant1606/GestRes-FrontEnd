@@ -8,6 +8,7 @@ import Tags from '../Components/Pages/Tag/Main'
 import RecourseNew from '../Components/Pages/Recourse/New';
 import RecourseShow from '../Components/Pages/Recourse/Show';
 import Titlebar from '../Components/Organisms/Titlebar'
+import { TagProvider } from '../Context/TagContext';
 
 const AppRouter = () => {
   return (
@@ -22,7 +23,14 @@ const AppRouter = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/canales" element={<Canales />}/>
               <Route path="/recursos" element={<Recourse />}/>
-              <Route path="/etiquetas" element={<Tags />}/>
+              <Route 
+                path="/etiquetas" 
+                element={
+                  <TagProvider>
+                    <Tags />
+                  </TagProvider>
+                }
+              />
               <Route path="/recursos/new" element={<RecourseNew />}/>
               <Route path="/recursos/show" element={<RecourseShow />}/>
               <Route path="/" element={<Dashboard />} />

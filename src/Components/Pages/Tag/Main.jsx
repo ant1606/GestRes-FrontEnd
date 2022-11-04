@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { TagProvider } from '../../../Context/TagContext';
+import useTag, { TagProvider } from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
@@ -75,11 +75,7 @@ const Etiquetas = () => {
     // e.target.etiqueta.value.focus();
     document.querySelector('#nombre').select();
   }
-  const handleClickCancel = () =>{
-    setEditTag({});
-    document.querySelector('#etiqueta').value = "";
-    document.querySelector('#etiqueta').select();
-  }
+  
 
   const handleChangeFilter = (e) => {
     let filter =e.target.value;
@@ -124,7 +120,7 @@ const Etiquetas = () => {
   }
 
   return (
-    <TagProvider>
+    <>
       
       {
         toggleDeleteModal && (
@@ -139,8 +135,6 @@ const Etiquetas = () => {
       }
 
       <Form 
-        handleSubmit={handleSubmit}
-        handleClickCancel ={handleClickCancel}
         editTag ={editTag}
       />
 
@@ -153,7 +147,7 @@ const Etiquetas = () => {
         handleClickDelete={handleClickDelete} 
         handleClickEdit={handleClickEdit}
       />
-    </TagProvider>
+    </>
   )
 }
 

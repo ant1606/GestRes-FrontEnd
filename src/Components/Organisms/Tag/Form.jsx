@@ -3,23 +3,34 @@ import useTag from '../../../Context/TagContext'
 import Button from '../../Atoms/Button'
 import Field from '../../Atoms/Field'
 
-const Form = ({handleSubmit, handleClickCancel, editTag={}}) => {
-  const {tags, saveTag} = useTag();
-  // console.log(context);
+const Form = ({ editTag={}}) => {
+  
+  const {tags, savingTagInDb} = useTag();
 
-  const handleSubmit2 = (e) =>{
+  const handleSubmit = (e) =>{
     e.preventDefault();
-    saveTag({
-      nombre: 'nombre test',
-      estilos:'prueba'
-    });
-    
+    const sendData = {
+      "nombre" : e.target.nombre.value,
+      "estilos" :"bg-gray-700"
+    }
+
+    savingTagInDb(sendData);
+
+    e.target.nombre.value='';
+    document.querySelector('#nombre').select();
   }
+
+  const handleClickCancel = () =>{
+    // setEditTag({});
+    document.querySelector('#etiqueta').value = "";
+    document.querySelector('#etiqueta').select();
+  }
+
   return (
 
     <div className='shadow-2xl p-4 rounded-xl flex flex-col gap-2 mb-14'>
       <h3 className='text-center text-2xl'>Mantenimiento de Etiquetas</h3>
-      <form onSubmit={handleSubmit2}>
+      <form onSubmit={handleSubmit}>
         <div className='flex justify-between items-end gap-10 w-full'>
           <Field
             type="text"

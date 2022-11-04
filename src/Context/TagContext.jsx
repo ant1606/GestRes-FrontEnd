@@ -5,47 +5,62 @@ import types from '../types/types';
 const TagContext = createContext(initialState);
 
 export const TagProvider = ({children}) => {
+
   const [state, dispatch] = useReducer(tagReducer, initialState);
 
-  //Generando acciones para manejar reducer
-  const saveTag = (tag) => {
-    dispatch({
-      type: types.tagSave,
-      payload: tag
-    });
+  const savingTagInDb = (sendData) => {
+    fetch('http://localhost/api/tag',{
+        method: 'post',       
+        body: JSON.stringify(sendData),
+        headers: {
+          "Content-Type": "application/json",
+          "accept" : "application/json"
+        }
+      })
+      .then(resp => resp.json())
+      .then(data=> dispatch(saveTag(data.data)))
+      .catch(err => console.log(err));
   }
+
+  const saveTag = (tag) => ({ 
+      type: types.tagSave,
+      payload: tag,
+  });
 
   const selectedTag = (tag) => {
     dispatch({
       type: types.tagSelect,
-      payload: tag
+      payload: tag,
     });
-  }
+  };
 
   const updatedTag = (tag) => {
     dispatch({
       type: types.tagUpdate,
-      payload: tag
+      payload: tag,
     });
-  }
+  };
 
   const deletedTag = (idTag) => {
     dispatch({
       type: types.deletedTag,
-      payload: idTag
+      payload: idTag,
     });
-  }
+  };
 
-  const value = {
-    ...state, 
-    saveTag, 
-    selectedTag, 
-    updatedTag, 
-    deletedTag
-  }
-  
+  const tagActions  = {
+    ...state,
+    savingTagInDb,
+    selectedTag,
+    updatedTag,
+    deletedTag,
+  };
 
-  return <TagContext.Provider value={ value}> {children} </TagContext.Provider>
+  return (
+    <TagContext.Provider value={ tagActions }>
+      {children} 
+    </TagContext.Provider>
+  );
 }
 
 const useTag = () => {
