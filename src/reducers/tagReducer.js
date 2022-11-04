@@ -10,20 +10,20 @@ export const initialState = {
  * tagActive: Object, Tag a editar o eliminar
  */
 
-const tagReducer = (state = initialState, action) => {
+const tagReducer = (state = {}, action) => {
   switch (action.type) {
     case types.tagSave:
       console.log('Guardando Tags');
       return {
         ...state,
-        tags: [payload, ...state.tags],
+        tags: [action.payload, ...state.tags],
       };
 
     case types.tagSelect:
       console.log('Seleccionando tag a actualizar/eliminar');
       return {
         ...state,
-        tagActive: payload,
+        tagActive: action.payload,
       };
 
     case types.tagUpdate:
@@ -32,7 +32,9 @@ const tagReducer = (state = initialState, action) => {
         ...state,
         tagActive: null,
         tags: state.tags.map((tag) =>
-          tag.identificado === payload.identificador ? payload : tag
+          tag.identificado === action.payload.identificador
+            ? action.payload
+            : tag
         ),
       };
 
@@ -41,7 +43,7 @@ const tagReducer = (state = initialState, action) => {
       return {
         ...state,
         tagActive: null,
-        tags: state.tags.filter((tag) => tag.identificador !== payload),
+        tags: state.tags.filter((tag) => tag.identificador !== action.payload),
       };
 
     default:

@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { TagProvider } from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
 import Form from '../../Organisms/Tag/Form';
 import Table from '../../Organisms/Tag/Table';
+
 
 const Etiquetas = () => {
 
@@ -122,7 +124,8 @@ const Etiquetas = () => {
   }
 
   return (
-    <>
+    <TagProvider>
+      
       {
         toggleDeleteModal && (
           <Modal
@@ -150,8 +153,7 @@ const Etiquetas = () => {
         handleClickDelete={handleClickDelete} 
         handleClickEdit={handleClickEdit}
       />
-
-    </>
+    </TagProvider>
   )
 }
 
