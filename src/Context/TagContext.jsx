@@ -22,9 +22,21 @@ export const TagProvider = ({children}) => {
       .catch(err => console.log(err));
   }
 
+  const loadTags = () => {
+    fetch('http://localhost/api/tag')
+    .then(resp => resp.json())
+    .then(data=> dispatch(setTags(data.data)));
+    // .then(data=> console.log(data));
+  }
+
   const saveTag = (tag) => ({ 
       type: types.tagSave,
       payload: tag,
+  });
+
+  const setTags = (tags) => ({
+      type: types.tagLoaded,
+      payload: tags
   });
 
   const selectedTag = (tag) => {
@@ -54,6 +66,7 @@ export const TagProvider = ({children}) => {
     selectedTag,
     updatedTag,
     deletedTag,
+    loadTags
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import useTag, { TagProvider } from '../../../Context/TagContext';
+import useTag  from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
@@ -9,11 +9,13 @@ import Table from '../../Organisms/Tag/Table';
 
 const Etiquetas = () => {
 
+  const {loadTags, tags} = useTag();
+
   const {changeTitle} = useContext(TitleContext);
   
   const [filter, setFilter] = useState('');
 
-  const [tags, setTags] = useState([]);
+  // const [tags, setTags] = useState([]);
   const [editTag, setEditTag] = useState({})
   const [deleteTag, setDeleteTag] = useState({})
   const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
@@ -25,65 +27,62 @@ const Etiquetas = () => {
   useEffect(()=>{
     changeTitle("Etiquetas");
 
-    fetch('http://localhost/api/tag')
-    .then(resp => resp.json())
-    .then(data=> setTags(data.data));
-    // setTags(data.data)
+    loadTags();
   }, []);
   
-  const handleSubmit= (e)=>{
-    e.preventDefault();
+  // const handleSubmit= (e)=>{
+  //   e.preventDefault();
     
-    const sendData = {
-      "nombre" : e.target.nombre.value,
-      "estilos" :"bg-gray-700"
-    }
+  //   const sendData = {
+  //     "nombre" : e.target.nombre.value,
+  //     "estilos" :"bg-gray-700"
+  //   }
 
-    if(JSON.stringify(editTag) !== "{}") {
+  //   if(JSON.stringify(editTag) !== "{}") {
 
-      fetch(`http://localhost/api/tag/${editTag.identificador}`,{
-        method: 'put',       
-        body: JSON.stringify({
-          ...sendData, 
-          identificador:editTag.identificador
-        }),
-        headers: {
-          "Content-Type": "application/json",
-          "accept" : "application/json"
-        }
-      })
-      .then(resp => resp.json())
-      .then(data => setTags((tags) => tags.map(tag => tag.identificador===editTag.identificador ? data.data : tag)))
-      .catch(err => console.log(err));
-        // 
-      setEditTag({});
-    }
-    else {
-      fetch('http://localhost/api/tag',{
-        method: 'post',       
-        body: JSON.stringify(sendData),
-        headers: {
-          "Content-Type": "application/json",
-          "accept" : "application/json"
-        }
-      })
-      .then(resp => resp.json())
-      .then(data=> setTags([...tags, data.data]));
-    }
+  //     fetch(`http://localhost/api/tag/${editTag.identificador}`,{
+  //       method: 'put',       
+  //       body: JSON.stringify({
+  //         ...sendData, 
+  //         identificador:editTag.identificador
+  //       }),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "accept" : "application/json"
+  //       }
+  //     })
+  //     .then(resp => resp.json())
+  //     .then(data => setTags((tags) => tags.map(tag => tag.identificador===editTag.identificador ? data.data : tag)))
+  //     .catch(err => console.log(err));
+  //       // 
+  //     setEditTag({});
+  //   }
+  //   else {
+  //     fetch('http://localhost/api/tag',{
+  //       method: 'post',       
+  //       body: JSON.stringify(sendData),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "accept" : "application/json"
+  //       }
+  //     })
+  //     .then(resp => resp.json())
+  //     .then(data=> setTags([...tags, data.data]));
+  //   }
 
-    e.target.nombre.value='';
-    // e.target.etiqueta.value.focus();
-    document.querySelector('#nombre').select();
-  }
+  //   e.target.nombre.value='';
+  //   // e.target.etiqueta.value.focus();
+  //   document.querySelector('#nombre').select();
+  // }
   
 
-  const handleChangeFilter = (e) => {
-    let filter =e.target.value;
+  // const handleChangeFilter = (e) => {
+  //   let filter =e.target.value;
     
-    fetch(`http://localhost/api/tag?searchNombre=${filter}`)
-    .then(resp => resp.json())
-    .then(data=> setTags(data.data));
-  }
+  //   fetch(`http://localhost/api/tag?searchNombre=${filter}`)
+  //   .then(resp => resp.json())
+  //   .then(data=> setTags(data.data));
+  // }
 
   const handleClickEdit = (tag) => {
     setEditTag(tag);
@@ -138,9 +137,9 @@ const Etiquetas = () => {
         editTag ={editTag}
       />
 
-      <Filter 
+      {/* <Filter 
         handleChangeFilter={handleChangeFilter}
-      />
+      /> */}
 
       <Table 
         tags={tags} 

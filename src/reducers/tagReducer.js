@@ -12,6 +12,12 @@ export const initialState = {
 
 const tagReducer = (state = {}, action) => {
   switch (action.type) {
+    case types.tagLoaded:
+      return {
+        ...state,
+        tags: [...action.payload],
+      };
+
     case types.tagSave:
       console.log('Guardando Tags');
       return {
