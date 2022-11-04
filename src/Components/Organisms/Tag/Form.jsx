@@ -11,7 +11,7 @@ const Form = ({handleSubmit, handleClickCancel, editTag={}}) => {
           <Field
             type="text"
             label="Ingrese Etiqueta"
-            name="etiqueta"
+            name="nombre"
             classBox="grow"
           />
           <Button

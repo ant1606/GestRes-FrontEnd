@@ -4,7 +4,7 @@ import Icon from '@mdi/react'
 
 const TableRow = ({tag, handleClickEdit, handleClickDelete }) => {
   return (
-      <tr key={tag.id}>
+      <tr key={tag.identificador}>
       <td className='w-48 h-14'>
         <div className="flex justify-around items-center px-3 py-2">
           <button 
@@ -32,7 +32,7 @@ const TableRow = ({tag, handleClickEdit, handleClickDelete }) => {
       <td className='max-h-14 max-w-xs'>
         <div className='flex justify-center items-center'>
           <span className='bg-gray-900 m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase'>
-            {tag.name}
+            {tag.nombre}
           </span>
         </div>
       </td>

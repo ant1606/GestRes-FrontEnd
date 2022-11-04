@@ -19,7 +19,7 @@ const Table = ({tags, handleClickEdit, handleClickDelete }) => {
           //TODO Generar paginacion de resultados
           tags?.map(tag =>
             <TableRow 
-              key={tag.id} 
+              key={tag.identificador} 
               tag={tag}
               handleClickDelete={handleClickDelete}
               handleClickEdit={handleClickEdit}
