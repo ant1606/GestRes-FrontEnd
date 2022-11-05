@@ -3,7 +3,7 @@ import useTag from '../../../Context/TagContext'
 import Button from '../../Atoms/Button'
 import Field from '../../Atoms/Field'
 
-const Form = ({ editTag={}}) => {
+const Form = () => {
   
   const {savingTagInDb, tagActive, selectedTag} = useTag();
 
@@ -61,4 +61,3 @@ const Form = ({ editTag={}}) => {
 }
 
 export default Form
-//JSON.stringify(editTag) !== "{}" &&(

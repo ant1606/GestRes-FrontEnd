@@ -40,8 +40,8 @@ export const TagProvider = ({children}) => {
     }
   }
 
-  const loadTags = () => {
-    fetch('http://localhost/api/tag')
+  const loadTags = (filter = "") => {
+    fetch(`http://localhost/api/tag?searchNombre=${filter}`)
     .then(resp => resp.json())
     .then(data=> dispatch(setTags(data.data)));
     // .then(data=> console.log(data));

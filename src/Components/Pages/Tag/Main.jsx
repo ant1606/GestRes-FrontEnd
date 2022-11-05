@@ -10,91 +10,22 @@ import Table from '../../Organisms/Tag/Table';
 const Etiquetas = () => {
 
   const {loadTags, tags} = useTag();
-
   const {changeTitle} = useContext(TitleContext);
   
-  const [filter, setFilter] = useState('');
 
-  // const [tags, setTags] = useState([]);
-  const [editTag, setEditTag] = useState({})
   const [deleteTag, setDeleteTag] = useState({})
   const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
-
-  const query ={
-    filter: filter,
-  };
 
   useEffect(()=>{
     changeTitle("Etiquetas");
 
     loadTags();
   }, []);
-  
-  // const handleSubmit= (e)=>{
-  //   e.preventDefault();
-    
-  //   const sendData = {
-  //     "nombre" : e.target.nombre.value,
-  //     "estilos" :"bg-gray-700"
-  //   }
 
-  //   if(JSON.stringify(editTag) !== "{}") {
-
-  //     fetch(`http://localhost/api/tag/${editTag.identificador}`,{
-  //       method: 'put',       
-  //       body: JSON.stringify({
-  //         ...sendData, 
-  //         identificador:editTag.identificador
-  //       }),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "accept" : "application/json"
-  //       }
-  //     })
-  //     .then(resp => resp.json())
-  //     .then(data => setTags((tags) => tags.map(tag => tag.identificador===editTag.identificador ? data.data : tag)))
-  //     .catch(err => console.log(err));
-  //       // 
-  //     setEditTag({});
-  //   }
-  //   else {
-  //     fetch('http://localhost/api/tag',{
-  //       method: 'post',       
-  //       body: JSON.stringify(sendData),
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "accept" : "application/json"
-  //       }
-  //     })
-  //     .then(resp => resp.json())
-  //     .then(data=> setTags([...tags, data.data]));
-  //   }
-
-  //   e.target.nombre.value='';
-  //   // e.target.etiqueta.value.focus();
-  //   document.querySelector('#nombre').select();
-  // }
-  
-
-  // const handleChangeFilter = (e) => {
-  //   let filter =e.target.value;
-    
-  //   fetch(`http://localhost/api/tag?searchNombre=${filter}`)
-  //   .then(resp => resp.json())
-  //   .then(data=> setTags(data.data));
-  // }
-
-  const handleClickEdit = (tag) => {
-    setEditTag(tag);
-    document.querySelector('#nombre').value = tag.nombre;
-    document.querySelector('#nombre').select();
-    // console.log(editTag);
-  }
 
   const handleClickDelete = (tag) => {
     setDeleteTag(tag);
     setToggleDeleteModal(!toggleDeleteModal);
-    
   }
 
   const handleClickDeleteModal = () => {
@@ -133,13 +64,9 @@ const Etiquetas = () => {
         )
       }
 
-      <Form 
-        editTag ={editTag}
-      />
+      <Form />
 
-      {/* <Filter 
-        handleChangeFilter={handleChangeFilter}
-      /> */}
+      <Filter />
 
       <Table />
     </>

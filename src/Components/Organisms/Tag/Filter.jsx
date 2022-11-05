@@ -2,8 +2,16 @@ import React from 'react'
 import { mdiMagnify } from '@mdi/js'
 import Icon from '@mdi/react'
 import Field from '../../Atoms/Field'
+import useTag from '../../../Context/TagContext'
 
-const Filter = ({handleChangeFilter}) => {
+const Filter = () => {
+  const {loadTags} = useTag();
+
+  const handleChange = (e) =>{
+    let filter = e.target.value;
+    loadTags(filter);
+  }
+
   return (
     <div className='flex mb-8'>
         <Icon
@@ -17,7 +25,7 @@ const Filter = ({handleChangeFilter}) => {
           label="Buscar Etiqueta"
           name="buscarEtiqueta"
           classBox=""
-          handleChange={handleChangeFilter}
+          handleChange={handleChange}
         />
     </div>
   )
