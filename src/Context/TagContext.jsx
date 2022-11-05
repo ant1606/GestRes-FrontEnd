@@ -41,10 +41,13 @@ export const TagProvider = ({children}) => {
     }
   }
 
-  const loadTags = (filter = "") => {
-    fetch(`http://localhost/api/tag?searchNombre=${filter}`)
+  const loadTags = (queryParams="") => {
+    fetch(`http://localhost/api/tag?${queryParams}`)
     .then(resp => resp.json())
-    .then(data=> dispatch(setTags(data.data)));
+    .then(data=> {
+      dispatch(setTags(data.data));
+      // console.log({meta: data.meta, links: data.links})
+    });
     // .then(data=> console.log(data));
   }
 

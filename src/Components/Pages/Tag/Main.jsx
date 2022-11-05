@@ -1,6 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect  } from 'react'
+import ReactPaginate from 'react-paginate';
+import { useSearchParams } from 'react-router-dom';
+
 import useTag  from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
+
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
 import Form from '../../Organisms/Tag/Form';
@@ -11,10 +15,13 @@ const Etiquetas = () => {
 
   const {loadTags, tagDelete, deletedTag, destroyTag} = useTag();
   const {changeTitle} = useContext(TitleContext);
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // console.log(searchParams);
   useEffect(()=>{
     changeTitle("Etiquetas");
 
+    
     loadTags();
   }, []);
 
@@ -26,7 +33,13 @@ const Etiquetas = () => {
     deletedTag(null);
   }
 
-  // console.log(tagDelete);
+  const handlePageClick = (e) => {    
+    searchParams.delete('page');
+    searchParams.append('page', e.selected+1);
+    searchParams.sort()
+    setSearchParams(searchParams);
+  }
+
   return (
     <>
       
@@ -47,6 +60,16 @@ const Etiquetas = () => {
       <Filter />
 
       <Table />
+
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={3}
+        pageCount={5}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+      />
     </>
   )
 }
