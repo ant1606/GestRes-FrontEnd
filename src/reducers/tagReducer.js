@@ -4,20 +4,26 @@ export const initialState = {
   tags: [],
   tagActive: null,
   tagDelete: null,
+  tagMeta: null,
+  tagLinks: null,
 };
 
 /**
  * tags: Array, Conjunto de Tags
  * tagActive: Object, Tag a editar
  * tagDelete: Object, Tag a eliminar
- */
+ * tagMeta: Object, Contiene los datos de la respuesta de Tags en paginacion
+ * tagLinks: Object, Contiene la informacion de los links para paginacion
+ *  */
 
 const tagReducer = (state = {}, action) => {
   switch (action.type) {
     case types.tagLoaded:
       return {
         ...state,
-        tags: [...action.payload],
+        tags: [...action.payload.data],
+        tagMeta: action.payload.meta,
+        tagLinks: action.payload.links,
       };
 
     case types.tagSave:

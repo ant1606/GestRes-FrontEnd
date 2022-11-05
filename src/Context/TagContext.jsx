@@ -45,7 +45,7 @@ export const TagProvider = ({children}) => {
     fetch(`http://localhost/api/tag?${queryParams}`)
     .then(resp => resp.json())
     .then(data=> {
-      dispatch(setTags(data.data));
+      dispatch(setTags(data));
       // console.log({meta: data.meta, links: data.links})
     });
     // .then(data=> console.log(data));
@@ -103,12 +103,14 @@ export const TagProvider = ({children}) => {
     tags: state.tags,
     tagActive: state.tagActive,
     tagDelete: state.tagDelete,
+    tagLinks: state.tagLinks,
+    tagMeta: state.tagMeta,
     savingTagInDb,
     selectedTag,
     updatedTag,
     deletedTag,
     loadTags,
-    destroyTag
+    destroyTag,
   };
 
   return (

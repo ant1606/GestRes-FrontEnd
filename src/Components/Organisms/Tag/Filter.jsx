@@ -9,18 +9,22 @@ import useTag from '../../../Context/TagContext'
 
 const Filter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { loadTags } = useTag();
+  const {loadTags} = useTag();
 
   const handleChange = (e) => {
     let filter = e.target.value;
 
     searchParams.delete('searchNombre');
 
-    if (filter !== '') 
+    if (filter !== '') {
+      searchParams.delete('page');
+      searchParams.append('page', 1);
       searchParams.append('searchNombre', filter);
-      
+    }
+
     searchParams.sort();
     setSearchParams(searchParams);
+    loadTags(searchParams.toString());
   }
 
   return (

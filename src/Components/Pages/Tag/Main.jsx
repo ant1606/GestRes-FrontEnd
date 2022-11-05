@@ -13,16 +13,14 @@ import Table from '../../Organisms/Tag/Table';
 
 const Etiquetas = () => {
 
-  const {loadTags, tagDelete, deletedTag, destroyTag} = useTag();
+  const {loadTags, tagDelete, deletedTag, destroyTag, tagMeta} = useTag();
   const {changeTitle} = useContext(TitleContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // console.log(searchParams);
-  useEffect(()=>{
+  useEffect( ()=>{
     changeTitle("Etiquetas");
 
-    
-    loadTags();
+    loadTags(searchParams.toString());
   }, []);
 
   const handleClickDeleteModal = () => {
@@ -38,6 +36,7 @@ const Etiquetas = () => {
     searchParams.append('page', e.selected+1);
     searchParams.sort()
     setSearchParams(searchParams);
+    loadTags(searchParams.toString())
   }
 
   return (
@@ -61,15 +60,20 @@ const Etiquetas = () => {
 
       <Table />
 
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel="next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={3}
-        pageCount={5}
-        previousLabel="< previous"
-        renderOnZeroPageCount={null}
-      />
+      {
+        tagMeta && (
+          <ReactPaginate
+            breakLabel="..."
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={tagMeta.perPage}
+            pageCount={tagMeta.totalPages}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+          />
+        )
+      }
+      
     </>
   )
 }
