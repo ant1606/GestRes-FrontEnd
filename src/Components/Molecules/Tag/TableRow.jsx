@@ -5,24 +5,22 @@ import useTag from '../../../Context/TagContext'
 
 const TableRow = ({tag }) => {
 
-  const {tagActive, selectedTag} = useTag();
+  const {deletedTag, selectedTag} = useTag();
 
   const handleClickEdit = (tag) => {
-    // setEditTag(tag);
     selectedTag(tag);
-    // console.log(tagActive);
+    
     document.querySelector('#nombre').value = tag.nombre;
     document.querySelector('#nombre').select();
-    // console.log(editTag);
   }
 
   const handleClickDelete = (tag) => {
-    setDeleteTag(tag);
-    setToggleDeleteModal(!toggleDeleteModal);
+    deletedTag(tag);
+    // setToggleDeleteModal(!toggleDeleteModal);
   }
 
   return (
-      <tr key={tag.identificador}>
+      <tr>
       <td className='w-48 h-14'>
         <div className="flex justify-around items-center px-3 py-2">
           <button 

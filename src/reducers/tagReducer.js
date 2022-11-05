@@ -3,11 +3,13 @@ import types from '../types/types';
 export const initialState = {
   tags: [],
   tagActive: null,
+  tagDelete: null,
 };
 
 /**
  * tags: Array, Conjunto de Tags
- * tagActive: Object, Tag a editar o eliminar
+ * tagActive: Object, Tag a editar
+ * tagDelete: Object, Tag a eliminar
  */
 
 const tagReducer = (state = {}, action) => {
@@ -19,24 +21,22 @@ const tagReducer = (state = {}, action) => {
       };
 
     case types.tagSave:
-      console.log('Guardando Tags');
       return {
         ...state,
         tags: [action.payload, ...state.tags],
       };
 
     case types.tagSelect:
-      console.log('Seleccionando tag a actualizar/eliminar');
       return {
         ...state,
         tagActive: action.payload,
       };
 
     case types.tagUpdate:
-      console.log('Actualizando tag', action.payload.identificador);
       return {
         ...state,
         tagActive: null,
+        tagDelete: null,
         tags: state.tags.map((tag) =>
           tag.identificador === action.payload.identificador
             ? action.payload
@@ -45,10 +45,16 @@ const tagReducer = (state = {}, action) => {
       };
 
     case types.tagDelete:
-      console.log('Eliminando Tag');
+      return {
+        ...state,
+        tagDelete: action.payload,
+      };
+
+    case types.tagDestroy:
       return {
         ...state,
         tagActive: null,
+        tagDelete: null,
         tags: state.tags.filter((tag) => tag.identificador !== action.payload),
       };
 

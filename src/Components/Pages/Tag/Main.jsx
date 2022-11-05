@@ -9,12 +9,8 @@ import Table from '../../Organisms/Tag/Table';
 
 const Etiquetas = () => {
 
-  const {loadTags, tags} = useTag();
+  const {loadTags, tagDelete, deletedTag, destroyTag} = useTag();
   const {changeTitle} = useContext(TitleContext);
-  
-
-  const [deleteTag, setDeleteTag] = useState({})
-  const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
 
   useEffect(()=>{
     changeTitle("Etiquetas");
@@ -22,43 +18,25 @@ const Etiquetas = () => {
     loadTags();
   }, []);
 
-
-  const handleClickDelete = (tag) => {
-    setDeleteTag(tag);
-    setToggleDeleteModal(!toggleDeleteModal);
-  }
-
   const handleClickDeleteModal = () => {
-    //TODO ver como limpiar el state deleteTag luego de cerrar el modal
-    setToggleDeleteModal(!toggleDeleteModal);
+    deletedTag(null);
   }
   const handleClickAcceptModal = () => {
-    // console.log(`http://localhost/api/tag/${deleteTag.id}`);
-
-    fetch(`http://localhost/api/tag/${deleteTag.identificador}`,{
-      method: 'delete',       
-      // body: JSON.stringify(sendData),
-      headers: {
-        "Content-Type": "application/json",
-        "accept" : "application/json"
-      }
-    })
-    .then(resp => resp.json())
-    .then(data=> setTags(tags => tags.filter(tag => tag.identificador !== deleteTag.identificador)  ));
-
-    setToggleDeleteModal(!toggleDeleteModal);
+    destroyTag();
+    deletedTag(null);
   }
 
+  // console.log(tagDelete);
   return (
     <>
       
       {
-        toggleDeleteModal && (
+        tagDelete && (
           <Modal
             title="Eliminar Etiqueta"
-            modalState={toggleDeleteModal}
+            modalState={tagDelete}
             handleClickParent={handleClickDeleteModal}
-            modalContent={<p>¿Desea eliminar la etiqueta {deleteTag.name}?</p>}
+            modalContent={<p>¿Desea eliminar la etiqueta {tagDelete.nombre}?</p>}
             handleClickAcceptButton={handleClickAcceptModal}
           />
         )
