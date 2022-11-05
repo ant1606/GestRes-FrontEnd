@@ -1,9 +1,11 @@
 import React from 'react'
-import { mdiPencil, mdiTrashCan } from '@mdi/js'
-import Icon from '@mdi/react'
-import TableRow from '../../Molecules/Tag/TableRow'
 
-const Table = ({tags, handleClickEdit, handleClickDelete }) => {
+import TableRow from '../../Molecules/Tag/TableRow'
+import useTag from '../../../Context/TagContext'
+
+const Table = () => {
+  const {tags} = useTag();
+
   return (
     <table className='table-auto w-full'>
       <thead>
@@ -21,8 +23,7 @@ const Table = ({tags, handleClickEdit, handleClickDelete }) => {
             <TableRow 
               key={tag.identificador} 
               tag={tag}
-              handleClickDelete={handleClickDelete}
-              handleClickEdit={handleClickEdit}
+              
             />
           )
         }

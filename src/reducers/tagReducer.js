@@ -33,12 +33,12 @@ const tagReducer = (state = {}, action) => {
       };
 
     case types.tagUpdate:
-      console.log('Actualizando tag');
+      console.log('Actualizando tag', action.payload.identificador);
       return {
         ...state,
         tagActive: null,
         tags: state.tags.map((tag) =>
-          tag.identificado === action.payload.identificador
+          tag.identificador === action.payload.identificador
             ? action.payload
             : tag
         ),

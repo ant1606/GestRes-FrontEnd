@@ -9,17 +9,35 @@ export const TagProvider = ({children}) => {
   const [state, dispatch] = useReducer(tagReducer, initialState);
 
   const savingTagInDb = (sendData) => {
-    fetch('http://localhost/api/tag',{
-        method: 'post',       
-        body: JSON.stringify(sendData),
+    if(state.tagActive){
+    fetch(`http://localhost/api/tag/${state.tagActive.identificador}`,{
+        method: 'PUT',       
+        body: JSON.stringify({
+          ...sendData, 
+          identificador:state.tagActive.identificador
+        }),
         headers: {
           "Content-Type": "application/json",
           "accept" : "application/json"
         }
       })
       .then(resp => resp.json())
-      .then(data=> dispatch(saveTag(data.data)))
-      .catch(err => console.log(err));
+      .then(data => dispatch(updatedTag(data.data)))
+      .catch(err => console.log(err) );
+      //TODO Ver como capturar el error para los mensajes de validacion
+    } else {
+      fetch('http://localhost/api/tag',{
+          method: 'POST',       
+          body: JSON.stringify(sendData),
+          headers: {
+            "Content-Type": "application/json",
+            "accept" : "application/json"
+          }
+        })
+        .then(resp => resp.json())
+        .then(data=> dispatch(saveTag(data.data)))
+        .catch(err => console.log(err));
+    }
   }
 
   const loadTags = () => {
@@ -42,16 +60,14 @@ export const TagProvider = ({children}) => {
   const selectedTag = (tag) => {
     dispatch({
       type: types.tagSelect,
-      payload: tag,
-    });
+      payload: tag, 
+    })
   };
 
-  const updatedTag = (tag) => {
-    dispatch({
+  const updatedTag = (tag) => ({
       type: types.tagUpdate,
       payload: tag,
-    });
-  };
+  });
 
   const deletedTag = (idTag) => {
     dispatch({
@@ -61,7 +77,8 @@ export const TagProvider = ({children}) => {
   };
 
   const tagActions  = {
-    ...state,
+    tags: state.tags,
+    tagActive: state.tagActive,
     savingTagInDb,
     selectedTag,
     updatedTag,

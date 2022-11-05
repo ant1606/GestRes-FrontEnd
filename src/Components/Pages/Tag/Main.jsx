@@ -141,11 +141,7 @@ const Etiquetas = () => {
         handleChangeFilter={handleChangeFilter}
       /> */}
 
-      <Table 
-        tags={tags} 
-        handleClickDelete={handleClickDelete} 
-        handleClickEdit={handleClickEdit}
-      />
+      <Table />
     </>
   )
 }

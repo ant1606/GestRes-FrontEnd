@@ -1,8 +1,26 @@
 import React from 'react'
 import { mdiPencil, mdiTrashCan } from '@mdi/js'
 import Icon from '@mdi/react'
+import useTag from '../../../Context/TagContext'
 
-const TableRow = ({tag, handleClickEdit, handleClickDelete }) => {
+const TableRow = ({tag }) => {
+
+  const {tagActive, selectedTag} = useTag();
+
+  const handleClickEdit = (tag) => {
+    // setEditTag(tag);
+    selectedTag(tag);
+    // console.log(tagActive);
+    document.querySelector('#nombre').value = tag.nombre;
+    document.querySelector('#nombre').select();
+    // console.log(editTag);
+  }
+
+  const handleClickDelete = (tag) => {
+    setDeleteTag(tag);
+    setToggleDeleteModal(!toggleDeleteModal);
+  }
+
   return (
       <tr key={tag.identificador}>
       <td className='w-48 h-14'>

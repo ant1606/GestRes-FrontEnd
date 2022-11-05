@@ -5,7 +5,7 @@ import Field from '../../Atoms/Field'
 
 const Form = ({ editTag={}}) => {
   
-  const {tags, savingTagInDb} = useTag();
+  const {savingTagInDb, tagActive, selectedTag} = useTag();
 
   const handleSubmit = (e) =>{
     e.preventDefault();
@@ -21,9 +21,9 @@ const Form = ({ editTag={}}) => {
   }
 
   const handleClickCancel = () =>{
-    // setEditTag({});
-    document.querySelector('#etiqueta').value = "";
-    document.querySelector('#etiqueta').select();
+    selectedTag(null);
+    document.querySelector('#nombre').value = "";
+    document.querySelector('#nombre').select();
   }
 
   return (
@@ -45,7 +45,8 @@ const Form = ({ editTag={}}) => {
           />
           
           {
-            JSON.stringify(editTag) !== "{}" &&(
+            
+            tagActive &&(
               <Button
                 text="CANCELAR"
                 btnType="warning"
@@ -60,3 +61,4 @@ const Form = ({ editTag={}}) => {
 }
 
 export default Form
+//JSON.stringify(editTag) !== "{}" &&(
