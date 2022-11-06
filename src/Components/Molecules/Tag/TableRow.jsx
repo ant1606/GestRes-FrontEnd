@@ -5,31 +5,31 @@ import useTag from '../../../Context/TagContext'
 import { useSearchParams } from 'react-router-dom'
 
 
-const TableRow = ({tag }) => {
+const TableRow = ({ tag }) => {
 
-  const {deletedTag, selectedTag, loadTags} = useTag();
+  const { deletedTag, selectedTag, loadTags } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClickEdit = (tag) => {
     selectedTag(tag);
-    
+
     document.querySelector('#nombre').value = tag.nombre;
     document.querySelector('#nombre').select();
   }
 
-  const handleClickDelete = (tag) => {
-    deletedTag(tag);
-    loadTags(searchParams.toString());
+  const handleClickDelete = async (tag) => {
+    deletedTag(tag, searchParams.toString());
+
     // setToggleDeleteModal(!toggleDeleteModal);
   }
 
   return (
-      <tr>
+    <tr>
       <td className='w-48 h-14'>
         <div className="flex justify-around items-center px-3 py-2">
-          <button 
+          <button
             className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg"
-            onClick ={() => {handleClickEdit(tag)}}
+            onClick={() => { handleClickEdit(tag) }}
           >
             <Icon path={mdiPencil}
               title="Edit"
@@ -37,9 +37,9 @@ const TableRow = ({tag }) => {
               color="white"
             />
           </button>
-          <button 
+          <button
             className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
-            onClick={() => {handleClickDelete(tag)}}
+            onClick={() => { handleClickDelete(tag) }}
           >
             <Icon path={mdiTrashCan}
               title="Delete"

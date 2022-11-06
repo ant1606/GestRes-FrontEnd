@@ -5,25 +5,24 @@ import Button from '../../Atoms/Button'
 import Field from '../../Atoms/Field'
 
 const Form = () => {
-  
-  const {savingTagInDb, tagActive, selectedTag, loadTags} = useTag();
+
+  const { savingTagInDb, tagActive, selectedTag, loadTags } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     const sendData = {
-      "nombre" : e.target.nombre.value,
-      "estilos" :"bg-gray-700"
+      "nombre": e.target.nombre.value,
+      "estilos": "bg-gray-700"
     }
 
-    savingTagInDb(sendData);
+    savingTagInDb(sendData, searchParams.toString());
 
-    e.target.nombre.value='';
+    e.target.nombre.value = '';
     document.querySelector('#nombre').select();
-    loadTags(searchParams.toString());
   }
 
-  const handleClickCancel = () =>{
+  const handleClickCancel = () => {
     selectedTag(null);
     document.querySelector('#nombre').value = "";
     document.querySelector('#nombre').select();
@@ -46,16 +45,16 @@ const Form = () => {
             type='submit'
             btnType="main"
           />
-          
+
           {
-            
-            tagActive &&(
+
+            tagActive && (
               <Button
                 text="CANCELAR"
                 btnType="warning"
-                handleClick={handleClickCancel} 
+                handleClick={handleClickCancel}
               />
-              )
+            )
           }
         </div>
       </form>
