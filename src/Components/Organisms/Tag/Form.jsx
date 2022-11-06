@@ -1,11 +1,13 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import useTag from '../../../Context/TagContext'
 import Button from '../../Atoms/Button'
 import Field from '../../Atoms/Field'
 
 const Form = () => {
   
-  const {savingTagInDb, tagActive, selectedTag} = useTag();
+  const {savingTagInDb, tagActive, selectedTag, loadTags} = useTag();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSubmit = (e) =>{
     e.preventDefault();
@@ -18,6 +20,7 @@ const Form = () => {
 
     e.target.nombre.value='';
     document.querySelector('#nombre').select();
+    loadTags(searchParams.toString());
   }
 
   const handleClickCancel = () =>{

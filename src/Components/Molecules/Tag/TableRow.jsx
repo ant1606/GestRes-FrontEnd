@@ -2,10 +2,13 @@ import React from 'react'
 import { mdiPencil, mdiTrashCan } from '@mdi/js'
 import Icon from '@mdi/react'
 import useTag from '../../../Context/TagContext'
+import { useSearchParams } from 'react-router-dom'
+
 
 const TableRow = ({tag }) => {
 
-  const {deletedTag, selectedTag} = useTag();
+  const {deletedTag, selectedTag, loadTags} = useTag();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClickEdit = (tag) => {
     selectedTag(tag);
@@ -16,6 +19,7 @@ const TableRow = ({tag }) => {
 
   const handleClickDelete = (tag) => {
     deletedTag(tag);
+    loadTags(searchParams.toString());
     // setToggleDeleteModal(!toggleDeleteModal);
   }
 

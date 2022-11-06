@@ -11,6 +11,7 @@ const Field = ({type, label, name, classBox='', handleChange=null  }) => {
         className="px-3 py-1 border-b-2 border-gray-900  bg-white peer w-full text-base transition-colors h-8
         focus:outline-none"
         onChange={handleChange}
+        autoComplete="off"
       />
       <label htmlFor={name}
         className="absolute left-0 -top-4 text-xs text-gray-600 cursor-text transition-all px-0

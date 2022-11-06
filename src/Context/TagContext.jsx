@@ -36,7 +36,7 @@ export const TagProvider = ({children}) => {
           }
         })
         .then(resp => resp.json())
-        .then(data=> dispatch(saveTag(data.data)))
+        .then(/*data=> dispatch(saveTag(data.data))*/)
         .catch(err => console.log(err));
     }
   }

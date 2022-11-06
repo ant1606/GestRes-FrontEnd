@@ -1,9 +1,10 @@
-import React, { useContext, useEffect  } from 'react'
+import React, { useContext, useEffect } from 'react'
 import ReactPaginate from 'react-paginate';
 import { useSearchParams } from 'react-router-dom';
 
-import useTag  from '../../../Context/TagContext';
+import useTag from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
+import Paginator from '../../Atoms/Paginator';
 
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
@@ -13,11 +14,11 @@ import Table from '../../Organisms/Tag/Table';
 
 const Etiquetas = () => {
 
-  const {loadTags, tagDelete, deletedTag, destroyTag, tagMeta} = useTag();
-  const {changeTitle} = useContext(TitleContext);
+  const { loadTags, tagDelete, deletedTag, destroyTag, tagMeta, tags } = useTag();
+  const { changeTitle } = useContext(TitleContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect( ()=>{
+  useEffect(() => {
     changeTitle("Etiquetas");
 
     loadTags(searchParams.toString());
@@ -31,9 +32,9 @@ const Etiquetas = () => {
     deletedTag(null);
   }
 
-  const handlePageClick = (e) => {    
+  const handlePageChange = (e) => {
     searchParams.delete('page');
-    searchParams.append('page', e.selected+1);
+    searchParams.append('page', e.selected + 1);
     searchParams.sort()
     setSearchParams(searchParams);
     loadTags(searchParams.toString())
@@ -41,7 +42,7 @@ const Etiquetas = () => {
 
   return (
     <>
-      
+
       {
         tagDelete && (
           <Modal
@@ -58,22 +59,33 @@ const Etiquetas = () => {
 
       <Filter />
 
-      <Table />
-
       {
-        tagMeta && (
-          <ReactPaginate
-            breakLabel="..."
-            nextLabel="next >"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={tagMeta.perPage}
-            pageCount={tagMeta.totalPages}
-            previousLabel="< previous"
-            renderOnZeroPageCount={null}
-          />
-        )
+        tags.length === 0 ?
+          (
+            <p>No se encontraron resultados</p>
+          )
+          :
+          (
+            <>
+              <Table />
+
+              {
+                tagMeta &&
+                (
+                  <Paginator
+                    handlePageChange={handlePageChange}
+                    perPage={tagMeta.perPage}
+                    totalPages={tagMeta.totalPages}
+                  />
+                )
+              }
+            </>
+
+          )
+
       }
-      
+
+
     </>
   )
 }
