@@ -6,11 +6,19 @@ import Field from '../../Atoms/Field'
 
 const Form = () => {
 
-  const { savingTagInDb, tagActive, selectedTag, loadTags } = useTag();
+  const { savingTagInDb, tagActive, selectedTag, addNewError, tagError } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (e.target.nombre.value.trim() === '') {
+      console.log("Debe enviar error");
+      addNewError({ [e.target.nombre.name]: "El nombre de etiqueta es requerido" });
+      document.querySelector('#nombre').select();
+      return;
+    }
+
     const sendData = {
       "nombre": e.target.nombre.value,
       "estilos": "bg-gray-700"
@@ -28,18 +36,39 @@ const Form = () => {
     document.querySelector('#nombre').select();
   }
 
+  const handleChange = (e) => {
+    if (e.target.value.trim() === '') {
+      addNewError({ [e.target.name]: "El nombre de etiqueta es requerido" });
+    }
+    else {
+      addNewError({ [e.target.name]: null });
+    }
+  }
+
   return (
 
-    <div className='shadow-2xl p-4 rounded-xl flex flex-col gap-2 mb-14'>
+    <div className='shadow-2xl p-4 h-32 rounded-xl flex flex-col gap-2 mb-14'>
       <h3 className='text-center text-2xl'>Mantenimiento de Etiquetas</h3>
       <form onSubmit={handleSubmit}>
-        <div className='flex justify-between items-end gap-10 w-full'>
-          <Field
-            type="text"
-            label="Ingrese Etiqueta"
-            name="nombre"
-            classBox="grow"
-          />
+        <div className='flex justify-between items-end gap-10 w-full '>
+          <div className='flex flex-col grow relative'>
+
+            <Field
+              type="text"
+              label="Ingrese Etiqueta"
+              name="nombre"
+              classBox="grow"
+              handleChange={handleChange}
+              errorInput={tagError.nombre}
+            />
+            {
+              tagError.nombre &&
+              (
+                <span className='text-xs absolute -bottom-5 z-10 text-red-500 font-bold'>{tagError.nombre}</span>
+              )
+            }
+
+          </div>
           <Button
             text="GUARDAR"
             type='submit'

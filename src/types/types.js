@@ -6,5 +6,6 @@ const types = {
   tagDelete: '[tag] Tag Deleted',
   tagDestroy: '[tag] Tag Destroyed',
   tagLoaded: '[tag] Loaded Tag Pagination',
+  tagAddError: '[tag] Add New Error Message Validation',
 };
 export default types;

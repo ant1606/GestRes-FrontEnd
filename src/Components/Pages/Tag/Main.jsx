@@ -62,6 +62,7 @@ const Etiquetas = () => {
       {
         tags.length === 0 ?
           (
+            //TODO Mejorar diseño de resultados no encontrados
             <p>No se encontraron resultados</p>
           )
           :

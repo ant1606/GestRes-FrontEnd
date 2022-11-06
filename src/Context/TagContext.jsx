@@ -62,7 +62,6 @@ export const TagProvider = ({ children }) => {
 
       })
       .catch(async error => {
-        //TODO Ver como capturar el error para los mensajes de validacion 
         const err = await error;
 
         const msg = Object.values(err.error);
@@ -78,7 +77,6 @@ export const TagProvider = ({ children }) => {
   }
 
   const loadTags = (queryParams = "") => {
-    console.log("Entre");
     fetch(`http://localhost/api/tag?${queryParams}`)
       .then(resp => resp.json())
       .then(data => {
@@ -120,7 +118,6 @@ export const TagProvider = ({ children }) => {
           toast: true
         });
       }).catch(async error => {
-        //TODO Ver como capturar el error para los mensajes de validacion 
         const err = await error;
 
         const msg = Object.values(err.error);
@@ -164,6 +161,13 @@ export const TagProvider = ({ children }) => {
     payload: tag,
   });
 
+  const addNewError = (error) => {
+    dispatch({
+      type: types.tagAddError,
+      payload: error,
+    })
+  }
+
 
 
   const tagActions = {
@@ -172,12 +176,14 @@ export const TagProvider = ({ children }) => {
     tagDelete: state.tagDelete,
     tagLinks: state.tagLinks,
     tagMeta: state.tagMeta,
+    tagError: state.error,
     savingTagInDb,
     selectedTag,
     updatedTag,
     deletedTag,
     loadTags,
     destroyTag,
+    addNewError
   };
 
   return (

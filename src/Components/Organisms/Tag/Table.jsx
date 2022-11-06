@@ -4,7 +4,7 @@ import TableRow from '../../Molecules/Tag/TableRow'
 import useTag from '../../../Context/TagContext'
 
 const Table = () => {
-  const {tags} = useTag();
+  const { tags } = useTag();
 
   return (
     <table className='table-auto w-full'>
@@ -15,15 +15,14 @@ const Table = () => {
         </tr>
       </thead>
       <tbody>
-        
+
         {
-          //TODO Evaluar cuando no existan resultados y muestre el mensaje resultados no encontrados
-          //TODO Generar paginacion de resultados
+
           tags?.map(tag =>
-            <TableRow 
-              key={tag.identificador} 
+            <TableRow
+              key={tag.identificador}
               tag={tag}
-              
+
             />
           )
         }
