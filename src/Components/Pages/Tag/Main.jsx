@@ -4,12 +4,12 @@ import { useSearchParams } from 'react-router-dom';
 
 import useTag from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
-import Paginator from '../../Atoms/Paginator';
 
 import Modal from '../../Molecules/Modal';
 import Filter from '../../Organisms/Tag/Filter';
 import Form from '../../Organisms/Tag/Form';
 import Table from '../../Organisms/Tag/Table';
+import FooterTable from '../../Organisms/FooterTable';
 
 
 const Etiquetas = () => {
@@ -72,10 +72,9 @@ const Etiquetas = () => {
               {
                 tagMeta &&
                 (
-                  <Paginator
+                  <FooterTable
                     handlePageChange={handlePageChange}
-                    perPage={tagMeta.perPage}
-                    totalPages={tagMeta.totalPages}
+                    {...tagMeta}
                   />
                 )
               }
