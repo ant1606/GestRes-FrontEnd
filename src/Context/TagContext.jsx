@@ -7,9 +7,10 @@ const TagContext = createContext(initialState);
 
 export const TagProvider = ({ children }) => {
 
+  //Mejorar los nombres de las acciones y de los tipos, dar un estandar
   const [state, dispatch] = useReducer(tagReducer, initialState);
 
-  const savingTagInDb = (sendData, queryParams = "") => {
+  const savingTagInDb = async (sendData, queryParams = "") => {
     let _endpoint = '';
     let _body = {};
     let _method = ''
@@ -30,7 +31,8 @@ export const TagProvider = ({ children }) => {
       _method = "POST"
     }
 
-    fetch(_endpoint, {
+    let success = true;
+    await fetch(_endpoint, {
       method: _method,
       body: _body,
       headers: {
@@ -56,7 +58,7 @@ export const TagProvider = ({ children }) => {
           icon: 'success',
           title: 'Se registro satisfactoriamente',
           showConfirmButton: false,
-          timer: 2000,
+          timer: 3000,
           toast: true
         });
 
@@ -64,16 +66,30 @@ export const TagProvider = ({ children }) => {
       .catch(async error => {
         const err = await error;
 
-        const msg = Object.values(err.error);
+        const processError = err.error.reduce(
+          (previous, currrent) => ({
+            ...previous,
+            [currrent.inputName]: currrent.detail
+          }),
+          {}
+        );
+
+        // console.log(stateError);
+        addNewError(processError);
+        // const msg = Object.values(err.error);
         Swal.fire({
           position: 'top-end',
           icon: 'error',
-          title: `Ocurrio un error durante el proceso.\n ${msg}`,
+          title: `Ocurrio un error en el formulario.`,
           showConfirmButton: false,
-          timer: 2000,
+          timer: 3000,
           toast: true
         });
+
+        success = false;
       });
+
+    return success;
   }
 
   const loadTags = (queryParams = "") => {

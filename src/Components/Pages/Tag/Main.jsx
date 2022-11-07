@@ -13,7 +13,8 @@ import FooterTable from '../../Organisms/FooterTable';
 
 
 const Etiquetas = () => {
-
+  //TODO Agregar un loader a las acciones eliminar, registrar nuevo y actualizado, filtrado y cambio de pagina
+  //TODO Dar estilos al toast de la notificacion de sweetalert
   const { loadTags, tagDelete, deletedTag, destroyTag, tagMeta, tags } = useTag();
   const { changeTitle } = useContext(TitleContext);
   const [searchParams, setSearchParams] = useSearchParams();

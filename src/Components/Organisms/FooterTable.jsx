@@ -1,13 +1,15 @@
 import React from 'react'
 import ReactPaginate from 'react-paginate'
 
-const FooterTable = ({ handlePageChange, perPage, totalPages, from, to, total }) => {
+const FooterTable = ({ handlePageChange, perPage, totalPages, from, to, total, currentPage }) => {
+  // //TODO Ver si se le puede definir un tamaño estatico y que no varie mucho cuando aparecen las demas paginas
   return (
     <div className='flex items-end'>
       <div className='block h-full flex-none'>
         <p>{from} a {to}, de {total}</p>
       </div>
       <div className='grow'>
+
         <ReactPaginate
           breakLabel="..."
           onPageChange={handlePageChange}
@@ -28,6 +30,7 @@ const FooterTable = ({ handlePageChange, perPage, totalPages, from, to, total })
           breakClassName={`text-xl mx-2`}
           breakLinkClassName={``}
           disabledClassName={`hidden`}
+          initialPage={currentPage - 1}
         />
       </div>
     </div>

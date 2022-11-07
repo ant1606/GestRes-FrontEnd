@@ -9,11 +9,10 @@ const Form = () => {
   const { savingTagInDb, tagActive, selectedTag, addNewError, tagError } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (e.target.nombre.value.trim() === '') {
-      console.log("Debe enviar error");
       addNewError({ [e.target.nombre.name]: "El nombre de etiqueta es requerido" });
       document.querySelector('#nombre').select();
       return;
@@ -24,9 +23,12 @@ const Form = () => {
       "estilos": "bg-gray-700"
     }
 
-    savingTagInDb(sendData, searchParams.toString());
+    const resp = await savingTagInDb(sendData, searchParams.toString());
 
-    e.target.nombre.value = '';
+    if (resp) {
+      e.target.nombre.value = '';
+    }
+
     document.querySelector('#nombre').select();
   }
 
