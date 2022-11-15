@@ -7,12 +7,12 @@ services:
     working_dir: /app
     ports: 
       - 3000:3000
-    command: yarn dev
+    command: yarn run dev
     tty: true
     networks:
       - pygesres_net
     extra_hosts:
-      - 'host.docker.interal:host-gateway'
+      - 'host.docker.internal:host-gateway'
 networks:
     pygesres_net:
         name: pygesres
