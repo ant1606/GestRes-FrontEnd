@@ -5,8 +5,7 @@ import Button from '../../Atoms/Button';
 import RecourseTable from '../../Organisms/Recourse/Table';
 import Filter from '../../Organisms/Recourse/Filter';
 
-const Recursos = () => {
-
+const RecourseScreenMain = () => {
   const { changeTitle } = useContext(TitleContext);
 
   useEffect(() => {
@@ -25,8 +24,9 @@ const Recursos = () => {
       <Filter />
 
       <RecourseTable />
+
     </>
   )
 }
 
-export default Recursos
+export default RecourseScreenMain

@@ -3,7 +3,7 @@ import Button from '../../Atoms/Button'
 import Form from '../../Organisms/Recourse/Form'
 import { Link } from 'react-router-dom';
 
-const New = () => {
+const RecourseScreenNew = () => {
   
   return (
     <>
@@ -27,4 +27,4 @@ const New = () => {
   )
 }
 
-export default New
+export default RecourseScreenNew

@@ -4,7 +4,7 @@ import RecourseForm from '../../Organisms/Recourse/Form'
 import StatusMain from '../../Organisms/Status/Main'
 import ProgressMain from '../../Organisms/Progress/Main'
 
-const Show = () => {
+const RecourseScreenShow = () => {
   const {changeTitle} = useContext(TitleContext);
   const [toggleTab, setToggleTab] = useState(1);
   const [showModalState, setShowModalState] = useState(false);
@@ -74,4 +74,4 @@ const Show = () => {
   )
 }
 
-export default Show
+export default RecourseScreenShow
