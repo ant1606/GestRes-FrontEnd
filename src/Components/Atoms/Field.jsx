@@ -1,7 +1,7 @@
 import React from 'react'
 import 'animate.css';
 
-const Field = ({ type, label, name, classBox = '', handleChange = null, errorInput = false }) => {
+const Field = ({ type, label, name, value='', classBox = '', handleChange = null, errorInput = false }) => {
   //TODO: Verificar que el mensaje de error se agregue en esta seccion misma
   return (
     <div className={`${errorInput ? "animate__animated animate__headShake" : ""} relative ${classBox}`}>
@@ -14,6 +14,7 @@ const Field = ({ type, label, name, classBox = '', handleChange = null, errorInp
         px-3 py-1  border-b-2 bg-white peer w-full text-base transition-colors h-8
         focus:outline-none`}
         onChange={handleChange}
+        value={value}
         autoComplete="off"
       />
       <label htmlFor={name}

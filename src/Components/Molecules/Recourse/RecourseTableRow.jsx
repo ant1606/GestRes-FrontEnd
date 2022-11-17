@@ -56,7 +56,7 @@ const RecourseTableRow = () => {
             <Link to="/recursos/show">
               <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
                 <Icon path={mdiEye}
-                  title="Show"
+                  title="RecourseScreenShow"
                   size={1}
                   color="white"
                 />

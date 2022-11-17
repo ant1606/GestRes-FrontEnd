@@ -1,14 +1,13 @@
 import React from 'react'
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+
 import SideBar from '../Components/Organisms/Sidebar'
 import Dashboard from '../Components/Pages/Dashboard'
 import Canales from '../Components/Pages/Canales'
-import Recourse from '../Components/Pages/Recourse/Main'
-import Tags from '../Components/Pages/Tag/Main'
-import RecourseNew from '../Components/Pages/Recourse/New';
-import RecourseShow from '../Components/Pages/Recourse/Show';
 import Titlebar from '../Components/Organisms/Titlebar'
-import { TagProvider } from '../Context/TagContext';
+
+import RecourseRouter from "./RecourseRouter.jsx";
+import TagRouter from "./TagRouter.jsx";
 
 const AppRouter = () => {
   return (
@@ -19,22 +18,16 @@ const AppRouter = () => {
         <main className='flex flex-col w-full'>
           <Titlebar />
           <div className='container h-full pt-4 px-6'>
+
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/canales" element={<Canales />}/>
-              <Route path="/recursos" element={<Recourse />}/>
-              <Route 
-                path="/etiquetas" 
-                element={
-                  <TagProvider>
-                    <Tags />
-                  </TagProvider>
-                }
-              />
-              <Route path="/recursos/new" element={<RecourseNew />}/>
-              <Route path="/recursos/show" element={<RecourseShow />}/>
               <Route path="/" element={<Dashboard />} />
             </Routes>
+
+            <TagRouter/>
+            <RecourseRouter/>
+
           </div>
         </main>
       </div>

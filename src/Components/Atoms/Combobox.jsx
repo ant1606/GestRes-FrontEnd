@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
 
-const Combobox = ({ name, options, label, handleChangeParent, selectedParent, classBox='', filter=false}) => {
-  
-  if(options !== undefined){
+const Combobox = ({ name, options, label, handleChange, value, classBox='', filter=false}) => {
+
+  if(options !== undefined || options?.length>0){
     return (
       <div className={`relative ${classBox}`}>
         <select 
-          className='px-3 py-1 border-b-2 border-gray-900 bg-white w-full text-base h-8
-            focus:outline-none' 
+          className='px-3 py-1 border-b-2 border-gray-900 bg-white w-full text-base h-8 focus:outline-none'
           name={name} 
           id={name}
-          onChange = {handleChangeParent}
-          value = {selectedParent}
+          onChange = {handleChange}
+          value = {value}
         >
           {filter && (
             <>
@@ -19,13 +18,21 @@ const Combobox = ({ name, options, label, handleChangeParent, selectedParent, cl
             </>
           )}
           {
-            options.map((option) => (
-              <option value={option.id} key={option.id}>{option.value}</option>
-            ))
+            options.map((option) =>
+                (
+                  <option
+                      value={option.id}
+                      key={option.id}
+                  >
+                      {option.value}
+                  </option>
+                )
+            )
           }
         </select>
-        <label htmlFor={name} 
-          className="absolute left-0 -top-4 px-0 text-xs text-gray-600 cursor-text"
+        <label
+            htmlFor={name}
+            className="absolute left-0 -top-4 px-0 text-xs text-gray-600 cursor-text"
         >
           {label}
         </label>

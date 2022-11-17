@@ -8,22 +8,16 @@ const Filter = () => {
   const [typeDataFilter, setTypeDataFilter] = useState();
   const [statusDataFilter, setStatusDataFilter] = useState();
 
+
   const getFilterData =  (val) => {
-    const obj =  fetch("http://localhost/api/settings", {
-      method: 'post',
-      body: JSON.stringify({
-        value: val
-      }),
-      headers: { 'Content-type': 'application/json' }
-    })
+    return  fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/settings/${val}`)
     .then((response) => response.json())
-    .then((data)=>  data.data);
-    return obj;
+    .then((data)=> data.data);
   }
 
   const initFilters = async () => {
-    let tempTypeDataFilter = await  getFilterData("type");
-    let tempStatusDataFilter =  await getFilterData("status");
+    let tempTypeDataFilter = await  getFilterData(import.meta.env.VITE_SETTINGS_TYPE);
+    let tempStatusDataFilter =  await getFilterData(import.meta.env.VITE_SETTINGS_STATUS);
     setTypeDataFilter(tempTypeDataFilter);
     setStatusDataFilter(tempStatusDataFilter);
   }

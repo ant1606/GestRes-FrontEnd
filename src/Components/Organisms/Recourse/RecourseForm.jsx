@@ -2,96 +2,103 @@ import React, { useContext, useEffect, useState } from 'react'
 import TitleContext from '../../../Context/TitleContext';
 import Combobox from '../../Atoms/Combobox';
 import Field from '../../Atoms/Field';
+import {useForm} from "../../../hooks/useForm.js";
+import useRecourse from "../../../Context/RecourseContext.jsx";
+import {useLoadComboData} from "../../../hooks/useLoadComboData.js";
+
+const initialState = {
+  nombre: '' ,
+  ruta: '',
+  autor: '',
+  editorial: '',
+  tipoId: 0,
+  totalVideos: 0,
+  totalHoras: '00:00:00',
+  totalPaginas: 0,
+  totalCapitulos: 0,
+  tags: []
+};
 
 const RecourseForm = ({endpoint, children}) => {
-  const {changeTitle} = useContext(TitleContext);
-  const [recourseTypeId, setRecourseTypeId] = useState(1);
-  
-  useEffect(()=>{
-    changeTitle("Recursos Educativos / Nuevo");
-  }, []);
+  const {recourseActive, recourseSaveDB} = useRecourse();
+  // const [comboTypeData, setComboTypeData] = useState([]);
+  const [formValues, handleInputChange, , resetValue ] = useForm(initialState);
+  const [comboData, fetchData] = useLoadComboData();
+  const {
+    nombre,
+    ruta,
+    autor,
+    editorial,
+    tipoId,
+    totalVideos,
+    totalHoras,
+    totalPaginas,
+    totalCapitulos,
+    tags
+  } = formValues;
+
+
+    useEffect(()=> {
+        fetchData(`settings/${import.meta.env.VITE_SETTINGS_TYPE}`);
+        // loadComboData(formValues.tipoId);
+        // console.log(tipoId);
+    }, []);
+
+  useEffect(() => {
+    // resetValue(totalPaginas);
+    // resetValue(totalCapitulos);
+    // resetValue(totalVideos);
+    // resetValue(totalHoras);
+  }, [tipoId])
+
+
+
+  // TODO Pensar en realizar un hook personalizado para la carga de los combobox
+  // const loadComboData =   (tipoId) => {
+  //    fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/settings/${import.meta.env.VITE_SETTINGS_TYPE}`)
+  //       .then( res => res.json())
+  //       .then(data => {
+  //         setComboTypeData(data.data);
+  //         tipoId = data.data[0]?.id;
+  //         console.log(tipoId);
+  //       });
+  // }
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let totalPaginasTemp = null;
-    let totalCapitulosTemp= null;
-    let totalVideosTemp = null;
-    let totalHorasTemp = null;
-    
-    
-    if (recourseTypeId === 1){
-      totalPaginasTemp = e.target.totalPaginas.value;
-      totalCapitulosTemp = e.target.totalCapitulos.value;
+    //TODO Queda pendiente la obtencion de las etiquetas
+
+    if(recourseActive===null){
+      recourseSaveDB({...formValues});
+    } else {
+      console.log("Actualizar el recurso");
     }
-    if (recourseTypeId === 2){
-      totalVideosTemp = e.target.totalVideos.value;
-      totalHorasTemp = e.target.totalHoras.value;
-    }
-    
-    //TODO hacer la obtencion de las etiquetas
-    const recourseObj = {
-      name: e.target.nombre.value,
-      source: e.target.ruta.value,
-      author: e.target.autor.value,
-      editorial: e.target.editorial.value,
-      type_id: e.target.tipo.value,
-      total_pages: totalPaginasTemp,
-      total_chapters: totalCapitulosTemp,
-      total_videos: totalVideosTemp,
-      total_hours: totalHorasTemp,
-    };
 
-    fetch(endpoint, {
-      method: 'post',
-      body: JSON.stringify(recourseObj),
-      headers: { 
-        "Content-Type" : "application/json",
-        "accept" : "application/json"
-      }
-    })
-    .then((response) => { 
-      return response.json();
-    })
-    .then((data)=>  {
-      console.log(data.status);
-      if(data.code === 422){
-        console.log("Existe un error");
-        return Promise.reject(data);
-        // throw Error(data);
-      }
-      // if(data.error)
-
-      console.log(data.data);
-    })
-    .catch((error) => {console.log("Hubo un error " + error)})
-
-    // console.log(obj);
-    // console.log(JSON.stringify(recourseObj));
   }
 
-  const handleChangeTypeIdRecourse = (e) => {
-    setRecourseTypeId(parseInt(e.target.value));
-    // console.log(recourseTypeId);
-  }
   return (
     <>
       <form className='flex flex-col' onSubmit={handleSubmit}>
-
+    <p>{tipoId}</p>
         <div className='flex w-full gap-10 my-5'>
           <Field 
               type="text" 
               label="Nombre" 
               name="nombre"
               classBox="basis-3/4"
+              handleChange={handleInputChange}
+              value={nombre}
           />
           <Combobox 
-              name="tipo" 
+              name="tipoId"
               label="Tipo" 
-              options={[{id: 1, value :"Opcion 1"}, {id: 2, value :"Opcion 2"} ]} 
+              options={comboData}
               filter={false}
               classBox="basis-1/4"
-              handleChangeParent={handleChangeTypeIdRecourse}
-              selectedParent={recourseTypeId}
+              handleChange={handleInputChange}
+              value={tipoId}
           />
         </div>
 
@@ -101,16 +108,20 @@ const RecourseForm = ({endpoint, children}) => {
               label="Editorial" 
               name="editorial"
               classBox="basis-3/4"
+              handleChange={handleInputChange}
+              value={editorial}
           />
 
           {
-            recourseTypeId === 1 ? 
+            parseInt(tipoId) === 1 ?
               (
                 <Field 
                   type="text" 
                   label="Total Paginas" 
                   name="totalPaginas"
                   classBox="basis-1/4"
+                  handleChange={handleInputChange}
+                  value={totalPaginas}
                 />
               ) 
             : 
@@ -120,6 +131,8 @@ const RecourseForm = ({endpoint, children}) => {
                 label="Total Videos" 
                 name="totalVideos"
                 classBox="basis-1/4"
+                handleChange={handleInputChange}
+                value={totalVideos}
               />
               ) 
           }
@@ -131,16 +144,20 @@ const RecourseForm = ({endpoint, children}) => {
               label="Autor" 
               name="autor"
               classBox="basis-3/4"
+              handleChange={handleInputChange}
+              value={autor}
           />
 
           {
-            recourseTypeId === 1 ? 
+            parseInt(tipoId) === 1 ?
               (
                 <Field 
                   type="text" 
                   label="Total Capitulos" 
                   name="totalCapitulos"
                   classBox="basis-1/4"
+                  handleChange={handleInputChange}
+                  value={totalCapitulos}
                 />
                 
               ) 
@@ -151,6 +168,8 @@ const RecourseForm = ({endpoint, children}) => {
                   label="Total Horas" 
                   name="totalHoras"
                   classBox="basis-1/4"
+                  handleChange={handleInputChange}
+                  value={totalHoras}
                 />
               ) 
           }
@@ -161,6 +180,8 @@ const RecourseForm = ({endpoint, children}) => {
               type="text" 
               label="Ruta" 
               name="ruta"
+              handleChange={handleInputChange}
+              value={ruta}
           />
         </div>
 
@@ -169,6 +190,8 @@ const RecourseForm = ({endpoint, children}) => {
               type="text" 
               label="Etiquetas" 
               name="etiqueta"
+              value={tags}
+              handleChange={handleInputChange}
           />
         </div>
 

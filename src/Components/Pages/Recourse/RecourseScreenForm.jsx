@@ -1,13 +1,21 @@
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import Button from '../../Atoms/Button'
-import Form from '../../Organisms/Recourse/Form'
+import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx'
 import { Link } from 'react-router-dom';
+import TitleContext from "../../../Context/TitleContext.jsx";
+import useRecourse from "../../../Context/RecourseContext.jsx";
 
-const RecourseScreenNew = () => {
-  
+const RecourseScreenForm = () => {
+  const { changeTitle } = useContext(TitleContext);
+  const {recourseActive} = useRecourse();
+
+  useEffect(()=>{
+    changeTitle(`Recursos Educativos / ${recourseActive===null ? "Nuevo" : "Editar"} `);
+  }, []);
+
   return (
     <>
-      <Form endpoint={"http://localhost/api/recourses"}>
+      <RecourseForm endpoint={"http://localhost/api/recourses"}>
         <div className='flex justify-around'>
           <Button 
               type="submit"
@@ -21,10 +29,10 @@ const RecourseScreenNew = () => {
           />
           </Link>
         </div> 
-      </Form>
+      </RecourseForm>
       
     </>
   )
 }
 
-export default RecourseScreenNew
+export default RecourseScreenForm

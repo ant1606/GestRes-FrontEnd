@@ -17,6 +17,7 @@ const RecourseScreenMain = () => {
       {/* //TODO Cuando se accede directamente a la ruta colocandola en la url, los assets del sidebar no son cargados 
       http://172.24.0.4:5173/recursos/show
       */}
+
       <Link to="/recursos/new">
         <Button text="Registrar Nuevo" />
       </Link>

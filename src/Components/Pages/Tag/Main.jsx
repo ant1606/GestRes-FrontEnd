@@ -43,7 +43,6 @@ const Etiquetas = () => {
 
   return (
     <>
-
       {
         tagDelete && (
           <Modal

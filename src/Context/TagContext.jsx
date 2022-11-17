@@ -17,7 +17,7 @@ export const TagProvider = ({ children }) => {
 
     if (state.tagActive) {
       /* ACTUALIZANDO TAG */
-      _endpoint = `http://localhost/api/tag/${state.tagActive.identificador}`;
+      _endpoint = `${import.meta.env.VITE_BACKEND_ENDPOINT}/tag/${state.tagActive.identificador}`;
       _body = JSON.stringify({
         ...sendData,
         identificador: state.tagActive.identificador
@@ -26,7 +26,7 @@ export const TagProvider = ({ children }) => {
 
     } else {
       /* REGISTRANDO NUEVA TAG*/
-      _endpoint = 'http://localhost/api/tag';
+      _endpoint = `${import.meta.env.VITE_BACKEND_ENDPOINT}/tag`;
       _body = JSON.stringify(sendData);
       _method = "POST"
     }
@@ -93,7 +93,7 @@ export const TagProvider = ({ children }) => {
   }
 
   const loadTags = (queryParams = "") => {
-    fetch(`http://localhost/api/tag?${queryParams}`)
+    fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/tag?${queryParams}`)
       .then(resp => resp.json())
       .then(data => {
         dispatch(setTags(data));
@@ -104,7 +104,7 @@ export const TagProvider = ({ children }) => {
 
   const destroyTag = (queryParams) => {
 
-    fetch(`http://localhost/api/tag/${state.tagDelete.identificador}`, {
+    fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/tag/${state.tagDelete.identificador}`, {
       method: 'delete',
       headers: {
         "Content-Type": "application/json",
@@ -183,8 +183,6 @@ export const TagProvider = ({ children }) => {
       payload: error,
     })
   }
-
-
 
   const tagActions = {
     tags: state.tags,
