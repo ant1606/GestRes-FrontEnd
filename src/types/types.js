@@ -7,5 +7,7 @@ const types = {
   tagDestroy: '[tag] Tag Destroyed',
   tagLoaded: '[tag] Loaded Tag Pagination',
   tagAddError: '[tag] Add RecourseScreenForm Error Message Validation',
+
+  settingsLoad: '[settings] Load settings',
 };
 export default types;
