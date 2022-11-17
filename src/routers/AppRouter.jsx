@@ -12,11 +12,16 @@ import useSettings from "../Context/SettingsContext.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y SideBarContext en SettingsContext
-  const {loadSettings} = useSettings()
+  const { loadSettings } = useSettings()
+
 
   useEffect(()=>{
-    loadSettings();
+    initApp();
   },[]);
+
+  const initApp = async() => {
+    await loadSettings();
+  }
 
   return (
       <BrowserRouter>

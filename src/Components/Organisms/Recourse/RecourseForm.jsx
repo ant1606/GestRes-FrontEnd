@@ -5,66 +5,37 @@ import Field from '../../Atoms/Field';
 import {useForm} from "../../../hooks/useForm.js";
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import {useLoadComboData} from "../../../hooks/useLoadComboData.js";
-
-const initialState = {
-  nombre: '' ,
-  ruta: '',
-  autor: '',
-  editorial: '',
-  tipoId: 0,
-  totalVideos: 0,
-  totalHoras: '00:00:00',
-  totalPaginas: 0,
-  totalCapitulos: 0,
-  tags: []
-};
+import useSettings from "../../../Context/SettingsContext.jsx";
 
 const RecourseForm = ({endpoint, children}) => {
+  const [comboTypeData, setComboTypeData] = useState([]);
+  const [typeId, setTypeId] = useState(0);
   const {recourseActive, recourseSaveDB} = useRecourse();
-  // const [comboTypeData, setComboTypeData] = useState([]);
-  const [formValues, handleInputChange, , resetValue ] = useForm(initialState);
-  const [comboData, fetchData] = useLoadComboData();
-  const {
-    nombre,
-    ruta,
-    autor,
-    editorial,
-    tipoId,
-    totalVideos,
-    totalHoras,
-    totalPaginas,
-    totalCapitulos,
-    tags
-  } = formValues;
+  const { settingsType } =useSettings();
+  const initialState = {
+    nombre: '' ,
+    ruta: '',
+    autor: '',
+    editorial: '',
+    totalVideos: 0,
+    totalHoras: '00:00:00',
+    totalPaginas: 0,
+    totalCapitulos: 0,
+    tags: []
+  };
 
+  //TODO Verificar como poder controlar el combobox desde el useForm (Ver useForm para encontrar el detella del error generado
+  const [formValues, handleInputChange,] = useForm(initialState);
+  const { nombre, ruta, autor, editorial, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
 
-    useEffect(()=> {
-        fetchData(`settings/${import.meta.env.VITE_SETTINGS_TYPE}`);
-        // loadComboData(formValues.tipoId);
-        // console.log(tipoId);
-    }, []);
+  useEffect(()=> {
+    setComboTypeData(settingsType);
+    setTypeId(!settingsType ? 0 : settingsType[0].id );
+  }, [settingsType, ]);
 
-  useEffect(() => {
-    // resetValue(totalPaginas);
-    // resetValue(totalCapitulos);
-    // resetValue(totalVideos);
-    // resetValue(totalHoras);
-  }, [tipoId])
-
-
-
-  // TODO Pensar en realizar un hook personalizado para la carga de los combobox
-  // const loadComboData =   (tipoId) => {
-  //    fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/settings/${import.meta.env.VITE_SETTINGS_TYPE}`)
-  //       .then( res => res.json())
-  //       .then(data => {
-  //         setComboTypeData(data.data);
-  //         tipoId = data.data[0]?.id;
-  //         console.log(tipoId);
-  //       });
-  // }
-
-
+  const handleComboChange = (e) => {
+    setTypeId(e.target.value);
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +52,7 @@ const RecourseForm = ({endpoint, children}) => {
   return (
     <>
       <form className='flex flex-col' onSubmit={handleSubmit}>
-    <p>{tipoId}</p>
+
         <div className='flex w-full gap-10 my-5'>
           <Field 
               type="text" 
@@ -91,14 +62,15 @@ const RecourseForm = ({endpoint, children}) => {
               handleChange={handleInputChange}
               value={nombre}
           />
-          <Combobox 
+
+          <Combobox
               name="tipoId"
-              label="Tipo" 
-              options={comboData}
+              label="Tipo"
+              options={comboTypeData}
               filter={false}
               classBox="basis-1/4"
-              handleChange={handleInputChange}
-              value={tipoId}
+              handleChange={handleComboChange}
+              value={typeId}
           />
         </div>
 
@@ -113,7 +85,7 @@ const RecourseForm = ({endpoint, children}) => {
           />
 
           {
-            parseInt(tipoId) === 1 ?
+            parseInt(typeId) === 1 ?
               (
                 <Field 
                   type="text" 
@@ -149,7 +121,7 @@ const RecourseForm = ({endpoint, children}) => {
           />
 
           {
-            parseInt(tipoId) === 1 ?
+            parseInt(typeId) === 1 ?
               (
                 <Field 
                   type="text" 

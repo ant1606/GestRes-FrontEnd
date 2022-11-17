@@ -7,7 +7,7 @@ const SettingsContext = createContext(initialState);
 export const SettingsProvider = ({children})=>{
     const [state, dispatch] = useReducer(settingsReducer, initialState);
 
-    const loadSettings = () => {
+    const loadSettings = async () => {
         fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/settings`)
             .then(resp => resp.json())
             .then(data =>
@@ -19,7 +19,9 @@ export const SettingsProvider = ({children})=>{
     }
 
     const settingsActions = {
-        loadSettings
+        settingsType: state.settingsType,
+        settingsStatus: state.settingsStatus,
+        loadSettings,
     }
 
     return (
