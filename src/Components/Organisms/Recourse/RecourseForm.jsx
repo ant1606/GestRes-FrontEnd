@@ -6,6 +6,7 @@ import {useForm} from "../../../hooks/useForm.js";
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import {useLoadComboData} from "../../../hooks/useLoadComboData.js";
 import useSettings from "../../../Context/SettingsContext.jsx";
+import {RECOURSE_TYPE_LIBRO} from "../../../const/globalConstantes.js";
 
 const RecourseForm = ({endpoint, children}) => {
   const [comboTypeData, setComboTypeData] = useState([]);
@@ -29,8 +30,10 @@ const RecourseForm = ({endpoint, children}) => {
   const { nombre, ruta, autor, editorial, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
 
   useEffect(()=> {
-    setComboTypeData(settingsType);
-    setTypeId(!settingsType ? 0 : settingsType[0].id );
+    if(settingsType !== null){
+      setComboTypeData(settingsType);
+      setTypeId(!settingsType ? 0 : settingsType[0].id );
+    }
   }, [settingsType, ]);
 
   const handleComboChange = (e) => {
@@ -42,7 +45,7 @@ const RecourseForm = ({endpoint, children}) => {
     //TODO Queda pendiente la obtencion de las etiquetas
 
     if(recourseActive===null){
-      recourseSaveDB({...formValues});
+      recourseSaveDB({...formValues, tipoId : typeId});
     } else {
       console.log("Actualizar el recurso");
     }
@@ -85,7 +88,7 @@ const RecourseForm = ({endpoint, children}) => {
           />
 
           {
-            parseInt(typeId) === 1 ?
+            parseInt(typeId) === settingsType?.find(val => val.key === RECOURSE_TYPE_LIBRO).id ?
               (
                 <Field 
                   type="text" 
@@ -121,7 +124,7 @@ const RecourseForm = ({endpoint, children}) => {
           />
 
           {
-            parseInt(typeId) === 1 ?
+            parseInt(typeId) === settingsType?.find(val => val.key === RECOURSE_TYPE_LIBRO).id  ?
               (
                 <Field 
                   type="text" 
