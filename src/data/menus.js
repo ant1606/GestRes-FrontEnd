@@ -1,6 +1,16 @@
 const menus = [
-  { title: 'Dashboard', icon: 'dashboard.svg', link: true, path: '/dashboard' },
-  { title: 'Mantenimiento', icon: '', link: false, path: '' },
+  {
+    title: 'Dashboard',
+    icon: 'dashboard.svg',
+    link: true,
+    path: '/dashboard'
+  },
+  {
+    title: 'Mantenimiento',
+    icon: '',
+    link: false,
+    path: ''
+  },
   {
     title: 'Videos Youtube',
     icon: 'youtube.svg',
@@ -13,7 +23,12 @@ const menus = [
     link: true,
     path: '/recursos',
   },
-  { title: 'Etiquetas', icon: 'tag.svg', link: true, path: '/etiquetas' },
+  {
+    title: 'Etiquetas',
+    icon: 'tag.svg',
+    link: true,
+    path: '/etiquetas'
+  },
 ];
 
 export default menus;
