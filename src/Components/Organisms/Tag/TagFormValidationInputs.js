@@ -1,8 +1,7 @@
-export const validateTagNombre = (nombre) => {
-    console.log(nombre);
+export const validateTagNombre = (values) => {
     const max = 50;
     const min = 2;
-    const nombreToValidate = nombre.trim();
+    const nombreToValidate = values.nombre.trim();
     const isBetween = (length, min, max) => !(length < min || length > max);
 
     if(!nombreToValidate){
