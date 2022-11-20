@@ -1,4 +1,5 @@
 export const validateTagNombre = (nombre) => {
+    console.log(nombre);
     const max = 50;
     const min = 2;
     const nombreToValidate = nombre.trim();

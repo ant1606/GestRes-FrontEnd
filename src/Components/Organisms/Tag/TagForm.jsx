@@ -1,32 +1,46 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useTag from '../../../Context/TagContext'
 import Button from '../../Atoms/Button'
 import Field from '../../Atoms/Field'
+import {useForm} from "../../../hooks/useForm.js";
+import {validateTagNombre} from "./TagFormValidationInputs.js";
 
-const Form = () => {
+const validateFunctionsFormInputs = {
+  nombre: validateTagNombre
+};
 
-  const { savingTagInDb, tagActive, selectedTag, addNewError, tagError } = useTag();
+const initialFormValues = {
+  nombre: ''
+};
+
+const TagForm = () => {
+
+  const { savingTag, updatingTag, tagActive, selectedTag, addNewError, tagError } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
+  const initialState = !!tagActive ? tagActive : initialFormValues;
+  const [formValues, handleInputChange, reset, isValid] = useForm(initialState, validateFunctionsFormInputs, addNewError );
+  const {nombre} = formValues;
+
+  useEffect(()=>{
+    reset();
+  }, [tagActive])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (e.target.nombre.value.trim() === '') {
-      addNewError({ [e.target.nombre.name]: "El nombre de etiqueta es requerido" });
-      document.querySelector('#nombre').select();
-      return;
-    }
-
-    const sendData = {
-      "nombre": e.target.nombre.value,
-      "estilos": "bg-gray-700"
-    }
-
-    const resp = await savingTagInDb(sendData, searchParams.toString());
-
-    if (resp) {
-      e.target.nombre.value = '';
+    if(isValid()){
+      let res = !tagActive ? savingTag(formValues, searchParams) : updatingTag(formValues);
+      if(res){
+        reset();
+      }
+    }else{
+      //Ejecuta todas las validaciones cuando no se hicieron las validaciones respectivas mediante el inputChange del useForm
+      Object.keys(validateFunctionsFormInputs).map(valid => {
+        addNewError({
+          [valid]: validateFunctionsFormInputs[valid](document.getElementById(valid).value)
+        });
+      });
     }
 
     document.querySelector('#nombre').select();
@@ -34,17 +48,7 @@ const Form = () => {
 
   const handleClickCancel = () => {
     selectedTag(null);
-    document.querySelector('#nombre').value = "";
     document.querySelector('#nombre').select();
-  }
-
-  const handleChange = (e) => {
-    if (e.target.value.trim() === '') {
-      addNewError({ [e.target.name]: "El nombre de etiqueta es requerido" });
-    }
-    else {
-      addNewError({ [e.target.name]: null });
-    }
   }
 
   return (
@@ -60,8 +64,9 @@ const Form = () => {
               label="Ingrese Etiqueta"
               name="nombre"
               classBox="grow"
-              handleChange={handleChange}
+              handleChange={handleInputChange}
               errorInput={tagError.nombre}
+              value={nombre}
             />
             {
               tagError.nombre &&
@@ -93,4 +98,4 @@ const Form = () => {
   )
 }
 
-export default Form
+export default TagForm
