@@ -1,7 +1,8 @@
 import React from 'react'
 import 'animate.css';
+import PropTypes from 'prop-types';
 
-const Field = ({ type, label, name, value='', classBox = '', handleChange = null, errorInput = false }) => {
+const Field = ({ type, label, name, value, classBox , handleChange , errorInput }) => {
   //TODO: Verificar que el mensaje de error se agregue en esta seccion misma
   return (
     <div className={`${errorInput ? "animate__animated animate__headShake" : ""} relative ${classBox}`}>
@@ -29,4 +30,19 @@ const Field = ({ type, label, name, value='', classBox = '', handleChange = null
   )
 }
 
+Field.propTypes = {
+    type: PropTypes.string.isRequired,
+    label : PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    classBox: PropTypes.string,
+    handleChange: PropTypes.func.isRequired,
+    errorInput: PropTypes.string
+}
+
+Field.defaultProps={
+    value: '',
+    classBox: '',
+    errorInput: ''
+}
 export default Field
