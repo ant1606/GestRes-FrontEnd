@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { useSearchParams } from 'react-router-dom'
 
 import { mdiMagnify } from '@mdi/js'
@@ -7,24 +7,35 @@ import Icon from '@mdi/react'
 import Field from '../../Atoms/Field'
 import useTag from '../../../Context/TagContext'
 
-const Filter = () => {
+const TagFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchNombre, setSearchNombre] = useState('');
   const {loadTags} = useTag();
 
-  const handleChange = (e) => {
-    let filter = e.target.value;
 
+  useEffect(()=>{
+    console.log(searchNombre);
+    execFilter();
+    },
+    [searchNombre]
+  );
+
+  const execFilter = () => {
     searchParams.delete('searchNombre');
 
-    if (filter !== '') {
+    if (searchNombre !== '') {
       searchParams.delete('page');
       searchParams.append('page', 1);
-      searchParams.append('searchNombre', filter);
+      searchParams.append('searchNombre', searchNombre);
     }
 
     searchParams.sort();
     setSearchParams(searchParams);
     loadTags(searchParams.toString());
+  }
+
+  const handleChange = (e) => {
+    setSearchNombre(e.target.value);
   }
 
   return (
@@ -41,9 +52,10 @@ const Filter = () => {
         name="buscarEtiqueta"
         classBox=""
         handleChange={handleChange}
+        value={searchNombre}
       />
     </div>
   )
 }
 
-export default Filter
+export default TagFilter
