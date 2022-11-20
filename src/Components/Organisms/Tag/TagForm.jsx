@@ -30,7 +30,7 @@ const TagForm = () => {
     e.preventDefault();
 
     if(isValid()){
-      let res = !tagActive ? savingTag(formValues, searchParams) : updatingTag(formValues);
+      let res =!tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
       if(res){
         reset();
       }
