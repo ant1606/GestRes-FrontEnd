@@ -23,5 +23,14 @@ export const toastNotifications = () => {
         });
     }
 
-    return {toastSucces, toastError};
+    const notificationError = (msg) => {
+        console.log("mostrando notification");
+        Swal.fire({
+            icon: 'error',
+            title: 'Sistema',
+            text: msg
+        })
+    }
+
+    return {toastSucces, toastError, notificationError};
 }
