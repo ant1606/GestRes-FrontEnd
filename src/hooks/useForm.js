@@ -3,13 +3,15 @@ import {useEffect, useState} from 'react';
 export const useForm = (initialState = {}, validateInputs, dispatchError) => {
     const [values, setValues] = useState(initialState);
     const [inputValidate, setInputValidate] = useState(null);
+    const [isValid, setIsValid] = useState(false);
     const [isValidated, setIsValidated] = useState(Object.keys(initialState).reduce((acc, curr) => ({
         ...acc,
         [curr]: false
     }), {}));
 
+
     useEffect(()=>{
-        validateInput();
+        validatedInput();
     },[values]);
 
     // Cuando se pasa el tipoId de RecourseForm, si se pasa 1, el values lo pasa a 0, no se encontro porque pasa eso (Verificar si haciendo el reset en el form se soluciona esto
@@ -25,7 +27,7 @@ export const useForm = (initialState = {}, validateInputs, dispatchError) => {
         });
     };
 
-    const validateInput = () => {
+    const validatedInput = () => {
         if(inputValidate!==null){
             const validateMsg = validateInputs[inputValidate](values);
 
@@ -45,9 +47,32 @@ export const useForm = (initialState = {}, validateInputs, dispatchError) => {
         setInputValidate(null);
     }
 
-    const isValid=() => {
-        return Object.values(isValidated).every(el=>el===true);
+    //Usado en el caso el tagActive este seleccionado y este es enviado a values como initialState del customHook
+    const validatedSubmitForm =() => {
+        const res = Object.keys(values).reduce((acc, curr) => {
+            if (Object.hasOwn(validateInputs, curr)){
+                return {
+                    ...acc,
+                    [curr] : validateInputs[curr](values)
+                };
+            }
+            return {...acc};
+        }, {});
+
+        Object.keys(res).map(x => {
+            dispatchError({
+                [x]: res[x]
+            });
+
+            //Definiendo si el input es valido o no en el objeto isValidated
+
+            if( !res[x]){
+                setIsValidated(state => ({...state, [x]: true}));
+            }else {
+                setIsValidated(state => ({...state, [x]: false}));
+            }
+        });
     }
 
-    return [values, handleInputChange, reset, isValid];
+    return [values, handleInputChange, reset, validatedSubmitForm];
 };
