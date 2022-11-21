@@ -5,12 +5,13 @@ import useTag from '../../../Context/TagContext'
 import { useSearchParams } from 'react-router-dom'
 
 
-const TableRow = ({ tag }) => {
+const TagTableRow = ({ tag }) => {
 
-  const { deletedTag, selectedTag, loadTags } = useTag();
+  const { deletedTag, selectedTag, addNewError } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClickEdit = (tag) => {
+    addNewError([]);
     selectedTag(tag);
 
     document.querySelector('#nombre').value = tag.nombre;
@@ -19,8 +20,6 @@ const TableRow = ({ tag }) => {
 
   const handleClickDelete = async (tag) => {
     deletedTag(tag, searchParams.toString());
-
-    // setToggleDeleteModal(!toggleDeleteModal);
   }
 
   return (
@@ -60,4 +59,4 @@ const TableRow = ({ tag }) => {
   )
 }
 
-export default TableRow
+export default TagTableRow
