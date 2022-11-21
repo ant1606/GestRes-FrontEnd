@@ -95,7 +95,13 @@ export const TagProvider = ({ children }) => {
           );
 
           addNewError(processError);
-          toastNotifications().toastError();
+
+          if(Object.hasOwn(processError,'undefined')){
+            toastNotifications().notificationError(processError[undefined]);
+          }else {
+            toastNotifications().toastError();
+          }
+
           success = false;
         });
 
