@@ -1,34 +1,42 @@
 import {createContext, useContext, useReducer, useState} from "react";
 import recourseReducer, {initialState} from "../reducers/recourseReducer.js";
+import GLOBAL_CONSTANTES from "../const/globalConstantes.js";
+import useSettings from "./SettingsContext.jsx";
 
 const RecourseContext = createContext(initialState);
 
 export const RecourseProvider = ({children}) => {
+    const {settingsType} =useSettings();
     const [state, dispatch] = useReducer(recourseReducer, initialState);
 
+    // let tmpTotalPaginas =  parseInt(recourse.totalPaginas === '' ? 0 : recourse.totalPaginas);
+    // let tmpTotalCapitulos =  parseInt(recourse.totalCapitulos === '' ? 0 : recourse.totalCapitulos);
+    // let tmpTotalVideos =  parseInt(recourse.totalVideos === '' ? 0 : recourse.totalVideos);
+    // let tmpTotalHoras =  recourse.totalHoras.trim() === '' ? "00:00:00" : recourse.totalHoras.trim();
+    // recourse.totalPaginas = tmpTotalPaginas === 0 ? null : tmpTotalPaginas;
+    // recourse.totalCapitulos = tmpTotalCapitulos === 0 ? null : tmpTotalCapitulos
+    // recourse.totalVideos = tmpTotalVideos === 0 ? null : tmpTotalVideos;
+    // recourse.totalHoras= tmpTotalHoras === "00:00:00" ? null : tmpTotalHoras;
+
     // Acciones INICIO
-    const recourseSaveDB = (recourse) => {
+    const recourseSaveDB = async (recourse) => {
+        if(parseInt(recourse.tipoId) === settingsType.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id){
+            recourse.totalVideos = null;
+            recourse.totalHoras = null;
+        }else {
+            recourse.totalPaginas = null;
+            recourse.totalCapitulos = null;
+        }
 
-        let tmpTotalPaginas =  parseInt(recourse.totalPaginas === '' ? 0 : recourse.totalPaginas);
-        let tmpTotalCapitulos =  parseInt(recourse.totalCapitulos === '' ? 0 : recourse.totalCapitulos);
-        let tmpTotalVideos =  parseInt(recourse.totalVideos === '' ? 0 : recourse.totalVideos);
-        let tmpTotalHoras =  recourse.totalHoras.trim() === '' ? "00:00:00" : recourse.totalHoras.trim();
-
-        recourse.totalPaginas = tmpTotalPaginas === 0 ? null : tmpTotalPaginas;
-        recourse.totalCapitulos = tmpTotalCapitulos === 0 ? null : tmpTotalCapitulos
-        recourse.totalVideos = tmpTotalVideos === 0 ? null : tmpTotalVideos;
-        recourse.totalHoras= tmpTotalHoras === "00:00:00" ? null : tmpTotalHoras;
-
-        console.log(recourse);
-        // fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourse/${state.tagActive.identificador}`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type' : 'application/json'
-        //     },
-        //     body: JSON.stringify(recourse)
-        // })
-        //     .then( resp => resp.json)
-        //     .then( data => console.log(data.data));
+        await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourses`, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(recourse)
+        })
+            .then( resp => resp.json)
+            .then( data => console.log(data.data));
     }
     // Acciones FIN
 
