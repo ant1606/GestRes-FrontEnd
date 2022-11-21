@@ -1,16 +1,14 @@
 import React, { useContext, useEffect } from 'react'
-import ReactPaginate from 'react-paginate';
 import { useSearchParams } from 'react-router-dom';
 
 import useTag from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
 
 import Modal from '../../Molecules/Modal';
-import Filter from '../../Organisms/Tag/Filter';
-import Form from '../../Organisms/Tag/Form';
+import TagFilter from '../../Organisms/Tag/TagFilter.jsx';
+import TagForm from '../../Organisms/Tag/TagForm.jsx';
 import Table from '../../Organisms/Tag/Table';
 import FooterTable from '../../Organisms/FooterTable';
-
 
 const Etiquetas = () => {
   //TODO Agregar un loader a las acciones eliminar, registrar nuevo y actualizado, filtrado y cambio de pagina
@@ -55,9 +53,9 @@ const Etiquetas = () => {
         )
       }
 
-      <Form />
+      <TagForm />
 
-      <Filter />
+      <TagFilter />
 
       {
         tags.length === 0 ?
@@ -84,7 +82,6 @@ const Etiquetas = () => {
           )
 
       }
-
 
     </>
   )

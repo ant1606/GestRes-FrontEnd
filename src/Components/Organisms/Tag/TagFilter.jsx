@@ -14,7 +14,6 @@ const TagFilter = () => {
 
 
   useEffect(()=>{
-    console.log(searchNombre);
     execFilter();
     },
     [searchNombre]
