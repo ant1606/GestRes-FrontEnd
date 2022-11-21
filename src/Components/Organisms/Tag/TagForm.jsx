@@ -19,7 +19,7 @@ const TagForm = () => {
   const { savingTag, updatingTag, tagActive, selectedTag, addNewError, tagError } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialState = !!tagActive ? tagActive : initialFormValues;
-  const [formValues, handleInputChange, reset, isValid] = useForm(initialState, validateFunctionsFormInputs, addNewError );
+  const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError );
   const {nombre} = formValues;
 
   useEffect(()=>{
@@ -29,18 +29,15 @@ const TagForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(isValid()){
+    await validatedSubmitForm();
+    const isValid =Object.keys(tagError).every(el=>tagError[el]===null);
+
+    if(isValid){
       let res =!tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
       if(res){
         reset();
+        addNewError([]);
       }
-    }else{
-      //Ejecuta todas las validaciones cuando no se hicieron las validaciones respectivas mediante el inputChange del useForm
-      Object.keys(validateFunctionsFormInputs).map(valid => {
-        addNewError({
-          [valid]: validateFunctionsFormInputs[valid](document.getElementById(valid).value)
-        });
-      });
     }
 
     document.querySelector('#nombre').select();
@@ -48,6 +45,7 @@ const TagForm = () => {
 
   const handleClickCancel = () => {
     selectedTag(null);
+    addNewError([]);
     document.querySelector('#nombre').select();
   }
 
