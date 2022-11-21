@@ -6,7 +6,7 @@ import {useForm} from "../../../hooks/useForm.js";
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import {useLoadComboData} from "../../../hooks/useLoadComboData.js";
 import useSettings from "../../../Context/SettingsContext.jsx";
-import {RECOURSE_TYPE_LIBRO} from "../../../const/globalConstantes.js";
+import GLOBAL_CONSTANTES from "../../../const/globalConstantes.js";
 
 const RecourseForm = ({endpoint, children}) => {
   const [comboTypeData, setComboTypeData] = useState([]);
@@ -14,10 +14,10 @@ const RecourseForm = ({endpoint, children}) => {
   const {recourseActive, recourseSaveDB} = useRecourse();
   const { settingsType } =useSettings();
   const initialState = {
-    nombre: '' ,
-    ruta: '',
-    autor: '',
-    editorial: '',
+    nombre: 'Mi curso de prueba' ,
+    ruta: 'https://www.vimeo.com/sdz/asdLHXCQWE',
+    autor: 'yO SOY',
+    editorial: 'Editorial pepito',
     totalVideos: 0,
     totalHoras: '00:00:00',
     totalPaginas: 0,
@@ -26,7 +26,7 @@ const RecourseForm = ({endpoint, children}) => {
   };
 
   //TODO Verificar como poder controlar el combobox desde el useForm (Ver useForm para encontrar el detella del error generado
-  const [formValues, handleInputChange,] = useForm(initialState);
+  const [formValues, handleInputChange] = useForm(initialState);
   const { nombre, ruta, autor, editorial, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
 
   useEffect(()=> {
@@ -88,7 +88,7 @@ const RecourseForm = ({endpoint, children}) => {
           />
 
           {
-            parseInt(typeId) === settingsType?.find(val => val.key === RECOURSE_TYPE_LIBRO).id ?
+            parseInt(typeId) === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id ?
               (
                 <Field 
                   type="text" 
@@ -124,7 +124,7 @@ const RecourseForm = ({endpoint, children}) => {
           />
 
           {
-            parseInt(typeId) === settingsType?.find(val => val.key === RECOURSE_TYPE_LIBRO).id  ?
+            parseInt(typeId) === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id  ?
               (
                 <Field 
                   type="text" 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import TableRow from '../../Molecules/Tag/TableRow'
+import TagTableRow from '../../Molecules/Tag/TagTableRow.jsx'
 import useTag from '../../../Context/TagContext'
 
 const Table = () => {
@@ -19,7 +19,7 @@ const Table = () => {
         {
 
           tags?.map(tag =>
-            <TableRow
+            <TagTableRow
               key={tag.identificador}
               tag={tag}
 
