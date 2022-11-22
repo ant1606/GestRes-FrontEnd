@@ -3,11 +3,12 @@ import { mdiPencil, mdiTrashCan } from '@mdi/js'
 import Icon from '@mdi/react'
 import useTag from '../../../Context/TagContext'
 import { useSearchParams } from 'react-router-dom'
+import {toastNotifications} from "../../../helpers/notificationsSwal.js";
 
 
 const TagTableRow = ({ tag }) => {
 
-  const { deletedTag, selectedTag, addNewError } = useTag();
+  const {selectedTag, addNewError, destroyTag, loadTags } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClickEdit = (tag) => {
@@ -19,7 +20,11 @@ const TagTableRow = ({ tag }) => {
   }
 
   const handleClickDelete = async (tag) => {
-    deletedTag(tag, searchParams.toString());
+    let result =  await toastNotifications().modalDeleteConfirm(tag);
+    if(result){
+      await destroyTag(tag);
+      loadTags(searchParams.toString());
+    }
   }
 
   return (

@@ -4,18 +4,16 @@ import { useSearchParams } from 'react-router-dom';
 import useTag from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
 
-import Modal from '../../Molecules/Modal';
 import TagFilter from '../../Organisms/Tag/TagFilter.jsx';
 import TagForm from '../../Organisms/Tag/TagForm.jsx';
 import Table from '../../Organisms/Tag/Table';
 import FooterTable from '../../Organisms/FooterTable';
 import perPageItemsValue from "../../../helpers/perPageItemsValue.js";
 
-
 const Etiquetas = () => {
   //TODO Agregar un loader a las acciones eliminar, registrar nuevo y actualizado, filtrado y cambio de pagina
   //TODO Dar estilos al toast de la notificacion de sweetalert
-  const { loadTags, tagDelete, deletedTag, destroyTag, tagMeta, tags,tagPerPage,setTagPerPage} = useTag();
+  const { loadTags, tagMeta, tags,tagPerPage,setTagPerPage} = useTag();
   const { changeTitle } = useContext(TitleContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -26,14 +24,6 @@ const Etiquetas = () => {
       setTagPerPage(perPageItemsValue[0].id);
     }
   }, []);
-
-  const handleClickDeleteModal = () => {
-    deletedTag(null);
-  }
-  const handleClickAcceptModal = () => {
-    destroyTag();
-    deletedTag(null);
-  }
 
   const handlePageChange = (e) => {
     searchParams.delete('page');
@@ -47,17 +37,6 @@ const Etiquetas = () => {
 
   return (
     <>
-      {
-        tagDelete && (
-          <Modal
-            title="Eliminar Etiqueta"
-            modalState={tagDelete}
-            handleClickParent={handleClickDeleteModal}
-            modalContent={<p>¿Desea eliminar la etiqueta {tagDelete.nombre}?</p>}
-            handleClickAcceptButton={handleClickAcceptModal}
-          />
-        )
-      }
       <TagForm />
       <TagFilter />
       {

@@ -50,7 +50,6 @@ export const toastNotifications = () => {
     }
 
     const notificationError = (msg) => {
-        console.log("mostrando notification");
         Swal.fire({
             icon: 'error',
             title: 'Sistema',
@@ -58,5 +57,33 @@ export const toastNotifications = () => {
         })
     }
 
-    return {toastSucces, toastError, notificationError};
+    const modalDeleteConfirm = async  (entity) => {
+        let confirm = false;
+
+         await Swal.fire({
+            title: `¿Desea eliminar el registro ${entity.nombre}?`,
+            text: "Esta acción no podrá ser revertida",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'ACEPTAR',
+            cancelButtonText: 'CANCELAR',
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'bg-green-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-green-700',
+                cancelButton: 'bg-red-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-red-900',
+                actions: 'gap-10'
+            },
+            buttonsStyling: false
+        }).then( result => {
+            if (result.isConfirmed) {
+                confirm = true
+            }else if ( result.dismiss === Swal.DismissReason.cancel) {
+                confirm = false;
+            }
+        });
+
+        return confirm;
+    }
+
+    return {toastSucces, toastError, notificationError, modalDeleteConfirm};
 }

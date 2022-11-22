@@ -3,7 +3,6 @@ import types from '../types/types';
 export const initialState = {
   tags: [],
   tagActive: null,
-  tagDelete: null,
   tagMeta: null,
   tagLinks: null,
   error: [],
@@ -13,7 +12,6 @@ export const initialState = {
 /**
  * tags: Array, Conjunto de Tags
  * tagActive: Object, Tag a editar
- * tagDelete: Object, Tag a eliminar
  * tagMeta: Object, Contiene los datos de la respuesta de Tags en paginacion
  * tagLinks: Object, Contiene la informacion de los links para paginacion
  * error: Array<Object>, Recibe los errores de validacion del formulario
@@ -52,20 +50,6 @@ const tagReducer = (state = {}, action) => {
             ? action.payload
             : tag
         ),
-      };
-
-    case types.tagDelete:
-      return {
-        ...state,
-        tagDelete: action.payload,
-      };
-
-    case types.tagDestroy:
-      return {
-        ...state,
-        tagActive: null,
-        tagDelete: null,
-        tags: state.tags.filter((tag) => tag.identificador !== action.payload),
       };
 
     case types.tagAddError:

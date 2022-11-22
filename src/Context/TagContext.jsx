@@ -85,6 +85,7 @@ export const TagProvider = ({ children }) => {
           dispatch(updatedTag(data.data));
         })
         .catch(async error => {
+          success = false;
           const err = await error;
           const processError = err.error.reduce(
               (previous, currrent) => ({
@@ -101,8 +102,6 @@ export const TagProvider = ({ children }) => {
           }else {
             toastNotifications().toastError();
           }
-
-          success = false;
         });
 
     return success;
@@ -113,9 +112,10 @@ export const TagProvider = ({ children }) => {
     payload: tag,
   });
 
-  const destroyTag = (queryParams) => {
+  const destroyTag = async (tag) => {
+    let success = false;
 
-    fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/tag/${state.tagDelete.identificador}`, {
+    await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/tag/${tag.identificador}`, {
       method: 'delete',
       headers: {
         "Content-Type": "application/json",
@@ -129,34 +129,34 @@ export const TagProvider = ({ children }) => {
         return resp.json();
       })
       .then(data => {
-        dispatch({
-          type: types.tagDestroy,
-          payload: data.data.identificador
-        });
-
-        loadTags(queryParams);
-
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Se eliminó el registro satisfactoriamente',
-          showConfirmButton: false,
-          timer: 2000,
-          toast: true
-        });
+        Swal.fire(
+            'Registro Eliminado',
+            'El registro fue eliminado satisfactoriamente.',
+            'success'
+        );
+        success = true;
       }).catch(async error => {
-        const err = await error;
+          const err = await error;
+          const processError = err.error.reduce(
+              (previous, currrent) => ({
+                ...previous,
+                [currrent.inputName]: currrent.detail
+              }),
+              {}
+          );
+          success = false;
 
-        const msg = Object.values(err.error);
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: `Ocurrio un error durante el proceso.\n ${msg}`,
-          showConfirmButton: false,
-          timer: 2000,
-          toast: true
-        });
+          addNewError(processError);
+
+          //TODO Ver si podemos extraer las notificaciones fuera de la funcion de eliminar, actualizar y guardar
+          if(Object.hasOwn(processError,'undefined')){
+            toastNotifications().notificationError(processError[undefined]);
+          }else {
+            toastNotifications().toastError();
+          }
       });
+
+    return success;
   }
 
   const selectedTag = (tag) => {
@@ -164,13 +164,6 @@ export const TagProvider = ({ children }) => {
       type: types.tagSelect,
       payload: tag,
     })
-  };
-
-  const deletedTag = (tag) => {
-    dispatch({
-      type: types.tagDelete,
-      payload: tag,
-    });
   };
 
   const setTags = (tags) => ({
@@ -203,7 +196,6 @@ export const TagProvider = ({ children }) => {
     savingTag,
     updatingTag,
     selectedTag,
-    deletedTag,
     loadTags,
     destroyTag,
     addNewError,
