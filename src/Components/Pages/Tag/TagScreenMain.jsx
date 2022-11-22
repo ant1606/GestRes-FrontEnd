@@ -9,6 +9,7 @@ import TagForm from '../../Organisms/Tag/TagForm.jsx';
 import Table from '../../Organisms/Tag/Table';
 import FooterTable from '../../Organisms/FooterTable';
 import perPageItemsValue from "../../../helpers/perPageItemsValue.js";
+import Loader from "../../Atoms/Loader.jsx";
 
 const Etiquetas = () => {
   //TODO Agregar un loader a las acciones eliminar, registrar nuevo y actualizado, filtrado y cambio de pagina
@@ -37,6 +38,7 @@ const Etiquetas = () => {
 
   return (
     <>
+      {/*<Loader/>*/}
       <TagForm />
       <TagFilter />
       {
