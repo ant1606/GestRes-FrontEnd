@@ -7,6 +7,7 @@ const types = {
   tagDestroy: '[tag] Tag Destroyed',
   tagLoaded: '[tag] Loaded Tag Pagination',
   tagAddError: '[tag] Add RecourseScreenForm Error Message Validation',
+  tagSetPerPage: '[tag] Set perPage range search',
 
   settingsLoad: '[settings] Load settings',
 };

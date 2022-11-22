@@ -113,87 +113,6 @@ export const TagProvider = ({ children }) => {
     payload: tag,
   });
 
-  const savingTagInDb = async (sendData, queryParams = "") => {
-    let _endpoint = '';
-    let _body = {};
-    let _method = ''
-
-    if (state.tagActive) {
-      /* ACTUALIZANDO TAG */
-      _endpoint = `${import.meta.env.VITE_BACKEND_ENDPOINT}/tag/${state.tagActive.identificador}`;
-      _body = JSON.stringify({
-        ...sendData,
-        identificador: state.tagActive.identificador
-      });
-      _method = "PUT"
-
-    } else {
-      /* REGISTRANDO NUEVA TAG*/
-      _endpoint = `${import.meta.env.VITE_BACKEND_ENDPOINT}/tag`;
-      _body = JSON.stringify(sendData);
-      _method = "POST"
-    }
-
-    let success = true;
-    await fetch(_endpoint, {
-      method: _method,
-      body: _body,
-      headers: {
-        "Content-Type": "application/json",
-        "accept": "application/json"
-      }
-    })
-      .then(resp => {
-        if (!resp.ok)
-          return Promise.reject(resp.json());
-
-        return resp.json();
-      })
-      .then(data => {
-        if (state.tagActive) {
-          dispatch(updatedTag(data.data));
-        } else {
-          loadTags(queryParams);
-        }
-
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Se registro satisfactoriamente',
-          showConfirmButton: false,
-          timer: 3000,
-          toast: true
-        });
-
-      })
-      .catch(async error => {
-        const err = await error;
-
-        const processError = err.error.reduce(
-          (previous, currrent) => ({
-            ...previous,
-            [currrent.inputName]: currrent.detail
-          }),
-          {}
-        );
-
-        addNewError(processError);
-        // const msg = Object.values(err.error);
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: `Ocurrio un error en el formulario.`,
-          showConfirmButton: false,
-          timer: 3000,
-          toast: true
-        });
-
-        success = false;
-      });
-
-    return success;
-  }
-
   const destroyTag = (queryParams) => {
 
     fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/tag/${state.tagDelete.identificador}`, {
@@ -254,11 +173,6 @@ export const TagProvider = ({ children }) => {
     });
   };
 
-  const saveTag = (tag) => ({
-    type: types.tagSave,
-    payload: tag,
-  });
-
   const setTags = (tags) => ({
     type: types.tagLoaded,
     payload: tags
@@ -271,6 +185,13 @@ export const TagProvider = ({ children }) => {
     })
   }
 
+  const setTagPerPage = (perPage) => {
+    dispatch({
+      type: types.tagSetPerPage,
+      payload: perPage
+    });
+  }
+
   const tagActions = {
     tags: state.tags,
     tagActive: state.tagActive,
@@ -278,14 +199,15 @@ export const TagProvider = ({ children }) => {
     tagLinks: state.tagLinks,
     tagMeta: state.tagMeta,
     tagError: state.error,
+    tagPerPage: state.perPage,
     savingTag,
     updatingTag,
-    savingTagInDb,
     selectedTag,
     deletedTag,
     loadTags,
     destroyTag,
-    addNewError
+    addNewError,
+    setTagPerPage
   };
 
   return (
@@ -297,7 +219,6 @@ export const TagProvider = ({ children }) => {
 
 const useTag = () => {
   const context = useContext(TagContext);
-  // console.log(context);
   if (context === undefined) {
     throw new Error("useTag debe usarse junto a TagContext");
   }

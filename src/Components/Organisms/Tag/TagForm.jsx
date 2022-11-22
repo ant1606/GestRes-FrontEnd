@@ -51,7 +51,7 @@ const TagForm = () => {
 
   return (
 
-    <div className='shadow-2xl p-4 h-32 rounded-xl flex flex-col gap-2 mb-14'>
+    <div className='shadow-md p-4 h-32 rounded-xl flex flex-col gap-2 mb-10'>
       <h3 className='text-center text-2xl'>Mantenimiento de Etiquetas</h3>
       <form onSubmit={handleSubmit}>
         <div className='flex justify-between items-end gap-10 w-full '>

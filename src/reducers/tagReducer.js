@@ -7,6 +7,7 @@ export const initialState = {
   tagMeta: null,
   tagLinks: null,
   error: [],
+  perPage: 0,
 };
 
 /**
@@ -16,6 +17,7 @@ export const initialState = {
  * tagMeta: Object, Contiene los datos de la respuesta de Tags en paginacion
  * tagLinks: Object, Contiene la informacion de los links para paginacion
  * error: Array<Object>, Recibe los errores de validacion del formulario
+ * perPage: Number, Recibe el valor de registros por paginas a mostrar
  *  */
 
 const tagReducer = (state = {}, action) => {
@@ -71,6 +73,12 @@ const tagReducer = (state = {}, action) => {
         ...state,
         error: action.payload,
       };
+
+    case types.tagSetPerPage:
+      return {
+        ...state,
+        perPage: action.payload,
+      }
 
     default:
       return state;
