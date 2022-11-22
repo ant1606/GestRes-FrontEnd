@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types';
 
-const Combobox = ({ name, options, label, handleChange, value=1, classBox='', filter=false}) => {
+const Combobox = ({ name, options, label, handleChange, value, classBox, filter}) => {
     if(options?.length === 0 || options=== null || options=== undefined){
         return (<p>cargando datos</p>)
     }else {
@@ -43,4 +44,18 @@ const Combobox = ({ name, options, label, handleChange, value=1, classBox='', fi
   }
 }
 
+Combobox.propTypes = {
+    classBox: PropTypes.string,
+    filter: PropTypes.bool,
+    handleChange: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    options: PropTypes.array.isRequired,
+    value: PropTypes.any.isRequired,
+}
+
+Combobox.defaultProps = {
+    classBox: '',
+    filter: false
+}
 export default Combobox
