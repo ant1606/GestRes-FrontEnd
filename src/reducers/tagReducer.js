@@ -7,6 +7,7 @@ export const initialState = {
   tagLinks: null,
   error: [],
   perPage: 0,
+  isLoading: false
 };
 
 /**
@@ -16,6 +17,7 @@ export const initialState = {
  * tagLinks: Object, Contiene la informacion de los links para paginacion
  * error: Array<Object>, Recibe los errores de validacion del formulario
  * perPage: Number, Recibe el valor de registros por paginas a mostrar
+ * isLoading: bool, valor que determina si se espera la respuesta del backend y mostrara el loader
  *  */
 
 const tagReducer = (state = {}, action) => {
@@ -62,6 +64,12 @@ const tagReducer = (state = {}, action) => {
       return {
         ...state,
         perPage: action.payload,
+      }
+    case types.tagIsLoading:
+      console.log("tagIsLoading");
+      return {
+        ...state,
+        isLoading: action.payload,
       }
 
     default:

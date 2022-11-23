@@ -23,6 +23,8 @@ const AppRouter = () => {
     await loadSettings();
   }
 
+  // TODO Hacer que el titlebar se mantenga posicionado en la parte superior
+  //TODO Hacer que solo el contenido principal pueda hacer scroll y no toda la pantalla
   return (
       <BrowserRouter>
         <div className='flex'>

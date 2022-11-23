@@ -8,6 +8,7 @@ const types = {
   tagLoaded: '[tag] Loaded Tag Pagination',
   tagAddError: '[tag] Add RecourseScreenForm Error Message Validation',
   tagSetPerPage: '[tag] Set perPage range search',
+  tagIsLoading: '[tag] Set isLoading to Tag',
 
   settingsLoad: '[settings] Load settings',
 };

@@ -185,6 +185,13 @@ export const TagProvider = ({ children }) => {
     });
   }
 
+  const setIsLoading = (isLoad) => {
+    dispatch({
+    type: types.tagIsLoading,
+     payload: isLoad
+    });
+  };
+
   const tagActions = {
     tags: state.tags,
     tagActive: state.tagActive,
@@ -193,13 +200,15 @@ export const TagProvider = ({ children }) => {
     tagMeta: state.tagMeta,
     tagError: state.error,
     tagPerPage: state.perPage,
+    tagIsLoading: state.isLoading,
     savingTag,
     updatingTag,
     selectedTag,
     loadTags,
     destroyTag,
     addNewError,
-    setTagPerPage
+    setTagPerPage,
+    setIsLoading
   };
 
   return (

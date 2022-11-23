@@ -8,7 +8,7 @@ import {toastNotifications} from "../../../helpers/notificationsSwal.js";
 
 const TagTableRow = ({ tag }) => {
 
-  const {selectedTag, addNewError, destroyTag, loadTags } = useTag();
+  const {selectedTag, addNewError, destroyTag, loadTags, setIsLoading } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClickEdit = (tag) => {
@@ -22,8 +22,10 @@ const TagTableRow = ({ tag }) => {
   const handleClickDelete = async (tag) => {
     let result =  await toastNotifications().modalDeleteConfirm(tag);
     if(result){
+      setIsLoading(true);
       await destroyTag(tag);
       loadTags(searchParams.toString());
+      setIsLoading(false);
     }
   }
 

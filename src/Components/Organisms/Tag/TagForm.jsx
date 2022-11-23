@@ -16,7 +16,15 @@ const initialFormValues = {
 
 const TagForm = () => {
 
-  const { savingTag, updatingTag, tagActive, selectedTag, addNewError, tagError } = useTag();
+  const {
+    savingTag,
+    updatingTag,
+    tagActive,
+    selectedTag,
+    addNewError,
+    tagError,
+    setIsLoading
+  } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialState = !!tagActive ? tagActive : initialFormValues;
   const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError );
@@ -28,7 +36,7 @@ const TagForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     await validatedSubmitForm();
     const isValid =Object.keys(tagError).every(el=>tagError[el]===null);
 
@@ -39,7 +47,7 @@ const TagForm = () => {
         addNewError([]);
       }
     }
-
+    setIsLoading(false);
     document.querySelector('#nombre').select();
   }
 

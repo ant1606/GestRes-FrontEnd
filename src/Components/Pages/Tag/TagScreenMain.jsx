@@ -14,13 +14,23 @@ import Loader from "../../Atoms/Loader.jsx";
 const Etiquetas = () => {
   //TODO Agregar un loader a las acciones eliminar, registrar nuevo y actualizado, filtrado y cambio de pagina
   //TODO Dar estilos al toast de la notificacion de sweetalert
-  const { loadTags, tagMeta, tags,tagPerPage,setTagPerPage} = useTag();
+  const {
+    loadTags,
+    tagMeta,
+    tags,
+    tagPerPage,
+    tagIsLoading,
+    setTagPerPage,
+    setIsLoading,
+  } = useTag();
   const { changeTitle } = useContext(TitleContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    setIsLoading(true);
     changeTitle("Etiquetas");
     setTagPerPage(perPageItemsValue[0].id);
+    setIsLoading(false);
     return () => {
       setTagPerPage(perPageItemsValue[0].id);
     }
@@ -38,7 +48,7 @@ const Etiquetas = () => {
 
   return (
     <>
-      {/*<Loader/>*/}
+      {tagIsLoading && <Loader/>}
       <TagForm />
       <TagFilter />
       {

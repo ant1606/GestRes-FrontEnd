@@ -14,6 +14,7 @@ const TagFilter = () => {
   const [searchNombre, setSearchNombre] = useState('');
   const {loadTags, setTagPerPage, tagPerPage} = useTag();
 
+  //Ver una forma de colocar un loader solo a la tabla
   useEffect(()=>{
       if(tagPerPage>0)
         execFilter();
