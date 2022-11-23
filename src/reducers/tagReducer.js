@@ -66,7 +66,6 @@ const tagReducer = (state = {}, action) => {
         perPage: action.payload,
       }
     case types.tagIsLoading:
-      console.log("tagIsLoading");
       return {
         ...state,
         isLoading: action.payload,

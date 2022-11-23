@@ -12,8 +12,6 @@ import perPageItemsValue from "../../../helpers/perPageItemsValue.js";
 import Loader from "../../Atoms/Loader.jsx";
 
 const Etiquetas = () => {
-  //TODO Agregar un loader a las acciones eliminar, registrar nuevo y actualizado, filtrado y cambio de pagina
-  //TODO Dar estilos al toast de la notificacion de sweetalert
   const {
     loadTags,
     tagMeta,
@@ -54,7 +52,6 @@ const Etiquetas = () => {
       {
         tags.length === 0 ?
           (
-            //TODO Mejorar diseño de resultados no encontrados
             <p>No se encontraron resultados</p>
           )
           :

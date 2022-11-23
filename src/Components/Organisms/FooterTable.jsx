@@ -2,7 +2,6 @@ import React from 'react'
 import ReactPaginate from 'react-paginate'
 
 const FooterTable = ({ handlePageChange, totalPages, from, to, total, currentPage }) => {
-  // TODO Ver si se le puede definir un tamaño estatico y que no varie mucho cuando aparecen las demas paginas
   return (
     <div className='flex items-end justify-between'>
       <div className='block h-full flex-none'>
