@@ -1,18 +1,27 @@
-import React, { useContext, useEffect, useState } from 'react'
-import TitleContext from '../../../Context/TitleContext';
+import React, { useEffect, useState } from 'react'
 import Combobox from '../../Atoms/Combobox';
 import Field from '../../Atoms/Field';
 import {useForm} from "../../../hooks/useForm.js";
 import useRecourse from "../../../Context/RecourseContext.jsx";
-import {useLoadComboData} from "../../../hooks/useLoadComboData.js";
-import useSettings from "../../../Context/SettingsContext.jsx";
 import GLOBAL_CONSTANTES from "../../../const/globalConstantes.js";
+import useSettings from "../../../Context/SettingsContext";
+import {
+  validateAutor,
+  validateEditorial,
+  validateNombre,
+  validateRuta, validateTotalCapitulos, validateTotalHoras, validateTotalPaginas,
+  validateTotalVideos
+} from "./RecourseFormValidationInputs.js";
 
-const RecourseForm = ({endpoint, children}) => {
+
+const RecourseForm = ({children}) => {
   const [comboTypeData, setComboTypeData] = useState([]);
   const [typeId, setTypeId] = useState(0);
-  const {recourseActive, recourseSaveDB} = useRecourse();
-  const { settingsType } =useSettings();
+  const {recourseActive, recourseSaveDB, recourseError} = useRecourse();
+  const { settingsType } = useSettings()
+
+  console.log(settingsType);
+
   const initialState = {
     nombre: 'Mi curso de prueba' ,
     ruta: 'https://www.vimeo.com/sdz/asdLHXCQWE',
@@ -22,17 +31,30 @@ const RecourseForm = ({endpoint, children}) => {
     totalHoras: '00:00:00',
     totalPaginas: 0,
     totalCapitulos: 0,
-    tags: []
+    tags: [],
+    recourseType: settingsType
+  };
+
+  const validateInputs = {
+    nombre: validateNombre,
+    ruta: validateRuta,
+    autor: validateAutor,
+    editorial: validateEditorial,
+    totalVideos: validateTotalVideos,
+    totalHoras: validateTotalHoras,
+    totalPaginas: validateTotalPaginas,
+    totalCapitulos: validateTotalCapitulos,
   };
 
   //TODO Verificar como poder controlar el combobox desde el useForm (Ver useForm para encontrar el detella del error generado
-  const [formValues, handleInputChange] = useForm(initialState);
+  const [formValues, handleInputChange, reset] = useForm(initialState, validateInputs, null );
   const { nombre, ruta, autor, editorial, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
 
   useEffect(()=> {
     if(settingsType !== null){
       setComboTypeData(settingsType);
       setTypeId(!settingsType ? 0 : settingsType[0].id );
+      reset()
     }
   }, [settingsType, ]);
 
@@ -64,6 +86,7 @@ const RecourseForm = ({endpoint, children}) => {
               classBox="basis-3/4"
               handleChange={handleInputChange}
               value={nombre}
+              errorInput={recourseError.nombre}
           />
 
           <Combobox
@@ -85,6 +108,7 @@ const RecourseForm = ({endpoint, children}) => {
               classBox="basis-3/4"
               handleChange={handleInputChange}
               value={editorial}
+              errorInput={recourseError.editorial}
           />
 
           {
@@ -97,6 +121,7 @@ const RecourseForm = ({endpoint, children}) => {
                   classBox="basis-1/4"
                   handleChange={handleInputChange}
                   value={totalPaginas}
+                  errorInput={recourseError.totalPaginas}
                 />
               ) 
             : 
@@ -108,6 +133,7 @@ const RecourseForm = ({endpoint, children}) => {
                 classBox="basis-1/4"
                 handleChange={handleInputChange}
                 value={totalVideos}
+                errorInput={recourseError.totalVideos}
               />
               ) 
           }
@@ -121,6 +147,7 @@ const RecourseForm = ({endpoint, children}) => {
               classBox="basis-3/4"
               handleChange={handleInputChange}
               value={autor}
+              errorInput={recourseError.autor}
           />
 
           {
@@ -133,6 +160,7 @@ const RecourseForm = ({endpoint, children}) => {
                   classBox="basis-1/4"
                   handleChange={handleInputChange}
                   value={totalCapitulos}
+                  errorInput={recourseError.totalCapitulos}
                 />
                 
               ) 
@@ -145,6 +173,7 @@ const RecourseForm = ({endpoint, children}) => {
                   classBox="basis-1/4"
                   handleChange={handleInputChange}
                   value={totalHoras}
+                  errorInput={recourseError.totalHoras}
                 />
               ) 
           }
@@ -157,6 +186,8 @@ const RecourseForm = ({endpoint, children}) => {
               name="ruta"
               handleChange={handleInputChange}
               value={ruta}
+              errorInput={recourseError.ruta}
+
           />
         </div>
 

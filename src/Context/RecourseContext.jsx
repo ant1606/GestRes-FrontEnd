@@ -46,7 +46,7 @@ export const RecourseProvider = ({children}) => {
         recourseDelete : state.recourseDelete ,
         recourseMeta: state.recourseMeta,
         recourseLinks: state.recourseLinks,
-        error: state.error,
+        recourseError: state.error,
         recourseSaveDB
     };
 
