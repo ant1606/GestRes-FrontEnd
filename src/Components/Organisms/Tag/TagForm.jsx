@@ -74,13 +74,6 @@ const TagForm = () => {
               errorInput={tagError.nombre}
               value={nombre}
             />
-            {
-              tagError.nombre &&
-              (
-                <span className='text-xs absolute -bottom-5 z-10 text-red-500 font-bold'>{tagError.nombre}</span>
-              )
-            }
-
           </div>
           <Button
             text="GUARDAR"
