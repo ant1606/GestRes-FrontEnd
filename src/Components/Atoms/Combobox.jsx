@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types';
 
 const Combobox = ({ name, options, label, handleChange, value, classBox, filter, errorCombo}) => {
-    console.log(errorCombo);
     if(options?.length === 0 || options=== null || options=== undefined){
         return (<p>cargando datos</p>)
     }else {

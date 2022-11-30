@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 export const useForm = (initialState = {}, validateInputs, dispatchError) => {
     const [values, setValues] = useState(initialState);
     const [inputValidate, setInputValidate] = useState(null);
+    //TODO Verificar el uso de isValid y isValidated
     const [isValid, setIsValid] = useState(false);
     const [isValidated, setIsValidated] = useState(Object.keys(initialState).reduce((acc, curr) => ({
         ...acc,
@@ -30,7 +31,6 @@ export const useForm = (initialState = {}, validateInputs, dispatchError) => {
     const validatedInput = () => {
         if(inputValidate!==null){
             const validateMsg = validateInputs[inputValidate](values);
-
             /* Disparar los errores de validacion aqui */
             dispatchError({
                 [inputValidate]: validateMsg
@@ -48,7 +48,7 @@ export const useForm = (initialState = {}, validateInputs, dispatchError) => {
     }
 
     //Usado en el caso el tagActive este seleccionado y este es enviado a values como initialState del customHook
-    const validatedSubmitForm =() => {
+    const validatedSubmitForm = () => {
         const res = Object.keys(values).reduce((acc, curr) => {
             if (Object.hasOwn(validateInputs, curr)){
                 return {
@@ -59,13 +59,12 @@ export const useForm = (initialState = {}, validateInputs, dispatchError) => {
             return {...acc};
         }, {});
 
-        Object.keys(res).map(x => {
+        Object.keys(res).map( x => {
             dispatchError({
                 [x]: res[x]
             });
 
             //Definiendo si el input es valido o no en el objeto isValidated
-
             if( !res[x]){
                 setIsValidated(state => ({...state, [x]: true}));
             }else {

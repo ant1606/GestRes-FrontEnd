@@ -6,18 +6,27 @@
  * recourseLinks: Object, Contiene la informacion de los links para paginacion
  * error: Array<Object>, Recibe los errores de validacion del formulario
  *  */
+import types from "../types/types.js";
 
+//TODO Validar que el objeto error funcione como Object o como Array
 export const initialState = {
     recourses: [],
     recourseActive : null,
     recourseDelete : null,
     recourseMeta: null,
     recourseLinks: null,
-    error: [],
+    error: {},
 };
 
 const recourseReducer = (state = initialState, action ) => {
-    switch (action.type) {
+    const {type, payload} = action;
+
+    switch (type) {
+        case types.recourseAddError:
+            return {
+                ...state,
+                error: {...state.error, [Object.keys(payload)]: Object.values(payload)[0] },
+            };
         default:
             return state;
     }

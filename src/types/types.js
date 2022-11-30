@@ -6,10 +6,12 @@ const types = {
   tagDelete: '[tag] Tag Deleted',
   tagDestroy: '[tag] Tag Destroyed',
   tagLoaded: '[tag] Loaded Tag Pagination',
-  tagAddError: '[tag] Add RecourseScreenForm Error Message Validation',
+  tagAddError: '[tag] Add Error Message Validation',
   tagSetPerPage: '[tag] Set perPage range search',
   tagIsLoading: '[tag] Set isLoading to Tag',
 
   settingsLoad: '[settings] Load settings',
+
+  recourseAddError: '[recourse] Add Error Message Validation',
 };
 export default types;

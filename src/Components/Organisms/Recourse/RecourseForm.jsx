@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import Combobox from '../../Atoms/Combobox';
 import Field from '../../Atoms/Field';
 import {useForm} from "../../../hooks/useForm.js";
@@ -9,28 +9,31 @@ import {
   validateAutor,
   validateEditorial,
   validateNombre,
-  validateRuta, validateTotalCapitulos, validateTotalHoras, validateTotalPaginas,
+  validateRuta,
+  validateTipoId,
+  validateTotalCapitulos,
+  validateTotalHoras,
+  validateTotalPaginas,
   validateTotalVideos
 } from "./RecourseFormValidationInputs.js";
+import {toastNotifications} from "../../../helpers/notificationsSwal.js";
 
 
 const RecourseForm = ({children}) => {
   const [comboTypeData, setComboTypeData] = useState([]);
-  const [typeId, setTypeId] = useState(0);
-  const {recourseActive, recourseSaveDB, recourseError} = useRecourse();
-  const { settingsType } = useSettings()
-
-  console.log(settingsType);
+  const {savingRecourse, recourseError, addNewError} = useRecourse();
+  const { settingsType } = useSettings();
 
   const initialState = {
     nombre: 'Mi curso de prueba' ,
     ruta: 'https://www.vimeo.com/sdz/asdLHXCQWE',
     autor: 'yO SOY',
     editorial: 'Editorial pepito',
-    totalVideos: 0,
+    tipoId: !settingsType ? 0 : settingsType[0].id,
+    totalVideos: '0',
     totalHoras: '00:00:00',
-    totalPaginas: 0,
-    totalCapitulos: 0,
+    totalPaginas: '0',
+    totalCapitulos: '0',
     tags: [],
     recourseType: settingsType
   };
@@ -40,43 +43,72 @@ const RecourseForm = ({children}) => {
     ruta: validateRuta,
     autor: validateAutor,
     editorial: validateEditorial,
+    tipoId: validateTipoId,
     totalVideos: validateTotalVideos,
     totalHoras: validateTotalHoras,
     totalPaginas: validateTotalPaginas,
     totalCapitulos: validateTotalCapitulos,
   };
 
-  //TODO Verificar como poder controlar el combobox desde el useForm (Ver useForm para encontrar el detella del error generado
-  const [formValues, handleInputChange, reset] = useForm(initialState, validateInputs, null );
-  const { nombre, ruta, autor, editorial, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
+  const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateInputs, addNewError );
+  const { nombre, ruta, autor, editorial, tipoId, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
+  const recourseErrorRef = useRef();
 
   useEffect(()=> {
     if(settingsType !== null){
       setComboTypeData(settingsType);
-      setTypeId(!settingsType ? 0 : settingsType[0].id );
       reset()
     }
-  }, [settingsType, ]);
+  }, [settingsType]);
 
-  const handleComboChange = (e) => {
-    setTypeId(e.target.value);
-  }
+  useEffect(()=>{
+    recourseErrorRef.current = recourseError;
+  }, [recourseError]);
 
-  const handleSubmit = (e) => {
+  useEffect(()=>{
+    addNewError({totalVideos: null});
+    addNewError({totalHoras: null});
+    addNewError({totalCapitulos: null});
+    addNewError({totalPaginas: null});
+    //TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
+  }, [tipoId]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    //TODO Queda pendiente la obtencion de las etiquetas
-
-    if(recourseActive===null){
-      recourseSaveDB({...formValues, tipoId : typeId});
-    } else {
-      console.log("Actualizar el recurso");
+    // setIsLoading(true);
+    await validatedSubmitForm();
+    const isValid = Object.keys(recourseErrorRef.current).every(el=>recourseErrorRef.current[el]===null);
+    console.log(isValid);
+    if(isValid){
+      //TODO Aplicar cuando se actualice el registro
+      let res = await savingRecourse(formValues);
+      // let res =!tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
+      console.log(res);
+      if(res){
+        console.log("Se guardo");
+        reset();
+        addNewError([]);
+      }
+    }else {
+      toastNotifications().toastError();
     }
+
+    // setIsLoading(false);
+    // document.querySelector('#nombre').select();
+    //
+    // e.preventDefault();
+    // //TODO Queda pendiente la obtencion de las etiquetas
+    // if(recourseActive===null){
+    //   recourseSaveDB({...formValues});
+    // } else {
+    //   console.log("Actualizar el recurso");
+    // }
 
   }
 
   return (
     <>
-      <form className='flex flex-col' onSubmit={handleSubmit}>
+      <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
 
         <div className='flex w-full gap-10 my-5'>
           <Field 
@@ -95,8 +127,9 @@ const RecourseForm = ({children}) => {
               options={comboTypeData}
               filter={false}
               classBox="basis-1/4"
-              handleChange={handleComboChange}
-              value={typeId}
+              handleChange={handleInputChange}
+              value={tipoId}
+              errorCombo={recourseError.tipoId}
           />
         </div>
 
@@ -112,7 +145,7 @@ const RecourseForm = ({children}) => {
           />
 
           {
-            parseInt(typeId) === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id ?
+            parseInt(tipoId) === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id ?
               (
                 <Field 
                   type="text" 
@@ -151,7 +184,7 @@ const RecourseForm = ({children}) => {
           />
 
           {
-            parseInt(typeId) === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id  ?
+            parseInt(tipoId) === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id  ?
               (
                 <Field 
                   type="text" 
@@ -191,7 +224,7 @@ const RecourseForm = ({children}) => {
           />
         </div>
 
-        <div className='mt-5 mb-32'>
+        <div className='mt-5 mb-24'>
           <Field 
               type="text" 
               label="Etiquetas" 
@@ -200,7 +233,6 @@ const RecourseForm = ({children}) => {
               handleChange={handleInputChange}
           />
         </div>
-
         {children}
       </form>
     </>

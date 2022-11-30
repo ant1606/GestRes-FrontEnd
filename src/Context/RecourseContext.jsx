@@ -1,7 +1,9 @@
-import {createContext, useContext, useReducer, useState} from "react";
+import {createContext, useContext, useReducer} from "react";
 import recourseReducer, {initialState} from "../reducers/recourseReducer.js";
 import GLOBAL_CONSTANTES from "../const/globalConstantes.js";
 import useSettings from "./SettingsContext.jsx";
+import types from "../types/types.js";
+import {toastNotifications} from "../helpers/notificationsSwal.js";
 
 const RecourseContext = createContext(initialState);
 
@@ -9,17 +11,10 @@ export const RecourseProvider = ({children}) => {
     const {settingsType} =useSettings();
     const [state, dispatch] = useReducer(recourseReducer, initialState);
 
-    // let tmpTotalPaginas =  parseInt(recourse.totalPaginas === '' ? 0 : recourse.totalPaginas);
-    // let tmpTotalCapitulos =  parseInt(recourse.totalCapitulos === '' ? 0 : recourse.totalCapitulos);
-    // let tmpTotalVideos =  parseInt(recourse.totalVideos === '' ? 0 : recourse.totalVideos);
-    // let tmpTotalHoras =  recourse.totalHoras.trim() === '' ? "00:00:00" : recourse.totalHoras.trim();
-    // recourse.totalPaginas = tmpTotalPaginas === 0 ? null : tmpTotalPaginas;
-    // recourse.totalCapitulos = tmpTotalCapitulos === 0 ? null : tmpTotalCapitulos
-    // recourse.totalVideos = tmpTotalVideos === 0 ? null : tmpTotalVideos;
-    // recourse.totalHoras= tmpTotalHoras === "00:00:00" ? null : tmpTotalHoras;
 
-    // Acciones INICIO
-    const recourseSaveDB = async (recourse) => {
+    const savingRecourse = async (recourse) => {
+        let success = false;
+
         if(parseInt(recourse.tipoId) === settingsType.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id){
             recourse.totalVideos = null;
             recourse.totalHoras = null;
@@ -35,10 +30,44 @@ export const RecourseProvider = ({children}) => {
             },
             body: JSON.stringify(recourse)
         })
-            .then( resp => resp.json)
-            .then( data => console.log(data.data));
+            .then( resp => {
+                if (!resp.ok)
+                    return Promise.reject(resp.json());
+                return resp.json();
+            })
+            .then( data => {
+                success = true;
+                toastNotifications().toastSucces();
+                console.log(data.data);
+            })
+            .catch(async error => {
+                const err = await error;
+                const processError = err.error.reduce(
+                    (previous, currrent) => ({
+                        ...previous,
+                        [currrent.inputName]: currrent.detail
+                    }),
+                    {}
+                );
+                //TODO Verificar que se esta generando entradas
+                // new entry: "undefined"
+                // Tratar de replicar el error al generar los registros en el formulario
+                console.log(processError);
+
+                addNewError(processError);
+                toastNotifications().toastError();
+                success = false;
+            });
+
+        return success;
     }
-    // Acciones FIN
+
+    const addNewError = async (error)=>{
+        await dispatch({
+            type: types.recourseAddError,
+            payload: error,
+        });
+    }
 
     const recourseActions = {
         recourses: state.recourses,
@@ -47,7 +76,8 @@ export const RecourseProvider = ({children}) => {
         recourseMeta: state.recourseMeta,
         recourseLinks: state.recourseLinks,
         recourseError: state.error,
-        recourseSaveDB
+        savingRecourse,
+        addNewError
     };
 
     return (

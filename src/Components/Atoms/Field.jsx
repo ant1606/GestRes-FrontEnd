@@ -3,7 +3,6 @@ import 'animate.css';
 import PropTypes from 'prop-types';
 
 const Field = ({ type, label, name, value, classBox , handleChange , errorInput }) => {
-  //TODO: Verificar que el mensaje de error se agregue en esta seccion misma
   return (
       <div className={`flex flex-col relative ${classBox}`}>
           <div className={`${errorInput ? "animate__animated animate__headShake" : ""} relative `}>
