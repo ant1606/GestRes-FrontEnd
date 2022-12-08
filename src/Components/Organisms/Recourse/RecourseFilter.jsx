@@ -10,9 +10,9 @@ const RecourseFilter = () => {
   const [typeDataFilter, setTypeDataFilter] = useState();
   const [statusDataFilter, setStatusDataFilter] = useState();
   const [searchNombre, setSearchNombre] = useState();
-  const {loadRecourses} = useRecourse();
+  const [searchTipo, setSearchTipo] = useState();
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const {loadRecourses} = useRecourse();
 
   const getFilterData =  (val) => {
     return  fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/settings/${val}`)
@@ -34,20 +34,28 @@ const RecourseFilter = () => {
   useEffect(()=>{
     // console.log(searchNombre);
     execFilter();
-  }, [searchNombre]);
+    console.log(searchTipo);
+  }, [searchNombre, searchTipo]);
 
   const handleChangeSearchNombre = (e) => {
     setSearchNombre(e.target.value);
   }
+  const handleChangeSearchTipo = (e) => {
+    setSearchTipo(e.target.value);
+  }
 
   const execFilter = () => {
     searchParams.delete('searchNombre');
+    searchParams.delete('searchTipo');
     // searchParams.delete('perPage');
     // searchParams.append('perPage', tagPerPage);
     searchParams.delete('page');
     searchParams.append('page', 1);
     if (!!searchNombre && searchNombre !== '')
       searchParams.append('searchNombre', searchNombre);
+
+    if (!!searchTipo && searchTipo !== '0')
+      searchParams.append('searchTipo', searchTipo);
 
     searchParams.sort();
     setSearchParams(searchParams);
@@ -74,6 +82,9 @@ const RecourseFilter = () => {
             label="Tipo" 
             options={ typeDataFilter}
             filter={true}
+            value={searchTipo}
+            handleChange={handleChangeSearchTipo}
+
           />
         </div>
         <div className='basis-1/4 items-end'>
