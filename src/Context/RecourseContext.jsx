@@ -17,10 +17,9 @@ export const RecourseProvider = ({children}) => {
             .then(data => {
                 console.log(data);
                 dispatch(setRecourses(data));
-                // console.log({meta: data.meta, links: data.links})
             });
-        // .then(data=> console.log(data));
     }
+
     const savingRecourse = async (recourse) => {
         let success = false;
 

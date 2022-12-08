@@ -1,19 +1,31 @@
 import { useContext, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import {Link, useSearchParams} from 'react-router-dom';
 import TitleContext from '../../../Context/TitleContext'
 import Button from '../../Atoms/Button';
 import RecourseTable from '../../Organisms/Recourse/RecourseTable.jsx';
-import Filter from '../../Organisms/Recourse/Filter';
+import RecourseFilter from '../../Organisms/Recourse/RecourseFilter.jsx';
 import useRecourse from "../../../Context/RecourseContext.jsx";
+import FooterTable from "../../Organisms/FooterTable.jsx";
 
 const RecourseScreenMain = () => {
   const { changeTitle } = useContext(TitleContext);
-  const {loadRecourses} = useRecourse();
+  const {loadRecourses, recourses, recourseMeta} = useRecourse();
+  const  [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     changeTitle("Recursos Educativos");
     loadRecourses();
   }, []);
+
+    const handlePageChange = (e) => {
+        searchParams.delete('page');
+        searchParams.append('page', e.selected + 1);
+        // searchParams.delete('perPage');
+        // searchParams.append('perPage', tagPerPage);
+        searchParams.sort()
+        setSearchParams(searchParams);
+        loadRecourses(searchParams.toString())
+    }
 
   return (
     <>
@@ -25,9 +37,30 @@ const RecourseScreenMain = () => {
         <Button text="Registrar Nuevo" />
       </Link>
 
-      <Filter />
+      <RecourseFilter />
 
-      <RecourseTable />
+        {
+            recourses?.length===0 ?
+                (
+                    //TODO Crear un componente que indique que no se encontraron resultados
+                    <p>No se encontraron resultados</p>
+                )
+                :
+                (
+                    <>
+                        <RecourseTable />
+                        { recourseMeta &&
+                            (
+                                <FooterTable
+                                    handlePageChange={handlePageChange}
+                                    {...recourseMeta}
+                                />
+                            )
+                        }
+                    </>
+                )
+        }
+
 
     </>
   )

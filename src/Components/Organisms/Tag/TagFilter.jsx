@@ -26,7 +26,7 @@ const TagFilter = () => {
     searchParams.append('perPage', tagPerPage);
     searchParams.delete('page');
     searchParams.append('page', 1);
-    if (searchNombre !== '')
+    if (!!searchNombre && searchNombre !== '')
       searchParams.append('searchNombre', searchNombre);
 
     searchParams.sort();
