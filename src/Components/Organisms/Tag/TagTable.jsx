@@ -3,7 +3,7 @@ import React from 'react'
 import TagTableRow from '../../Molecules/Tag/TagTableRow.jsx'
 import useTag from '../../../Context/TagContext'
 
-const Table = () => {
+const TagTable = () => {
   const { tags } = useTag();
 
   return (
@@ -31,4 +31,4 @@ const Table = () => {
   )
 }
 
-export default Table
+export default TagTable

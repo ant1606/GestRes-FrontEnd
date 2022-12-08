@@ -1,6 +1,9 @@
 import RecourseTableRow from '../../Molecules/Recourse/RecourseTableRow';
+import useRecourse from "../../../Context/RecourseContext.jsx";
 
 const RecourseTable = () => {
+    const {recourses} = useRecourse();
+
   return (
     <table className='table-auto w-full'>
       <thead>
@@ -13,10 +16,15 @@ const RecourseTable = () => {
         </tr>
       </thead>
       <tbody>
-        <RecourseTableRow />
-        <RecourseTableRow />
-        <RecourseTableRow />
-        <RecourseTableRow />
+      {
+          recourses?.map(recourse =>
+              <RecourseTableRow
+                key={recourse.identificador}
+                recourse={recourse}
+              />
+          )
+      }
+
         
       </tbody>
     </table>

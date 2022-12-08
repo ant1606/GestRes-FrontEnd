@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
 import Icon from '@mdi/react'
-import { 
-  mdiWeb, 
-  mdiTooltipAccount, 
+import {
+  mdiWeb,
+  mdiTooltipAccount,
   mdiDomain,
   mdiArrowDownDropCircle,
   mdiEye,
   mdiPencil,
   mdiTrashCan,
-  mdiBookOpenPageVariantOutline, 
+  mdiBookOpenPageVariantOutline,
   mdiTextBoxMultipleOutline,
-  mdiVideoVintage, 
-  mdiTimerOutline,
+  mdiVideoVintage,
+  mdiTimerOutline
 } from '@mdi/js';
 import { Link } from 'react-router-dom';
 import Modal from '../Modal';
+import GLOBAL_CONSTANTES from "../../../const/globalConstantes.js";
+import useSettings from "../../../Context/SettingsContext.jsx";
 
-const RecourseTableRow = () => {
+const RecourseTableRow = ({recourse}) => {
   const [detail, setDetail] = useState(false);
   const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
+  const { settingsType } = useSettings();
 
   function toggleDetail() {
     setDetail(!detail);
@@ -84,13 +87,13 @@ const RecourseTableRow = () => {
         </td>
         <td className='max-h-14 max-w-xs'>
           <div className='flex justify-center items-center'>
-            <p className='text-lg font-semibold text-gray-900 truncate '> Nombre del recurso 1 asdasdasdsadsadsa sadasdsa asdas asdasdasdas asd as adsasdasdasd dasdasd as dasd sad final</p>
+            <p className='text-lg font-semibold text-gray-900 truncate '> {recourse.nombre}</p>
           </div>
         </td>
         <td className='w-40 h-14 p-3'>
           <div className='flex justify-center items-center w-38 px-4 py-1 rounded-2xl bg-gray-900'>
             <span className='text-sm font-bold text-white uppercase'>
-              POR EMPEZAR
+              { recourse.status?.find((val, ind) => ind === recourse.status.length-1).estadoNombre }
             </span>
           </div>
         </td>
@@ -99,12 +102,13 @@ const RecourseTableRow = () => {
             <div className='w-full'>
               <div className='w-full h-3 bg-gray-800 rounded-full'></div>
             </div>
+            {/*TODO Generar el calculo del avance de cada recurso*/}
             <span className='text-gray-500 text-sm font-semibold'>100%</span>
           </div>
         </td>
         <td className='w-56 '>
           <div className='px-3 text-center text-lg text-gray-900 font-semibold'>
-            <p>LIBRO ELECTRÓNICO</p>
+            <p>{recourse.tipoNombre}</p>
           </div>
         </td>
       </tr>
@@ -125,7 +129,7 @@ const RecourseTableRow = () => {
                 size={1}
                 color="rgb(17 24 39 / 1)"
                 />
-              <p className='truncate max-w-4xl'>https://www.udemy.com/cursos/carlos1231/curso-de-programacion-funcional-javascript-asdasdlkajsdklasjdlkasjdlkasjdklajslkdjaslkdjalksjdlkasjdlkasjdlkajsdklajsdlkjaslkdaslkjdalskjdklasjdklsa</p>
+              <p className='truncate max-w-4xl'>{recourse.ruta}</p>
             </div>
             <div className='flex justify-between gap-4' >
               <div className='flex flex-1 flex-col gap-3'>
@@ -135,7 +139,7 @@ const RecourseTableRow = () => {
                     size={1}
                     color="rgb(17 24 39 / 1)"
                   />
-                  <p>Carlos Azaustre</p>
+                  <p>{recourse.autor}</p>
                 </div>
                 <div className='flex gap-4'>
                   <Icon path={mdiDomain}
@@ -143,25 +147,52 @@ const RecourseTableRow = () => {
                     size={1}
                     color="rgb(17 24 39 / 1)"
                   />
-                  <p>Udemy</p>
+                  <p>{recourse.editorial}</p>
                 </div>
                 <div className='flex'>
-                  <div className='flex gap-4 w-2/4'>
-                    <Icon path={mdiVideoVintage}
-                      title="Source"
-                      size={1}
-                      color="rgb(17 24 39 / 1)"
-                    />
-                    <p>153</p>
-                  </div>
-                  <div className='flex gap-4'>
-                    <Icon path={mdiTimerOutline}
-                      title="Source"
-                      size={1}
-                      color="rgb(17 24 39 / 1)"
-                    />
-                    <p>50:30:12</p>
-                  </div>
+                  { recourse.tipoNombre === settingsType?.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).value ?
+                      (
+                          <>
+                            <div className='flex gap-4 w-2/4'>
+                              <Icon path={mdiTextBoxMultipleOutline}
+                                    title="Source"
+                                    size={1}
+                                    color="rgb(17 24 39 / 1)"
+                              />
+                              <p>{recourse.totalPaginas}</p>
+                            </div>
+                            <div className='flex gap-4'>
+                              <Icon path={mdiBookOpenPageVariantOutline}
+                                    title="Source"
+                                    size={1}
+                                    color="rgb(17 24 39 / 1)"
+                              />
+                              <p>{recourse.totalCapitulos}</p>
+                            </div>
+                          </>
+                      )
+                        :
+                      (
+                          <>
+                            <div className='flex gap-4 w-2/4'>
+                              <Icon path={mdiVideoVintage}
+                                    title="Source"
+                                    size={1}
+                                    color="rgb(17 24 39 / 1)"
+                              />
+                              <p>{recourse.totalVideos}</p>
+                            </div>
+                            <div className='flex gap-4'>
+                              <Icon path={mdiTimerOutline}
+                                    title="Source"
+                                    size={1}
+                                    color="rgb(17 24 39 / 1)"
+                              />
+                              <p>{recourse.totalHoras}</p>
+                            </div>
+                          </>
+                      )
+                  }
                 </div>
               </div>
               {/* TODO Hacer scrollear las etiquetas */}

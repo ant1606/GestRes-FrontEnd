@@ -11,7 +11,16 @@ export const RecourseProvider = ({children}) => {
     const {settingsType} =useSettings();
     const [state, dispatch] = useReducer(recourseReducer, initialState);
 
-
+    const loadRecourses = (queryParams = "") => {
+        fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourses?${queryParams}`)
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data);
+                dispatch(setRecourses(data));
+                // console.log({meta: data.meta, links: data.links})
+            });
+        // .then(data=> console.log(data));
+    }
     const savingRecourse = async (recourse) => {
         let success = false;
 
@@ -69,6 +78,11 @@ export const RecourseProvider = ({children}) => {
         });
     }
 
+    const setRecourses = (recourses) => ({
+        type: types.recourseLoaded,
+        payload: recourses,
+    })
+
     const recourseActions = {
         recourses: state.recourses,
         recourseActive : state.recourseActive ,
@@ -77,7 +91,8 @@ export const RecourseProvider = ({children}) => {
         recourseLinks: state.recourseLinks,
         recourseError: state.error,
         savingRecourse,
-        addNewError
+        addNewError,
+        loadRecourses
     };
 
     return (

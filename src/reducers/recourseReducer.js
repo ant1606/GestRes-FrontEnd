@@ -22,6 +22,13 @@ const recourseReducer = (state = initialState, action ) => {
     const {type, payload} = action;
 
     switch (type) {
+        case types.recourseLoaded:
+            return {
+                ...state,
+                recourses: [...action.payload.data],
+                recourseMeta: action.payload.meta,
+                recourseLinks: action.payload.links,
+            };
         case types.recourseAddError:
             return {
                 ...state,

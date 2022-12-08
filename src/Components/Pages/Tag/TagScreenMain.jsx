@@ -6,7 +6,7 @@ import TitleContext from '../../../Context/TitleContext';
 
 import TagFilter from '../../Organisms/Tag/TagFilter.jsx';
 import TagForm from '../../Organisms/Tag/TagForm.jsx';
-import Table from '../../Organisms/Tag/Table';
+import TagTable from '../../Organisms/Tag/TagTable.jsx';
 import FooterTable from '../../Organisms/FooterTable';
 import perPageItemsValue from "../../../helpers/perPageItemsValue.js";
 import Loader from "../../Atoms/Loader.jsx";
@@ -57,7 +57,7 @@ const Etiquetas = () => {
           :
           (
             <>
-              <Table />
+              <TagTable />
               {
                 tagMeta &&
                 (

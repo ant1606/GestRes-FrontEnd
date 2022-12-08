@@ -2,14 +2,17 @@ import { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import TitleContext from '../../../Context/TitleContext'
 import Button from '../../Atoms/Button';
-import RecourseTable from '../../Organisms/Recourse/Table';
+import RecourseTable from '../../Organisms/Recourse/RecourseTable.jsx';
 import Filter from '../../Organisms/Recourse/Filter';
+import useRecourse from "../../../Context/RecourseContext.jsx";
 
 const RecourseScreenMain = () => {
   const { changeTitle } = useContext(TitleContext);
+  const {loadRecourses} = useRecourse();
 
   useEffect(() => {
     changeTitle("Recursos Educativos");
+    loadRecourses();
   }, []);
 
   return (

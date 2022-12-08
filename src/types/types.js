@@ -13,5 +13,6 @@ const types = {
   settingsLoad: '[settings] Load settings',
 
   recourseAddError: '[recourse] Add Error Message Validation',
+  recourseLoaded: '[recourse] Loaded Recourse Pagination',
 };
 export default types;
