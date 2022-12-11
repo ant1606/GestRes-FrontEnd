@@ -11,6 +11,7 @@ const RecourseFilter = () => {
   const [statusDataFilter, setStatusDataFilter] = useState();
   const [searchNombre, setSearchNombre] = useState();
   const [searchTipo, setSearchTipo] = useState();
+  const [searchEstado, setSearchEstado] = useState();
   const [searchParams, setSearchParams] = useSearchParams();
   const {loadRecourses} = useRecourse();
 
@@ -34,8 +35,8 @@ const RecourseFilter = () => {
   useEffect(()=>{
     // console.log(searchNombre);
     execFilter();
-    console.log(searchTipo);
-  }, [searchNombre, searchTipo]);
+    // console.log(searchEstado);
+  }, [searchNombre, searchTipo, searchEstado]);
 
   const handleChangeSearchNombre = (e) => {
     setSearchNombre(e.target.value);
@@ -43,10 +44,16 @@ const RecourseFilter = () => {
   const handleChangeSearchTipo = (e) => {
     setSearchTipo(e.target.value);
   }
+  const handleChangeSearchEstado = (e) => {
+    setSearchEstado(e.target.value);
+  }
+
 
   const execFilter = () => {
+    //TODO cambiar el filtro de tipo y estado  para evitar enviar en las queryString el ID de los valores
     searchParams.delete('searchNombre');
     searchParams.delete('searchTipo');
+    searchParams.delete('searchEstado');
     // searchParams.delete('perPage');
     // searchParams.append('perPage', tagPerPage);
     searchParams.delete('page');
@@ -56,6 +63,9 @@ const RecourseFilter = () => {
 
     if (!!searchTipo && searchTipo !== '0')
       searchParams.append('searchTipo', searchTipo);
+
+    if (!!searchEstado && searchEstado !== '0')
+      searchParams.append('searchEstado', searchEstado);
 
     searchParams.sort();
     setSearchParams(searchParams);
@@ -93,6 +103,8 @@ const RecourseFilter = () => {
             label="Estado" 
             filter={true} 
             options={ statusDataFilter}
+            value={searchEstado}
+            handleChange={handleChangeSearchEstado}
           />
         </div>
         <div className='basis-1/4 items-end'>
