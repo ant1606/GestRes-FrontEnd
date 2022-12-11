@@ -6,22 +6,26 @@ import RecourseTable from '../../Organisms/Recourse/RecourseTable.jsx';
 import RecourseFilter from '../../Organisms/Recourse/RecourseFilter.jsx';
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import FooterTable from "../../Organisms/FooterTable.jsx";
+import perPageItemsValue from "../../../helpers/perPageItemsValue.js";
 
 const RecourseScreenMain = () => {
   const { changeTitle } = useContext(TitleContext);
-  const {loadRecourses, recourses, recourseMeta} = useRecourse();
+  const {loadRecourses, recourses, recourseMeta, recoursePerPage, setRecoursePerPage} = useRecourse();
   const  [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     changeTitle("Recursos Educativos");
-    loadRecourses();
+    setRecoursePerPage(perPageItemsValue[0].id);
+      return () => {
+          setRecoursePerPage(perPageItemsValue[0].id);
+      }
   }, []);
 
     const handlePageChange = (e) => {
         searchParams.delete('page');
         searchParams.append('page', e.selected + 1);
-        // searchParams.delete('perPage');
-        // searchParams.append('perPage', tagPerPage);
+        searchParams.delete('perPage');
+        searchParams.append('perPage', recoursePerPage);
         searchParams.sort()
         setSearchParams(searchParams);
         loadRecourses(searchParams.toString())

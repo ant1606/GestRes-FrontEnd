@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { mdiMagnify} from '@mdi/js';
-import Icon from '@mdi/react'
 import Field from '../../Atoms/Field';
 import Combobox from '../../Atoms/Combobox';
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import {useSearchParams} from "react-router-dom";
+import perPageItemsValue from "../../../helpers/perPageItemsValue.js";
 
 const RecourseFilter = () => {
   const [typeDataFilter, setTypeDataFilter] = useState();
@@ -13,7 +12,7 @@ const RecourseFilter = () => {
   const [searchTipo, setSearchTipo] = useState();
   const [searchEstado, setSearchEstado] = useState();
   const [searchParams, setSearchParams] = useSearchParams();
-  const {loadRecourses} = useRecourse();
+  const {loadRecourses, recoursePerPage, setRecoursePerPage} = useRecourse();
 
   const getFilterData =  (val) => {
     return  fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/settings/${val}`)
@@ -33,10 +32,9 @@ const RecourseFilter = () => {
   }, []);
 
   useEffect(()=>{
-    // console.log(searchNombre);
-    execFilter();
-    // console.log(searchEstado);
-  }, [searchNombre, searchTipo, searchEstado]);
+    if(recoursePerPage>0)
+      execFilter();
+  }, [searchNombre, searchTipo, searchEstado, recoursePerPage]);
 
   const handleChangeSearchNombre = (e) => {
     setSearchNombre(e.target.value);
@@ -47,6 +45,9 @@ const RecourseFilter = () => {
   const handleChangeSearchEstado = (e) => {
     setSearchEstado(e.target.value);
   }
+  const handleChangeRecordsPerPage = (e) => {
+    setRecoursePerPage(parseInt(e.target.value));
+  }
 
 
   const execFilter = () => {
@@ -54,8 +55,8 @@ const RecourseFilter = () => {
     searchParams.delete('searchNombre');
     searchParams.delete('searchTipo');
     searchParams.delete('searchEstado');
-    // searchParams.delete('perPage');
-    // searchParams.append('perPage', tagPerPage);
+    searchParams.delete('perPage');
+    searchParams.append('perPage', recoursePerPage);
     searchParams.delete('page');
     searchParams.append('page', 1);
     if (!!searchNombre && searchNombre !== '')
@@ -115,14 +116,17 @@ const RecourseFilter = () => {
             options={ [ {id: 1, value: "OPCION 1"} ,{id: 2, value: "OPCION 2"} ]}
           />
         </div>
-        <button className='bg-gray-900 hover:bg-gray-800 text-white font-bold p-1 rounded-md'>
-          <Icon 
-            path={mdiMagnify}
-            title="Search"
-            size={1.25}
-            color="white"
+        <div className='basis-1/4 items-end'>
+          <Combobox
+              label="Registros por Pagina"
+              name="perPage"
+              options={perPageItemsValue}
+              value={recoursePerPage}
+              filter={false}
+              classBox="w-32"
+              handleChange={handleChangeRecordsPerPage}
           />
-        </button>
+        </div>
       </div>
     </div>
   )

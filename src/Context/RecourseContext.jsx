@@ -82,6 +82,13 @@ export const RecourseProvider = ({children}) => {
         payload: recourses,
     })
 
+    const setRecoursePerPage = (perPage) => {
+        dispatch({
+            type: types.recourseSetPerPage,
+            payload: perPage
+        });
+    }
+
     const recourseActions = {
         recourses: state.recourses,
         recourseActive : state.recourseActive ,
@@ -89,9 +96,11 @@ export const RecourseProvider = ({children}) => {
         recourseMeta: state.recourseMeta,
         recourseLinks: state.recourseLinks,
         recourseError: state.error,
+        recoursePerPage: state.perPage,
         savingRecourse,
         addNewError,
-        loadRecourses
+        loadRecourses,
+        setRecoursePerPage
     };
 
     return (

@@ -15,6 +15,7 @@ export const initialState = {
     recourseDelete : null,
     recourseMeta: null,
     recourseLinks: null,
+    perPage: 0,
     error: {},
 };
 
@@ -34,6 +35,11 @@ const recourseReducer = (state = initialState, action ) => {
                 ...state,
                 error: {...state.error, [Object.keys(payload)]: Object.values(payload)[0] },
             };
+        case types.recourseSetPerPage:
+            return {
+                ...state,
+                perPage: action.payload,
+            }
         default:
             return state;
     }
