@@ -15,7 +15,7 @@ export const RecourseProvider = ({children}) => {
         fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourses?${queryParams}`)
             .then(resp => resp.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 dispatch(setRecourses(data));
             });
     }

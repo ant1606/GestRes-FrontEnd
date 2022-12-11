@@ -93,7 +93,7 @@ const RecourseTableRow = ({recourse}) => {
         <td className='w-40 h-14 p-3'>
           <div className='flex justify-center items-center w-38 px-4 py-1 rounded-2xl bg-gray-900'>
             <span className='text-sm font-bold text-white uppercase'>
-              { recourse.status?.find((val, ind) => ind === recourse.status.length-1).estadoNombre }
+              { recourse.nombreEstadoActual }
             </span>
           </div>
         </td>
