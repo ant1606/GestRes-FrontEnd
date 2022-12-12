@@ -89,18 +89,26 @@ export const RecourseProvider = ({children}) => {
         });
     }
 
+    const setIsLoading = (isLoad) => {
+        dispatch({
+            type: types.recourseIsLoading,
+            payload: isLoad
+        });
+    };
+
     const recourseActions = {
         recourses: state.recourses,
         recourseActive : state.recourseActive ,
-        recourseDelete : state.recourseDelete ,
         recourseMeta: state.recourseMeta,
         recourseLinks: state.recourseLinks,
         recourseError: state.error,
         recoursePerPage: state.perPage,
+        recourseIsLoading: state.isLoading,
         savingRecourse,
         addNewError,
         loadRecourses,
-        setRecoursePerPage
+        setRecoursePerPage,
+        setIsLoading
     };
 
     return (

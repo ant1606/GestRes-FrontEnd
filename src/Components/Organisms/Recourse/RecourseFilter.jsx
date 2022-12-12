@@ -108,6 +108,7 @@ const RecourseFilter = () => {
             handleChange={handleChangeSearchEstado}
           />
         </div>
+        {/*//TODO Crear componente para multiselect de etiqueta*/}
         <div className='basis-1/4 items-end'>
           <Combobox 
             name="etiqueta" 

@@ -15,5 +15,6 @@ const types = {
   recourseAddError: '[recourse] Add Error Message Validation',
   recourseLoaded: '[recourse] Loaded Recourse Pagination',
   recourseSetPerPage: '[recourse] Set perPage range search',
+  recourseIsLoading: '[recourse] Set isLoading to Recourse',
 };
 export default types;

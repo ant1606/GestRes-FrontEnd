@@ -12,11 +12,11 @@ import types from "../types/types.js";
 export const initialState = {
     recourses: [],
     recourseActive : null,
-    recourseDelete : null,
     recourseMeta: null,
     recourseLinks: null,
-    perPage: 0,
     error: {},
+    perPage: 0,
+    isLoading: false
 };
 
 const recourseReducer = (state = initialState, action ) => {
@@ -39,6 +39,11 @@ const recourseReducer = (state = initialState, action ) => {
             return {
                 ...state,
                 perPage: action.payload,
+            }
+        case types.recourseIsLoading:
+            return {
+                ...state,
+                isLoading: action.payload,
             }
         default:
             return state;
