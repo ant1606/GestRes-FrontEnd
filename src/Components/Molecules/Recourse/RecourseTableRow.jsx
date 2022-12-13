@@ -13,37 +13,36 @@ import {
   mdiVideoVintage,
   mdiTimerOutline
 } from '@mdi/js';
-import { Link } from 'react-router-dom';
-import Modal from '../Modal';
+import {Link, useSearchParams} from 'react-router-dom';
 import GLOBAL_CONSTANTES from "../../../const/globalConstantes.js";
 import useSettings from "../../../Context/SettingsContext.jsx";
+import {toastNotifications} from "../../../helpers/notificationsSwal.js";
+import useRecourse from "../../../Context/RecourseContext.jsx";
 
 const RecourseTableRow = ({recourse}) => {
   const [detail, setDetail] = useState(false);
-  const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
   const { settingsType } = useSettings();
+  const {setIsLoading, destroyRecourse, loadRecourses} = useRecourse();
+  const [searchParams, setSearchParams] = useSearchParams()
 
   function toggleDetail() {
     setDetail(!detail);
   }
 
-  const handleClickDeleteModal = () => {
+  const handleClickDelete = async (recourse) => {
     // console.log("Mostrar modal");
-    setToggleDeleteModal(!toggleDeleteModal)
+    // setToggleDeleteModal(!toggleDeleteModal)
+    let result =  await toastNotifications().modalDeleteConfirm(recourse);
+    if(result){
+      setIsLoading(true);
+      await destroyRecourse(recourse);
+      loadRecourses(searchParams.toString());
+      setIsLoading(false);
+    }
   }
 
   return (
     <>
-      {
-        toggleDeleteModal && (
-          <Modal 
-            title="Eliminar recurso" 
-            modalState={toggleDeleteModal} 
-            handleClickParent={handleClickDeleteModal}
-            modalContent={(<p className='text-center text-xl font-medium'>¿Está seguro que desea eliminar el recurso?</p>)}
-          />
-        )
-      }
       {/* Fila de Datos */}
       <tr>
         <td className=' w-48 h-14'>
@@ -75,7 +74,7 @@ const RecourseTableRow = ({recourse}) => {
             </button>
             <button 
               className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
-              onClick={handleClickDeleteModal}
+              onClick={() => handleClickDelete(recourse)}
             >
               <Icon path={mdiTrashCan}
                 title="Delete"

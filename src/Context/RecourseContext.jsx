@@ -4,6 +4,7 @@ import GLOBAL_CONSTANTES from "../const/globalConstantes.js";
 import useSettings from "./SettingsContext.jsx";
 import types from "../types/types.js";
 import {toastNotifications} from "../helpers/notificationsSwal.js";
+import Swal from "sweetalert2";
 
 const RecourseContext = createContext(initialState);
 
@@ -70,6 +71,53 @@ export const RecourseProvider = ({children}) => {
         return success;
     }
 
+    const destroyRecourse = async (recourse) => {
+        let success = false;
+
+        await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourses/${recourse.identificador}`, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            }
+        })
+            .then(resp => {
+                if (!resp.ok)
+                    return Promise.reject(resp.json());
+
+                return resp.json();
+            })
+            .then(data => {
+                Swal.fire(
+                    'Registro Eliminado',
+                    'El registro fue eliminado satisfactoriamente.',
+                    'success'
+                );
+                success = true;
+            }).catch(async error => {
+                const err = await error;
+                const processError = err.error.reduce(
+                    (previous, currrent) => ({
+                        ...previous,
+                        [currrent.inputName]: currrent.detail
+                    }),
+                    {}
+                );
+                success = false;
+                console.log(processError);
+                addNewError(processError);
+
+                //TODO Ver si podemos extraer las notificaciones fuera de la funcion de eliminar, actualizar y guardar
+                if(Object.hasOwn(processError,'undefined')){
+                    toastNotifications().notificationError(processError[undefined]);
+                }else {
+                    toastNotifications().toastError();
+                }
+            });
+
+        return success;
+    }
+
     const addNewError = async (error)=>{
         await dispatch({
             type: types.recourseAddError,
@@ -108,7 +156,8 @@ export const RecourseProvider = ({children}) => {
         addNewError,
         loadRecourses,
         setRecoursePerPage,
-        setIsLoading
+        setIsLoading,
+        destroyRecourse
     };
 
     return (
