@@ -11,7 +11,7 @@ const RecourseRouter = () => {
             <Routes>
                 <Route path="recursos" element={<RecourseScreenMain/>}/>
                 <Route path="recursos/new" element={<RecourseScreenForm />}/>
-                <Route path="recursos/show" element={<RecourseScreenShow />}/>
+                <Route path="recursos/:idrecurso" element={<RecourseScreenShow />}/>
             </Routes>
         </RecourseProvider>
     );

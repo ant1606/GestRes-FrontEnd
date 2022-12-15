@@ -13,7 +13,7 @@ import {
   mdiVideoVintage,
   mdiTimerOutline
 } from '@mdi/js';
-import {Link, useSearchParams} from 'react-router-dom';
+import {NavLink, useSearchParams} from 'react-router-dom';
 import GLOBAL_CONSTANTES from "../../../const/globalConstantes.js";
 import useSettings from "../../../Context/SettingsContext.jsx";
 import {toastNotifications} from "../../../helpers/notificationsSwal.js";
@@ -30,8 +30,6 @@ const RecourseTableRow = ({recourse}) => {
   }
 
   const handleClickDelete = async (recourse) => {
-    // console.log("Mostrar modal");
-    // setToggleDeleteModal(!toggleDeleteModal)
     let result =  await toastNotifications().modalDeleteConfirm(recourse);
     if(result){
       setIsLoading(true);
@@ -55,7 +53,7 @@ const RecourseTableRow = ({recourse}) => {
                 color="white"
               />
             </button>
-            <Link to="/recursos/show">
+            <NavLink to={`/recursos/${recourse.identificador}`}>
               <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
                 <Icon path={mdiEye}
                   title="RecourseScreenShow"
@@ -63,7 +61,7 @@ const RecourseTableRow = ({recourse}) => {
                   color="white"
                 />
               </button>
-            </Link>
+            </NavLink>
             
             <button className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg">
               <Icon path={mdiPencil}
