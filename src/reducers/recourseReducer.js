@@ -45,6 +45,11 @@ const recourseReducer = (state = initialState, action ) => {
                 ...state,
                 isLoading: action.payload,
             }
+        case types.recourseGetData:
+            return {
+                ...state,
+                recourseActive: action.payload,
+            }
         default:
             return state;
     }

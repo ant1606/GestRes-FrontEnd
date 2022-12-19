@@ -118,6 +118,14 @@ export const RecourseProvider = ({children}) => {
         return success;
     }
 
+    const getRecourse = (recourseId) => {
+        fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourses/${recourseId}`)
+            .then(resp => resp.json())
+            .then(data => {
+                dispatch(setRecourse(data.data));
+            });
+    }
+
     const addNewError = async (error)=>{
         await dispatch({
             type: types.recourseAddError,
@@ -128,7 +136,12 @@ export const RecourseProvider = ({children}) => {
     const setRecourses = (recourses) => ({
         type: types.recourseLoaded,
         payload: recourses,
-    })
+    });
+
+    const setRecourse = (recourse)=> ({
+        type: types.recourseGetData,
+        payload: recourse,
+    });
 
     const setRecoursePerPage = (perPage) => {
         dispatch({
@@ -152,12 +165,13 @@ export const RecourseProvider = ({children}) => {
         recourseError: state.error,
         recoursePerPage: state.perPage,
         recourseIsLoading: state.isLoading,
-        savingRecourse,
         addNewError,
+        destroyRecourse,
+        getRecourse,
         loadRecourses,
-        setRecoursePerPage,
         setIsLoading,
-        destroyRecourse
+        setRecoursePerPage,
+        savingRecourse,
     };
 
     return (
