@@ -18,26 +18,29 @@ import {
 } from "./RecourseFormValidationInputs.js";
 import {toastNotifications} from "../../../helpers/notificationsSwal.js";
 
-
 const RecourseForm = ({children}) => {
   const [comboTypeData, setComboTypeData] = useState([]);
-  const {savingRecourse, recourseError, addNewError} = useRecourse();
+  const {savingRecourse, recourseError, addNewError, recourseActive} = useRecourse();
   const { settingsType } = useSettings();
 
+  //TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
+  //TODO QUeda cargar las etiquetas del recurso
   const initialState = {
-    nombre: 'Mi curso de prueba' ,
-    ruta: 'https://www.vimeo.com/sdz/asdLHXCQWE',
-    autor: 'yO SOY',
-    editorial: 'Editorial pepito',
-    tipoId: !settingsType ? 0 : settingsType[0].id,
-    totalVideos: '0',
-    totalHoras: '00:00:00',
-    totalPaginas: '0',
-    totalCapitulos: '0',
+    nombre: recourseActive?.nombre ?  recourseActive?.nombre : '',
+    ruta: recourseActive?.ruta ? recourseActive?.ruta : '',
+    autor: recourseActive?.autor ? recourseActive?.autor : '',
+    editorial: recourseActive?.editorial ? recourseActive?.editorial : '',
+    tipoId: recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId,
+    totalVideos: recourseActive?.totalVideos ? recourseActive?.totalVideos : recourseActive?.totalVideos=== undefined && '0',
+    totalHoras: recourseActive?.totalHoras ? recourseActive?.totalHoras : recourseActive?.totalHoras=== undefined && '00:00:00',
+    totalPaginas: recourseActive?.totalPaginas ? recourseActive?.totalPaginas : recourseActive?.totalPaginas=== undefined && '0',
+    totalCapitulos: recourseActive?.totalCapitulos ? recourseActive?.totalCapitulos : recourseActive?.totalCapitulos=== undefined && '0',
     tags: [],
     recourseType: settingsType
   };
 
+  // tipoId: recourseActive?.tipoId === undefined ? 0 : (!settingsType ? 0 : settingsType[0].id) ,
+  //recourseActive?.tipoId === undefined ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId,
   const validateInputs = {
     nombre: validateNombre,
     ruta: validateRuta,
@@ -50,6 +53,8 @@ const RecourseForm = ({children}) => {
     totalCapitulos: validateTotalCapitulos,
   };
 
+  //TODO El campo Tipo Recurso aun no se carga correctamente, al igual que los valores del formulario, generar un meetodo para cargarlos
+  // dependiendo de la existencia del recourseActive
   const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateInputs, addNewError );
   const { nombre, ruta, autor, editorial, tipoId, totalVideos, totalHoras, totalPaginas, totalCapitulos, tags } = formValues;
   const recourseErrorRef = useRef();
@@ -73,19 +78,26 @@ const RecourseForm = ({children}) => {
     //TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
   }, [tipoId]);
 
+  useEffect(()=>{
+    // console.log(recourseActive);
+    // console.log(recourseActive?.tipoId);
+    reset();
+    console.log(recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId)
+  }, [recourseActive]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     // setIsLoading(true);
     await validatedSubmitForm();
     const isValid = Object.keys(recourseErrorRef.current).every(el=>recourseErrorRef.current[el]===null);
-    console.log(isValid);
+    // console.log(isValid);
     if(isValid){
       //TODO Aplicar cuando se actualice el registro
       let res = await savingRecourse(formValues);
       // let res =!tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
-      console.log(res);
+      // console.log(res);
       if(res){
-        console.log("Se guardo");
+        // console.log("Se guardo");
         reset();
         addNewError([]);
       }

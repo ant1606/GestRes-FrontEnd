@@ -50,6 +50,11 @@ const recourseReducer = (state = initialState, action ) => {
                 ...state,
                 recourseActive: action.payload,
             }
+        case types.recourseCleanActive:
+            return {
+                ...state,
+                recourseActive: action.payload,
+            }
         default:
             return state;
     }

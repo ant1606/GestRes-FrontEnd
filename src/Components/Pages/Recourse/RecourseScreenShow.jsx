@@ -11,13 +11,16 @@ const RecourseScreenShow = () => {
   const [toggleTab, setToggleTab] = useState(1);
   const [showModalState, setShowModalState] = useState(false);
   const [showModalProgress, setShowModalProgress] = useState(false);
-  const {getRecourse} = useRecourse();
+  const {getRecourse, cleanRecourseActive, recourseActive} = useRecourse();
   // const [searchParams, setSearchParamas] = useSearchParams();
   let {idrecurso} = useParams();
 
   useEffect(()=>{
     changeTitle("Recursos Educativos / Ver");
     getRecourse(idrecurso);
+    return () => {
+      cleanRecourseActive();
+    }
   }, []);
 
   const handleClickButtonState = () => {

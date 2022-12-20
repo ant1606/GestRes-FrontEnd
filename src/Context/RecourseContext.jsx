@@ -157,6 +157,13 @@ export const RecourseProvider = ({children}) => {
         });
     };
 
+    const cleanRecourseActive = ()=> {
+        dispatch({
+            type: types.recourseCleanActive,
+            payload: null
+        })
+    }
+
     const recourseActions = {
         recourses: state.recourses,
         recourseActive : state.recourseActive ,
@@ -166,12 +173,14 @@ export const RecourseProvider = ({children}) => {
         recoursePerPage: state.perPage,
         recourseIsLoading: state.isLoading,
         addNewError,
+        cleanRecourseActive,
         destroyRecourse,
         getRecourse,
         loadRecourses,
         setIsLoading,
         setRecoursePerPage,
         savingRecourse,
+
     };
 
     return (

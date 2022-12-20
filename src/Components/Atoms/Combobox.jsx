@@ -14,7 +14,7 @@ const Combobox = ({ name, options, label, handleChange, value, classBox, filter,
                       name={name}
                       id={name}
                       onChange = {handleChange}
-                      defaultValue = {value}
+                      value = {value}
                   >
                       {filter && (
                           <>
@@ -27,6 +27,7 @@ const Combobox = ({ name, options, label, handleChange, value, classBox, filter,
                                   <option
                                       value={option.id}
                                       key={option.id}
+
                                   >
                                       {option.value}
                                   </option>
