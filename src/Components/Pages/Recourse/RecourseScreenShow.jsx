@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import TitleContext from '../../../Context/TitleContext';
 import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx'
 import StatusMain from '../../Organisms/Status/StatusMain.jsx'
-import ProgressMain from '../../Organisms/Progress/Main'
+import ProgressMain from '../../Organisms/Progress/ProgressMain.jsx'
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import {useParams, useSearchParams} from "react-router-dom";
 

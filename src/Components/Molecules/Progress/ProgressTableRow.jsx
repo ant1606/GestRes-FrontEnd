@@ -3,7 +3,7 @@ import Icon from '@mdi/react';
 import { mdiTrashCan } from '@mdi/js';
 import Modal from '../Modal';
 
-const TableRow = ({last, comentario}) => {
+const ProgressTableRow = ({last, progress}) => {
 
   const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
 
@@ -48,23 +48,23 @@ const TableRow = ({last, comentario}) => {
       </td>
 
       <td className='w-32  text-center'>
-        15/05/2022
+          {progress?.fecha}
       </td>
 
       <td className='w-36 text-center'>
-        15
+          {progress?.realizado}
       </td>
 
       <td className='w-36 text-center'>
-        50
+          {progress?.pendiente}
       </td>
 
       <td className=''>
-        Comentario
+          {progress?.comentario}
       </td>
 
     </tr>
   )
 }
 
-export default TableRow
+export default ProgressTableRow

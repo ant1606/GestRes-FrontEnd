@@ -1,9 +1,8 @@
 
 import Field from '../../Atoms/Field'
-import Combobox from '../../Atoms/Combobox'
 import TextArea from '../../Atoms/TextArea'
 
-const Form = () => {
+const ProgressForm = () => {
   return (
     <div className='flex flex-col py-8 gap-10'>
       <Field 
@@ -34,4 +33,4 @@ const Form = () => {
   )
 }
 
-export default Form
+export default ProgressForm

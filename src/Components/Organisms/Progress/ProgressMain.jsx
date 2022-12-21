@@ -1,10 +1,10 @@
 import React from 'react'
 import Button from '../../Atoms/Button';
 import Modal from '../../Molecules/Modal';
-import ProgressForm from './Form'
-import ProgressTable from './Table'
+import ProgressForm from './ProgressForm.jsx'
+import ProgressTable from './ProgressTable.jsx'
 
-const Main = ({handleClickParent, modalState}) => {
+const ProgressMain = ({handleClickParent, modalState}) => {
 
   return (
     <div>
@@ -30,4 +30,4 @@ const Main = ({handleClickParent, modalState}) => {
   )
 }
 
-export default Main
+export default ProgressMain
