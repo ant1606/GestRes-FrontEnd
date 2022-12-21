@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import TitleContext from '../../../Context/TitleContext';
 import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx'
-import StatusMain from '../../Organisms/Status/Main'
+import StatusMain from '../../Organisms/Status/StatusMain.jsx'
 import ProgressMain from '../../Organisms/Progress/Main'
 import useRecourse from "../../../Context/RecourseContext.jsx";
 import {useParams, useSearchParams} from "react-router-dom";
@@ -11,7 +11,7 @@ const RecourseScreenShow = () => {
   const [toggleTab, setToggleTab] = useState(1);
   const [showModalState, setShowModalState] = useState(false);
   const [showModalProgress, setShowModalProgress] = useState(false);
-  const {getRecourse, cleanRecourseActive, recourseActive} = useRecourse();
+  const {getRecourse, cleanRecourseActive} = useRecourse();
   // const [searchParams, setSearchParamas] = useSearchParams();
   let {idrecurso} = useParams();
 

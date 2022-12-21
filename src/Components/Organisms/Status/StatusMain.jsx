@@ -1,10 +1,10 @@
 import React from 'react'
 import Button from '../../Atoms/Button';
 import Modal from '../../Molecules/Modal';
-import StatusForm from './Form'
-import StatusTable from './Table'
+import StatusForm from './StatusForm.jsx'
+import StatusTable from './StatusTable.jsx'
 
-const Main = ({handleClickParent, modalState}) => {
+const StatusMain = ({handleClickParent, modalState}) => {
   return (
     <div>
       <Button 
@@ -29,4 +29,4 @@ const Main = ({handleClickParent, modalState}) => {
   )
 }
 
-export default Main
+export default StatusMain

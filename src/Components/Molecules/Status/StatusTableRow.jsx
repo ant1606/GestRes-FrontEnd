@@ -3,7 +3,7 @@ import Icon from '@mdi/react'
 import React, { useState } from 'react'
 import Modal from '../Modal';
 
-const TableRow = ({last, comentario}) => {
+const StatusTableRow = ({last, status}) => {
 
   const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
 
@@ -48,25 +48,25 @@ const TableRow = ({last, comentario}) => {
       </td>
 
       <td className='w-32  text-center'>
-        15/05/2022
+          {status?.fecha}
       </td>
 
       <td className='w-44 '>
         <div className='flex justify-center'>
           <div className='flex justify-center items-center w-38 px-4 py-1 rounded-2xl bg-gray-900'>
             <span className='text-sm font-bold text-white uppercase'>
-              POR EMPEZAR
+              {status?.estadoNombre}
             </span>
           </div>
         </div>
       </td>
 
       <td className=''>
-        {comentario}
+        {status?.comentario}
       </td>
 
     </tr>
   )
 }
 
-export default TableRow
+export default StatusTableRow

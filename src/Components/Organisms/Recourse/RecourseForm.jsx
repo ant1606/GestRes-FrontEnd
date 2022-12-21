@@ -82,7 +82,7 @@ const RecourseForm = ({children}) => {
     // console.log(recourseActive);
     // console.log(recourseActive?.tipoId);
     reset();
-    console.log(recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId)
+    // console.log(recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId)
   }, [recourseActive]);
 
   const handleSubmit = async (e) => {
