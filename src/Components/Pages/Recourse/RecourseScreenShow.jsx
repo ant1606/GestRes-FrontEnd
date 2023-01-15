@@ -4,7 +4,7 @@ import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx'
 import StatusMain from '../../Organisms/Status/StatusMain.jsx'
 import ProgressMain from '../../Organisms/Progress/ProgressMain.jsx'
 import useRecourse from "../../../Context/RecourseContext.jsx";
-import {useParams, useSearchParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 const RecourseScreenShow = () => {
   const {changeTitle} = useContext(TitleContext);
@@ -23,6 +23,7 @@ const RecourseScreenShow = () => {
     }
   }, []);
 
+  //TODO Cambiar el modalState a un contexto de UI para toda la aplicacion
   const handleClickButtonState = () => {
     setShowModalState(!showModalState);
   }
@@ -63,7 +64,7 @@ const RecourseScreenShow = () => {
         </div>
 
         <div className={`${toggleTab === 2 ? "" : "hidden"}`}>
-          <StatusMain 
+          <StatusMain
             handleClickParent={handleClickButtonState}
             modalState={showModalState}
           />

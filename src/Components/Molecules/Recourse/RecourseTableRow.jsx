@@ -70,6 +70,7 @@ const RecourseTableRow = ({recourse}) => {
                 color="white"
               />
             </button>
+
             <button 
               className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
               onClick={() => handleClickDelete(recourse)}
