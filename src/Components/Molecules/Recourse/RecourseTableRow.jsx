@@ -22,7 +22,7 @@ import useRecourse from "../../../Context/RecourseContext.jsx";
 const RecourseTableRow = ({recourse}) => {
   const [detail, setDetail] = useState(false);
   const { settingsType } = useSettings();
-  const {setIsLoading, destroyRecourse, loadRecourses} = useRecourse();
+  const {setIsLoading, destroyRecourse, loadRecourses, setRecourseActive} = useRecourse();
   const [searchParams, setSearchParams] = useSearchParams()
 
   function toggleDetail() {
@@ -37,6 +37,11 @@ const RecourseTableRow = ({recourse}) => {
       loadRecourses(searchParams.toString());
       setIsLoading(false);
     }
+  }
+
+  const handleClickEdit = (recourse) => {
+    console.log(recourse);
+    setRecourseActive(recourse);
   }
 
   return (
@@ -62,14 +67,16 @@ const RecourseTableRow = ({recourse}) => {
                 />
               </button>
             </NavLink>
-            
-            <button className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg">
-              <Icon path={mdiPencil}
-                title="Edit"
-                size={1}
-                color="white"
-              />
-            </button>
+
+            <NavLink to={`/recursos/${recourse.identificador}/edit`}>
+              <button className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg" onClick={()=> handleClickEdit(recourse)}>
+                <Icon path={mdiPencil}
+                  title="Edit"
+                  size={1}
+                  color="white"
+                />
+              </button>
+            </NavLink>
 
             <button 
               className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"

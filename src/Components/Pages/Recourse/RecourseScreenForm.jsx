@@ -8,10 +8,14 @@ import useSettings from "../../../Context/SettingsContext.jsx";
 
 const RecourseScreenForm = () => {
   const { changeTitle } = useContext(TitleContext);
-  const {recourseActive} = useRecourse();
+  const {recourseActive, cleanRecourseActive} = useRecourse();
 
   useEffect(()=>{
+    console.log(recourseActive);
     changeTitle(`Recursos Educativos / ${recourseActive===null ? "Nuevo" : "Editar"} `);
+    return (()=>{
+      cleanRecourseActive();
+    });
   }, []);
 
   return (

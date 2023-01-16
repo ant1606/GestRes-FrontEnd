@@ -17,6 +17,7 @@ const types = {
   recourseGetData: '[recourse] Get Data from one Recourse show',
   recourseSetPerPage: '[recourse] Set perPage range search',
   recourseCleanActive: '[recourse] Clean Recourse Active',
+  recourseSetActive: '[recourse] Set Recourse Active',
   recourseIsLoading: '[recourse] Set isLoading to Recourse',
 };
 export default types;

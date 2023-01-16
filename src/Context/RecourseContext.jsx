@@ -157,10 +157,16 @@ export const RecourseProvider = ({children}) => {
         });
     };
 
+    const setRecourseActive = (recourse) => {
+        dispatch({
+            type: types.recourseSetActive,
+            payload: recourse
+        })
+    }
+
     const cleanRecourseActive = ()=> {
         dispatch({
-            type: types.recourseCleanActive,
-            payload: null
+            type: types.recourseCleanActive
         })
     }
 
@@ -178,6 +184,7 @@ export const RecourseProvider = ({children}) => {
         getRecourse,
         loadRecourses,
         setIsLoading,
+        setRecourseActive,
         setRecoursePerPage,
         savingRecourse,
 
