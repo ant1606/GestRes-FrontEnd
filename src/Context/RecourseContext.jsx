@@ -71,6 +71,56 @@ export const RecourseProvider = ({children}) => {
         return success;
     }
 
+    const updatingRecourse = async (recourse, id) => {
+        let success = false;
+
+        if(parseInt(recourse.tipoId) === settingsType.find(val => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id){
+            recourse.totalVideos = null;
+            recourse.totalHoras = null;
+        }else {
+            recourse.totalPaginas = null;
+            recourse.totalCapitulos = null;
+        }
+
+        await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/recourses/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(recourse)
+        })
+            .then( resp => {
+                if (!resp.ok)
+                    return Promise.reject(resp.json());
+                return resp.json();
+            })
+            .then( data => {
+                success = true;
+                toastNotifications().toastSucces();
+                console.log(data.data);
+            })
+            .catch(async error => {
+                const err = await error;
+                const processError = err.error.reduce(
+                    (previous, currrent) => ({
+                        ...previous,
+                        [currrent.inputName]: currrent.detail
+                    }),
+                    {}
+                );
+                //TODO Verificar que se esta generando entradas
+                // new entry: "undefined"
+                // Tratar de replicar el error al generar los registros en el formulario
+                console.log(processError);
+
+                addNewError(processError);
+                toastNotifications().toastError();
+                success = false;
+            });
+
+        return success;
+    }
+
     const destroyRecourse = async (recourse) => {
         let success = false;
 
@@ -187,6 +237,7 @@ export const RecourseProvider = ({children}) => {
         setRecourseActive,
         setRecoursePerPage,
         savingRecourse,
+        updatingRecourse,
 
     };
 

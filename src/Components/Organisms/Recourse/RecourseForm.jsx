@@ -1,4 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
+import {useNavigate} from 'react-router-dom'
+
 import Combobox from '../../Atoms/Combobox';
 import Field from '../../Atoms/Field';
 import {useForm} from "../../../hooks/useForm.js";
@@ -20,9 +22,9 @@ import {toastNotifications} from "../../../helpers/notificationsSwal.js";
 
 const RecourseForm = ({children}) => {
   const [comboTypeData, setComboTypeData] = useState([]);
-  const {savingRecourse, recourseError, addNewError, recourseActive} = useRecourse();
+  const {savingRecourse, recourseError, addNewError, recourseActive, updatingRecourse} = useRecourse();
   const { settingsType } = useSettings();
-
+  const navigate = useNavigate();
   //TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   //TODO QUeda cargar las etiquetas del recurso
   const initialState = {
@@ -31,10 +33,10 @@ const RecourseForm = ({children}) => {
     autor: recourseActive?.autor ? recourseActive?.autor : '',
     editorial: recourseActive?.editorial ? recourseActive?.editorial : '',
     tipoId: recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId,
-    totalVideos: recourseActive?.totalVideos ? recourseActive?.totalVideos : (recourseActive?.totalVideos=== undefined ? '0' : recourseActive?.totalVideos=== null && '0'),
-    totalHoras: recourseActive?.totalHoras ? recourseActive?.totalHoras : (recourseActive?.totalHoras=== undefined ? '00:00:00' : recourseActive?.totalHoras=== null && '00:00:00'),
-    totalPaginas: recourseActive?.totalPaginas ? recourseActive?.totalPaginas : (recourseActive?.totalPaginas=== undefined ? '0' : recourseActive?.totalPaginas=== null && '0'  ),
-    totalCapitulos: recourseActive?.totalCapitulos ? recourseActive?.totalCapitulos : (recourseActive?.totalCapitulos=== undefined ? '0' : recourseActive?.totalCapitulos=== null && '0'),
+    totalVideos: recourseActive?.totalVideos ? recourseActive?.totalVideos.toString() : (recourseActive?.totalVideos=== undefined ? '0' : recourseActive?.totalVideos=== null && '0'),
+    totalHoras: recourseActive?.totalHoras ? recourseActive?.totalHoras.toString() : (recourseActive?.totalHoras=== undefined ? '00:00:00' : recourseActive?.totalHoras=== null && '00:00:00'),
+    totalPaginas: recourseActive?.totalPaginas ? recourseActive?.totalPaginas.toString() : (recourseActive?.totalPaginas=== undefined ? '0' : recourseActive?.totalPaginas=== null && '0'  ),
+    totalCapitulos: recourseActive?.totalCapitulos ? recourseActive?.totalCapitulos.toString() : (recourseActive?.totalCapitulos=== undefined ? '0' : recourseActive?.totalCapitulos=== null && '0'),
     tags: [],
     recourseType: settingsType
   };
@@ -101,19 +103,22 @@ const RecourseForm = ({children}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     // setIsLoading(true);
     await validatedSubmitForm();
     const isValid = Object.keys(recourseErrorRef.current).every(el=>recourseErrorRef.current[el]===null);
     // console.log(isValid);
     if(isValid){
       //TODO Aplicar cuando se actualice el registro
-      let res = await savingRecourse(formValues);
+      let res = await recourseActive ? updatingRecourse(formValues,recourseActive.identificador) : savingRecourse(formValues);
       // let res =!tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
       // console.log(res);
       if(res){
         // console.log("Se guardo");
         reset();
         addNewError([]);
+
+        navigate("/recursos");
       }
     }else {
       toastNotifications().toastError();
