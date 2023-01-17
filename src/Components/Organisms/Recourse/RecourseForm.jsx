@@ -31,13 +31,27 @@ const RecourseForm = ({children}) => {
     autor: recourseActive?.autor ? recourseActive?.autor : '',
     editorial: recourseActive?.editorial ? recourseActive?.editorial : '',
     tipoId: recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId,
-    totalVideos: recourseActive?.totalVideos ? recourseActive?.totalVideos : recourseActive?.totalVideos=== undefined && '0',
-    totalHoras: recourseActive?.totalHoras ? recourseActive?.totalHoras : recourseActive?.totalHoras=== undefined && '00:00:00',
-    totalPaginas: recourseActive?.totalPaginas ? recourseActive?.totalPaginas : recourseActive?.totalPaginas=== undefined && '0',
-    totalCapitulos: recourseActive?.totalCapitulos ? recourseActive?.totalCapitulos : recourseActive?.totalCapitulos=== undefined && '0',
+    totalVideos: recourseActive?.totalVideos ? recourseActive?.totalVideos : (recourseActive?.totalVideos=== undefined ? '0' : recourseActive?.totalVideos=== null && '0'),
+    totalHoras: recourseActive?.totalHoras ? recourseActive?.totalHoras : (recourseActive?.totalHoras=== undefined ? '00:00:00' : recourseActive?.totalHoras=== null && '00:00:00'),
+    totalPaginas: recourseActive?.totalPaginas ? recourseActive?.totalPaginas : (recourseActive?.totalPaginas=== undefined ? '0' : recourseActive?.totalPaginas=== null && '0'  ),
+    totalCapitulos: recourseActive?.totalCapitulos ? recourseActive?.totalCapitulos : (recourseActive?.totalCapitulos=== undefined ? '0' : recourseActive?.totalCapitulos=== null && '0'),
     tags: [],
     recourseType: settingsType
   };
+  // const initialState = {
+  //   nombre: recourseActive?.nombre ?  recourseActive?.nombre : '',
+  //   ruta: recourseActive?.ruta ? recourseActive?.ruta : '',
+  //   autor: recourseActive?.autor ? recourseActive?.autor : '',
+  //   editorial: recourseActive?.editorial ? recourseActive?.editorial : '',
+  //   tipoId: recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId,
+  //   totalVideos: recourseActive?.totalVideos ? recourseActive?.totalVideos : recourseActive?.totalVideos=== undefined && '0',
+  //   totalHoras: recourseActive?.totalHoras ? recourseActive?.totalHoras : recourseActive?.totalHoras=== undefined && '00:00:00',
+  //   totalPaginas: recourseActive?.totalPaginas ? recourseActive?.totalPaginas : recourseActive?.totalPaginas=== undefined && '0',
+  //   totalCapitulos: recourseActive?.totalCapitulos ? recourseActive?.totalCapitulos : recourseActive?.totalCapitulos=== undefined && '0',
+  //   tags: [],
+  //   recourseType: settingsType
+  // };
+
 
   // tipoId: recourseActive?.tipoId === undefined ? 0 : (!settingsType ? 0 : settingsType[0].id) ,
   //recourseActive?.tipoId === undefined ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId,
