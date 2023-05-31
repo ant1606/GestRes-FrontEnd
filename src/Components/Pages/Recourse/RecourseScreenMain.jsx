@@ -32,6 +32,7 @@ const RecourseScreenMain = () => {
       }
   }, []);
 
+  //TODO Este metodo se repite en cada ScreenMain, ver si puedo acoplarlo en el mismo componenten de FooterTable
     const handlePageChange = (e) => {
         searchParams.delete('page');
         searchParams.append('page', e.selected + 1);
@@ -44,7 +45,8 @@ const RecourseScreenMain = () => {
 
   return (
     <>
-      {/* //TODO Cuando se accede directamente a la ruta colocandola en la url, los assets del sidebar no son cargados 
+      {/* //TODO Cuando se accede directamente a la ruta colocandola en la url, los assets del sidebar no son cargados, limitar el acceso de las rutas
+      solo a las paginas principales
       http://172.24.0.4:5173/recursos/show
       */}
       {recourseIsLoading && <Loader/>}

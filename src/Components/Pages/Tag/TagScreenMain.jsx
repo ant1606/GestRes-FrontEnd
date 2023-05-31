@@ -34,6 +34,7 @@ const Etiquetas = () => {
     }
   }, []);
 
+  //TODO Este metodo se repite en cada ScreenMain, ver si puedo acoplarlo en el mismo componenten de FooterTable
   const handlePageChange = (e) => {
     searchParams.delete('page');
     searchParams.append('page', e.selected + 1);

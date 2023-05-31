@@ -19,5 +19,9 @@ const types = {
   recourseCleanActive: '[recourse] Clean Recourse Active',
   recourseSetActive: '[recourse] Set Recourse Active',
   recourseIsLoading: '[recourse] Set isLoading to Recourse',
+
+  securityAddError: '[security] Add Error Message Validation',
+  securityUserIsLogged: '[security] Set if the user is logged or not',
+  securityIsLoading: '[security] Set isLoading in module Security',
 };
 export default types;

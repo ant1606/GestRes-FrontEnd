@@ -8,9 +8,10 @@ import moment from 'moment';
 import {useForm} from "../../../hooks/useForm.js";
 import {validateFecha, validateComentario, validateEstadoId} from "./StatusFormValidationInputs.js";
 
-const StatusForm = () => {
-    const { settingsStatus } = useSettings();
+const StatusForm = ({statusOptions}) => {
     const [comboStatusData, setComboStatusData] = useState([]);
+    // No se detectaba el estado de settingStatus en el form, quizas porque esta incrustado en SweetAlert, investigar luego
+    // const { settingsStatus } = useSettings();
 
     const initialState = {
         fecha: moment().format("YYYY-MM-DD"),
@@ -28,17 +29,17 @@ const StatusForm = () => {
     // const statusErrorRef = useRef();
 
     useEffect(()=> {
-        console.log(fecha);
-        if(settingsStatus !== null){
-            setComboStatusData(settingsStatus);
+        // console.log(fecha);
+        // console.log(settingsStatus);
+        if(statusOptions !== null){
+            setComboStatusData(statusOptions);
             reset()
         }
-    }, [settingsStatus]);
+    }, [statusOptions]);
 
     // useEffect(()=>{
     //     statusErrorRef.current = recourseError;
     // }, [recourseError]);
-
   return (
     <div className='flex flex-col py-8 gap-10'>
       <Field

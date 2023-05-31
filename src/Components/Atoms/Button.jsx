@@ -12,7 +12,7 @@ const Button = ({text, btnType, handleClick, type}) => {
   
   return (
     <button className={`${btnColors[btnType]} rounded-xl text-white py-2 px-5 text-2xl font-medium
-        hover:bg-gray-800`} 
+        hover:bg-gray-800 grow`}
         onClick={handleClick}
         type={type}
     >
