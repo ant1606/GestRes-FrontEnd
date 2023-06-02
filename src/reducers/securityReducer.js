@@ -3,7 +3,8 @@ import types from '../types/types.js';
 export const initialState={
     userLogged: false,
     error: [],
-    isLoading: false
+    isLoading: false,
+    user: {}
 };
 
 /**
@@ -19,7 +20,12 @@ const securityReducer = (state = {}, action) => {
                 ...state,
                 error: {...state.error, [Object.keys(action.payload)]: Object.values(action.payload)[0] },
             };
-            //TODO agregar caso cuando el usuario se logea
+        case types.securityUserIsLogged:
+            return{
+                ...state,
+                userLogged: true,
+                user: action.payload
+            }
         default:
             return state;
     }

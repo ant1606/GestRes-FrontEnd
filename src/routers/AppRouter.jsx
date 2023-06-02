@@ -10,12 +10,14 @@ import RecourseRouter from "./RecourseRouter.jsx";
 import TagRouter from "./TagRouter.jsx";
 import useSettings from "../Context/SettingsContext.jsx";
 import Login from "../Components/Pages/Login.jsx";
+import useSecurity from "../Context/SecurityContext.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y SideBarContext en SettingsContext
-  const { loadSettings } = useSettings()
-  //TODO Gestionar el logged del usuario para condicionar el render de las vistas
-  const [logged, setLogged] = useState(false);
+  const { loadSettings } = useSettings();
+  const {securityUserIsLogged } = useSecurity();
+  // //TODO Gestionar el logged del usuario para condicionar el render de las vistas
+  // const [logged, setLogged] = useState(false);
 
   useEffect(()=>{
     initApp();
@@ -30,7 +32,7 @@ const AppRouter = () => {
   return (
       <BrowserRouter>
 
-        {!logged ? (
+        {!securityUserIsLogged ? (
             <Routes>
               <Route path="/login" element={<Login/>}></Route>
             </Routes>

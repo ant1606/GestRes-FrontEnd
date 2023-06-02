@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Field from "../Atoms/Field.jsx";
 import Button from "../Atoms/Button.jsx";
 import useSecurity from '../../Context/SecurityContext';
@@ -9,15 +9,16 @@ import { mdiLock } from '@mdi/js';
 
 import {validateUserEmail, validateUserPassword} from "./LoginFormValidationInputs.js";
 import {useForm} from "../../hooks/useForm.js";
+import {useNavigate} from "react-router-dom";
 
 const validateFunctionsFormInputs ={
     email: validateUserEmail,
-    password: validateUserPassword
+    password: validateUserPassword,
 };
 
 const initialState = {
     email: '',
-    password: ''
+    password: '',
 };
 
 const Login = () => {
@@ -25,62 +26,32 @@ const Login = () => {
         addNewError,
         setIsLoading,
         securityError,
+        logginUser,
+        securityUserIsLogged
     } = useSecurity();
     const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError);
     const {email, password} = formValues;
+    const navigate = useNavigate();
+    const [remember_me, setRemember_me] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         await validatedSubmitForm();
         const isValid =Object.keys(securityError).every(el=>securityError[el]===null);
-        console.log(isValid);
+
         if(isValid){
-            //Guardamos la cookie ya que el formulario fue validado
-            fetch('http://localhost/api/login',{
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "accept": "application/json"
-                },
-                body: JSON.stringify({
-                    email:"test@example.com",
-                    password:"password"
-                })
-            }).then( res => res.json())
-                .then(data =>{
-                    setCookie("bearerToken", data.data.token, data.data.expire_date);
-                    // setCookie("miprueba", "valor1", "Wed 31 May 2023 20:40:24 GMT");
-                } );
-            //TODO setear que el usuario fue logeado
+            let res = await logginUser({email, password, remember_me});
+            if(res){
+                // return redirect("/dashboard");
+                navigate("/dashboard");
+            }
         }
         setIsLoading(false);
     }
 
-    function setCookie(key, value, expire=null ){
-        let cookieValue =`${key}=${value}`;
-        if(expire!==null){
-            cookieValue += `; expires=${expire};`;
-        }
-        document.cookie =`${key}=${value}; expires=${expire}`;
-    }
-    function getCookie(name) {
-        // Separa las cookies individuales en un arreglo
-        var cookies = document.cookie.split(';');
-
-        // Itera sobre cada cookie
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-
-            // Verifica si la cookie comienza con el nombre buscado
-            if (cookie.startsWith(name + '=')) {
-                // Extrae y devuelve el valor de la cookie
-                return cookie.substring(name.length + 1);
-            }
-        }
-
-        // Retorna null si no se encontró la cookie
-        return null;
+    const handleCheckBoxClick = (e) => {
+        setRemember_me(e.target.checked);
     }
 
     return (
@@ -125,7 +96,7 @@ const Login = () => {
                         />
                     </div>
                     <div>
-                        <label className="text-sm leading-5 font-semibold"><input type="checkbox" value="" /> Recordarme</label>
+                        <label className="text-sm leading-5 font-semibold"><input type="checkbox" name="remember_me" value={remember_me} onChange={handleCheckBoxClick}/> Recordarme</label>
                     </div>
                     <div className="flex justify-between">
                         <a href="#" className="text-sm leading-5 font-semibold">Registrate</a>
