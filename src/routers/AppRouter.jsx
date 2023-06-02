@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 
 import SideBar from '../Components/Organisms/Sidebar'
 import Dashboard from '../Components/Pages/Dashboard'
@@ -11,13 +11,16 @@ import TagRouter from "./TagRouter.jsx";
 import useSettings from "../Context/SettingsContext.jsx";
 import Login from "../Components/Pages/Login.jsx";
 import useSecurity from "../Context/SecurityContext.jsx";
+import {tokenExpired} from "../helpers/authenticationManagement.js";
+
+import {useNavigate} from "react-router-dom";
 
 const AppRouter = () => {
-  // TODO Agrupar TitleContext y SideBarContext en SettingsContext
+  // TODO Agrupar TitleContext y  en SettingsContext
   const { loadSettings } = useSettings();
-  const {securityUserIsLogged } = useSecurity();
-  // //TODO Gestionar el logged del usuario para condicionar el render de las vistas
-  // const [logged, setLogged] = useState(false);
+  const {securityUserIsLogged, checkRememberToken } = useSecurity();
+  const navigate = useNavigate();
+  const {setUserIsLogged} = useSecurity();
 
   useEffect(()=>{
     initApp();
@@ -25,42 +28,52 @@ const AppRouter = () => {
 
   const initApp = async() => {
     await loadSettings();
+
+    if(tokenExpired()){ //Token bearer
+      if(!checkRememberToken()){
+        navigate("/login");
+      }
+    }else{
+      const user = JSON.parse(localStorage.getItem('user'));
+      setUserIsLogged(user);
+      //TODO Pasar como parametro la ultima pagina visitada del usuario, por el momento se esta colocando el dashboard
+      navigate("/dashboard");
+    }
   }
 
   // TODO Hacer que el titlebar se mantenga posicionado en la parte superior
   //TODO Hacer que solo el contenido principal pueda hacer scroll y no toda la pantalla
   return (
-      <BrowserRouter>
-
-        {!securityUserIsLogged ? (
+     <>
+        {!securityUserIsLogged ?
+          (
             <Routes>
               <Route path="/login" element={<Login/>}></Route>
             </Routes>
-        ) :
-            (
-                <div className='flex'>
-                  <SideBar/>
+          ) :
+          (
+            <div className='flex'>
+              <SideBar/>
 
-                  <main className='flex flex-col w-full'>
-                    <Titlebar />
-                    <div className='container h-full pt-4 px-6'>
+              <main className='flex flex-col w-full'>
+                <Titlebar />
+                <div className='container h-full pt-4 px-6'>
 
-                      <Routes>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/canales" element={<Canales />}/>
-                        <Route path="/" element={<Dashboard />} />
-                      </Routes>
+                  <Routes>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/canales" element={<Canales />}/>
+                    <Route path="/" element={<Dashboard />} />
+                  </Routes>
 
-                      <TagRouter/>
-                      <RecourseRouter/>
+                  <TagRouter/>
+                  <RecourseRouter/>
 
-                    </div>
-                  </main>
                 </div>
-            )
+              </main>
+            </div>
+          )
         }
-
-      </BrowserRouter>
+     </>
   )
 }
 

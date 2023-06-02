@@ -40,6 +40,7 @@ export const SecurityProvider = ({children}) => {
                 success = true;
                 setCookie("bearerToken", data.data.bearer_token, data.data.bearer_expire);
                 localStorage.setItem('rememberToken',data.data.user.remember_token );
+                localStorage.setItem('user',JSON.stringify(data.data.user) );
                 setUserIsLogged(data.data.user);
         }).catch(async error => {
             const err = await error;
@@ -64,6 +65,50 @@ export const SecurityProvider = ({children}) => {
         });
     };
 
+    const checkRememberToken = () => {
+
+        let success = true;
+
+        if( localStorage.getItem('rememberToken') === null){
+            console.log( localStorage.getItem('rememberToken') , "va a enviar false");
+            return false;
+        }
+
+        fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/remember`,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            },
+            body: JSON.stringify({
+                "remember_me" : localStorage.getItem('rememberToken')
+            })
+        }).then( res => {
+            if(!res.ok)
+                return Promise.reject(res.json());
+            return res.json()
+        }).then(data =>{
+            success = true;
+            setCookie("bearerToken", data.data.bearer_token, data.data.bearer_expire);
+            localStorage.setItem('rememberToken',data.data.user.remember_token );
+            localStorage.setItem('user',JSON.stringify(data.data.user) );
+            setUserIsLogged(data.data.user);
+        }).catch(async error => {
+            const err = await error;
+            const processError = err.error.reduce(
+                (previous, currrent) => ({
+                    ...previous,
+                    [currrent.inputName]: currrent.detail
+                }),
+                {}
+            );
+            addNewError(processError);
+            success = false;
+        });
+
+        return success;
+    }
+
     const securityActions = {
         securityError: state.error,
         securityUserIsLogged: state.userLogged,
@@ -71,6 +116,8 @@ export const SecurityProvider = ({children}) => {
         addNewError,
         setIsLoading,
         logginUser,
+        setUserIsLogged,
+        checkRememberToken
     };
     return (
         <SecurityContext.Provider value={securityActions}>
