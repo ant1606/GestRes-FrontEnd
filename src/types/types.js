@@ -21,7 +21,8 @@ const types = {
   recourseIsLoading: '[recourse] Set isLoading to Recourse',
 
   securityAddError: '[security] Add Error Message Validation',
-  securityUserIsLogged: '[security] Set if the user is logged or not',
+  securityUserIsLogged: '[security] Set if the user is login',
+  securityUserIsLogout: '[security] Set if the user is logout',
   securityIsLoading: '[security] Set isLoading in module Security',
 };
 export default types;

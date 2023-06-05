@@ -14,6 +14,8 @@ import useSecurity from "../Context/SecurityContext.jsx";
 import {tokenExpired} from "../helpers/authenticationManagement.js";
 
 import {useNavigate} from "react-router-dom";
+import RegisterUser from "../Components/Pages/RegisterUser.jsx";
+import NotificationVerifyEmail from "../Components/Pages/NotificationVerifyEmail.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y  en SettingsContext
@@ -31,7 +33,8 @@ const AppRouter = () => {
 
     if(tokenExpired()){ //Token bearer
       if(!checkRememberToken()){
-        navigate("/login");
+        //TODO Evaluar esta parte ya que no puedo acceder a register si esta activo
+        // navigate("/login");
       }
     }else{
       const user = JSON.parse(localStorage.getItem('user'));
@@ -45,6 +48,10 @@ const AppRouter = () => {
   //TODO Hacer que solo el contenido principal pueda hacer scroll y no toda la pantalla
   return (
      <>
+       <Routes>
+        <Route path="/register" element={<RegisterUser/>}></Route>
+         <Route path="/notifyVerifyEmail" element={<NotificationVerifyEmail/>}></Route>
+       </Routes>
         {!securityUserIsLogged ?
           (
             <Routes>

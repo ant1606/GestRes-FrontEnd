@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useReducer} from 'react';
 import securityReducer, {initialState} from "../reducers/securityReducer.js";
 import types from '../types/types.js';
-import {setCookie} from "../helpers/manageCookies.js";
+import {deleteCookie, setCookie} from "../helpers/manageCookies.js";
 
 const SecurityContext = createContext(initialState);
 
@@ -65,12 +65,12 @@ export const SecurityProvider = ({children}) => {
         });
     };
 
-    const checkRememberToken = () => {
 
+
+    const checkRememberToken = () => {
         let success = true;
 
-        if( localStorage.getItem('rememberToken') === null){
-            console.log( localStorage.getItem('rememberToken') , "va a enviar false");
+        if( localStorage.getItem('rememberToken') === null || localStorage.getItem('rememberToken') === ""){
             return false;
         }
 
@@ -109,6 +109,19 @@ export const SecurityProvider = ({children}) => {
         return success;
     }
 
+    const logoutUser = () => {
+        setUserIsLogout();
+        localStorage.removeItem('rememberToken');
+        localStorage.removeItem('user');
+        deleteCookie("bearerToken");
+    }
+
+    const setUserIsLogout = () =>{
+        dispatch({
+            type: types.securityUserIsLogout
+        })
+    }
+
     const securityActions = {
         securityError: state.error,
         securityUserIsLogged: state.userLogged,
@@ -117,7 +130,8 @@ export const SecurityProvider = ({children}) => {
         setIsLoading,
         logginUser,
         setUserIsLogged,
-        checkRememberToken
+        checkRememberToken,
+        logoutUser,
     };
     return (
         <SecurityContext.Provider value={securityActions}>

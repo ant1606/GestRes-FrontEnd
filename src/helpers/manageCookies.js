@@ -16,3 +16,7 @@ export function getCookie(name) {
     }
     return null;
 }
+
+export function deleteCookie(key){
+    setCookie(key, "", "Thu, 01 Jan 1970 00:00:00 GMT");
+}

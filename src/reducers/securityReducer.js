@@ -26,6 +26,11 @@ const securityReducer = (state = {}, action) => {
                 userLogged: true,
                 user: action.payload
             }
+        case types.securityUserIsLogout:
+            return {
+                ...state,
+                userLogged: false,
+            }
         default:
             return state;
     }
