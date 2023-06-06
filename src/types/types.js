@@ -26,6 +26,8 @@ const types = {
   securityIsLoading: '[security] Set isLoading in module Security',
 
   userAddError: '[user] Add Error Message Validation',
-  userSave: '[user] User Saved'
+  userSave: '[user] User Saved',
+  userIsLoading: '[user] Set isLoading in module User'
+
 };
 export default types;

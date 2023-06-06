@@ -16,6 +16,11 @@ const userReducer = (state = {}, action) => {
                 ...state,
                 error: {...state.error, [Object.keys(action.payload)]: Object.values(action.payload)[0] },
             };
+        case types.userIsLoading:
+            return {
+                ...state,
+                isLoading: action.payload
+            }
         default:
             return state;
     }

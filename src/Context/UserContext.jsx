@@ -32,13 +32,19 @@ export const UserProvider = ({children}) => {
             success = true;
         }).catch(async error => {
             const err = await error;
+
             const processError = err.error.reduce(
-                (previous, currrent) => ({
+                (previous, current) => ({
                     ...previous,
-                    [currrent.inputName]: currrent.detail
+                    ...Object.entries(current.detail).reduce((acc, [key, value]) => ({
+                        ...acc,
+                        [key]: value[0]
+                    }), {})
                 }),
-                {}
+                []
             );
+            console.log(err);
+            console.log(processError);
             addNewError(processError);
             success = false;
         });
@@ -46,10 +52,19 @@ export const UserProvider = ({children}) => {
         return success;
     }
 
+    const setIsLoading = (isLoad) => {
+        dispatch({
+            type: types.userIsLoading,
+            payload: isLoad
+        });
+    };
+
     const userActions = {
         userError: state.error,
+        userIsLoading: state.isLoading,
         addNewError,
-        savingUser
+        savingUser,
+        setIsLoading
     };
 
     return (

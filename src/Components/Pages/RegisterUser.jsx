@@ -29,7 +29,13 @@ const initialState = {
 }
 
 const RegisterUser = () => {
-    const {addNewError, userError, savingUser} = useUser();
+    const {
+        addNewError,
+        userError,
+        savingUser,
+        userIsLoading,
+        setIsLoading
+    } = useUser();
 
     const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError);
     const {name, email, password, password_confirmation} = formValues;
@@ -41,7 +47,6 @@ const RegisterUser = () => {
         setIsLoading(true);
         await  validatedSubmitForm();
         const isValid =Object.keys(userError).every(el=>userError[el]===null);
-
         if(isValid){
             let res = await savingUser({
                 name,
@@ -59,7 +64,8 @@ const RegisterUser = () => {
         navigate("/login");
     }
     return (
-
+        <>
+        {userIsLoading&& <Loader/>}
         <div className="flex flex-col h-screen">
             <div className="bg-gray-800 min-h-[5rem]">
             </div>
@@ -157,7 +163,7 @@ const RegisterUser = () => {
             <div className="bg-gray-900 min-h-[5rem]">
             </div>
         </div>
-
+        </>
     )
 }
 export default RegisterUser;
