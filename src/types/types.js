@@ -24,5 +24,8 @@ const types = {
   securityUserIsLogged: '[security] Set if the user is login',
   securityUserIsLogout: '[security] Set if the user is logout',
   securityIsLoading: '[security] Set isLoading in module Security',
+
+  userAddError: '[user] Add Error Message Validation',
+  userSave: '[user] User Saved'
 };
 export default types;

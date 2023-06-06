@@ -31,6 +31,9 @@ const NotificationVerifyEmail = () => {
                                 />
                             </div>
                         </form>
+                        <p>
+                            Ir a login
+                        </p>
                     </div>
                 </div>
                 <div className="bg-gray-900 min-h-[5rem]">
