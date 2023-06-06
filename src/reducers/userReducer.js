@@ -2,6 +2,7 @@ import types from '../types/types.js'
 
 export const initialState={
     error:[],
+    isLoading: false
 }
 
 /**
