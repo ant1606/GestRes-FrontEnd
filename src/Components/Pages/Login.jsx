@@ -9,7 +9,7 @@ import { mdiLock } from '@mdi/js';
 
 import {validateUserEmail, validateUserPassword} from "./LoginFormValidationInputs.js";
 import {useForm} from "../../hooks/useForm.js";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const validateFunctionsFormInputs ={
     email: validateUserEmail,
@@ -99,8 +99,8 @@ const Login = () => {
                         <label className="text-sm leading-5 font-semibold"><input type="checkbox" name="remember_me" value={remember_me} onChange={handleCheckBoxClick}/> Recordarme</label>
                     </div>
                     <div className="flex justify-between">
-                        <a href="#" className="text-sm leading-5 font-semibold">Registrate</a>
-                        <a href="#" className="text-sm leading-5 font-semibold">¿Olvidó su contraseña?</a>
+                        <span className="text-sm leading-5 font-semibold"><Link to="/register">Registrate</Link></span>
+                        <span className="text-sm leading-5 font-semibold">¿Olvidó su contraseña?</span>
                     </div>
                     <div className="flex">
                         <Button

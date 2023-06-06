@@ -13,7 +13,7 @@ import Login from "../Components/Pages/Login.jsx";
 import useSecurity from "../Context/SecurityContext.jsx";
 import {tokenExpired} from "../helpers/authenticationManagement.js";
 
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Navigate} from "react-router-dom";
 import RegisterUser from "../Components/Pages/RegisterUser.jsx";
 import NotificationVerifyEmail from "../Components/Pages/NotificationVerifyEmail.jsx";
 
@@ -46,40 +46,44 @@ const AppRouter = () => {
 
   // TODO Hacer que el titlebar se mantenga posicionado en la parte superior
   //TODO Hacer que solo el contenido principal pueda hacer scroll y no toda la pantalla
+  //TODO Agregar un parametro para evaluar cuando el usuario a verificado su email, si fue asi, recien se le dará acceso a la aplicación
   return (
      <>
-       <Routes>
-        <Route path="/register" element={<RegisterUser/>}></Route>
-         <Route path="/notifyVerifyEmail" element={<NotificationVerifyEmail/>}></Route>
-       </Routes>
-        {!securityUserIsLogged ?
-          (
-            <Routes>
-              <Route path="/login" element={<Login/>}></Route>
-            </Routes>
-          ) :
-          (
-            <div className='flex'>
-              <SideBar/>
+        <Routes>
+            <Route path="/register" element={<RegisterUser/>}></Route>
+            <Route path="/notifyVerifyEmail" element={<NotificationVerifyEmail/>}></Route>
+            {!securityUserIsLogged ?
+                (
+                    <Route path="/login" element={<Login/>}></Route>
+                ) :
+                (
+                    ///Pasar la ruta notifyVerifyEmail a un estado para acceder a la aplicación
 
-              <main className='flex flex-col w-full'>
-                <Titlebar />
-                <div className='container h-full pt-4 px-6'>
+                    <div className='flex'>
+                        <SideBar/>
 
-                  <Routes>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/canales" element={<Canales />}/>
-                    <Route path="/" element={<Dashboard />} />
-                  </Routes>
+                        <main className='flex flex-col w-full'>
+                            <Titlebar />
+                            <div className='container h-full pt-4 px-6'>
 
-                  <TagRouter/>
-                  <RecourseRouter/>
+                                <Routes>
+                                    <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/canales" element={<Canales />}/>
+                                    <Route path="/" element={<Dashboard />} />
+                                </Routes>
 
-                </div>
-              </main>
-            </div>
-          )
-        }
+                                <TagRouter/>
+                                <RecourseRouter/>
+
+                            </div>
+                        </main>
+                    </div>
+                )
+            }
+
+        </Routes>
+
+
      </>
   )
 }
