@@ -43,8 +43,6 @@ export const UserProvider = ({children}) => {
                 }),
                 []
             );
-            console.log(err);
-            console.log(processError);
             addNewError(processError);
             success = false;
         });
@@ -59,12 +57,48 @@ export const UserProvider = ({children}) => {
         });
     };
 
+    const forgetPassword = async (email) => {
+        let success = true;
+        await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/forgot-password`,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            },
+            body: JSON.stringify({"email":email})
+        }).then( res => {
+            if(!res.ok)
+                return Promise.reject(res.json());
+            return res.json()
+        }).then(data =>{
+            success = true;
+        }).catch(async error => {
+            const err = await error;
+
+            const processError = err.error.reduce(
+                (previous, current) => ({
+                    ...previous,
+                    ...Object.entries(current.detail).reduce((acc, [key, value]) => ({
+                        ...acc,
+                        [key]: value[0]
+                    }), {})
+                }),
+                []
+            );
+            addNewError(processError);
+            success = false;
+        });
+
+        return success;
+    }
+
     const userActions = {
         userError: state.error,
         userIsLoading: state.isLoading,
         addNewError,
         savingUser,
-        setIsLoading
+        setIsLoading,
+        forgetPassword
     };
 
     return (

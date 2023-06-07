@@ -4,7 +4,7 @@ import Icon from "@mdi/react";
 import {mdiEmail, mdiLock, mdiLockCheck} from "@mdi/js";
 import Field from "../Atoms/Field.jsx";
 
-const PasswordResetForm = () => {
+const PasswordReset = () => {
 
     const [validateEmail,setValidateEmail ] = useState(false);
 
@@ -59,4 +59,4 @@ const PasswordResetForm = () => {
     )
 }
 
-export default  PasswordResetForm;
+export default  PasswordReset;

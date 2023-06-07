@@ -102,7 +102,7 @@ const Login = () => {
                     </div>
                     <div className="flex justify-between">
                         <span className="text-sm leading-5 font-semibold"><Link to="/register">Registrate</Link></span>
-                        <span className="text-sm leading-5 font-semibold">¿Olvidó su contraseña?</span>
+                        <span className="text-sm leading-5 font-semibold"><Link to="/forget-password">¿Olvidó su contraseña?</Link></span>
                     </div>
                     <div className="flex">
                         <Button

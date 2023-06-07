@@ -3,19 +3,52 @@ import Button from "../Atoms/Button.jsx";
 import Icon from "@mdi/react";
 import { mdiEmail} from "@mdi/js";
 import Field from "../Atoms/Field.jsx";
+import useUser from "../../Context/UserContext.jsx";
+import {validateUserEmail} from "./RegisterFormValidationInputs.js";
+import {useForm} from "../../hooks/useForm.js";
+import Loader from "../Atoms/Loader.jsx";
 
-const PasswordResetEmail = () => {
+const validateFunctionsFormInputs = {
+    email: validateUserEmail,
+}
 
-    const [validateEmail,setValidateEmail ] = useState(false);
+const initialState = {
+    email: '',
+}
 
-    const handleSubmit = (e) => {
+const PasswordForget = () => {
+
+    const {
+        forgetPassword,
+        setIsLoading,
+        addNewError,
+        userError,
+        userIsLoading
+    } = useUser();
+
+    const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError);
+    const {email} = formValues;
+
+    const [validateEmail, setValidateEmail ] = useState(false);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        await  validatedSubmitForm();
+        const isValid =Object.keys(userError).every(el=>userError[el]===null);
+        if(isValid){
+
+            let res = await forgetPassword(email);
+            if(res){
+                setValidateEmail(true);
+            }
+        }
+        setIsLoading(false);
     }
 
-    const handleClick = () =>{return null;}
-
-
     return (
+        <>
+        {userIsLoading&& <Loader/>}
         <div className="flex flex-col h-screen">
             <div className="bg-gray-800 min-h-[5rem]">
             </div>
@@ -33,7 +66,9 @@ const PasswordResetEmail = () => {
                                             name="email"
                                             label="Email"
                                             classBox="my-3 grow"
-                                            handleChange={()=>{}}
+                                            handleChange={handleInputChange}
+                                            value={email}
+                                            errorInput={userError.email}
                                         />
                                     </div>
                                     <div className="flex">
@@ -64,7 +99,8 @@ const PasswordResetEmail = () => {
             <div className="bg-gray-900 min-h-[5rem]">
             </div>
         </div>
+        </>
     )
 }
 
-export default  PasswordResetEmail;
+export default  PasswordForget;
