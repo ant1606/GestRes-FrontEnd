@@ -2,6 +2,7 @@ import React, {createContext, useContext, useReducer} from 'react';
 import types from '../types/types.js';
 import userReducer, {initialState} from "../reducers/userReducer.js";
 import {setCookie} from "../helpers/manageCookies.js";
+import {toastNotifications} from "../helpers/notificationsSwal.js";
 
 const UserContext = createContext(initialState);
 
@@ -92,13 +93,50 @@ export const UserProvider = ({children}) => {
         return success;
     }
 
+    const resetPassword = async (credentials) => {
+        let success = true;
+        await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/reset-password`,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            },
+            body: JSON.stringify(credentials)
+        }).then( res => {
+            if(!res.ok)
+                return Promise.reject(res.json());
+            return res.json()
+        }).then(data =>{
+            success = true;
+            toastNotifications().toastSuccesCustomize("Se actualizo su contraseña satisfactoriamente.");
+        }).catch(async error => {
+            const err = await error;
+
+            const processError = err.error.reduce(
+                (previous, current) => ({
+                    ...previous,
+                    ...Object.entries(current.detail).reduce((acc, [key, value]) => ({
+                        ...acc,
+                        [key]: value[0]
+                    }), {})
+                }),
+                []
+            );
+            addNewError(processError);
+            success = false;
+        });
+
+        return success;
+    }
+
     const userActions = {
         userError: state.error,
         userIsLoading: state.isLoading,
         addNewError,
         savingUser,
         setIsLoading,
-        forgetPassword
+        forgetPassword,
+        resetPassword
     };
 
     return (
