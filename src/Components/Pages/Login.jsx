@@ -27,7 +27,8 @@ const Login = () => {
         setIsLoading,
         securityError,
         logginUser,
-        securityUserIsLogged
+        securityUserIsLogged,
+        securityUser
     } = useSecurity();
     const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError);
     const {email, password} = formValues;
@@ -42,9 +43,10 @@ const Login = () => {
 
         if(isValid){
             let res = await logginUser({email, password, remember_me});
+
             if(res){
-                // return redirect("/dashboard");
-                navigate("/dashboard");
+                let usuario = JSON.parse(localStorage.getItem("user"));
+                usuario.is_verified ? navigate("/dashboard") : navigate("/notifyVerifyEmail");
             }
         }
         setIsLoading(false);

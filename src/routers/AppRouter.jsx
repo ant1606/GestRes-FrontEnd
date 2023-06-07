@@ -16,16 +16,18 @@ import {tokenExpired} from "../helpers/authenticationManagement.js";
 import {useNavigate, Navigate} from "react-router-dom";
 import RegisterUser from "../Components/Pages/RegisterUser.jsx";
 import NotificationVerifyEmail from "../Components/Pages/NotificationVerifyEmail.jsx";
+import VerifyEmail from "../Components/Pages/VerifyEmail.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y  en SettingsContext
   const { loadSettings } = useSettings();
-  const {securityUserIsLogged, checkRememberToken } = useSecurity();
+  const {securityUserIsLogged, checkRememberToken, securityUser } = useSecurity();
   const navigate = useNavigate();
   const {setUserIsLogged} = useSecurity();
 
   useEffect(()=>{
     initApp();
+
   },[]);
 
   const initApp = async() => {
@@ -38,52 +40,63 @@ const AppRouter = () => {
       }
     }else{
       const user = JSON.parse(localStorage.getItem('user'));
+      console.log(user);
       setUserIsLogged(user);
+      console.log(user.is_verified);
       //TODO Pasar como parametro la ultima pagina visitada del usuario, por el momento se esta colocando el dashboard
-      navigate("/dashboard");
+      !user.is_verified ? navigate("/notifyVerifyEmail") : navigate("/dashboard");
+
     }
   }
 
+  /**
+   * http://172.18.0.3:5173/verifyEmail/11/e65c022deb4ff7b5964476772ed8b401688d8938
+   * Ruta de verificacion de email, primero esta el id, luego el hash que es el correo
+   */
   // TODO Hacer que el titlebar se mantenga posicionado en la parte superior
   //TODO Hacer que solo el contenido principal pueda hacer scroll y no toda la pantalla
-  //TODO Agregar un parametro para evaluar cuando el usuario a verificado su email, si fue asi, recien se le dará acceso a la aplicación
   return (
      <>
         <Routes>
             <Route path="/register" element={<RegisterUser/>}></Route>
-            <Route path="/notifyVerifyEmail" element={<NotificationVerifyEmail/>}></Route>
-            {!securityUserIsLogged ?
-                (
-                    <Route path="/login" element={<Login/>}></Route>
-                ) :
-                (
-                    ///Pasar la ruta notifyVerifyEmail a un estado para acceder a la aplicación
-
-                    <div className='flex'>
-                        <SideBar/>
-
-                        <main className='flex flex-col w-full'>
-                            <Titlebar />
-                            <div className='container h-full pt-4 px-6'>
-
-                                <Routes>
-                                    <Route path="/dashboard" element={<Dashboard />} />
-                                    <Route path="/canales" element={<Canales />}/>
-                                    <Route path="/" element={<Dashboard />} />
-                                </Routes>
-
-                                <TagRouter/>
-                                <RecourseRouter/>
-
-                            </div>
-                        </main>
-                    </div>
-                )
-            }
-
+            <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail/>}></Route>
         </Routes>
+          {!securityUserIsLogged ?
+              (
+                  <Routes>
+                    <Route path="/login" element={<Login/>}></Route>
+                  </Routes>
+              ) :
+                  !securityUser.is_verified ?
+                      (
+                          <Routes>
+                            <Route path="/notifyVerifyEmail" element={<NotificationVerifyEmail/>}></Route>
+                          </Routes>
+                      ) :
+                      (
+                          <>
+                              <div className='flex'>
+                                  <SideBar/>
 
+                                  <main className='flex flex-col w-full'>
+                                      <Titlebar />
+                                      <div className='container h-full pt-4 px-6'>
 
+                                          <Routes>
+                                              <Route path="/dashboard" element={<Dashboard />} />
+                                              <Route path="/canales" element={<Canales />}/>
+                                              <Route path="/" element={<Dashboard />} />
+                                          </Routes>
+
+                                          <TagRouter/>
+                                          <RecourseRouter/>
+
+                                      </div>
+                                  </main>
+                              </div>
+                          </>
+                      )
+          }
      </>
   )
 }

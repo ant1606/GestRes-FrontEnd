@@ -121,17 +121,54 @@ export const SecurityProvider = ({children}) => {
             type: types.securityUserIsLogout
         })
     }
+    const verifyUserEmail = (id, hash) => {
+        let success = true;
+
+        fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/email/verify/${id}/${hash}`,{
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            }
+        }).then( res => {
+            if(!res.ok)
+                return Promise.reject(res.json());
+            return res.json()
+        }).then(data =>{
+            success = true;
+            //TODO ver si luego de validar el correo mandarlo al dashboard
+            setCookie("bearerToken", data.data.bearer_token, data.data.bearer_expire);
+            localStorage.setItem('rememberToken',data.data.user.remember_token );
+            localStorage.setItem('user',JSON.stringify(data.data.user) );
+            setUserIsLogged(data.data.user);
+        }).catch(async error => {
+            // const err = await error;
+            // const processError = err.error.reduce(
+            //     (previous, currrent) => ({
+            //         ...previous,
+            //         [currrent.inputName]: currrent.detail
+            //     }),
+            //     {}
+            // );
+            // addNewError(processError);
+            success = false;
+        });
+
+        return success;
+    }
 
     const securityActions = {
         securityError: state.error,
         securityUserIsLogged: state.userLogged,
         securityIsLoading: state.isLoading,
+        securityUser : state.user,
         addNewError,
         setIsLoading,
         logginUser,
         setUserIsLogged,
         checkRememberToken,
         logoutUser,
+        verifyUserEmail
     };
     return (
         <SecurityContext.Provider value={securityActions}>

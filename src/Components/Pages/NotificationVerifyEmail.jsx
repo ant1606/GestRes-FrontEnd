@@ -13,13 +13,13 @@ const NotificationVerifyEmail = () => {
                 <div className="bg-gray-200 h-full flex justify-center align-center">
                     <div className="flex flex-col justify-center align-center gap-14 min-w-[30rem] px-32">
                         <p className="text-5xl leading-10 font-bold text-center">
-                            ¡Gracias por registarte!
+                            ¡Debes verificar tu correo electrónico!
                         </p>
                         <p className="text-3xl leading-9 font-medium text-center">
-                            Hemos enviado un link a tu email, al que deberás acceder para verificar tu email y finalizar con tu registro en el sistema.
+                            Se te ha enviado un link a tu email, al que deberás acceder para verificar tu email.
                         </p>
                         <p className="text-3xl leading-9 font-bold  text-center">
-                            Si aún no haz recibido el link de verificación da click en el siguiente botón para solicitarlo nuevamente.
+                            Si aún no haz recibido el link de verificación, Solicita uno nuevo dando click al botón
                         </p>
 
                         <form  className="flex flex-col justify-center gap-4">
@@ -31,9 +31,6 @@ const NotificationVerifyEmail = () => {
                                 />
                             </div>
                         </form>
-                        <p>
-                            Ir a login
-                        </p>
                     </div>
                 </div>
                 <div className="bg-gray-900 min-h-[5rem]">
