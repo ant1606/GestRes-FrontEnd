@@ -1,10 +1,20 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Icon from "@mdi/react";
 import {mdiAccountCircle, mdiEmail, mdiLock, mdiLockCheck} from "@mdi/js";
 import Field from "../Atoms/Field.jsx";
 import Button from "../Atoms/Button.jsx";
+import useSecurity from "../../Context/SecurityContext.jsx";
 
 const NotificationVerifyEmail = () => {
+    const {securityUser, resendLinkVerifyUserEmail} = useSecurity();
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        let res = await resendLinkVerifyUserEmail(securityUser.id);
+        console.log(res);
+    }
+
     return(
         <>
             <div className="flex flex-col h-screen">
@@ -22,7 +32,7 @@ const NotificationVerifyEmail = () => {
                             Si aún no haz recibido el link de verificación, Solicita uno nuevo dando click al botón
                         </p>
 
-                        <form  className="flex flex-col justify-center gap-4">
+                        <form  onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
                             <div className="flex">
                                 <Button
                                     text="Solicitar Link de verificación de email"

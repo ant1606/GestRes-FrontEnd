@@ -49,6 +49,17 @@ export const toastNotifications = () => {
         });
     }
 
+    const toastSuccesCustomize = (message) => {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+            toast: true
+        });
+    }
+
     const notificationError = (msg) => {
         Swal.fire({
             icon: 'error',
@@ -85,5 +96,5 @@ export const toastNotifications = () => {
         return confirm;
     }
 
-    return {toastSucces, toastError, notificationError, modalDeleteConfirm};
+    return {toastSucces, toastError, notificationError, modalDeleteConfirm, toastSuccesCustomize};
 }

@@ -35,14 +35,14 @@ const AppRouter = () => {
 
     if(tokenExpired()){ //Token bearer
       if(!checkRememberToken()){
-        //TODO Evaluar esta parte ya que no puedo acceder a register si esta activo
+        //TODO Evaluar esta parte ya que no puedo acceder a register  ni verifyEmail si esta activo
         // navigate("/login");
       }
     }else{
       const user = JSON.parse(localStorage.getItem('user'));
-      console.log(user);
+      // console.log(user);
       setUserIsLogged(user);
-      console.log(user.is_verified);
+      // console.log(user.is_verified);
       //TODO Pasar como parametro la ultima pagina visitada del usuario, por el momento se esta colocando el dashboard
       !user.is_verified ? navigate("/notifyVerifyEmail") : navigate("/dashboard");
 

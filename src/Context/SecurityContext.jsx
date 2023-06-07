@@ -1,7 +1,8 @@
 import React, {createContext, useContext, useReducer} from 'react';
 import securityReducer, {initialState} from "../reducers/securityReducer.js";
 import types from '../types/types.js';
-import {deleteCookie, setCookie} from "../helpers/manageCookies.js";
+import {deleteCookie, getCookie, setCookie} from "../helpers/manageCookies.js";
+import {toastNotifications } from "../helpers/notificationsSwal.js";
 
 const SecurityContext = createContext(initialState);
 
@@ -157,6 +158,44 @@ export const SecurityProvider = ({children}) => {
         return success;
     }
 
+    const resendLinkVerifyUserEmail = (id) => {
+        let success = true;
+        console.log(getCookie("bearerToken"));
+        fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/email/verification-notification`,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "accept": "application/json",
+                "Authorization": `Bearer ${getCookie("bearerToken")}`
+            },
+            body: JSON.stringify({
+                "id" : id
+            })
+        }).then( res => {
+            if(!res.ok)
+                return Promise.reject(res.json());
+            return res.json()
+        }).then(data =>{
+            success = true;
+            toastNotifications().toastSuccesCustomize("Se reenvio el link de verificación a su correo.");
+        }).catch(async error => {
+            console.log(error);
+            toastNotifications().toastError();
+            // const err = await error;
+            // const processError = err.error.reduce(
+            //     (previous, currrent) => ({
+            //         ...previous,
+            //         [currrent.inputName]: currrent.detail
+            //     }),
+            //     {}
+            // );
+            // addNewError(processError);
+            success = false;
+        });
+
+        return success;
+    }
+
     const securityActions = {
         securityError: state.error,
         securityUserIsLogged: state.userLogged,
@@ -168,7 +207,8 @@ export const SecurityProvider = ({children}) => {
         setUserIsLogged,
         checkRememberToken,
         logoutUser,
-        verifyUserEmail
+        verifyUserEmail,
+        resendLinkVerifyUserEmail
     };
     return (
         <SecurityContext.Provider value={securityActions}>
