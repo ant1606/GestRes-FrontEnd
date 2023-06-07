@@ -17,6 +17,8 @@ import {useNavigate, Navigate} from "react-router-dom";
 import RegisterUser from "../Components/Pages/RegisterUser.jsx";
 import NotificationVerifyEmail from "../Components/Pages/NotificationVerifyEmail.jsx";
 import VerifyEmail from "../Components/Pages/VerifyEmail.jsx";
+import PasswordResetEmail from "../Components/Pages/PasswordResetEmail.jsx";
+import PasswordResetForm from "../Components/Pages/PasswordResetForm.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y  en SettingsContext
@@ -60,6 +62,8 @@ const AppRouter = () => {
         <Routes>
             <Route path="/register" element={<RegisterUser/>}></Route>
             <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail/>}></Route>
+            <Route path="/reset-password" element={<PasswordResetEmail/>}></Route>
+          <Route path="/reset-password-form" element={<PasswordResetForm/>}></Route>
         </Routes>
           {!securityUserIsLogged ?
               (
