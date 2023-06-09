@@ -17,8 +17,8 @@ import {useNavigate, Navigate} from "react-router-dom";
 import RegisterUserScreen from "../Components/Pages/Authentication/RegisterUserScreen.jsx";
 import NotificationVerifyEmail from "../Components/Pages/Authentication/NotificationVerifyEmail.jsx";
 import VerifyEmail from "../Components/Pages/Authentication/VerifyEmail.jsx";
-import PasswordForget from "../Components/Pages/Authentication/PasswordForget.jsx";
-import PasswordReset from "../Components/Pages/Authentication/PasswordReset.jsx";
+import PasswordForgetScreen from "../Components/Pages/Authentication/PasswordForgetScreen.jsx";
+import PasswordResetScreen from "../Components/Pages/Authentication/PasswordResetScreen.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y  en SettingsContext
@@ -62,8 +62,8 @@ const AppRouter = () => {
         <Routes>
             <Route path="/register" element={<RegisterUserScreen/>}></Route>
             <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail/>}></Route>
-            <Route path="/forget-password" element={<PasswordForget/>}></Route>
-          <Route path="/reset-password" element={<PasswordReset/>}></Route>
+            <Route path="/forget-password" element={<PasswordForgetScreen/>}></Route>
+          <Route path="/reset-password" element={<PasswordResetScreen/>}></Route>
         </Routes>
           {!securityUserIsLogged ?
               (

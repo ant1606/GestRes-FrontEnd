@@ -8,11 +8,9 @@ import useSecurity from "../../../Context/SecurityContext.jsx";
 const NotificationVerifyEmail = () => {
     const {securityUser, resendLinkVerifyUserEmail} = useSecurity();
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         let res = await resendLinkVerifyUserEmail(securityUser.id);
-        console.log(res);
     }
 
     return(
