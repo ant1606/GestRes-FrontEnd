@@ -9,16 +9,16 @@ import Titlebar from '../Components/Organisms/Titlebar'
 import RecourseRouter from "./RecourseRouter.jsx";
 import TagRouter from "./TagRouter.jsx";
 import useSettings from "../Context/SettingsContext.jsx";
-import Login from "../Components/Pages/Login.jsx";
+import LoginScreen from "../Components/Pages/Authentication/LoginScreen.jsx";
 import useSecurity from "../Context/SecurityContext.jsx";
 import {tokenExpired} from "../helpers/authenticationManagement.js";
 
 import {useNavigate, Navigate} from "react-router-dom";
-import RegisterUser from "../Components/Pages/RegisterUser.jsx";
-import NotificationVerifyEmail from "../Components/Pages/NotificationVerifyEmail.jsx";
-import VerifyEmail from "../Components/Pages/VerifyEmail.jsx";
-import PasswordForget from "../Components/Pages/PasswordForget.jsx";
-import PasswordReset from "../Components/Pages/PasswordReset.jsx";
+import RegisterUserScreen from "../Components/Pages/Authentication/RegisterUserScreen.jsx";
+import NotificationVerifyEmail from "../Components/Pages/Authentication/NotificationVerifyEmail.jsx";
+import VerifyEmail from "../Components/Pages/Authentication/VerifyEmail.jsx";
+import PasswordForget from "../Components/Pages/Authentication/PasswordForget.jsx";
+import PasswordReset from "../Components/Pages/Authentication/PasswordReset.jsx";
 
 const AppRouter = () => {
   // TODO Agrupar TitleContext y  en SettingsContext
@@ -60,7 +60,7 @@ const AppRouter = () => {
   return (
      <>
         <Routes>
-            <Route path="/register" element={<RegisterUser/>}></Route>
+            <Route path="/register" element={<RegisterUserScreen/>}></Route>
             <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail/>}></Route>
             <Route path="/forget-password" element={<PasswordForget/>}></Route>
           <Route path="/reset-password" element={<PasswordReset/>}></Route>
@@ -68,7 +68,7 @@ const AppRouter = () => {
           {!securityUserIsLogged ?
               (
                   <Routes>
-                    <Route path="/login" element={<Login/>}></Route>
+                    <Route path="/login" element={<LoginScreen/>}></Route>
                   </Routes>
               ) :
                   !securityUser.is_verified ?

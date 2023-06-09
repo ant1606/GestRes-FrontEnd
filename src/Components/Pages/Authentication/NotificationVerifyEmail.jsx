@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
 import Icon from "@mdi/react";
 import {mdiAccountCircle, mdiEmail, mdiLock, mdiLockCheck} from "@mdi/js";
-import Field from "../Atoms/Field.jsx";
-import Button from "../Atoms/Button.jsx";
-import useSecurity from "../../Context/SecurityContext.jsx";
+import Field from "../../Atoms/Field.jsx";
+import Button from "../../Atoms/Button.jsx";
+import useSecurity from "../../../Context/SecurityContext.jsx";
 
 const NotificationVerifyEmail = () => {
     const {securityUser, resendLinkVerifyUserEmail} = useSecurity();

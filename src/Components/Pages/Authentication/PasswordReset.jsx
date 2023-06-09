@@ -1,17 +1,17 @@
 import React, {useEffect} from 'react';
-import Button from "../Atoms/Button.jsx";
+import Button from "../../Atoms/Button.jsx";
 import Icon from "@mdi/react";
 import {mdiEmail, mdiLock, mdiLockCheck} from "@mdi/js";
-import Field from "../Atoms/Field.jsx";
+import Field from "../../Atoms/Field.jsx";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {
     validateUserEmail,
     validateUserPassword,
     validateUserPasswordConfirmation
-} from "./RegisterFormValidationInputs.js";
-import useUser from "../../Context/UserContext.jsx";
-import {useForm} from "../../hooks/useForm.js";
-import Loader from "../Atoms/Loader.jsx";
+} from "../../Organisms/Authentication/RegisterFormValidationInputs.js";
+import useUser from "../../../Context/UserContext.jsx";
+import {useForm} from "../../../hooks/useForm.js";
+import Loader from "../../Atoms/Loader.jsx";
 
 const validateFunctionsFormInputs = {
     email: validateUserEmail,

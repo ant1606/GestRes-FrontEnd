@@ -9,7 +9,6 @@ const Button = ({text, btnType, handleClick, type}) => {
     default: 'bg-blue-500',
   }
 
-  
   return (
     <button className={`${btnColors[btnType]} rounded-xl text-white py-2 px-5 text-2xl font-medium
         hover:bg-gray-800 grow`}

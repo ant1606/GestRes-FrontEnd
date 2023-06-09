@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import Button from "../Atoms/Button.jsx";
+import Button from "../../Atoms/Button.jsx";
 import Icon from "@mdi/react";
 import { mdiEmail} from "@mdi/js";
-import Field from "../Atoms/Field.jsx";
-import useUser from "../../Context/UserContext.jsx";
-import {validateUserEmail} from "./RegisterFormValidationInputs.js";
-import {useForm} from "../../hooks/useForm.js";
-import Loader from "../Atoms/Loader.jsx";
+import Field from "../../Atoms/Field.jsx";
+import useUser from "../../../Context/UserContext.jsx";
+import {validateUserEmail} from "../../Organisms/Authentication/RegisterFormValidationInputs.js";
+import {useForm} from "../../../hooks/useForm.js";
+import Loader from "../../Atoms/Loader.jsx";
 
 const validateFunctionsFormInputs = {
     email: validateUserEmail,
