@@ -15,8 +15,8 @@ import {tokenExpired} from "../helpers/authenticationManagement.js";
 
 import {useNavigate, Navigate} from "react-router-dom";
 import RegisterUserScreen from "../Components/Pages/Authentication/RegisterUserScreen.jsx";
-import NotificationVerifyEmail from "../Components/Pages/Authentication/NotificationVerifyEmail.jsx";
-import VerifyEmail from "../Components/Pages/Authentication/VerifyEmail.jsx";
+import ResendLinkVerifyEmailScreen from "../Components/Pages/Authentication/ResendLinkVerifyEmailScreen.jsx";
+import VerifyEmailScreen from "../Components/Pages/Authentication/VerifyEmailScreen.jsx";
 import PasswordForgetScreen from "../Components/Pages/Authentication/PasswordForgetScreen.jsx";
 import PasswordResetScreen from "../Components/Pages/Authentication/PasswordResetScreen.jsx";
 
@@ -61,7 +61,7 @@ const AppRouter = () => {
      <>
         <Routes>
             <Route path="/register" element={<RegisterUserScreen/>}></Route>
-            <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail/>}></Route>
+            <Route path="/verifyEmail/:id/:hash" element={<VerifyEmailScreen/>}></Route>
             <Route path="/forget-password" element={<PasswordForgetScreen/>}></Route>
           <Route path="/reset-password" element={<PasswordResetScreen/>}></Route>
         </Routes>
@@ -74,7 +74,7 @@ const AppRouter = () => {
                   !securityUser.is_verified ?
                       (
                           <Routes>
-                            <Route path="/notifyVerifyEmail" element={<NotificationVerifyEmail/>}></Route>
+                            <Route path="/notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen/>}></Route>
                           </Routes>
                       ) :
                       (
