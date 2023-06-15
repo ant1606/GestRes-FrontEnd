@@ -8,6 +8,7 @@ export const initialState = {
 const settingsReducer = (state = initialState, action) =>{
     switch (action.type) {
         case types.settingsLoad:
+            console.log(action.payload);
             return {
                 ...state,
                 settingsType : action.payload.filter(val => val.type === import.meta.env.VITE_SETTINGS_TYPE),

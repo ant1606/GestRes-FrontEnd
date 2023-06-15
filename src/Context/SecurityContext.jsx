@@ -15,17 +15,14 @@ export const SecurityProvider = ({children}) => {
             payload: error,
         })
     }
-
     const setIsLoading = (isLoad) => {
         dispatch({
             type: types.securityIsLoading,
             payload: isLoad
         });
     };
-
     const logginUser = async (credentials) => {
         let success = true;
-
         await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/login`,{
             method: 'POST',
             headers: {
@@ -45,29 +42,30 @@ export const SecurityProvider = ({children}) => {
                 setUserIsLogged(data.data.user);
         }).catch(async error => {
             const err = await error;
+
             const processError = err.error.reduce(
-                (previous, currrent) => ({
+                (previous, current) => ({
                     ...previous,
-                    [currrent.inputName]: currrent.detail
+                    ...Object.entries(current.detail).reduce((acc, [key, value]) => ({
+                        ...acc,
+                        [key]: value[0]
+                    }), {})
                 }),
                 {}
             );
+
             addNewError(processError);
             success = false;
         });
 
         return success;
     }
-
     const setUserIsLogged = (user) =>{
         dispatch({
             type: types.securityUserIsLogged,
             payload: user
         });
     };
-
-
-
     const checkRememberToken = () => {
         let success = true;
 
@@ -109,14 +107,12 @@ export const SecurityProvider = ({children}) => {
 
         return success;
     }
-
     const logoutUser = () => {
         setUserIsLogout();
         localStorage.removeItem('rememberToken');
         localStorage.removeItem('user');
         deleteCookie("bearerToken");
     }
-
     const setUserIsLogout = () =>{
         dispatch({
             type: types.securityUserIsLogout
@@ -157,7 +153,6 @@ export const SecurityProvider = ({children}) => {
 
         return success;
     }
-
     const resendLinkVerifyUserEmail = (id) => {
         let success = true;
         console.log(getCookie("bearerToken"));
@@ -210,6 +205,7 @@ export const SecurityProvider = ({children}) => {
         verifyUserEmail,
         resendLinkVerifyUserEmail
     };
+
     return (
         <SecurityContext.Provider value={securityActions}>
             {children}
@@ -217,12 +213,10 @@ export const SecurityProvider = ({children}) => {
     )
 }
 
-const useSecurity = () => {
+export const useSecurity = () => {
     const context = useContext(SecurityContext);
     if(context === undefined){
         throw new Error("useSecurity debe usarse junto a Security Context");
     }
     return context;
 }
-
-export default useSecurity

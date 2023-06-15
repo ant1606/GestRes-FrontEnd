@@ -5,7 +5,7 @@ import Field from "../../Atoms/Field.jsx";
 import {Link, useNavigate} from "react-router-dom";
 import Button from "../../Atoms/Button.jsx";
 import {validateUserEmail, validateUserPassword} from "./LoginFormValidationInputs.js";
-import useSecurity from "../../../Context/SecurityContext.jsx";
+import {useSecurity} from "../../../Context/SecurityContext.jsx";
 import {useForm} from "../../../hooks/useForm.js";
 
 const validateFunctionsFormInputs ={
@@ -18,13 +18,14 @@ const initialState = {
     password: '',
 };
 
-const LoginForm = () => {
+const LoginForm = ({myContext = useSecurity}) => {
     const {
         addNewError,
         setIsLoading,
         securityError,
         logginUser,
-    } = useSecurity();
+    } = myContext();
+
     const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError);
     const {email, password} = formValues;
     const navigate = useNavigate();

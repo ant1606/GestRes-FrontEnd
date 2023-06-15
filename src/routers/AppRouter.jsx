@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import {Route, Routes} from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router-dom';
 
 import SideBar from '../Components/Organisms/Sidebar'
 import Dashboard from '../Components/Pages/Dashboard'
@@ -10,10 +10,10 @@ import RecourseRouter from "./RecourseRouter.jsx";
 import TagRouter from "./TagRouter.jsx";
 import useSettings from "../Context/SettingsContext.jsx";
 import LoginScreen from "../Components/Pages/Authentication/LoginScreen.jsx";
-import useSecurity from "../Context/SecurityContext.jsx";
-import {tokenExpired} from "../helpers/authenticationManagement.js";
+import { useSecurity } from "../Context/SecurityContext.jsx";
+import { tokenExpired } from "../helpers/authenticationManagement.js";
 
-import {useNavigate, Navigate} from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import RegisterUserScreen from "../Components/Pages/Authentication/RegisterUserScreen.jsx";
 import ResendLinkVerifyEmailScreen from "../Components/Pages/Authentication/ResendLinkVerifyEmailScreen.jsx";
 import VerifyEmailScreen from "../Components/Pages/Authentication/VerifyEmailScreen.jsx";
@@ -23,24 +23,24 @@ import PasswordResetScreen from "../Components/Pages/Authentication/PasswordRese
 const AppRouter = () => {
   // TODO Agrupar TitleContext y  en SettingsContext
   const { loadSettings } = useSettings();
-  const {securityUserIsLogged, checkRememberToken, securityUser } = useSecurity();
+  const { securityUserIsLogged, checkRememberToken, securityUser } = useSecurity();
   const navigate = useNavigate();
-  const {setUserIsLogged} = useSecurity();
+  const { setUserIsLogged } = useSecurity();
 
-  useEffect(()=>{
+  useEffect(() => {
     initApp();
 
-  },[]);
+  }, []);
 
-  const initApp = async() => {
+  const initApp = async () => {
     await loadSettings();
 
-    if(tokenExpired()){ //Token bearer
-      if(!checkRememberToken()){
+    if (tokenExpired()) { //Token bearer
+      if (!checkRememberToken()) {
         //TODO Evaluar esta parte ya que no puedo acceder a register  ni verifyEmail si esta activo
         // navigate("/login");
       }
-    }else{
+    } else {
       const user = JSON.parse(localStorage.getItem('user'));
       // console.log(user);
       setUserIsLogged(user);
@@ -57,51 +57,54 @@ const AppRouter = () => {
    */
   // TODO Hacer que el titlebar se mantenga posicionado en la parte superior
   //TODO Hacer que solo el contenido principal pueda hacer scroll y no toda la pantalla
+  //TODO COlocar la ruta por defecto que apunte a "/"
+  //TODO Colocar la ruta no existente path="*" element={<>NOt Found</>}
+  //TODO Separar las rutas entre Rutas Privadas y RUtas Publicas
   return (
-     <>
-        <Routes>
-            <Route path="/register" element={<RegisterUserScreen/>}></Route>
-            <Route path="/verifyEmail/:id/:hash" element={<VerifyEmailScreen/>}></Route>
-            <Route path="/forget-password" element={<PasswordForgetScreen/>}></Route>
-          <Route path="/reset-password" element={<PasswordResetScreen/>}></Route>
-        </Routes>
-          {!securityUserIsLogged ?
-              (
-                  <Routes>
-                    <Route path="/login" element={<LoginScreen/>}></Route>
-                  </Routes>
-              ) :
-                  !securityUser.is_verified ?
-                      (
-                          <Routes>
-                            <Route path="/notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen/>}></Route>
-                          </Routes>
-                      ) :
-                      (
-                          <>
-                              <div className='flex'>
-                                  <SideBar/>
+    <>
+      <Routes>
+        <Route path="/register" element={<RegisterUserScreen />}></Route>
+        <Route path="/verifyEmail/:id/:hash" element={<VerifyEmailScreen />}></Route>
+        <Route path="/forget-password" element={<PasswordForgetScreen />}></Route>
+        <Route path="/reset-password" element={<PasswordResetScreen />}></Route>
+      </Routes>
+      {!securityUserIsLogged ?
+        (
+          <Routes>
+            <Route path="/login" element={<LoginScreen />}></Route>
+          </Routes>
+        ) :
+        !securityUser.is_verified ?
+          (
+            <Routes>
+              <Route path="/notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen />}></Route>
+            </Routes>
+          ) :
+          (
+            <>
+              <div className='flex'>
+                <SideBar />
 
-                                  <main className='flex flex-col w-full'>
-                                      <Titlebar />
-                                      <div className='container h-full pt-4 px-6'>
+                <main className='flex flex-col w-full'>
+                  <Titlebar />
+                  <div className='container h-full pt-4 px-6'>
 
-                                          <Routes>
-                                              <Route path="/dashboard" element={<Dashboard />} />
-                                              <Route path="/canales" element={<Canales />}/>
-                                              <Route path="/" element={<Dashboard />} />
-                                          </Routes>
+                    <Routes>
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/canales" element={<Canales />} />
+                      <Route path="/" element={<Dashboard />} />
+                    </Routes>
 
-                                          <TagRouter/>
-                                          <RecourseRouter/>
+                    <TagRouter />
+                    <RecourseRouter />
 
-                                      </div>
-                                  </main>
-                              </div>
-                          </>
-                      )
-          }
-     </>
+                  </div>
+                </main>
+              </div>
+            </>
+          )
+      }
+    </>
   )
 }
 

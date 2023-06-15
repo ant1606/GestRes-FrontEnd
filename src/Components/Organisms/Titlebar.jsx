@@ -2,12 +2,13 @@ import React, { useContext } from 'react'
 import TitleContext from '../../Context/TitleContext';
 import Icon from "@mdi/react";
 import {mdiExitToApp} from "@mdi/js";
-import useSecurity from "../../Context/SecurityContext.jsx";
+
 import {useNavigate} from "react-router-dom";
+import {useSecurity} from "../../Context/SecurityContext.jsx";
 
 const Titlebar = () => {
   const {title} = useContext(TitleContext);
-  const {logoutUser} = useSecurity();
+  const {logoutUser} = useSecurity()
   const navigate = useNavigate();
 
   const handleExitAppClick = () => {

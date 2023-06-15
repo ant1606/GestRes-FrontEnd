@@ -13,8 +13,6 @@
     "@mdi/font": "^7.0.96",
     "@mdi/js": "^7.0.96",
     "@mdi/react": "^1.6.1",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
     "animate.css": "^4.1.1",
     "jsdom": "^22.1.0",
     "localforage": "^1.10.0",
@@ -31,6 +29,9 @@
     "sweetalert2-react-content": "^5.0.7"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.1.0",

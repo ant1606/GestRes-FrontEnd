@@ -17,6 +17,7 @@ const Field = ({ type, label, name, value, classBox , handleChange , errorInput 
                   onChange={handleChange}
                   value={value}
                   autoComplete="off"
+                  data-testid={name}
               />
               <label htmlFor={name}
                      className={`${errorInput ? "text-rose-500 peer-focus:text-rose-500" : "text-gray-600 peer-focus:text-gray-900"} 
