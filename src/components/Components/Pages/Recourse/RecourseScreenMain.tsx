@@ -2,12 +2,12 @@ import React, { useContext, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import TitleContext from '../../../Context/TitleContext';
 import Button from '../../Atoms/Button';
-import RecourseTable from '../../Organisms/Recourse/RecourseTable.jsx';
-import RecourseFilter from '../../Organisms/Recourse/RecourseFilter.jsx';
+import RecourseTable from '../../Organisms/Recourse/RecourseTable.js';
+import RecourseFilter from '../../Organisms/Recourse/RecourseFilter.js';
 import useRecourse from '../../../Context/RecourseContext.jsx';
-import FooterTable from '../../Organisms/FooterTable.jsx';
+import FooterTable from '../../Organisms/FooterTable.js';
 import perPageItemsValue from '../../../helpers/perPageItemsValue.js';
-import Loader from '../../Atoms/Loader.jsx';
+import Loader from '../../Atoms/Loader.js';
 
 const RecourseScreenMain = () => {
   const { changeTitle } = useContext(TitleContext);
@@ -32,7 +32,7 @@ const RecourseScreenMain = () => {
     };
   }, []);
 
-  //TODO Este metodo se repite en cada ScreenMain, ver si puedo acoplarlo en el mismo componenten de FooterTable
+  // TODO Este metodo se repite en cada ScreenMain, ver si puedo acoplarlo en el mismo componenten de FooterTable
   const handlePageChange = (e) => {
     searchParams.delete('page');
     searchParams.append('page', e.selected + 1);
@@ -51,24 +51,19 @@ const RecourseScreenMain = () => {
       */}
       {recourseIsLoading && <Loader />}
 
-      <Link to='/recursos/new'>
-        <Button text='Registrar Nuevo' />
+      <Link to="/recursos/new">
+        <Button text="Registrar Nuevo" />
       </Link>
 
       <RecourseFilter />
 
       {recourses?.length === 0 ? (
-        //TODO Crear un componente que indique que no se encontraron resultados
+        // TODO Crear un componente que indique que no se encontraron resultados
         <p>No se encontraron resultados</p>
       ) : (
         <>
           <RecourseTable />
-          {recourseMeta && (
-            <FooterTable
-              handlePageChange={handlePageChange}
-              {...recourseMeta}
-            />
-          )}
+          {recourseMeta && <FooterTable handlePageChange={handlePageChange} {...recourseMeta} />}
         </>
       )}
     </>

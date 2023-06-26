@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSecurity } from '../../../Context/SecurityContext.jsx';
-import AuthenticationTemplate from './AuthenticationTemplate.jsx';
+import AuthenticationTemplate from './AuthenticationTemplate.js';
 
 const VerifyEmailScreen = () => {
-  let { id, hash } = useParams();
+  const { id, hash } = useParams();
   const { verifyUserEmail } = useSecurity();
   const navigate = useNavigate();
 
   useEffect(() => {
     async function verifiedUserEmail(id, hash) {
-      let res = await verifyUserEmail(id, hash);
+      const res = await verifyUserEmail(id, hash);
       if (res) {
         navigate('/dashboard');
       }
@@ -22,7 +22,7 @@ const VerifyEmailScreen = () => {
   return (
     <>
       <AuthenticationTemplate>
-        <p className='text-5xl leading-10 font-bold text-center'>
+        <p className="text-5xl leading-10 font-bold text-center">
           Estamos verificando tu correo electrónico ...
         </p>
       </AuthenticationTemplate>

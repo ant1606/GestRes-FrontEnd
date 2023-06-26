@@ -1,7 +1,7 @@
 import React from 'react';
-import Loader from '../../Atoms/Loader.jsx';
-import AuthenticationTemplate from './AuthenticationTemplate.jsx';
-import PasswordResetForm from '../../Organisms/Authentication/PasswordResetForm.jsx';
+import Loader from '../../Atoms/Loader.js';
+import AuthenticationTemplate from './AuthenticationTemplate.js';
+import PasswordResetForm from '../../Organisms/Authentication/PasswordResetForm.js';
 import useUser from '../../../Context/UserContext.jsx';
 
 const PasswordResetScreen = () => {

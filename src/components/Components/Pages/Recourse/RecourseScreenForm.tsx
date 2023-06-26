@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import Button from '../../Atoms/Button';
-import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx';
+import RecourseForm from '../../Organisms/Recourse/RecourseForm.js';
 import { Link } from 'react-router-dom';
 import TitleContext from '../../../Context/TitleContext.jsx';
 import useRecourse from '../../../Context/RecourseContext.jsx';
@@ -12,9 +12,7 @@ const RecourseScreenForm = () => {
 
   useEffect(() => {
     console.log(recourseActive);
-    changeTitle(
-      `Recursos Educativos / ${recourseActive === null ? 'Nuevo' : 'Editar'} `
-    );
+    changeTitle(`Recursos Educativos / ${recourseActive === null ? 'Nuevo' : 'Editar'} `);
     return () => {
       cleanRecourseActive();
     };
@@ -23,11 +21,11 @@ const RecourseScreenForm = () => {
   return (
     <>
       <RecourseForm endpoint={'http://localhost/api/recourses'}>
-        <div className='flex justify-around'>
-          <Button type='submit' text='Registrar' />
+        <div className="flex justify-around">
+          <Button type="submit" text="Registrar" />
 
-          <Link to='/recursos'>
-            <Button btnType='danger' text='Cancelar' />
+          <Link to="/recursos">
+            <Button btnType="danger" text="Cancelar" />
           </Link>
         </div>
       </RecourseForm>

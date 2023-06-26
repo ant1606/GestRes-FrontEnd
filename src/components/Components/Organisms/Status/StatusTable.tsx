@@ -1,9 +1,9 @@
 import React from 'react'
-import StatusTableRow from '../../Molecules/Status/StatusTableRow.jsx'
+import StatusTableRow from '../../Molecules/Status/StatusTableRow.js'
 import useRecourse from "../../../Context/RecourseContext.jsx";
 
 const StatusTable = () => {
-    const {recourseActive} = useRecourse();
+  const { recourseActive } = useRecourse();
 
   return (
     <table className='table-auto w-full mt-8'>
@@ -18,15 +18,15 @@ const StatusTable = () => {
       <tbody>
 
         {
-            recourseActive &&
-            recourseActive?.status.map((status, i)=>{
-                if(i+1 === recourseActive?.status.length){
-                    return <StatusTableRow key={i} last={true} status={status}/>
-                }
-                else {
-                    return <StatusTableRow key={i} status={status}/>
-                }
-            })
+          recourseActive &&
+          recourseActive?.status.map((status, i) => {
+            if (i + 1 === recourseActive?.status.length) {
+              return <StatusTableRow key={i} last={true} status={status} />
+            }
+            else {
+              return <StatusTableRow key={i} status={status} />
+            }
+          })
         }
 
       </tbody>

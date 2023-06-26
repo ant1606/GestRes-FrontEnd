@@ -4,23 +4,16 @@ import { useSearchParams } from 'react-router-dom';
 import useTag from '../../../Context/TagContext';
 import TitleContext from '../../../Context/TitleContext';
 
-import TagFilter from '../../Organisms/Tag/TagFilter.jsx';
-import TagForm from '../../Organisms/Tag/TagForm.jsx';
-import TagTable from '../../Organisms/Tag/TagTable.jsx';
-import FooterTable from '../../Organisms/FooterTable';
+import TagFilter from '../../Organisms/Tag/TagFilter.js';
+import TagForm from '../../Organisms/Tag/TagForm.js';
+import TagTable from '../../Organisms/Tag/TagTable.js';
+import FooterTable from '../../Organisms/FooterTable.js';
 import perPageItemsValue from '../../../helpers/perPageItemsValue.js';
-import Loader from '../../Atoms/Loader.jsx';
+import Loader from '../../Atoms/Loader.js';
 
 const Etiquetas = () => {
-  const {
-    loadTags,
-    tagMeta,
-    tags,
-    tagPerPage,
-    tagIsLoading,
-    setTagPerPage,
-    setIsLoading
-  } = useTag();
+  const { loadTags, tagMeta, tags, tagPerPage, tagIsLoading, setTagPerPage, setIsLoading } =
+    useTag();
   const { changeTitle } = useContext(TitleContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -34,7 +27,7 @@ const Etiquetas = () => {
     };
   }, []);
 
-  //TODO Este metodo se repite en cada ScreenMain, ver si puedo acoplarlo en el mismo componenten de FooterTable
+  // TODO Este metodo se repite en cada ScreenMain, ver si puedo acoplarlo en el mismo componenten de FooterTable
   const handlePageChange = (e) => {
     searchParams.delete('page');
     searchParams.append('page', e.selected + 1);
@@ -55,9 +48,7 @@ const Etiquetas = () => {
       ) : (
         <>
           <TagTable />
-          {tagMeta && (
-            <FooterTable handlePageChange={handlePageChange} {...tagMeta} />
-          )}
+          {tagMeta && <FooterTable handlePageChange={handlePageChange} {...tagMeta} />}
         </>
       )}
     </>
