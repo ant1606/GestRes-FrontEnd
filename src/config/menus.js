@@ -15,20 +15,20 @@ const menus = [
     title: 'Videos Youtube',
     icon: 'youtube.svg',
     link: true,
-    path: '/canales',
+    path: '/canales'
   },
   {
     title: 'Recursos Educativos',
     icon: 'graduate.svg',
     link: true,
-    path: '/recursos',
+    path: '/recursos'
   },
   {
     title: 'Etiquetas',
     icon: 'tag.svg',
     link: true,
     path: '/etiquetas'
-  },
+  }
 ];
 
 export default menus;

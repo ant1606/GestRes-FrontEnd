@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        18: '4.5rem',
-      },
-    },
+        18: '4.5rem'
+      }
+    }
   },
   plugins: [],
   safelist: [
@@ -23,6 +23,6 @@ module.exports = {
     'bg-sky-600',
     'bg-teal-500',
     'bg-yellow-400',
-    'bg-gray-900',
-  ],
+    'bg-gray-900'
+  ]
 };
