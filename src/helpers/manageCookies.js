@@ -7,7 +7,7 @@ export function setCookie(key, value, expire=null ){
 }
 
 export function getCookie(name) {
-    let cookies = document.cookie.split(';');
+       let cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
         let cookie = cookies[i].trim();
         if (cookie.startsWith(name + '=')) {

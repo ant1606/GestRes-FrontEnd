@@ -1,43 +1,38 @@
-import React, {useContext, useEffect} from 'react'
-import Button from '../../Atoms/Button'
-import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx'
+import React, { useContext, useEffect } from 'react';
+import Button from '../../Atoms/Button';
+import RecourseForm from '../../Organisms/Recourse/RecourseForm.jsx';
 import { Link } from 'react-router-dom';
-import TitleContext from "../../../Context/TitleContext.jsx";
-import useRecourse from "../../../Context/RecourseContext.jsx";
-import useSettings from "../../../Context/SettingsContext.jsx";
+import TitleContext from '../../../Context/TitleContext.jsx';
+import useRecourse from '../../../Context/RecourseContext.jsx';
+import useSettings from '../../../Context/SettingsContext.jsx';
 
 const RecourseScreenForm = () => {
   const { changeTitle } = useContext(TitleContext);
-  const {recourseActive, cleanRecourseActive} = useRecourse();
+  const { recourseActive, cleanRecourseActive } = useRecourse();
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(recourseActive);
-    changeTitle(`Recursos Educativos / ${recourseActive===null ? "Nuevo" : "Editar"} `);
-    return (()=>{
+    changeTitle(
+      `Recursos Educativos / ${recourseActive === null ? 'Nuevo' : 'Editar'} `
+    );
+    return () => {
       cleanRecourseActive();
-    });
+    };
   }, []);
 
   return (
     <>
-      <RecourseForm endpoint={"http://localhost/api/recourses"}>
+      <RecourseForm endpoint={'http://localhost/api/recourses'}>
         <div className='flex justify-around'>
-          <Button 
-              type="submit"
-              text="Registrar" 
-          />
+          <Button type='submit' text='Registrar' />
 
-          <Link to="/recursos">
-            <Button 
-                btnType="danger" 
-                text="Cancelar" 
-          />
+          <Link to='/recursos'>
+            <Button btnType='danger' text='Cancelar' />
           </Link>
-        </div> 
+        </div>
       </RecourseForm>
-      
     </>
-  )
-}
+  );
+};
 
-export default RecourseScreenForm
+export default RecourseScreenForm;

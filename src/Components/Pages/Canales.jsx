@@ -1,17 +1,14 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react';
 import TitleContext from '../../Context/TitleContext';
 
 const Canales = () => {
-  
-  const {changeTitle} = useContext(TitleContext);
+  const { changeTitle } = useContext(TitleContext);
 
-  useEffect(()=>{
-    changeTitle("Canales Youtube");
+  useEffect(() => {
+    changeTitle('Canales Youtube');
   }, []);
 
-  return (
-    <div>Canales</div>
-  )
-}
+  return <div>Canales</div>;
+};
 
-export default Canales
+export default Canales;
