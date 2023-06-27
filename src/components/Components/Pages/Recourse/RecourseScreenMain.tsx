@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import TitleContext from '../../../Context/TitleContext';
-import Button from '../../Atoms/Button';
+import Button from '../../Button.js';
 import RecourseTable from '../../Organisms/Recourse/RecourseTable.js';
 import RecourseFilter from '../../Organisms/Recourse/RecourseFilter.js';
 import useRecourse from '../../../Context/RecourseContext.jsx';

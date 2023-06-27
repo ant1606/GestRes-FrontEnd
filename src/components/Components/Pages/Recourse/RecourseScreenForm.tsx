@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import Button from '../../Atoms/Button';
+import Button from '../../Button.js';
 import RecourseForm from '../../Organisms/Recourse/RecourseForm.js';
 import { Link } from 'react-router-dom';
 import TitleContext from '../../../Context/TitleContext.jsx';

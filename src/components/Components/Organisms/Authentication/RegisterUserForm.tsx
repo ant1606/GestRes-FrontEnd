@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
 import Field from '../../Atoms/Field.js';
-import Button from '../../Atoms/Button.js';
+import Button from '../../Button.js';
 import {
   validateUserEmail,
   validateUserName,

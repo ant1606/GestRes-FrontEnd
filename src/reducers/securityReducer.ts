@@ -1,10 +1,10 @@
 import types from '../types/types.js';
 
 export const initialState = {
-    userLogged: false,
-    error: {},
-    isLoading: false,
-    user: {}
+  userLogged: false,
+  error: {},
+  isLoading: false,
+  user: {}
 };
 
 /**
@@ -14,27 +14,27 @@ export const initialState = {
  */
 
 const securityReducer = (state = {}, action) => {
-    switch (action.type) {
-        case types.securityAddError:
-            return {
-                ...state,
-                error: {...state.error, [Object.keys(action.payload)]: Object.values(action.payload)[0]},
-            };
-        case types.securityUserIsLogged:
-            return {
-                ...state,
-                userLogged: true,
-                user: action.payload
-            }
-        case types.securityUserIsLogout:
-            return {
-                ...state,
-                userLogged: false,
-                user: {}
-            }
-        default:
-            return state;
-    }
-}
+  switch (action.type) {
+    case types.securityAddError:
+      return {
+        ...state,
+        error: { ...state.error, [Object.keys(action.payload)]: Object.values(action.payload)[0] }
+      };
+    case types.securityUserIsLogged:
+      return {
+        ...state,
+        userLogged: true,
+        user: action.payload
+      };
+    case types.securityUserIsLogout:
+      return {
+        ...state,
+        userLogged: false,
+        user: {}
+      };
+    default:
+      return state;
+  }
+};
 
 export default securityReducer;

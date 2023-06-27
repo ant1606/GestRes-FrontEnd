@@ -1,17 +1,13 @@
 import React from 'react';
-import store from './redux/store';
-import { Provider } from 'react-redux';
+
 import AppRouter from '@/routers/AppRouter';
 
 const App: React.FC = () => {
-  return (
-    <Provider store={store}>
-      <AppRouter />
-    </Provider>
-  );
+  return <AppRouter />;
 };
 
 export default App;
+
 // import React from 'react';
 // import { SideBarContextProvider } from './Context/SideBarContext';
 // import { TitleContextProvider } from './Context/TitleContext';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from '../../Atoms/Button.js';
+import Button from '../../Button.js';
 import Icon from '@mdi/react';
 import { mdiEmail } from '@mdi/js';
 import Field from '../../Atoms/Field.js';

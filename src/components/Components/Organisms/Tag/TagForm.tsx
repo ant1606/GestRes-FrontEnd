@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import useTag from '../../../Context/TagContext'
-import Button from '../../Atoms/Button'
+import Button from '../../Button.js'
 import Field from '../../Atoms/Field'
-import {useForm} from "../../../hooks/useForm.js";
-import {validateTagNombre} from "./TagFormValidationInputs.js";
+import { useForm } from "../../../hooks/useForm.js";
+import { validateTagNombre } from "./TagFormValidationInputs.js";
 
 const validateFunctionsFormInputs = {
   nombre: validateTagNombre
@@ -27,10 +27,10 @@ const TagForm = () => {
   } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialState = !!tagActive ? tagActive : initialFormValues;
-  const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError );
-  const {nombre} = formValues;
+  const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(initialState, validateFunctionsFormInputs, addNewError);
+  const { nombre } = formValues;
 
-  useEffect(()=>{
+  useEffect(() => {
     reset();
   }, [tagActive])
 
@@ -38,11 +38,11 @@ const TagForm = () => {
     e.preventDefault();
     setIsLoading(true);
     await validatedSubmitForm();
-    const isValid =Object.keys(tagError).every(el=>tagError[el]===null);
+    const isValid = Object.keys(tagError).every(el => tagError[el] === null);
 
-    if(isValid){
-      let res =!tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
-      if(res){
+    if (isValid) {
+      let res = !tagActive ? await savingTag(formValues, searchParams) : await updatingTag(formValues);
+      if (res) {
         reset();
         addNewError([]);
       }

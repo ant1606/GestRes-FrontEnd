@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from '../../Atoms/Button';
+import Button from '../../Button.js';
 import Modal from '../../Molecules/Modal';
 import StatusForm from './StatusForm.js';
 import StatusTable from './StatusTable.js';
