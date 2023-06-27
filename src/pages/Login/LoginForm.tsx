@@ -3,17 +3,10 @@ import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
 
 import { Link } from 'react-router-dom';
-import Button from '../../components/Components/Button.js';
-// import {
-//   type User,
-//   validateUserEmail,
-//   validateUserPassword,
-//   type ValidationMessage
-// } from './LoginFormValidationInputs.js';
-// import { useSecurity } from '../../../Context/SecurityContext.jsx';
-
+import Button from '@/components/Components/Button.js';
 import Field from '@/components/Components/Field.js';
 import { useForm } from '@/utilities/hooks/useForm';
+
 import {
   validateUserEmail,
   type User,
@@ -21,7 +14,8 @@ import {
   validateUserPassword
 } from './LoginFormValidationInputs.js';
 import { useLogin } from './context/login.context.js';
-// import { useForm } from '@/utilities/hooks/useForm.js';
+import { useDispatch } from 'react-redux';
+import { isLoading } from '@/redux/slice/uiSlice.js';
 
 type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
 
@@ -30,28 +24,13 @@ const validateFunctionsFormInputs: ValidationFunctions = {
   password: validateUserPassword
 };
 
-// const initialState = {
-//   email: '',
-//   password: ''
-// };
-
-// const addNewError = {};
+const initialValue = {
+  email: '',
+  password: ''
+};
 
 const LoginForm: React.FC = () => {
   const { loginError, addValidationError } = useLogin();
-  // console.log({ loginError }, 'desde componente');
-  // const { addNewError, setIsLoading, securityError, logginUser } = myContext();
-
-  // const [formValues, handleInputChange, ,] = useForm<ValidationFunctions>(
-  //   initialState,
-  //   validateFunctionsFormInputs,
-  //   addNewError
-  // );
-  const initialValue = {
-    email: '',
-    password: ''
-  };
-
   const { values: formValues, handleInputChange } = useForm(
     initialValue,
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
@@ -59,22 +38,26 @@ const LoginForm: React.FC = () => {
   );
   const { email, password } = formValues;
 
-  // const securityError = {
-  //   email: '',
-  //   password: ''
-  // };
-
-  // const { email, password } = formValues;
   // const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
 
-  // const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-  //   console.log(evt.target.value);
-  // };
+  const dispatch = useDispatch();
+
+  const handleCheckBoxClick = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+    setRememberMe(evt.target.checked);
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    // console.log(formValues);
+    console.log(formValues);
+    console.log('Vamos a hacer dispatch');
+    dispatch(isLoading(true));
+
+    setTimeout(() => {
+      dispatch(isLoading(false));
+    }, 2000);
+    console.log('Terminamos de hacer dispatch');
+
     // setIsLoading(true);
     // await validatedSubmitForm();
     // const isValid = Object.keys(securityError).every((el) => securityError[el] === null);
@@ -90,10 +73,6 @@ const LoginForm: React.FC = () => {
     // setIsLoading(false);
   };
 
-  const handleCheckBoxClick = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    setRememberMe(evt.target.checked);
-  };
-  // console.log(loginError.email, 'mensaje');
   return (
     <>
       <div className="flex justify-center">

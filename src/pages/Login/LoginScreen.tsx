@@ -1,10 +1,15 @@
 import React from 'react';
 import LoginForm from './LoginForm';
 import { LoginProvider } from './context/login.context';
+import { useSelector } from 'react-redux';
+import { type RootState } from '@/redux/store';
+import Loader from '@/components/Components/Loader';
 
 const LoginScreen: React.FC = () => {
+  const uiLoading = useSelector((state: RootState) => state.ui.value);
   return (
     <LoginProvider>
+      {uiLoading && <Loader />}
       <div className="relative bg-slate-50">
         <div className="login_background_top"></div>
         <div className="login_background_bottom"></div>

@@ -1,24 +1,22 @@
 import { type ReactNode, createContext, useContext, useReducer, type Reducer } from 'react';
 
-const ADD_VALIDATION_ERROR = 'add validation error';
-const LoginContext = createContext({});
-
 interface LoginProviderProps {
   children: ReactNode;
 }
-
 interface ActionReducer {
   type: string;
   payload: Record<string, unknown>;
 }
-
 interface InitialState {
   validationError: Record<string, string | null>;
 }
+const ADD_VALIDATION_ERROR = 'add validation error';
 
 const initialState: InitialState = {
   validationError: {}
 };
+
+const LoginContext = createContext({});
 
 const loginReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
@@ -36,7 +34,6 @@ const loginReducer: Reducer<InitialState, ActionReducer> = (
         validationError: {
           ...state.validationError,
           [payloadKey]: payloadValue as string | null
-          // [Object.getOwnPropertyNames(action.payload)[0]]: Object.values(action.payload)[0]
         }
       };
   }

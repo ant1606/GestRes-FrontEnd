@@ -1,9 +1,15 @@
 import React from 'react';
 
 import AppRouter from '@/routers/AppRouter';
+import { Provider } from 'react-redux';
+import { store } from '@/redux/store';
 
 const App: React.FC = () => {
-  return <AppRouter />;
+  return (
+    <Provider store={store}>
+      <AppRouter />
+    </Provider>
+  );
 };
 
 export default App;
