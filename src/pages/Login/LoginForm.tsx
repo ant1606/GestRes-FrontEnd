@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
-
-import { Link } from 'react-router-dom';
 import Button from '@/components/Components/Button.js';
 import Field from '@/components/Components/Field.js';
-import { useForm } from '@/utilities/hooks/useForm';
+import { isLoading } from '@/redux/slice/uiSlice.js';
+import { useAppDispatch } from '@/hooks/redux/index.js';
+import { useForm } from '@/hooks/useForm.js';
 
 import {
   validateUserEmail,
@@ -14,11 +15,15 @@ import {
   validateUserPassword
 } from './LoginFormValidationInputs.js';
 import { useLogin } from './context/login.context.js';
-import { useDispatch } from 'react-redux';
-import { isLoading } from '@/redux/slice/uiSlice.js';
+import { logginUser } from '@/services/login.services.js';
+import { processErorrResponse } from '@/utilities/processAPIResponse.util.js';
+import { toastNotifications } from '@/utilities/notificationsSwal.js';
 
 type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
-
+interface ResponseAPI {
+  data?: unknown;
+  error?: unknown;
+}
 const validateFunctionsFormInputs: ValidationFunctions = {
   email: validateUserEmail,
   password: validateUserPassword
@@ -47,7 +52,7 @@ const LoginForm: React.FC = () => {
   const loginErrorRef = useRef<Record<string, string | null>>({});
   // const [formIsValid, setFormIsValid] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     loginErrorRef.current = loginError;
@@ -60,7 +65,6 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    // TODO El loader no se esta mostrando, ya que se hace instantaneamente, verificar el motivo
     dispatch(isLoading(true));
     await validatedSubmitForm();
     const existValidationMessage = Object.keys(loginErrorRef.current).every(
@@ -68,13 +72,38 @@ const LoginForm: React.FC = () => {
     );
 
     if (existValidationMessage) {
-      // const res = await logginUser({ email, password, remember_me });
+      try {
+        const response: ResponseAPI = await logginUser({ email, password });
+
+        if ('data' in response) {
+          // Guardamos los datos del usuario en el store
+        } else if ('error' in response) {
+          // TODO Manejamos los errores de validacion
+
+          const errorProcesed = processErorrResponse(response.error.detail);
+          Object.keys(errorProcesed).forEach((key) => {
+            // TODO colocar el nombre api_response de manera global en una constante
+            if (key !== 'api_response') {
+              addValidationError({ [key]: errorProcesed[key] });
+            }
+          });
+
+          if ('api_response' in errorProcesed) {
+            throw new Error(errorProcesed.api_response);
+          }
+        }
+      } catch (error) {
+        toastNotifications().notificationError(error.message);
+      } finally {
+        dispatch(isLoading(false));
+      }
+
+      // const res = await logginUser({email, password, remember_me});
 
       // if (res) {
       //   const usuario = JSON.parse(localStorage.getItem('user'));
       //   usuario.is_verified ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
       // }
-      console.log('Se hara login al backend');
     }
     dispatch(isLoading(false));
   };
