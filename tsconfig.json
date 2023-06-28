@@ -22,7 +22,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "./src/typing/env.d.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"
