@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
 
@@ -31,7 +31,11 @@ const initialValue = {
 
 const LoginForm: React.FC = () => {
   const { loginError, addValidationError } = useLogin();
-  const { values: formValues, handleInputChange } = useForm(
+  const {
+    values: formValues,
+    handleInputChange,
+    validatedSubmitForm
+  } = useForm(
     initialValue,
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
     addValidationError
@@ -40,37 +44,44 @@ const LoginForm: React.FC = () => {
 
   // const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
+  const loginErrorRef = useRef<Record<string, string | null>>({});
+  // const [formIsValid, setFormIsValid] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    loginErrorRef.current = loginError;
+  }, [loginError]);
 
   const handleCheckBoxClick = (evt: React.ChangeEvent<HTMLInputElement>): void => {
     setRememberMe(evt.target.checked);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    console.log(formValues);
-    console.log('Vamos a hacer dispatch');
+
+    // TODO El loader no se esta mostrando, ya que se hace instantaneamente, verificar el motivo
     dispatch(isLoading(true));
+    await validatedSubmitForm();
+    const existValidationMessage = Object.keys(loginErrorRef.current).every(
+      (el) => loginErrorRef.current[el] === null
+    );
 
-    setTimeout(() => {
-      dispatch(isLoading(false));
-    }, 2000);
-    console.log('Terminamos de hacer dispatch');
+    if (existValidationMessage) {
+      // const res = await logginUser({ email, password, remember_me });
 
-    // setIsLoading(true);
-    // await validatedSubmitForm();
-    // const isValid = Object.keys(securityError).every((el) => securityError[el] === null);
+      // if (res) {
+      //   const usuario = JSON.parse(localStorage.getItem('user'));
+      //   usuario.is_verified ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
+      // }
+      console.log('Se hara login al backend');
+    }
+    dispatch(isLoading(false));
+  };
 
-    // if (isValid) {
-    //   const res = await logginUser({ email, password, remember_me });
-
-    //   if (res) {
-    //     const usuario = JSON.parse(localStorage.getItem('user'));
-    //     usuario.is_verified ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
-    //   }
-    // }
-    // setIsLoading(false);
+  const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    handleSubmit(e); // Invocar la función handleSubmit sin esperar la promesa
   };
 
   return (
@@ -81,7 +92,7 @@ const LoginForm: React.FC = () => {
       <div className="flex justify-center">
         <p className="text-4xl leading-10 font-bold">Login</p>
       </div>
-      <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
+      <form onSubmit={handleSubmitWrapper} className="flex flex-col justify-center gap-4">
         <div className="flex gap-3 items-center">
           <Icon path={mdiAccountCircle} size={1} />
           <Field

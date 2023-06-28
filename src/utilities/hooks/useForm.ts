@@ -3,8 +3,11 @@ import { useCallback, useEffect, useState } from 'react';
 interface useFormOutput {
   values: Record<string, any>;
   handleInputChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+  // TODO Cambiar el tipo de validatedSubmitForm
+  validatedSubmitForm: any;
 }
 
+// TODO Ver si el initialState puede recibir un tipo Genérico para poder tipar el initialState desde el componente en donde se usa useForm()
 interface useFormInput {
   initialState: Record<string, unknown>;
   functionsToValidateInputs: Record<string, (values: unknown) => string | null>;
@@ -30,18 +33,10 @@ export const useForm = <T extends useFormInput>(
   const validatedInput = useCallback(() => {
     if (inputToValidate !== null) {
       const validateMsg = functionsToValidateInputs[inputToValidate](values);
-      // console.log({ validateMsg });
 
       dispatcherErrorValidations({
         [inputToValidate]: validateMsg
       });
-
-      // Definiendo si el input es valido o no en el objeto isValidated
-      // if (validateMsg.trim.length === 0) {
-      //   setIsValidated((state) => ({ ...state, [inputValidate]: true }));
-      // } else {
-      //   setIsValidated((state) => ({ ...state, [inputValidate]: false }));
-      // }
     }
 
     setInputToValidate(null);
@@ -51,5 +46,27 @@ export const useForm = <T extends useFormInput>(
     validatedInput();
   }, [validatedInput]);
 
-  return { values, handleInputChange };
+  const validatedSubmitForm = async (): Promise<void> => {
+    await new Promise<void>((resolve) => {
+      const res = Object.keys(values).reduce((acc, curr) => {
+        if (curr in functionsToValidateInputs) {
+          return {
+            ...acc,
+            [curr]: functionsToValidateInputs[curr](values)
+          };
+        }
+        return { ...acc };
+      }, {});
+
+      // TODO Corregir la advertencia Eslint
+      Object.keys(res).map((x) =>
+        dispatcherErrorValidations({
+          [x]: res[x]
+        })
+      );
+      resolve();
+    });
+  };
+
+  return { values, handleInputChange, validatedSubmitForm };
 };

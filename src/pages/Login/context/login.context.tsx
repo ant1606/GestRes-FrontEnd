@@ -7,13 +7,20 @@ interface ActionReducer {
   type: string;
   payload: Record<string, unknown>;
 }
+
+type typeValidationError = 'email' | 'password' | 'apiValidationResponse';
 interface InitialState {
-  validationError: Record<string, string | null>;
+  validationError: Record<typeValidationError, string | null>;
 }
+
 const ADD_VALIDATION_ERROR = 'add validation error';
 
 const initialState: InitialState = {
-  validationError: {}
+  validationError: {
+    email: null,
+    password: null,
+    apiValidationResponse: null
+  }
 };
 
 const LoginContext = createContext({});
@@ -28,7 +35,6 @@ const loginReducer: Reducer<InitialState, ActionReducer> = (
     case ADD_VALIDATION_ERROR:
       payloadKey = Object.getOwnPropertyNames(action.payload)[0];
       payloadValue = Object.values(action.payload)[0];
-
       return {
         ...state,
         validationError: {
