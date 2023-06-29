@@ -1,3 +1,4 @@
+// TODO Refactorizar todo esto
 import Swal from 'sweetalert2';
 
 export const toastNotifications = () => {

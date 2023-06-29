@@ -18,11 +18,12 @@ import { useLogin } from './context/login.context.js';
 import { logginUser } from '@/services/login.services.js';
 import { processErorrResponse } from '@/utilities/processAPIResponse.util.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
+import { setCookie } from '@/utilities/manageCookies.js';
 
 type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
 interface ResponseAPI {
-  data?: unknown;
-  error?: unknown;
+  data?: Record<string, any>;
+  error?: Record<string, any>;
 }
 const validateFunctionsFormInputs: ValidationFunctions = {
   email: validateUserEmail,
@@ -50,7 +51,6 @@ const LoginForm: React.FC = () => {
   // const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
   const loginErrorRef = useRef<Record<string, string | null>>({});
-  // const [formIsValid, setFormIsValid] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -65,24 +65,36 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
-    dispatch(isLoading(true));
-    await validatedSubmitForm();
-    const existValidationMessage = Object.keys(loginErrorRef.current).every(
-      (el) => loginErrorRef.current[el] === null
-    );
+    try {
+      dispatch(isLoading(true));
+      await validatedSubmitForm();
+      const existValidationMessage = Object.keys(loginErrorRef.current).every(
+        (el) => loginErrorRef.current[el] === null
+      );
 
-    if (existValidationMessage) {
-      try {
-        const response: ResponseAPI = await logginUser({ email, password });
+      if (existValidationMessage) {
+        // TODO Mandar tambien el remember_me al logginUser
+        const response: ResponseAPI = await logginUser({
+          email,
+          password,
+          remember_me: rememberMe
+        });
 
         if ('data' in response) {
-          // Guardamos los datos del usuario en el store
+          // TODO Se almacenará el bearerToken en cookie y los datos del usuario en el localStorage y luego lo gestionare en el store
+          // El cookie es porque permite manejar fecha de expiración
+          // Pero queda pendiente implementar JWT para obtener los datos del usuario en un token encriptado
+          // console.log(response);
+          setCookie('bearerToken', response.data?.bearer_token, response.data?.bearer_expire);
+          localStorage.setItem('rememberToken', response.data?.user.remember_token);
+          localStorage.setItem('user', JSON.stringify(response.data?.user));
+          //   // setUserIsLogged(data.data.user);
+          // setUserIsLogged(data.data.user);
+          // usuario.is_verified ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
         } else if ('error' in response) {
-          // TODO Manejamos los errores de validacion
-
-          const errorProcesed = processErorrResponse(response.error.detail);
+          const errorProcesed = processErorrResponse(response.error?.detail);
           Object.keys(errorProcesed).forEach((key) => {
-            // TODO colocar el nombre api_response de manera global en una constante
+            // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
             if (key !== 'api_response') {
               addValidationError({ [key]: errorProcesed[key] });
             }
@@ -92,20 +104,12 @@ const LoginForm: React.FC = () => {
             throw new Error(errorProcesed.api_response);
           }
         }
-      } catch (error) {
-        toastNotifications().notificationError(error.message);
-      } finally {
-        dispatch(isLoading(false));
       }
-
-      // const res = await logginUser({email, password, remember_me});
-
-      // if (res) {
-      //   const usuario = JSON.parse(localStorage.getItem('user'));
-      //   usuario.is_verified ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
-      // }
+    } catch (error) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
     }
-    dispatch(isLoading(false));
   };
 
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {

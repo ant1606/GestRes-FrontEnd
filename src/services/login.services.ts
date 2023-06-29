@@ -1,6 +1,7 @@
 interface LoginCredentials {
   email: string;
   password: string;
+  remember_me: boolean;
 }
 
 export const logginUser = async (credentials: LoginCredentials): Promise<any> => {
@@ -17,29 +18,9 @@ export const logginUser = async (credentials: LoginCredentials): Promise<any> =>
       return await res.json();
     })
     .then((data) => {
-      //   // setCookie('bearerToken', data.data.bearer_token, data.data.bearer_expire);
-      //   // localStorage.setItem('rememberToken', data.data.user.remember_token);
-      //   // localStorage.setItem('user', JSON.stringify(data.data.user));
-      //   // setUserIsLogged(data.data.user);
       return data;
     })
     .catch(async (error) => {
       return error;
-      // const err = await error;
-      // // const processError = err.error.reduce(
-      // //   (previous, current) => ({
-      // //     ...previous,
-      // //     ...Object.entries(current.detail).reduce(
-      // //       (acc, [key, value]) => ({
-      // //         ...acc,
-      // //         [key]: value[0]
-      // //       }),
-      // //       {}
-      // //     )
-      // //   }),
-      // //   {}
-      // // );
-      // return err;
-      // addNewError(processError);
     });
 };
