@@ -2,12 +2,12 @@ import React from 'react';
 import Icon from '@mdi/react';
 import { mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
 import Field from '../../Atoms/Field.js';
-import Button from '../../Button.js';
+import Button from '../../components/Button.js';
 import {
   validateUserEmail,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from './RegisterFormValidationInputs.js';
+} from '../Register/RegisterFormValidationInputs.js';
 import useUser from '../../../Context/UserContext.jsx';
 import { useForm } from '../../../hooks/useForm.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';

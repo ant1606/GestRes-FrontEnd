@@ -1,7 +1,7 @@
 import React from 'react';
 import { type RootState } from '@/redux/store';
 import { useAppSelector } from '@/hooks/redux';
-import Loader from '@/components/Components/Loader';
+import Loader from '@/components/Loader';
 
 import { LoginProvider } from './context/login.context';
 import LoginFormContainer from './LoginFormContainer';

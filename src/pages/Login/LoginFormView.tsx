@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '@/components/Components/Button';
-import Field from '@/components/Components/Field';
+import Button from '@/components/Button';
+import Field from '@/components/Field';
 import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';

@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
-import Button from '@/components/Components/Button.js';
-import Field from '@/components/Components/Field.js';
+import Button from '@/components/Button.js';
+
 import { isLoading } from '@/redux/slice/uiSlice.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { useForm } from '@/hooks/useForm.js';
@@ -19,6 +19,7 @@ import { logginUser } from '@/services/login.services.js';
 import { processErorrResponse } from '@/utilities/processAPIResponse.util.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { setCookie } from '@/utilities/manageCookies.js';
+import Field from '@/components/Field.js';
 
 type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
 interface ResponseAPI {

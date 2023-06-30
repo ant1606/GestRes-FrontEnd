@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Button from '../Button'
+import Button from '../../Button'
 
 const Modal = ({ title, modalState, handleClickParent, modalContent, handleClickAcceptButton }) => {
   const [toggleModal, setToggleModal] = useState(false);

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
 import Field from '../../Atoms/Field.js';
-import Button from '../../Button.js';
+import Button from '../../../Button.js';
 import { useSecurity } from '../../../Context/SecurityContext.jsx';
-import AuthenticationTemplate from './AuthenticationTemplate.js';
+import AuthenticationTemplate from '../../../AuthenticationTemplate.js';
 
 const ResendLinkVerifyEmailScreen = () => {
   const { securityUser, resendLinkVerifyUserEmail } = useSecurity();

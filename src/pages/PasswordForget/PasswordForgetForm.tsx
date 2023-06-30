@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Icon from '@mdi/react';
 import { mdiEmail } from '@mdi/js';
 import Field from '../../Atoms/Field.js';
-import Button from '../../Button.js';
-import { validateUserEmail } from './RegisterFormValidationInputs.js';
+import Button from '../../components/Button.js';
+import { validateUserEmail } from '../Register/RegisterFormValidationInputs.js';
 import useUser from '../../../Context/UserContext.jsx';
 import { useForm } from '../../../hooks/useForm.js';
 

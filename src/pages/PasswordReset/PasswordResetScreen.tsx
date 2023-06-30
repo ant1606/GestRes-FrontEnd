@@ -1,6 +1,6 @@
 import React from 'react';
 import Loader from '../../Atoms/Loader.js';
-import AuthenticationTemplate from './AuthenticationTemplate.js';
+import AuthenticationTemplate from '../../../AuthenticationTemplate.js';
 import PasswordResetForm from '../../Organisms/Authentication/PasswordResetForm.js';
 import useUser from '../../../Context/UserContext.jsx';
 
