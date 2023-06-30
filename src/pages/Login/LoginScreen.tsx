@@ -6,7 +6,7 @@ import Loader from '@/components/Components/Loader';
 import { LoginProvider } from './context/login.context';
 import LoginFormContainer from './LoginFormContainer';
 
-const LoginScreen: React.FC = () => {
+export const LoginScreen: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.value);
   return (
     <LoginProvider>
@@ -22,4 +22,3 @@ const LoginScreen: React.FC = () => {
     </LoginProvider>
   );
 };
-export default LoginScreen;

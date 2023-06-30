@@ -1,4 +1,4 @@
-import { LoginScreen } from '@/pages/Login';
+import Login from '@/pages/Login';
 import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace={true} />} />
-        <Route path="/login/" element={<LoginScreen />} />
+        <Route path="/login/" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
