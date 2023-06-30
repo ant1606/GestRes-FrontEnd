@@ -8,7 +8,7 @@ interface ActionReducer {
   payload: Record<string, unknown>;
 }
 
-type typeValidationError = 'email' | 'password' | 'remember_me';
+type typeValidationError = 'email' | 'password';
 interface InitialState {
   validationError: Record<typeValidationError, string | null | boolean>;
 }
@@ -18,8 +18,7 @@ const ADD_VALIDATION_ERROR = 'add validation error';
 const initialState: InitialState = {
   validationError: {
     email: null,
-    password: null,
-    remember_me: false
+    password: null
   }
 };
 

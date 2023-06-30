@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
 import Button from '@/components/Components/Button.js';
@@ -48,7 +48,7 @@ const LoginForm: React.FC = () => {
   );
   const { email, password } = formValues;
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
   const loginErrorRef = useRef<Record<string, string | null>>({});
 
@@ -71,9 +71,7 @@ const LoginForm: React.FC = () => {
       const existValidationMessage = Object.keys(loginErrorRef.current).every(
         (el) => loginErrorRef.current[el] === null
       );
-
       if (existValidationMessage) {
-        // TODO Mandar tambien el remember_me al logginUser
         const response: ResponseAPI = await logginUser({
           email,
           password,
@@ -84,13 +82,13 @@ const LoginForm: React.FC = () => {
           // TODO Se almacenará el bearerToken en cookie y los datos del usuario en el localStorage y luego lo gestionare en el store
           // El cookie es porque permite manejar fecha de expiración
           // Pero queda pendiente implementar JWT para obtener los datos del usuario en un token encriptado
-          // console.log(response);
           setCookie('bearerToken', response.data?.bearer_token, response.data?.bearer_expire);
           localStorage.setItem('rememberToken', response.data?.user.remember_token);
-          localStorage.setItem('user', JSON.stringify(response.data?.user));
-          //   // setUserIsLogged(data.data.user);
-          // setUserIsLogged(data.data.user);
-          // usuario.is_verified ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
+          const userInfo = response.data?.user;
+          localStorage.setItem('user', JSON.stringify(userInfo));
+
+          // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
+          userInfo.is_verified === true ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
         } else if ('error' in response) {
           const errorProcesed = processErorrResponse(response.error?.detail);
           Object.keys(errorProcesed).forEach((key) => {
