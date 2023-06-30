@@ -12,7 +12,7 @@ import {
 } from './LoginFormValidationInputs.js';
 import { useLogin } from './context/login.context.js';
 import { logginUser } from '@/services/login.services.js';
-import { processErorrResponse } from '@/utilities/processAPIResponse.util.js';
+import { processErrorResponse } from '@/utilities/processAPIResponse.util.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { setCookie } from '@/utilities/manageCookies.js';
 import LoginFormView from './LoginFormView.js';
@@ -87,7 +87,7 @@ const LoginFormContainer: React.FC = () => {
           // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
           userInfo.is_verified === true ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
         } else if ('error' in response) {
-          const errorProcesed = processErorrResponse(response.error?.detail);
+          const errorProcesed = processErrorResponse(response.error?.detail);
           Object.keys(errorProcesed).forEach((key) => {
             // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
             if (key !== 'api_response') {

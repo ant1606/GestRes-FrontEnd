@@ -1,4 +1,4 @@
-export const processErorrResponse = (error: any): Record<string, string> => {
+export const processErrorResponse = (error: any): Record<string, string> => {
   const errorContentToArray = Object.entries(error);
   // console.log();
   return errorContentToArray.reduce((acc, current) => {

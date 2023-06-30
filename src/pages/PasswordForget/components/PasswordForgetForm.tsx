@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Icon from '@mdi/react';
 import { mdiEmail } from '@mdi/js';
-import Field from '../../Atoms/Field.js';
-import Button from '../../components/Button.js';
-import { validateUserEmail } from '../Register/RegisterFormValidationInputs.js';
-import useUser from '../../../Context/UserContext.jsx';
-import { useForm } from '../../../hooks/useForm.js';
+import Field from '@/components/Field';
+import Button from '@/components/Button';
+import { validateUserEmail } from '../../Register/RegisterFormValidationInputs.js';
+// import useUser from '../../../Context/UserContext.jsx';
+import { useForm } from '@/hooks/useForm.js';
+import { usePasswordForget } from '../context/passwordForget.context.js';
 
 const validateFunctionsFormInputs = {
   email: validateUserEmail
@@ -15,13 +16,18 @@ const initialState = {
   email: ''
 };
 
-const PasswordForgetForm = ({ handleSendValidateEmail }) => {
-  const { forgetPassword, setIsLoading, addNewError, userError } = useUser();
+const PasswordForgetForm: React.FC = ({ handleSendValidateEmail }) => {
+  const {
+    passwordForgetError,
+    resetUrlIsGenerated,
+    setIfResetLinkWasGenerated,
+    addValidationError
+  } = usePasswordForget();
 
   const [formValues, handleInputChange, reset, validatedSubmitForm] = useForm(
     initialState,
     validateFunctionsFormInputs,
-    addNewError
+    addValidationError
   );
   const { email } = formValues;
 
