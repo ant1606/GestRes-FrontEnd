@@ -2,12 +2,12 @@ import React from 'react';
 import Icon from '@mdi/react';
 import { mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
 import Field from '../../Atoms/Field.js';
-import Button from '../../components/Button.js';
+import Button from '../../../components/Button.js';
 import {
   validateUserEmail,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from '../Register/RegisterFormValidationInputs.js';
+} from '../../Register/RegisterFormValidationInputs.js';
 import useUser from '../../../Context/UserContext.jsx';
 import { useForm } from '../../../hooks/useForm.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -58,7 +58,6 @@ const PasswordResetForm = () => {
 
   return (
     <>
-      <p className="text-4xl leading-10 font-bold text-center">Ingrese su nueva contraseña</p>
       <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
         <div className="flex gap-3 items-center">
           <Icon path={mdiEmail} size={1} />

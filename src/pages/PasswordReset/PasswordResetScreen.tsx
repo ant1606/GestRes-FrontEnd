@@ -1,10 +1,10 @@
 import React from 'react';
-import Loader from '../../Atoms/Loader.js';
-import AuthenticationTemplate from '../../../AuthenticationTemplate.js';
-import PasswordResetForm from '../../Organisms/Authentication/PasswordResetForm.js';
-import useUser from '../../../Context/UserContext.jsx';
+import Loader from '@/components/Loader';
+import AuthenticationTemplate from '@/components/AuthenticationTemplate';
+import PasswordResetForm from './components/PasswordResetForm';
+// import useUser from '../../../Context/UserContext.jsx';
 
-const PasswordResetScreen = () => {
+const PasswordResetScreen: React.FC = () => {
   const { userIsLoading } = useUser();
 
   return (
