@@ -1,36 +1,39 @@
 import React, { useEffect, useRef } from 'react';
 import FormView from './FormView';
-import { usePasswordReset } from '../context/passwordReset.context';
+import { useForm } from '@/hooks/useForm';
 import {
   validateUserEmail,
+  validateUserName,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from '../validationInputs';
-import { useForm } from '@/hooks/useForm';
+} from '../RegisterFormValidationInputs';
+import { toastNotifications } from '@/utilities/notificationsSwal';
 import { useAppDispatch } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
-import { resetPassword } from '@/services/resetPassword.services';
+import { useRegister } from '../context/register.context';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { savingUser } from '@/services/register.services';
 
 interface ResponseAPI {
   data?: Record<string, any>;
   error?: Record<string, any>;
 }
 
-const initialState = {
-  email: '',
-  password: '',
-  passwordConfirmation: ''
-};
 const validateFunctionsFormInputs = {
+  name: validateUserName,
   email: validateUserEmail,
   password: validateUserPassword,
   passwordConfirmation: validateUserPasswordConfirmation
 };
+const initialState = {
+  name: '',
+  email: '',
+  password: '',
+  passwordConfirmation: ''
+};
+
 export const FormContainer: React.FC = () => {
-  const { passwordResetError, addValidationError } = usePasswordReset();
+  const { registerError, addValidationError, setUserWasRegistered } = useRegister();
   const {
     values: formValues,
     handleInputChange,
@@ -40,39 +43,31 @@ export const FormContainer: React.FC = () => {
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
     addValidationError
   );
-  const { email, password, passwordConfirmation } = formValues;
+  const { name, email, password, passwordConfirmation } = formValues;
   const dispatch = useAppDispatch();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const passwordResetErrorRef = useRef<Record<string, string | null>>({});
-
+  const registerErrorRef = useRef<Record<string, string | null>>({});
   useEffect(() => {
-    passwordResetErrorRef.current = passwordResetError;
-  }, [passwordResetError]);
+    registerErrorRef.current = registerError;
+  }, [registerError]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     try {
       dispatch(isLoading(true));
       await validatedSubmitForm();
-      const existValidationMessage = Object.keys(passwordResetErrorRef.current).every(
-        (el) => passwordResetErrorRef.current[el] === null
+      const existValidationMessage = Object.keys(registerErrorRef.current).every(
+        (el) => registerErrorRef.current[el] === null
       );
       if (existValidationMessage) {
-        const token = searchParams.get('token');
-        if (token?.trim().length === 0 || token === null) {
-          throw new Error('Token no válido');
-        }
-        const response: ResponseAPI = await resetPassword({
+        const response: ResponseAPI = await savingUser({
+          name,
           email,
           password,
-          password_confirmation: passwordConfirmation,
-          token: token ?? ''
+          password_confirmation: passwordConfirmation
         });
         console.log(response);
         if ('data' in response) {
-          toastNotifications().toastSuccesCustomize('Su contraseña fue cambiada con éxito.');
-          navigate('/login', { replace: true });
+          setUserWasRegistered(true);
         } else if ('error' in response) {
           const errorProcesed = processErrorResponse(response.error?.detail);
           Object.keys(errorProcesed).forEach((key) => {
@@ -101,11 +96,12 @@ export const FormContainer: React.FC = () => {
   return (
     <FormView
       email={email}
-      handleInput={handleInputChange}
+      handleInputChange={handleInputChange}
       handleSubmit={handleSubmitWrapper}
+      name={name}
       password={password}
       passwordConfirmation={passwordConfirmation}
-      userError={passwordResetError}
+      userError={registerError}
     />
   );
 };

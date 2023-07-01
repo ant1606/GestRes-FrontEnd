@@ -5,21 +5,18 @@ import useUser from '../../../Context/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import RegisterUserMessage from '../../Organisms/Authentication/RegisterUserMessage.js';
 import AuthenticationTemplate from '../../components/AuthenticationTemplate.js';
+import Message from './components/Message.js';
 
-const RegisterUserScreen = () => {
+const RegisterUserScreen: React.FC = () => {
   const { userIsLoading } = useUser();
   const [userRegistered, setUserRegistered] = useState(false);
-  const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate('/login');
-  };
   return (
     <>
       {userIsLoading && <Loader />}
       <AuthenticationTemplate>
         {userRegistered ? (
-          <RegisterUserMessage handleClickToLogin={handleClick} />
+          <Message />
         ) : (
           <RegisterUserForm handleUserRegistered={setUserRegistered} />
         )}

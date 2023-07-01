@@ -8,7 +8,7 @@ import {
   validateUserName,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from './RegisterFormValidationInputs.js';
+} from '../RegisterFormValidationInputs.js';
 import useUser from '../../../Context/UserContext.jsx';
 import { useForm } from '../../../hooks/useForm.js';
 
