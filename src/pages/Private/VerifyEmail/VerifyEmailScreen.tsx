@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSecurity } from '../../../Context/SecurityContext.jsx';
-import AuthenticationTemplate from '../../../AuthenticationTemplate.js';
+import AuthenticationTemplate from '../../../components/AuthenticationTemplate.js';
 
 const VerifyEmailScreen = () => {
   const { id, hash } = useParams();

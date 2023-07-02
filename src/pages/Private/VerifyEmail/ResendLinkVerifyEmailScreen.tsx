@@ -1,17 +1,22 @@
 import React, { useEffect } from 'react';
-import Icon from '@mdi/react';
-import { mdiAccountCircle, mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
-import Field from '../../Atoms/Field.js';
-import Button from '../../../Button.js';
-import { useSecurity } from '../../../Context/SecurityContext.jsx';
-import AuthenticationTemplate from '../../../AuthenticationTemplate.js';
 
-const ResendLinkVerifyEmailScreen = () => {
-  const { securityUser, resendLinkVerifyUserEmail } = useSecurity();
+// import { useSecurity } from '../../../Context/SecurityContext.jsx';
+import AuthenticationTemplate from '@/components/AuthenticationTemplate.js';
+import Button from '@/components/Button.js';
+import { useNavigate } from 'react-router-dom';
 
-  const handleSubmit = async (e) => {
+const ResendLinkVerifyEmailScreen: React.FC = () => {
+  // const { securityUser, resendLinkVerifyUserEmail } = useSecurity();
+  // const emailIsVerified = false;
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (emailIsVerified) navigate('/dashboard', { replace: true });
+  // }, [emailIsVerified, navigate]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    const res = await resendLinkVerifyUserEmail(securityUser.id);
+    // const res = await resendLinkVerifyUserEmail(securityUser.id);
   };
 
   return (
