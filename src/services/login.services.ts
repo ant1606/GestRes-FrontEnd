@@ -13,7 +13,7 @@ interface LoginCredentials {
 export const logginUser = async (
   credentials: LoginCredentials
 ): Promise<Record<string, string | any>> => {
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/login`, {
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/loin`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

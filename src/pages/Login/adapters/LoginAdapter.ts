@@ -42,8 +42,6 @@ export const loginSuccessResponseAdapter = (user: any): LoginSuccessResponse => 
 };
 
 export const loginErrorResponseAdapter = (error: any): LoginErrorResponse => {
-  console.log('loginErrorResponseAdapter');
-  console.log(error);
   return {
     error: {
       status: error.error.status,

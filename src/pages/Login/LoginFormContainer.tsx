@@ -74,29 +74,31 @@ const LoginFormContainer: React.FC = () => {
           password,
           remember_me: rememberMe
         });
-
         if ('data' in response) {
           // TODO Se almacenará el bearerToken en cookie y los datos del usuario en el localStorage y luego lo gestionare en el store
           // El cookie es porque permite manejar fecha de expiración
           // Pero queda pendiente implementar JWT para obtener los datos del usuario en un token encriptado
-          setCookie('bearerToken', response.data?.bearer_token, response.data?.bearer_expire);
-          localStorage.setItem('rememberToken', response.data?.user.remember_token);
+
+          setCookie('bearerToken', response.data?.bearerToken, response.data?.bearerExpire);
+          localStorage.setItem('rememberToken', response.data?.user.rememberToken);
           const userInfo = response.data?.user;
+          // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
           localStorage.setItem('user', JSON.stringify(userInfo));
 
-          // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
-          userInfo.is_verified === true ? navigate('/dashboard') : navigate('/notifyVerifyEmail');
+          // userInfo.is_verified === true
+          //   ? navigate('app/dashboard')
+          //   : navigate('/notifyVerifyEmail');
         } else if ('error' in response) {
-          const errorProcesed = processErrorResponse(response.error?.detail);
-          Object.keys(errorProcesed).forEach((key) => {
+          const errorsDetail = response.error?.detail;
+          Object.keys(errorsDetail).forEach((key) => {
             // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
-            if (key !== 'api_response') {
-              addValidationError({ [key]: errorProcesed[key] });
+            if (key !== 'apiResponse') {
+              addValidationError({ [key]: errorsDetail[key] });
             }
           });
 
-          if ('api_response' in errorProcesed) {
-            throw new Error(errorProcesed.api_response);
+          if ('apiResponse' in errorsDetail) {
+            throw new Error(errorsDetail.apiResponse);
           }
         }
       }
