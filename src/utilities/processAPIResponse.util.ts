@@ -25,19 +25,3 @@ export const processErrorResponse = (error: any): Record<string, string | any> =
     }
   };
 };
-
-// const processErrorAntiguo = (error) => {
-//   const processError = err.error.reduce(
-//     (previous, current) => ({
-//       ...previous,
-//       ...Object.entries(current.detail).reduce(
-//         (acc, [key, value]) => ({
-//           ...acc,
-//           [key]: value[0]
-//         }),
-//         {}
-//       )
-//     }),
-//     {}
-//   );
-// };

@@ -12,10 +12,10 @@ import {
 } from './LoginFormValidationInputs.js';
 import { useLogin } from './context/login.context.js';
 import { logginUser } from '@/services/login.services.js';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { setCookie } from '@/utilities/manageCookies.js';
 import LoginFormView from './LoginFormView.js';
+import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
 
 type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
 interface ResponseAPI {
@@ -74,6 +74,7 @@ const LoginFormContainer: React.FC = () => {
           password,
           remember_me: rememberMe
         });
+
         if ('data' in response) {
           // TODO Se almacenará el bearerToken en cookie y los datos del usuario en el localStorage y luego lo gestionare en el store
           // El cookie es porque permite manejar fecha de expiración
@@ -85,13 +86,19 @@ const LoginFormContainer: React.FC = () => {
           // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
           localStorage.setItem('user', JSON.stringify(userInfo));
 
-          // userInfo.is_verified === true
-          //   ? navigate('app/dashboard')
-          //   : navigate('/notifyVerifyEmail');
+          dispatch(
+            userIsLoggin({
+              email: userInfo.email,
+              id: userInfo.id,
+              isVerified: userInfo.isVerified,
+              name: userInfo.name
+            })
+          );
+          navigate('/app/dashboard', { replace: true });
         } else if ('error' in response) {
           const errorsDetail = response.error?.detail;
           Object.keys(errorsDetail).forEach((key) => {
-            // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
+            // TODO colocar el nombre apiResponse de manera global en una constante o cambiar nombre
             if (key !== 'apiResponse') {
               addValidationError({ [key]: errorsDetail[key] });
             }

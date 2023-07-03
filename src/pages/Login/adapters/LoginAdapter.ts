@@ -53,32 +53,3 @@ export const loginErrorResponseAdapter = (error: any): LoginErrorResponse => {
     }
   };
 };
-
-// export const loginSuccessResponseAdapter: Record<string, string | any> = (user: any) => {
-//   return {
-//     data: {
-//       bearerToken: user.data.bearer_token,
-//       bearerExpire: user.data.bearer_expire,
-//       user: {
-//         id: user.data.user.email,
-//         name: user.data.user.email,
-//         email: user.data.user.email,
-//         isVerified: user.data.user.is_verified,
-//         rememberToken: user.data.user.remember_token
-//       }
-//     }
-//   };
-// };
-
-// export const loginErrorResponseAdapter: Record<string, string | any> = (error: any) => {
-//   return {
-//     error: {
-//       status: error.status,
-//       detail: {
-//         apiResponse: error.detail.api_response ?? null,
-//         email: error.detail.email ?? null,
-//         password: error.detail.password ?? null
-//       }
-//     }
-//   };
-// };

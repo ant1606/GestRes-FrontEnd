@@ -2,33 +2,30 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 // import type { RootState } from '../store';
 
-interface UserState {
+interface AuthenticationState {
   id: number;
   name: string;
   email: string;
-  rememberToken: string | null;
   isVerified: boolean;
-  isLogged: boolean;
+  isLogged?: boolean;
 }
 
-const initialState: UserState = {
+const initialState: AuthenticationState = {
   id: 0,
   name: '',
   email: '',
-  rememberToken: null,
   isVerified: false,
   isLogged: false
 };
 
-export const userSlice = createSlice({
-  name: 'user',
+export const authenticationSlice = createSlice({
+  name: 'authentication',
   initialState,
   reducers: {
-    userIsLoggin: (state, action: PayloadAction<UserState>) => {
+    userIsLoggin: (state, action: PayloadAction<AuthenticationState>) => {
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.email = action.payload.email;
-      state.rememberToken = action.payload.rememberToken;
       state.isVerified = action.payload.isVerified;
       state.isLogged = true;
     },
@@ -36,13 +33,12 @@ export const userSlice = createSlice({
       state.id = 0;
       state.name = '';
       state.email = '';
-      state.rememberToken = null;
       state.isVerified = false;
       state.isLogged = false;
     }
   }
 });
 
-export const { userIsLoggin, userIsLogout } = userSlice.actions;
+export const { userIsLoggin, userIsLogout } = authenticationSlice.actions;
 // export const selectUser = (state: RootState) => state.user.id;
-export default userSlice.reducer;
+export default authenticationSlice.reducer;
