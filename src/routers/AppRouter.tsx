@@ -7,6 +7,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import AuthGuard from './guards/auth.guard';
 import ResendLinkVerifyEmailScreen from '@/pages/Private/VerifyEmail/ResendLinkVerifyEmailScreen';
 import UserVerifiedGuard from './guards/userVerified.guard';
+import { Private } from './Private';
 
 const AppRouter: React.FC = () => {
   const userIsLogged = true;
@@ -15,20 +16,20 @@ const AppRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace={true} />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forget-password" element={<PasswordForget />} />
-        <Route path="/reset-password" element={<PasswordReset />}></Route>
-        <Route path="/register" element={<Register />}></Route>
+        <Route path="login" element={<Login />} />
+        <Route path="forget-password" element={<PasswordForget />} />
+        <Route path="reset-password" element={<PasswordReset />}></Route>
+        <Route path="register" element={<Register />}></Route>
         <Route element={<AuthGuard userIsLogged={userIsLogged} />}>
           <Route element={<UserVerifiedGuard userVerifiedEmail={userVerifiedEmail} />}>
-            <Route path="/dashboard" element={<>Dashboard</>} />
+            <Route path="app/*" element={<Private />} />
           </Route>
 
           {!userVerifiedEmail && (
-            <Route path="/notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen />} />
+            <Route path="notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen />} />
           )}
         </Route>
-        <Route path="/*" element={<Navigate replace to="/dashboard" />}></Route>
+        <Route path="*" element={<>No existe página</>} />
       </Routes>
     </BrowserRouter>
   );
