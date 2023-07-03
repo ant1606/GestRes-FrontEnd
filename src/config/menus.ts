@@ -1,7 +1,11 @@
+import dashboardIcon from '@/assets/dashboard.svg';
+import youtubeIcon from '@/assets/youtube.svg';
+import graduateIcon from '@/assets/graduate.svg';
+import tagIcon from '@/assets/tag.svg';
 const menus = [
   {
     title: 'Dashboard',
-    icon: 'dashboard.svg',
+    icon: dashboardIcon,
     link: true,
     path: '/dashboard'
   },
@@ -13,19 +17,19 @@ const menus = [
   },
   {
     title: 'Videos Youtube',
-    icon: 'youtube.svg',
+    icon: youtubeIcon,
     link: true,
     path: '/canales'
   },
   {
     title: 'Recursos Educativos',
-    icon: 'graduate.svg',
+    icon: graduateIcon,
     link: true,
     path: '/recursos'
   },
   {
     title: 'Etiquetas',
-    icon: 'tag.svg',
+    icon: tagIcon,
     link: true,
     path: '/etiquetas'
   }
