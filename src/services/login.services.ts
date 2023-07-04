@@ -3,6 +3,7 @@ import {
   loginSuccessResponseAdapter
 } from '@/pages/Login/adapters/LoginAdapter';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+import fetch from 'cross-fetch';
 
 interface LoginCredentials {
   email: string;
@@ -28,4 +29,28 @@ export const logginUser = async (
     .then(async (data) => loginSuccessResponseAdapter(await data))
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
   // .catch(async (error) => processErrorResponse(await error));
+};
+
+export const refreshUserFromRememberToken = async (
+  rememberToken: string | null
+): Promise<Record<string, string | any>> => {
+  console.log('antes de llamar al servicio refresh rememberToken desde loginServices');
+  // console.log(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`);
+  return await fetch('http://localhost/api/v1/remember', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    },
+    body: JSON.stringify({
+      remember_me: rememberToken
+    })
+  })
+    .then(async (res) => {
+      console.log(res);
+      if (!res.ok) return await Promise.reject(res.json());
+      return await res.json();
+    })
+    .then(async (data) => loginSuccessResponseAdapter(await data))
+    .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
 };
