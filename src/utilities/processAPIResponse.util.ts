@@ -1,5 +1,5 @@
 export const processErrorResponse = (error: any): Record<string, string | any> => {
-  const errorDetailToArray = Object.entries(error.error.detail);
+  const errorDetailToArray = Object.entries(error.error?.detail);
   const errorDetailSanitized = errorDetailToArray.reduce((acc, current) => {
     let value = current[1];
     if (Array.isArray(value)) {

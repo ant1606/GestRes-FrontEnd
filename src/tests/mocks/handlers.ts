@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 // Mock Data
-export const userLoggin = {
+export const user = {
   data: {
     bearer_token: 'miToken',
     bearer_expire: '2023-07-04T16:18:05.000Z',
@@ -11,6 +11,14 @@ export const userLoggin = {
       email: 'test@mail.com',
       is_verified: false,
       remember_token: null
+    }
+  }
+};
+export const error = {
+  error: {
+    status: 404,
+    detail: {
+      api_response: 'No se encontro el remembertoken'
     }
   }
 };
@@ -26,16 +34,21 @@ export const userLoggin = {
 //     })
 //   );
 // }),
+let serviceRememberResponseSuccess = true;
+export const getServiceRememberResponseSuccess = (): boolean => {
+  return serviceRememberResponseSuccess;
+};
+export const setServiceRememberResponseSuccess = (value: boolean): void => {
+  serviceRememberResponseSuccess = value;
+};
+
 export const handlers = [
-  rest.post('http://localhost/api/v1/remember', async (req, res, ctx) => {
-    console.log(req);
-    console.log('llamada desde el handler msw');
-    return await res(
-      // Respond with a 200 status code
-      ctx.status(200),
-      ctx.json({
-        userLoggin
-      })
-    );
+  rest.post(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`, async (req, res, ctx) => {
+    // console.log(params);
+    if (getServiceRememberResponseSuccess()) {
+      return await res(ctx.status(200), ctx.json(user));
+    } else {
+      return await res(ctx.status(404), ctx.json(error));
+    }
   })
 ];

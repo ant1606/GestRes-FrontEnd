@@ -34,9 +34,7 @@ export const logginUser = async (
 export const refreshUserFromRememberToken = async (
   rememberToken: string | null
 ): Promise<Record<string, string | any>> => {
-  console.log('antes de llamar al servicio refresh rememberToken desde loginServices');
-  // console.log(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`);
-  return await fetch('http://localhost/api/v1/remember', {
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +45,6 @@ export const refreshUserFromRememberToken = async (
     })
   })
     .then(async (res) => {
-      console.log(res);
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })

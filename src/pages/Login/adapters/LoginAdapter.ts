@@ -31,8 +31,8 @@ export const loginSuccessResponseAdapter = (user: any): LoginSuccessResponse => 
       bearerToken: user.data.bearer_token,
       bearerExpire: user.data.bearer_expire,
       user: {
-        id: user.data.user.email,
-        name: user.data.user.email,
+        id: user.data.user.id,
+        name: user.data.user.name,
         email: user.data.user.email,
         isVerified: user.data.user.is_verified,
         rememberToken: user.data.user.remember_token
