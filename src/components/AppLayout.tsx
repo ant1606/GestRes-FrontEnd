@@ -1,5 +1,5 @@
 import React, { type ReactNode } from 'react';
-import Sidebar from './Sidebar';
+import Sidebar from './Sidebar/Sidebar';
 import Titlebar from './Titlebar';
 
 interface Props {
