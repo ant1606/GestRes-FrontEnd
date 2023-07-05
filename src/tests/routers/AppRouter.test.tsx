@@ -1,69 +1,82 @@
-import { deleteCookie, getCookie, setCookie } from '@/utilities/manageCookies';
-import { findByText, render, screen, waitFor } from '@/tests/utils/test-utils';
+import { cleanup, screen, waitFor } from '@/tests/utils/test-utils';
 import AppRouter from '@/routers/AppRouter';
-import { Provider } from 'react-redux';
-import { store } from '@/redux/store';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
-import uiReducer from '@/redux/slice/uiSlice';
-import authenticationReducer from '@/redux/slice/authenticationSlice';
+import Cookies from 'js-cookie';
 import { renderWithProviders } from '../utils/renderWithProvider';
+import {
+  setServiceRememberResponseSuccess,
+  setServiceRememberUserVerified
+} from '../mocks/handlers';
 
 describe('AppRouter test', () => {
   const BEARER_TOKEN = 'bearerToken';
   const REMEMBER_ME_TOKEN = 'rememberToken';
 
   beforeEach(() => {
-    deleteCookie(BEARER_TOKEN);
-    localStorage.removeItem(REMEMBER_ME_TOKEN);
-    localStorage.removeItem('user');
+    cleanup();
+    localStorage.clear();
+    Cookies.remove(BEARER_TOKEN);
   });
 
-  // test('probando servicio remember', async () => {
-  //   setServiceRememberResponseSuccess(false);
-  //   const data = await refreshUserFromRememberToken('miToken');
-  //   console.log(data, 'Obtuve datos');
-  //   // console.log(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`);
-  // });
+  /**
+   * Datos
+   * bearerToken, rememberToken, usuario (usuario verificado)
+   * [X] Mostrar Login cuando el beareToken y el rememberToken no existe
+   * [-] Mostrar Login cuando el bearerToken existe pero no es valido  ***Por evaluar, ya que es local
+   * [X] Mostrar Login cuando el rememberToken existe pero no es valido
+   * [X] Mostrar VerifyEmail cuando el bearerToken existe y el usuario no ha sido verificado
+   * [X] Mostrar VerifyEmail cuando el rememberToken existe y el usuario no ha sido verificado
+   * [X] Mostrar app/dashboard cuando existe el bearerToken existe y el usuario esta verificado
+   * [X] Mostrar app/dashboard cuando existe rememberToken y el usuario esta verificado
+   */
 
-  test.todo('should show login when no exists bearerToken and rememberToken', () => {
-    // setCookie(BEARER_TOKEN, 'miToken');
-    // localStorage.setItem(REMEMBER_ME_TOKEN, 'miTokenRemember');
-    // const preloadedState = {
-    //   authentication: {
-    //     id: 999,
-    //     name: '',
-    //     email: '',
-    //     isVerified: false,
-    //     isLogged: false
-    //   },
-    //   ui: {
-    //     value: false
-    //   }
-    // };
-    // const storeMock = configureStore({
-    //   reducer: {
-    //     ui: uiReducer,
-    //     authentication: authenticationReducer
-    //   },
-    //   preloadedState
-    // });
-    renderWithProviders(
-      <MemoryRouter>
-        <AppRouter />
-      </MemoryRouter>
+  test('Debe mostrar Login cuando el beareToken y el rememberToken no existe', async () => {
+    renderWithProviders(<AppRouter />);
+    await waitFor(() => {
+      expect(screen.getByText(/login/i)).toBeDefined();
+    });
+  });
+
+  test('Debe Mostrar Login cuando el rememberToken existe pero no es valido', async () => {
+    localStorage.setItem(REMEMBER_ME_TOKEN, 'rememberTokeNoValido');
+    setServiceRememberResponseSuccess(false);
+    renderWithProviders(<AppRouter />);
+    await waitFor(() => {
+      expect(screen.getByText(/login/i)).toBeDefined();
+    });
+  });
+
+  test('Mostrar VerifyEmail cuando el bearerToken existe y el usuario no ha sido verificado', async () => {
+    Cookies.set(BEARER_TOKEN, 'miBearerToken');
+    setServiceRememberUserVerified(false);
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        id: '1',
+        name: 'userTest',
+        email: 'test@mail.com',
+        isVerified: false,
+        rememberToken: null
+      })
     );
-    // render(
-    //   <Provider store={storeMock}>
+    renderWithProviders(<AppRouter />);
 
-    //   </Provider>
-    // );
-    // console.log(screen);
-    expect(screen.getByText(/login/i)).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText(/Debes verificar tu correo/i)).toBeDefined();
+    });
   });
 
-  test('should show app/dashboard when exists bearerToken', async () => {
-    setCookie(BEARER_TOKEN, 'miToken');
+  test('Mostrar VerifyEmail cuando el rememberToken existe y el usuario no ha sido verificado', async () => {
+    localStorage.setItem(REMEMBER_ME_TOKEN, 'rememberTokenValido');
+    setServiceRememberUserVerified(false);
+    setServiceRememberResponseSuccess(true);
+    renderWithProviders(<AppRouter />);
+    await waitFor(() => {
+      expect(screen.getByText(/Debes verificar tu correo/i)).toBeDefined();
+    });
+  });
+
+  test('Debe mostrar app/dashboard cuando existe el bearerToken y el usuario esta verificado', async () => {
+    Cookies.set(BEARER_TOKEN, 'miBearerToken');
     localStorage.setItem(
       'user',
       JSON.stringify({
@@ -74,25 +87,19 @@ describe('AppRouter test', () => {
         rememberToken: null
       })
     );
-
     renderWithProviders(<AppRouter />);
-
-    await waitFor(
-      () => {
-        expect(screen.getAllByText(/dashboard/i)).toBeDefined();
-      },
-      {
-        timeout: 5000
-      }
-    );
-
-    screen.debug();
+    await waitFor(() => {
+      expect(screen.getAllByText(/dashboard/i)).toBeDefined();
+    });
   });
 
-  test.todo(
-    'should show app/dashboard when does not exists bearerToken and exists rememberToken',
-    () => {
-      expect(1);
-    }
-  );
+  test('Debe mostrar app/dashboard cuando existe rememberToken y el usuario esta verificado', async () => {
+    localStorage.setItem(REMEMBER_ME_TOKEN, 'MiRememberToken');
+    setServiceRememberUserVerified(true);
+    setServiceRememberResponseSuccess(true);
+    renderWithProviders(<AppRouter />);
+    await waitFor(() => {
+      expect(screen.getAllByText(/dashboard/i)).toBeDefined();
+    });
+  });
 });

@@ -17,6 +17,10 @@ export function getCookie(name) {
   return null;
 }
 
-export function deleteCookie(key) {
-  setCookie(key, '', 'Thu, 01 Jan 1970 00:00:00 GMT');
+// export function deleteCookie(key) {
+//   setCookie(key, '', 'Thu, 01 Jan 1970 00:00:00 GMT');
+// }
+
+export function deleteCookie(key: string) {
+  document.cookie = `${key}=;expires=Thu, 01-Jan-1970 00:00:01 GMT; Max-Age=0;`;
 }

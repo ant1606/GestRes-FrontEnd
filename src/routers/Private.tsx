@@ -3,7 +3,6 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 export const Private: React.FC = () => {
-  console.log('Desde Private');
   return (
     <AppLayout>
       <Routes>

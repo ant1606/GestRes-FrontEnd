@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Login from '@/pages/Login';
 import PasswordForget from '@/pages/PasswordForget';
 import { PasswordReset } from '@/pages/PasswordReset';
@@ -15,8 +15,8 @@ import {
   getRememberToken,
   tokenExpired
 } from '@/utilities/authenticationManagement';
-import { setCookie } from '@/utilities/manageCookies';
 import { refreshUserFromRememberToken } from '@/services';
+import Cookies from 'js-cookie';
 
 interface ResponseAPI {
   data?: Record<string, any>;
@@ -54,48 +54,48 @@ const AppRouter: React.FC = () => {
   };
 
   const initApp = async (): Promise<void> => {
-    // TODO Cargar los datos de configuracion de la app
-    // await loadSettings();
+    try {
+      // TODO Cargar los datos de configuracion de la app
+      // await loadSettings();
+      if (tokenExpired()) {
+        if (rememberTokenExists()) {
+          const response: ResponseAPI = await refreshUserFromRememberToken(getRememberToken);
 
-    if (tokenExpired()) {
-      console.log('No Existe bearer token');
-      if (rememberTokenExists()) {
-        console.log('Existe remember Token');
-        const response: ResponseAPI = await refreshUserFromRememberToken(getRememberToken);
-        console.log({ response }, 'mockeamos el servicio refreshUserFromRememberToken');
-        setCookie('bearerToken', response.data?.bearerToken, response.data?.bearerExpire);
-        localStorage.setItem('rememberToken', response.data?.user.rememberToken);
-        const userInfo = response.data?.user;
-        // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
-        localStorage.setItem('user', JSON.stringify(userInfo));
+          if ('data' in response) {
+            Cookies.set('bearerToken', response.data?.bearerToken, { expires: 1 });
+            // setCookie('bearerToken', response.data?.bearerToken, response.data?.bearerExpire);
+            localStorage.setItem('rememberToken', response.data?.user.rememberToken);
+            const userInfo = response.data?.user;
+            // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
+            localStorage.setItem('user', JSON.stringify(userInfo));
 
-        dispatch(
-          userIsLoggin({
-            email: userInfo.email,
-            id: userInfo.id,
-            isVerified: userInfo.isVerified,
-            name: userInfo.name
-          })
-        );
-        navigate('/app/dashboard', { replace: true });
+            await userIsLoggedInPromise(userInfo);
+
+            navigate('app/dashboard', { replace: true });
+          } else if ('error' in response) {
+            throw new Error('El token no es válido');
+          }
+        } else {
+          // TODO Limpiar si existen restos de los datos del usuario en el localStorage
+          throw new Error('El token no es válido');
+        }
       } else {
-        console.log('NO Existe remember Token');
-        // TODO Limpiar si existen restos de los datos del usuario en el localStorage
-        navigate('/login', { replace: true });
+        const userJson = localStorage.getItem('user') ?? 'null';
+        if (userJson !== 'null') {
+          const userData = JSON.parse(userJson);
+          await userIsLoggedInPromise(userData);
+          navigate('app/dashboard', { replace: true });
+        } else {
+          // TODO Limpiar datos del rememberToken y bearerToken si es que no existen datos del usuario en localStorage
+          throw new Error(
+            'Los datos del usuario no son válidos, limpiar cache y datos del navegador'
+          );
+        }
+        // TODO Pasar como parametro la ultima pagina visitada del usuario, por el momento se esta colocando el dashboard
+        // !user.is_verified ? navigate('/notifyVerifyEmail') : navigate('/dashboard');
       }
-    } else {
-      const userJson = localStorage.getItem('user') ?? 'null';
-      if (userJson !== 'null') {
-        const userData = JSON.parse(userJson);
-
-        await userIsLoggedInPromise(userData);
-        navigate('app/dashboard', { replace: true });
-      } else {
-        // TODO Limpiar datos del rememberToken y bearerToken si es que no existen datos del usuario en localStorage
-        navigate('/login', { replace: true });
-      }
-      // TODO Pasar como parametro la ultima pagina visitada del usuario, por el momento se esta colocando el dashboard
-      // !user.is_verified ? navigate('/notifyVerifyEmail') : navigate('/dashboard');
+    } catch (error) {
+      navigate('/login', { replace: true });
     }
   };
 
