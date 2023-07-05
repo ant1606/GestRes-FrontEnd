@@ -6,6 +6,7 @@ interface Props {
 }
 
 const AuthGuard: React.FC<Props> = ({ userIsLogged }) => {
+  console.log(userIsLogged, 'desde AuthGuard');
   return userIsLogged ? <Outlet /> : <Navigate replace to="/login" />;
 };
 

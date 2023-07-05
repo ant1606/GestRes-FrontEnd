@@ -5,6 +5,7 @@ interface Props {
 }
 
 const UserVerifiedGuard: React.FC<Props> = ({ userVerifiedEmail }) => {
+  console.log('Desde VerifiedGuard');
   return userVerifiedEmail ? <Outlet /> : <Navigate replace to="/notifyVerifyEmail" />;
 };
 

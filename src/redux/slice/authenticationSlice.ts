@@ -8,7 +8,7 @@ interface AuthenticationState {
   name: string;
   email: string;
   isVerified: boolean;
-  isLogged: boolean;
+  isLogged?: boolean;
 }
 
 const initialState: AuthenticationState = {

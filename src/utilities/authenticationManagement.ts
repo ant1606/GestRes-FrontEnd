@@ -11,7 +11,6 @@ export const tokenExpired = (): boolean => {
 
 export const rememberTokenExists = (): boolean => {
   const rememberToken = localStorage.getItem(REMEMBER_ME_TOKEN);
-  console.log({ rememberToken }, 'desde checkRememberTokenExists ');
   // console.log(typeof rememberToken);
   if (
     rememberToken === null ||
