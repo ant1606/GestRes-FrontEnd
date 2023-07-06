@@ -1,7 +1,7 @@
 import endPoint from './handlersDependency';
 
 // Mock Data
-export const userVerified = {
+const userVerified = {
   data: {
     bearer_token: 'miToken',
     bearer_expire: '2023-07-04T16:18:05.000Z',
@@ -14,7 +14,7 @@ export const userVerified = {
     }
   }
 };
-export const userNoVerified = {
+const userNoVerified = {
   data: {
     bearer_token: 'miToken',
     bearer_expire: '2023-07-04T16:18:05.000Z',
@@ -27,7 +27,7 @@ export const userNoVerified = {
     }
   }
 };
-export const error = {
+const error = {
   error: {
     status: 404,
     detail: {

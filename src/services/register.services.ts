@@ -1,3 +1,9 @@
+import {
+  registerErrorResponseAdapter,
+  registerSuccessResponseAdapter
+} from '@/pages/Register/adapters/RegisterAdapter';
+import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+
 interface UserData {
   name: string;
   email: string;
@@ -18,10 +24,6 @@ export const savingUser = async (user: UserData): Promise<any> => {
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then((data) => {
-      return data;
-    })
-    .catch(async (error) => {
-      return error;
-    });
+    .then(async (data) => registerSuccessResponseAdapter(await data))
+    .catch(async (error) => registerErrorResponseAdapter(processErrorResponse(await error)));
 };

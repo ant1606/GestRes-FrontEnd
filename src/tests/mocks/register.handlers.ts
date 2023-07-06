@@ -1,64 +1,33 @@
 import endPoint from './handlersDependency';
 // Mock Data
-export const userVerified = {
+
+const success = {
   data: {
-    bearer_token: 'miToken',
-    bearer_expire: '2023-07-04T16:18:05.000Z',
-    user: {
-      id: '1',
-      name: 'userTest',
-      email: 'test@mail.com',
-      is_verified: true,
-      remember_token: null
-    }
+    message: 'Registro satisfactorio'
   }
 };
-export const userNoVerified = {
-  data: {
-    bearer_token: 'miToken',
-    bearer_expire: '2023-07-04T16:18:05.000Z',
-    user: {
-      id: '1',
-      name: 'userTest',
-      email: 'test@mail.com',
-      is_verified: false,
-      remember_token: null
-    }
-  }
-};
-export const error = {
+const error = {
   error: {
     status: 404,
     detail: {
-      api_response: 'No se encontro el remembertoken'
+      api_response: 'Hubo problemas en la comunicación con el servidor'
     }
   }
 };
 
-let serviceRememberResponseSuccess = true;
-let serviceRememberUserVerified = true;
-export const getServiceRememberResponseSuccess = (): boolean => {
-  return serviceRememberResponseSuccess;
-};
-export const setServiceRememberResponseSuccess = (value: boolean): void => {
-  serviceRememberResponseSuccess = value;
-};
+let serviceRegisterResponseSuccess = true;
 
-export const getServiceRememberUserVerified = (): boolean => {
-  return serviceRememberUserVerified;
+export const getServiceRegisterResponseSuccess = (): boolean => {
+  return serviceRegisterResponseSuccess;
 };
-export const setServiceRememberUserVerified = (value: boolean): void => {
-  serviceRememberUserVerified = value;
-};
-
-const getUser = () => {
-  return getServiceRememberUserVerified() ? userVerified : userNoVerified;
+export const setServiceRegisterResponseSuccess = (value: boolean): void => {
+  serviceRegisterResponseSuccess = value;
 };
 
 export const handlersRegister = [
-  endPoint.post(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`, async (req, res, ctx) => {
-    if (getServiceRememberResponseSuccess()) {
-      return await res(ctx.status(200), ctx.json(getUser()));
+  endPoint.post(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/register`, async (req, res, ctx) => {
+    if (getServiceRegisterResponseSuccess()) {
+      return await res(ctx.status(200), ctx.json(success));
     } else {
       return await res(ctx.status(404), ctx.json(error));
     }

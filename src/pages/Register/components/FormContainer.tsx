@@ -65,20 +65,19 @@ export const FormContainer: React.FC = () => {
           password,
           password_confirmation: passwordConfirmation
         });
-        console.log(response);
         if ('data' in response) {
           setUserWasRegistered(true);
         } else if ('error' in response) {
-          const errorProcesed = processErrorResponse(response.error?.detail);
-          Object.keys(errorProcesed).forEach((key) => {
+          const errorsDetail = response.error?.detail;
+          Object.keys(errorsDetail).forEach((key) => {
             // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
-            if (key !== 'api_response') {
-              addValidationError({ [key]: errorProcesed[key] });
+            if (key !== 'apiResponse') {
+              addValidationError({ [key]: errorsDetail[key] });
             }
           });
 
-          if ('api_response' in errorProcesed) {
-            throw new Error(errorProcesed.api_response);
+          if ('apiResponse' in errorsDetail) {
+            throw new Error(errorsDetail.apiResponse);
           }
         }
       }

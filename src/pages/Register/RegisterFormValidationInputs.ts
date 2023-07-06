@@ -39,7 +39,7 @@ export const validateUserPasswordConfirmation = (values: User): ValidationMessag
   const passwordConfirmationToValidate = values.passwordConfirmation.trim();
   const passwordToValidate = values.password.trim();
   if (passwordConfirmationToValidate.trim().length === 0) {
-    return 'Debe ingresar el password del usuario';
+    return 'Debe ingresar la confirmación de password del usuario';
   }
   if (passwordConfirmationToValidate !== passwordToValidate) {
     return 'Las contraseñas ingresadas no son iguales';
