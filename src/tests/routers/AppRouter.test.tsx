@@ -5,7 +5,7 @@ import { renderWithProviders } from '../utils/renderWithProvider';
 import {
   setServiceRememberResponseSuccess,
   setServiceRememberUserVerified
-} from '../mocks/handlers';
+} from '../mocks/login.handlers';
 
 describe('AppRouter test', () => {
   const BEARER_TOKEN = 'bearerToken';
