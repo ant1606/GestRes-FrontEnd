@@ -5,7 +5,7 @@ import PasswordForget from '@/pages/PasswordForget';
 import { PasswordReset } from '@/pages/PasswordReset';
 import { Register } from '@/pages/Register';
 import AuthGuard from './guards/auth.guard';
-import ResendLinkVerifyEmailScreen from '@/pages/Private/ResendVerifyLinkEmail/ResendLinkVerifyEmailScreen';
+
 import UserVerifiedGuard from './guards/userVerified.guard';
 import { Private } from './Private';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -18,6 +18,7 @@ import {
 import { refreshUserFromRememberToken } from '@/services';
 import Cookies from 'js-cookie';
 import VerifyEmail from '@/pages/VerifyEmail';
+import { ResendLinkVerifyEmail } from '@/pages/Private/ResendVerifyLinkEmail/ResendLinkVerifyEmail';
 
 interface ResponseAPI {
   data?: Record<string, any>;
@@ -114,7 +115,7 @@ const AppRouter: React.FC = () => {
         </Route>
 
         {!userLoggin.isVerified && (
-          <Route path="notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen />} />
+          <Route path="notifyVerifyEmail" element={<ResendLinkVerifyEmail />} />
         )}
       </Route>
       <Route path="*" element={<>No existe página</>} />
