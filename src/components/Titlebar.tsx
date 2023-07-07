@@ -3,6 +3,7 @@ import Icon from '@mdi/react';
 import { mdiExitToApp } from '@mdi/js';
 import { useAppDispatch } from '@/hooks/redux';
 import { userIsLogout } from '@/redux/slice/authenticationSlice';
+import Cookies from 'js-cookie';
 
 // import { useNavigate } from 'react-router-dom';
 // import { useSecurity } from '../../Context/SecurityContext.jsx';
@@ -12,6 +13,8 @@ const Titlebar: React.FC = () => {
 
   const handleExitAppClick = (): void => {
     // TODO ELiminar el LocalStorage de usuario y el bearerToken
+    Cookies.remove('bearerToken');
+    localStorage.clear();
     dispatch(userIsLogout());
   };
   // TODO Colocar el titulo por cada página de la aplicación en la barra de título
