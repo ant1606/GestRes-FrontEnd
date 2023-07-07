@@ -19,6 +19,8 @@ import { refreshUserFromRememberToken } from '@/services';
 import Cookies from 'js-cookie';
 import VerifyEmail from '@/pages/VerifyEmail';
 import { ResendLinkVerifyEmail } from '@/pages/Private/ResendVerifyLinkEmail/ResendLinkVerifyEmail';
+import PageNotFound from '@/pages/PageNotFound';
+import RoutesWithPageNotFound from './RoutesWithPageNotFound';
 
 interface ResponseAPI {
   data?: Record<string, any>;
@@ -79,7 +81,7 @@ const AppRouter: React.FC = () => {
           }
         } else {
           // TODO Limpiar si existen restos de los datos del usuario en el localStorage
-          throw new Error('El token no es válido');
+          throw new Error('No existen tokens');
         }
       } else {
         const userJson = localStorage.getItem('user') ?? 'null';
@@ -97,13 +99,14 @@ const AppRouter: React.FC = () => {
         // !user.is_verified ? navigate('/notifyVerifyEmail') : navigate('/dashboard');
       }
     } catch (error) {
-      navigate('/login', { replace: true });
+      // TODO Investigar como poder hacer el registro de logs de los errores generados
+      // console.log(error);
     }
   };
 
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace={true} />} />
+    <RoutesWithPageNotFound>
+      {/* <Route path="/" element={<Navigate to="/login" replace={true} />} /> */}
       <Route path="login" element={<Login />} />
       <Route path="forget-password" element={<PasswordForget />} />
       <Route path="reset-password" element={<PasswordReset />}></Route>
@@ -118,17 +121,8 @@ const AppRouter: React.FC = () => {
           <Route path="notifyVerifyEmail" element={<ResendLinkVerifyEmail />} />
         )}
       </Route>
-      <Route path="*" element={<>No existe página</>} />
-    </Routes>
+    </RoutesWithPageNotFound>
   );
 };
 
 export default AppRouter;
-
-/* <Route element={<AuthGuard userIsLogged={true} />}>
-        <Route element={<UserVerifiedGuard userVerifiedEmail={true} />}>
-          <Route path="app/*" element={<Private />} />
-        </Route>
-
-        {!true && <Route path="notifyVerifyEmail" element={<ResendLinkVerifyEmailScreen />} />}
-      </Route> */

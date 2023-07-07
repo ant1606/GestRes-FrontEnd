@@ -1,15 +1,15 @@
 import AppLayout from '@/components/AppLayout';
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
+import RoutesWithPageNotFound from './RoutesWithPageNotFound';
 
 export const Private: React.FC = () => {
   return (
     <AppLayout>
-      <Routes>
+      <RoutesWithPageNotFound>
         <Route path="/" element={<Navigate replace to="dashboard" />} />
-        <Route path="dashboard" element={<>Dashboard</>} />
-        <Route path="*" element={<>No existe pagina</>} />
-      </Routes>
+        <Route path="/dashboard" element={<>Dashboard</>} />
+      </RoutesWithPageNotFound>
     </AppLayout>
   );
 };
