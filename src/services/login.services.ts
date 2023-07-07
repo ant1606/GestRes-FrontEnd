@@ -28,7 +28,6 @@ export const logginUser = async (
     })
     .then(async (data) => loginSuccessResponseAdapter(await data))
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
-  // .catch(async (error) => processErrorResponse(await error));
 };
 
 export const refreshUserFromRememberToken = async (

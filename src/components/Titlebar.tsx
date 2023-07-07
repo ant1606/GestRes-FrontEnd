@@ -11,6 +11,7 @@ const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleExitAppClick = (): void => {
+    // TODO ELiminar el LocalStorage de usuario y el bearerToken
     dispatch(userIsLogout());
   };
   // TODO Colocar el titulo por cada página de la aplicación en la barra de título

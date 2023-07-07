@@ -5,7 +5,7 @@ import PasswordForget from '@/pages/PasswordForget';
 import { PasswordReset } from '@/pages/PasswordReset';
 import { Register } from '@/pages/Register';
 import AuthGuard from './guards/auth.guard';
-import ResendLinkVerifyEmailScreen from '@/pages/Private/VerifyEmail/ResendLinkVerifyEmailScreen';
+import ResendLinkVerifyEmailScreen from '@/pages/Private/ResendVerifyLinkEmail/ResendLinkVerifyEmailScreen';
 import UserVerifiedGuard from './guards/userVerified.guard';
 import { Private } from './Private';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -17,6 +17,7 @@ import {
 } from '@/utilities/authenticationManagement';
 import { refreshUserFromRememberToken } from '@/services';
 import Cookies from 'js-cookie';
+import VerifyEmail from '@/pages/VerifyEmail';
 
 interface ResponseAPI {
   data?: Record<string, any>;
@@ -106,6 +107,7 @@ const AppRouter: React.FC = () => {
       <Route path="forget-password" element={<PasswordForget />} />
       <Route path="reset-password" element={<PasswordReset />}></Route>
       <Route path="register" element={<Register />}></Route>
+      <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail />}></Route>
       <Route element={<AuthGuard userIsLogged={userLoggin.isLogged} />}>
         <Route element={<UserVerifiedGuard userVerifiedEmail={userLoggin.isVerified} />}>
           <Route path="app/*" element={<Private />} />
