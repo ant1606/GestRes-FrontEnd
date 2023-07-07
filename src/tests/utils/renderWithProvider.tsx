@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import { setupStore, type AppStore, type RootState } from '@/redux/store';
 // As a basic setup, import your same slice reducer
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -38,13 +38,14 @@ export function renderWithProviders(
     // Automatically create a store instance if no store was passed in
     store = setupStore(preloadedState),
     ...renderOptions
-  }: ExtendedRenderOptions = {}
+  }: ExtendedRenderOptions = {},
+  initialEntries: string[] = ['/']
 ): Record<string, any> {
   function Wrapper({ children }: PropsWithChildren<Record<string, unknown>>): JSX.Element {
     return (
-      <BrowserRouter>
+      <MemoryRouter initialEntries={initialEntries}>
         <Provider store={store}>{children}</Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     );
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };

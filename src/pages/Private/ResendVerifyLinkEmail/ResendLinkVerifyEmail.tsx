@@ -15,10 +15,8 @@ interface ResponseAPI {
 
 export const ResendLinkVerifyEmail: React.FC = () => {
   const dispatch = useAppDispatch();
-  const {
-    authentication: userAuthenticated,
-    ui: { value: uiLoading }
-  } = useAppSelector((state: RootState) => state);
+  const userAuthenticated = useAppSelector((state: RootState) => state.authentication);
+  const { value: uiLoading } = useAppSelector((state: RootState) => state.ui);
 
   const handleSubmit = async (): Promise<void> => {
     try {

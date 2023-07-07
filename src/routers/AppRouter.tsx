@@ -88,6 +88,7 @@ const AppRouter: React.FC = () => {
         if (userJson !== 'null') {
           const userData = JSON.parse(userJson);
           await userIsLoggedInPromise(userData);
+          // TODO esto esta fallando, ya que si me dirijo a /recourse, me redirige a app
           navigate('app/dashboard', { replace: true });
         } else {
           // TODO Limpiar datos del rememberToken y bearerToken si es que no existen datos del usuario en localStorage
@@ -106,7 +107,6 @@ const AppRouter: React.FC = () => {
 
   return (
     <RoutesWithPageNotFound>
-      {/* <Route path="/" element={<Navigate to="/login" replace={true} />} /> */}
       <Route path="login" element={<Login />} />
       <Route path="forget-password" element={<PasswordForget />} />
       <Route path="reset-password" element={<PasswordReset />}></Route>
@@ -121,6 +121,7 @@ const AppRouter: React.FC = () => {
           <Route path="notifyVerifyEmail" element={<ResendLinkVerifyEmail />} />
         )}
       </Route>
+      <Route path="/" element={<Navigate to="/login" replace={true} />} />
     </RoutesWithPageNotFound>
   );
 };

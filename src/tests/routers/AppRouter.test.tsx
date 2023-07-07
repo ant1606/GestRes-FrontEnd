@@ -6,6 +6,7 @@ import {
   setServiceRememberResponseSuccess,
   setServiceRememberUserVerified
 } from '../mocks/login.handlers';
+import { MemoryRouter } from 'react-router-dom';
 
 describe('AppRouter test', () => {
   const BEARER_TOKEN = 'bearerToken';
@@ -61,7 +62,7 @@ describe('AppRouter test', () => {
     renderWithProviders(<AppRouter />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Debes verificar tu correo/i)).toBeDefined();
+      expect(screen.getByText(/verificar tu correo/i)).toBeDefined();
     });
   });
 

@@ -7,8 +7,9 @@ export const Private: React.FC = () => {
   return (
     <AppLayout>
       <RoutesWithPageNotFound>
+        <Route path="dashboard" element={<>Dashboard</>} />
+        <Route path="recourse" element={<>Recursos</>} />
         <Route path="/" element={<Navigate replace to="dashboard" />} />
-        <Route path="/dashboard" element={<>Dashboard</>} />
       </RoutesWithPageNotFound>
     </AppLayout>
   );
