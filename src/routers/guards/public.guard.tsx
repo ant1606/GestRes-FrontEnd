@@ -1,15 +1,15 @@
 import { useAppSelector } from '@/hooks/redux';
 import { authenticatedUser } from '@/redux/slice/authenticationSlice';
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 // interface Props {
 //   userIsLogged: boolean;
 // }
 
-const AuthGuard: React.FC = () => {
+const PublicGuard: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
-  return userLoggin.isLogged ? <Outlet /> : <Navigate replace to="/login" />;
+  return !userLoggin.isLogged ? <Outlet /> : <Navigate replace to="app/" />;
 };
 
-export default AuthGuard;
+export default PublicGuard;

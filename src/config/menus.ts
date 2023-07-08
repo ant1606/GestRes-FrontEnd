@@ -25,7 +25,7 @@ const menus = [
     title: 'Recursos Educativos',
     icon: graduateIcon,
     link: true,
-    path: '/recursos'
+    path: '/app/recourse'
   },
   {
     title: 'Etiquetas',

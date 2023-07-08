@@ -52,7 +52,7 @@ export const setServiceRememberUserVerified = (value: boolean): void => {
   serviceRememberUserVerified = value;
 };
 
-const getUser = () => {
+const getUser = (): Record<string, string | any> => {
   return getServiceRememberUserVerified() ? userVerified : userNoVerified;
 };
 

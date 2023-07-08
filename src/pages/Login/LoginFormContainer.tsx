@@ -94,7 +94,8 @@ const LoginFormContainer: React.FC = () => {
               name: userInfo.name
             })
           );
-          navigate('/app/dashboard', { replace: true });
+          navigate('app/dashboard');
+          console.log('Va a dashboard');
         } else if ('error' in response) {
           const errorsDetail = response.error?.detail;
           Object.keys(errorsDetail).forEach((key) => {
