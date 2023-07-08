@@ -1,4 +1,4 @@
-//TODO Normalizar los nombres y dar nombres mas descriptivos a las acciones
+// TODO Normalizar los nombres y dar nombres mas descriptivos a las acciones
 const types = {
   tagSave: '[tag] Tag Saved',
   tagSelect: '[tag] Set Tag to activeTag',
@@ -28,8 +28,7 @@ const types = {
   userAddError: '[user] Add Error Message Validation',
   userSave: '[user] User Saved',
   userIsLoading: '[user] Set isLoading in module User',
-  userForgotPassword:
-    '[user] Send email to initiate proccess to Reset Password',
+  userForgotPassword: '[user] Send email to initiate proccess to Reset Password',
   userResetPassword: '[user] Send new password to proccess to Reset Password'
 };
 export default types;

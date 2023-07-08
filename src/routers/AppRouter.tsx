@@ -62,12 +62,12 @@ const AppRouter: React.FC = () => {
 
   return (
     <RoutesWithPageNotFound>
+      <Route path="forget-password" element={<PasswordForget />} />
+      <Route path="reset-password" element={<PasswordReset />} />
+      <Route path="register" element={<Register />} />
+      <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail />} />
       <Route element={<PublicGuard />}>
         <Route path="login" element={<Login />} />
-        <Route path="forget-password" element={<PasswordForget />} />
-        <Route path="reset-password" element={<PasswordReset />} />
-        <Route path="register" element={<Register />} />
-        <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail />} />
       </Route>
       <Route element={<AuthGuard />}>
         <Route element={<UserVerifiedGuard />}>

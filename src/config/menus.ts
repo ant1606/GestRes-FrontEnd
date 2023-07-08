@@ -7,7 +7,7 @@ const menus = [
     title: 'Dashboard',
     icon: dashboardIcon,
     link: true,
-    path: '/dashboard'
+    path: '/app/dashboard'
   },
   {
     title: 'Mantenimiento',
@@ -19,7 +19,7 @@ const menus = [
     title: 'Videos Youtube',
     icon: youtubeIcon,
     link: true,
-    path: '/canales'
+    path: '/app/canales'
   },
   {
     title: 'Recursos Educativos',
@@ -31,7 +31,7 @@ const menus = [
     title: 'Etiquetas',
     icon: tagIcon,
     link: true,
-    path: '/etiquetas'
+    path: '/app/etiquetas'
   }
 ];
 
