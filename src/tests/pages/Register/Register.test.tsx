@@ -1,8 +1,9 @@
 import { Register } from '@/pages/Register';
 import { setServiceRegisterResponseSuccess } from '@/tests/mocks/register.handlers';
 import { renderWithProviders } from '@/tests/utils/renderWithProvider';
-import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 
 describe('Test en Register', () => {
   /***
@@ -11,53 +12,62 @@ describe('Test en Register', () => {
    * [X] Debe mostrar un mensaje de notificación si se recibe un mensaje de error del API
    * [X] Debe mostrar notificación de envio de email de verificación luego de registro de usuario satisfactorio
    */
+
   beforeEach(() => {
     cleanup();
+    setServiceRegisterResponseSuccess(true);
+  });
+  afterAll(() => {
+    cleanup();
+    setServiceRegisterResponseSuccess(true);
   });
   test('Register  debe renderizarse', () => {
-    renderWithProviders(<Register />);
+    const wrapper = renderWithProviders(<Register />);
+    wrapper.unmount();
   });
 
   test('Debe mostrar notificación de envio de email de verificación luego de registro de usuario satisfactorio', async () => {
-    renderWithProviders(<Register />);
+    const wrapper = renderWithProviders(<Register />);
     setServiceRegisterResponseSuccess(true);
     act(() => {
-      fireEvent.change(screen.getByTestId('email'), {
+      fireEvent.change(wrapper.getByTestId('email'), {
         target: { value: 'testUser@email.com' }
       });
-      fireEvent.change(screen.getByTestId('name'), { target: { value: 'test User' } });
-      fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-      fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+      fireEvent.change(wrapper.getByTestId('name'), { target: { value: 'test User' } });
+      fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+      fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
         target: { value: '123456' }
       });
-      fireEvent.click(screen.getByRole('button'));
+      fireEvent.click(wrapper.getByRole('button'));
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/enviado un link/)).toBeInTheDocument();
+      expect(wrapper.getByText(/enviado un link/)).toBeInTheDocument();
     });
+    wrapper.unmount();
   });
 
   test('Debe mostrar notificación de error al recibir una respuesta de error por el API', async () => {
-    const renderResult = renderWithProviders(<Register />);
+    const wrapper = renderWithProviders(<Register />);
     setServiceRegisterResponseSuccess(false);
     act(() => {
-      fireEvent.change(screen.getByTestId('email'), {
+      fireEvent.change(wrapper.getByTestId('email'), {
         target: { value: 'testUser@email.com' }
       });
-      fireEvent.change(screen.getByTestId('name'), { target: { value: 'test User' } });
-      fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-      fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+      fireEvent.change(wrapper.getByTestId('name'), { target: { value: 'test User' } });
+      fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+      fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
         target: { value: '123456' }
       });
-      fireEvent.click(screen.getByRole('button'));
+      fireEvent.click(wrapper.getByRole('button'));
     });
 
     await waitFor(() => {
       expect(
-        screen.getByText(/Hubo problemas en la comunicación con el servidor/)
+        wrapper.getByText(/Hubo problemas en la comunicación con el servidor/)
       ).toBeInTheDocument();
-      expect(renderResult).toMatchSnapshot();
+      expect(wrapper).toMatchSnapshot();
+      wrapper.unmount();
     });
   });
 
@@ -65,106 +75,128 @@ describe('Test en Register', () => {
     beforeEach(() => {
       cleanup();
     });
+
+    test('Debe mostrar mensajes de validación cuando se envia el formulario sin ingresar datos', async () => {
+      const wrapper = renderWithProviders(<Register />);
+      const user = userEvent.setup();
+      await user.click(wrapper.getByText('Registrar'));
+      await waitFor(() => {
+        expect(wrapper.getByText(/ingresar el nombre del usuario/)).toBeInTheDocument();
+        expect(wrapper.getByText(/ingresar el email del usuario/)).toBeInTheDocument();
+        expect(wrapper.getByText(/ingresar el password del usuario/)).toBeInTheDocument();
+        expect(
+          wrapper.getByText(/ingresar la confirmación de password del usuario/)
+        ).toBeInTheDocument();
+      });
+      wrapper.unmount();
+    });
+
     test('Debe mostrar mensaje de validación cuando no se ingresa nombre', async () => {
-      renderWithProviders(<Register />);
+      const wrapper = renderWithProviders(<Register />);
       act(() => {
-        fireEvent.change(screen.getByTestId('email'), {
+        fireEvent.change(wrapper.getByTestId('email'), {
           target: { value: 'miemail@validemail.com' }
         });
-        fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-        fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+        fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+        fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
           target: { value: '123456' }
         });
-        fireEvent.click(screen.getByText('Registrar'));
+        fireEvent.click(wrapper.getByText('Registrar'));
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/ingresar el nombre del usuario/)).toBeInTheDocument();
+        expect(wrapper.getByText(/ingresar el nombre del usuario/)).toBeInTheDocument();
       });
+      wrapper.unmount();
     });
 
     test('Debe mostrar mensaje de validación cuando no se ingresa el email', async () => {
-      renderWithProviders(<Register />);
+      const wrapper = renderWithProviders(<Register />);
       act(() => {
-        fireEvent.change(screen.getByTestId('name'), {
+        fireEvent.change(wrapper.getByTestId('name'), {
           target: { value: 'mi nombre' }
         });
-        fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-        fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+        fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+        fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
           target: { value: '123456' }
         });
-        fireEvent.click(screen.getByText('Registrar'));
+        fireEvent.click(wrapper.getByText('Registrar'));
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/ingresar el email del usuario/)).toBeInTheDocument();
+        expect(wrapper.getByText(/ingresar el email del usuario/)).toBeInTheDocument();
       });
+      wrapper.unmount();
     });
 
     test('Debe mostrar mensaje de validación cuando se ingresa formato incorrecto del email', async () => {
-      renderWithProviders(<Register />);
+      const wrapper = renderWithProviders(<Register />);
       act(() => {
-        fireEvent.change(screen.getByTestId('name'), { target: { value: 'mi nombre' } });
-        fireEvent.change(screen.getByTestId('email'), { target: { value: 'miemail.sinformato' } });
-        fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-        fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+        fireEvent.change(wrapper.getByTestId('name'), { target: { value: 'mi nombre' } });
+        fireEvent.change(wrapper.getByTestId('email'), { target: { value: 'miemail.sinformato' } });
+        fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+        fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
           target: { value: '123456' }
         });
-        fireEvent.click(screen.getByText('Registrar'));
+        fireEvent.click(wrapper.getByText('Registrar'));
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/Formato incorrecto ingresado del email/)).toBeInTheDocument();
+        expect(wrapper.getByText(/Formato incorrecto ingresado del email/)).toBeInTheDocument();
       });
+      wrapper.unmount();
     });
 
     test('Debe mostrar mensaje de validación cuando no se ingresa el password', async () => {
-      renderWithProviders(<Register />);
+      const wrapper = renderWithProviders(<Register />);
       act(() => {
-        fireEvent.change(screen.getByTestId('name'), { target: { value: 'mi nombre' } });
-        fireEvent.change(screen.getByTestId('email'), { target: { value: 'mi@email.com' } });
-        fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+        fireEvent.change(wrapper.getByTestId('name'), { target: { value: 'mi nombre' } });
+        fireEvent.change(wrapper.getByTestId('email'), { target: { value: 'mi@email.com' } });
+        fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
           target: { value: '123456' }
         });
-        fireEvent.click(screen.getByText('Registrar'));
+        fireEvent.click(wrapper.getByText('Registrar'));
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/ingresar el password del usuario/)).toBeInTheDocument();
+        expect(wrapper.getByText(/ingresar el password del usuario/)).toBeInTheDocument();
       });
+      wrapper.unmount();
     });
 
     test('Debe mostrar mensaje de validación cuando no se ingresa el password confirmation', async () => {
-      renderWithProviders(<Register />);
+      const wrapper = renderWithProviders(<Register />);
       act(() => {
-        fireEvent.change(screen.getByTestId('name'), { target: { value: 'mi nombre' } });
-        fireEvent.change(screen.getByTestId('email'), { target: { value: 'mi@email.com' } });
-        fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-        fireEvent.click(screen.getByText('Registrar'));
+        fireEvent.change(wrapper.getByTestId('name'), { target: { value: 'mi nombre' } });
+        fireEvent.change(wrapper.getByTestId('email'), { target: { value: 'mi@email.com' } });
+        fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+        fireEvent.click(wrapper.getByText('Registrar'));
       });
 
       await waitFor(() => {
         expect(
-          screen.getByText(/ingresar la confirmación de password del usuario/)
+          wrapper.getByText(/ingresar la confirmación de password del usuario/)
         ).toBeInTheDocument();
       });
+      wrapper.unmount();
     });
 
     test('Debe mostrar mensaje de validación cuando el password Confirmation no es igual al password', async () => {
-      renderWithProviders(<Register />);
+      const wrapper = renderWithProviders(<Register />);
       act(() => {
-        fireEvent.change(screen.getByTestId('name'), { target: { value: 'mi nombre' } });
-        fireEvent.change(screen.getByTestId('email'), { target: { value: 'mi@email.com' } });
-        fireEvent.change(screen.getByTestId('password'), { target: { value: '123456' } });
-        fireEvent.change(screen.getByTestId('passwordConfirmation'), {
+        fireEvent.change(wrapper.getByTestId('name'), { target: { value: 'mi nombre' } });
+        fireEvent.change(wrapper.getByTestId('email'), { target: { value: 'mi@email.com' } });
+        fireEvent.change(wrapper.getByTestId('password'), { target: { value: '123456' } });
+        fireEvent.change(wrapper.getByTestId('passwordConfirmation'), {
           target: { value: '12345678910' }
         });
-        fireEvent.click(screen.getByText('Registrar'));
+        fireEvent.click(wrapper.getByText('Registrar'));
       });
 
       await waitFor(() => {
-        expect(screen.getByText(/Las contraseñas ingresadas no son iguales/)).toBeInTheDocument();
+        expect(wrapper.getByText(/Las contraseñas ingresadas no son iguales/)).toBeInTheDocument();
       });
+      wrapper.unmount();
     });
   });
 });

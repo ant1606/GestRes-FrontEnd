@@ -68,6 +68,7 @@ export const FormContainer: React.FC = () => {
         if ('data' in response) {
           setUserWasRegistered(true);
         } else if ('error' in response) {
+          console.log(response);
           const errorsDetail = response.error?.detail;
           Object.keys(errorsDetail).forEach((key) => {
             // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
@@ -77,7 +78,7 @@ export const FormContainer: React.FC = () => {
           });
 
           if ('apiResponse' in errorsDetail) {
-            throw new Error(errorsDetail.apiResponse);
+            if (errorsDetail.apiResponse !== null) throw new Error(errorsDetail.apiResponse);
           }
         }
       }

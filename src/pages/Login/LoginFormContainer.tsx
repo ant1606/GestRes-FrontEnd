@@ -125,7 +125,7 @@ const LoginFormContainer: React.FC = () => {
           });
 
           if ('apiResponse' in errorsDetail) {
-            throw new Error(errorsDetail.apiResponse);
+            if (errorsDetail.apiResponse !== null) throw new Error(errorsDetail.apiResponse);
           }
         }
       }
