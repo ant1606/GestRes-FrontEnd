@@ -4,7 +4,7 @@ import { PageNotFound } from '@/pages/PageNotFound/PageNotFound';
 
 interface Props {
   children: JSX.Element[] | JSX.Element;
-  isPrivatePage: boolean;
+  isPrivatePage?: boolean;
 }
 const RoutesWithPageNotFound: React.FC<Props> = ({ children, isPrivatePage = false }) => {
   return (

@@ -64,16 +64,21 @@ const LoginFormView: React.FC<Props> = ({
               name="remember_me"
               checked={rememberMe}
               onChange={handleCheckBoxClick}
+              data-testid="remember_me"
             />{' '}
             Recordarme
           </label>
         </div>
         <div className="flex justify-between">
           <span className="text-sm leading-5 font-semibold">
-            <Link to="/register">Registrate</Link>
+            <Link to="/register" replace>
+              Registrate
+            </Link>
           </span>
           <span className="text-sm leading-5 font-semibold">
-            <Link to="/forget-password">¿Olvidó su contraseña?</Link>
+            <Link to="/forget-password" replace>
+              ¿Olvidó su contraseña?
+            </Link>
           </span>
         </div>
         <div className="flex">

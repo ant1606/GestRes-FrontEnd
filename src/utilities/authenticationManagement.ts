@@ -41,8 +41,9 @@ export const rememberTokenExists = (): boolean => {
 export const savePersistenDataUser = (response: Record<string, string | any>): void => {
   // TODO Formatear la fecha de expiración del bearerToken
   Cookies.set('bearerToken', response.data?.bearerToken, { expires: 1 });
-  localStorage.setItem('rememberToken', response.data?.user.rememberToken);
   localStorage.setItem('user', JSON.stringify(response.data?.user));
+  if (typeof response.data?.user.rememberToken === 'string')
+    localStorage.setItem('rememberToken', response.data?.user.rememberToken);
 };
 
 export const checkAuthentication = async (): Promise<Record<string, string | any>> => {

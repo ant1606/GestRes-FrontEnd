@@ -13,9 +13,9 @@ import {
 import { useLogin } from './context/login.context.js';
 import { logginUser } from '@/services/login.services.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
-import { setCookie } from '@/utilities/manageCookies.js';
 import LoginFormView from './LoginFormView.js';
 import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
+import { savePersistenDataUser } from '@/utilities/authenticationManagement.js';
 
 type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
 interface ResponseAPI {
@@ -59,6 +59,20 @@ const LoginFormContainer: React.FC = () => {
     setRememberMe(evt.target.checked);
   };
 
+  const userIsLoggedInPromise = async (params: UserLoginParams): Promise<void> => {
+    await new Promise<void>((resolve) => {
+      dispatch(
+        userIsLoggin({
+          email: params.email,
+          id: params.id,
+          isVerified: params.isVerified,
+          name: params.name
+        })
+      );
+      resolve();
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -80,22 +94,27 @@ const LoginFormContainer: React.FC = () => {
           // El cookie es porque permite manejar fecha de expiración
           // Pero queda pendiente implementar JWT para obtener los datos del usuario en un token encriptado
 
-          setCookie('bearerToken', response.data?.bearerToken, response.data?.bearerExpire);
-          localStorage.setItem('rememberToken', response.data?.user.rememberToken);
-          const userInfo = response.data?.user;
-          // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
-          localStorage.setItem('user', JSON.stringify(userInfo));
+          response.data.user.rememberToken = rememberMe ? response.data?.user.rememberToken : null;
 
-          dispatch(
-            userIsLoggin({
-              email: userInfo.email,
-              id: userInfo.id,
-              isVerified: userInfo.isVerified,
-              name: userInfo.name
-            })
-          );
-          navigate('app/dashboard');
-          console.log('Va a dashboard');
+          savePersistenDataUser(response);
+          await userIsLoggedInPromise(response.data?.user);
+
+          // setCookie('bearerToken', response.data?.bearerToken, response.data?.bearerExpire);
+          // localStorage.setItem('rememberToken', response.data?.user.rememberToken);
+          // const userInfo = response.data?.user;
+          // // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
+          // localStorage.setItem('user', JSON.stringify(userInfo));
+
+          // dispatch(
+          //   userIsLoggin({
+          //     email: userInfo.email,
+          //     id: userInfo.id,
+          //     isVerified: userInfo.isVerified,
+          //     name: userInfo.name
+          //   })
+          // );
+
+          navigate('/app/dashboard', { replace: true });
         } else if ('error' in response) {
           const errorsDetail = response.error?.detail;
           Object.keys(errorsDetail).forEach((key) => {

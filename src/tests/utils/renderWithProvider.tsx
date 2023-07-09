@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 
 import { setupStore, type AppStore, type RootState } from '@/redux/store';
 // As a basic setup, import your same slice reducer
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -42,6 +42,7 @@ export function renderWithProviders(
   initialEntries: string[] = ['/']
 ): Record<string, any> {
   function Wrapper({ children }: PropsWithChildren<Record<string, unknown>>): JSX.Element {
+    // console.log(initialEntries);
     return (
       <MemoryRouter initialEntries={initialEntries}>
         <Provider store={store}>{children}</Provider>
