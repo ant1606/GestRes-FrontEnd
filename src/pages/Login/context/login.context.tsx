@@ -9,8 +9,9 @@ interface ActionReducer {
 }
 
 type typeValidationError = 'email' | 'password';
+export type loginValidationError = Record<typeValidationError, string | null>;
 interface InitialState {
-  validationError: Record<typeValidationError, string | null | boolean>;
+  validationError: loginValidationError;
 }
 
 const ADD_VALIDATION_ERROR = 'add validation error';

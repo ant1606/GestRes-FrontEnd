@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import types from '../types/types.js';
+import types from '../typing/types/types.js';
 import userReducer, { initialState } from '../reducers/userReducer.js';
 import { setCookie } from '../helpers/manageCookies.js';
 import { toastNotifications } from '../helpers/notificationsSwal.js';

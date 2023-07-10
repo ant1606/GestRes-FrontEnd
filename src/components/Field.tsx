@@ -8,24 +8,8 @@ interface Props {
   value: string | number | readonly string[] | undefined;
   classBox: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  errorInput: string;
+  errorInput: string | null;
 }
-
-// Field.propTypes = {
-//   type: PropTypes.string.isRequired,
-//   label: PropTypes.string.isRequired,
-//   name: PropTypes.string.isRequired,
-//   value: PropTypes.any.isRequired,
-//   classBox: PropTypes.string,
-//   handleChange: PropTypes.func.isRequired,
-//   errorInput: PropTypes.string
-// };
-
-// Field.defaultProps = {
-//   value: '',
-//   classBox: '',
-//   errorInput: ''
-// };
 
 const Field: React.FC<Props> = ({
   type,
@@ -36,7 +20,7 @@ const Field: React.FC<Props> = ({
   handleChange,
   errorInput
 }) => {
-  const validateLengthErrorInput = errorInput?.trim().length;
+  const validateLengthErrorInput = errorInput !== null ? errorInput.trim().length : 0;
   return (
     <div className={`flex flex-col relative ${classBox}`}>
       <div

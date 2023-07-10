@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import tagReducer, { initialState } from '../reducers/tagReducer.js';
-import types from '../types/types.js';
+import types from '../typing/types/types.js';
 import Swal from 'sweetalert2';
 import { toastNotifications } from '../helpers/notificationsSwal.js';
 

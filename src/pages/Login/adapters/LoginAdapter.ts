@@ -1,29 +1,4 @@
-import { type ApiErrorResponse } from '@/models/apiResponse.type';
-
-interface LoginSuccessResponse {
-  data: {
-    bearerToken: string;
-    bearerExpire: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      isVerified: boolean;
-      rememberToken: string;
-    };
-  };
-}
-
-interface LoginErrorDetailResponse extends ApiErrorResponse {
-  email: string | null;
-  password: string | null;
-}
-interface LoginErrorResponse {
-  error: {
-    status: string;
-    detail: LoginErrorDetailResponse;
-  };
-}
+import { type LoginSuccessResponse, type LoginErrorResponse } from '../index.types';
 
 export const loginSuccessResponseAdapter = (user: any): LoginSuccessResponse => {
   return {
@@ -46,7 +21,7 @@ export const loginErrorResponseAdapter = (error: any): LoginErrorResponse => {
     error: {
       status: error.error.status,
       detail: {
-        apiResponse: error.error.detail.api_response ?? null,
+        apiResponseMessageError: error.error.detail.api_response ?? null,
         email: error.error.detail.email ?? null,
         password: error.error.detail.password ?? null
       }

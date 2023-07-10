@@ -4,8 +4,8 @@ import Field from '@/components/Field';
 import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
+import { type loginValidationError } from './context/login.context';
 
-// TODO Tipar correctamente el prop de loginError
 interface Props {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleInput: (evt: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,7 +13,7 @@ interface Props {
   email: string;
   password: string;
   rememberMe: boolean;
-  loginError: Record<string, string>;
+  loginError: loginValidationError;
 }
 const LoginFormView: React.FC<Props> = ({
   handleSubmit,

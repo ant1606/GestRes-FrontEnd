@@ -2,6 +2,7 @@ import {
   loginErrorResponseAdapter,
   loginSuccessResponseAdapter
 } from '@/pages/Login/adapters/LoginAdapter';
+import { type LoginSuccessResponse, type LoginErrorResponse } from '@/pages/Login/index.types';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util';
 import fetch from 'cross-fetch';
 import Cookies from 'js-cookie';
@@ -14,7 +15,7 @@ interface LoginCredentials {
 
 export const logginUser = async (
   credentials: LoginCredentials
-): Promise<Record<string, string | any>> => {
+): Promise<LoginSuccessResponse | LoginErrorResponse> => {
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/login`, {
     method: 'POST',
     headers: {
@@ -33,7 +34,7 @@ export const logginUser = async (
 
 export const refreshUserFromRememberToken = async (
   rememberToken: string | null
-): Promise<Record<string, string | any>> => {
+): Promise<LoginSuccessResponse | LoginErrorResponse> => {
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`, {
     method: 'POST',
     headers: {
@@ -52,7 +53,7 @@ export const refreshUserFromRememberToken = async (
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
 };
 
-export const loggoutUser = async (): Promise<Record<string, string | any>> => {
+export const loggoutUser = async (): Promise<ApiSuccessResponse | LoginErrorResponse> => {
   const bearerToken = Cookies.get('bearerToken');
   if (bearerToken === null || bearerToken === undefined)
     throw new Error('Token de autorización inválido');

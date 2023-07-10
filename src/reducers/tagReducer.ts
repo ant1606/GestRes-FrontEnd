@@ -1,4 +1,4 @@
-import types from '../types/types';
+import types from '../typing/types/types';
 
 export const initialState = {
   tags: [],

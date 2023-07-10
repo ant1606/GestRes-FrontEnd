@@ -7,7 +7,7 @@ import { LoginProvider } from './context/login.context';
 import LoginFormContainer from './LoginFormContainer';
 
 export const LoginScreen: React.FC = () => {
-  const uiLoading = useAppSelector((state: RootState) => state.ui.value);
+  const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   return (
     <LoginProvider>
       {uiLoading && <Loader />}

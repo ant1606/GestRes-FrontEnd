@@ -4,24 +4,15 @@ import { isLoading } from '@/redux/slice/uiSlice.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { useForm } from '@/hooks/useForm.js';
 
-import {
-  validateUserEmail,
-  type User,
-  type ValidationMessage,
-  validateUserPassword
-} from './LoginFormValidationInputs.js';
+import { validateUserEmail, validateUserPassword } from './LoginFormValidationInputs.js';
 import { useLogin } from './context/login.context.js';
 import { logginUser } from '@/services/login.services.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import LoginFormView from './LoginFormView.js';
 import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
 import { savePersistenDataUser } from '@/utilities/authenticationManagement.js';
+import { type ValidationFunctions } from './index.types.js';
 
-type ValidationFunctions = Record<string, (values: User) => ValidationMessage>;
-interface ResponseAPI {
-  data?: Record<string, any>;
-  error?: Record<string, any>;
-}
 const validateFunctionsFormInputs: ValidationFunctions = {
   email: validateUserEmail,
   password: validateUserPassword
@@ -59,12 +50,12 @@ const LoginFormContainer: React.FC = () => {
     setRememberMe(evt.target.checked);
   };
 
-  const userIsLoggedInPromise = async (params: UserLoginParams): Promise<void> => {
+  const userIsLoggedInPromise = async (params: User): Promise<void> => {
     await new Promise<void>((resolve) => {
       dispatch(
         userIsLoggin({
           email: params.email,
-          id: params.id,
+          id: parseInt(params.id),
           isVerified: params.isVerified,
           name: params.name
         })
@@ -83,53 +74,33 @@ const LoginFormContainer: React.FC = () => {
         (el) => loginErrorRef.current[el] === null
       );
       if (existValidationMessage) {
-        const response: ResponseAPI = await logginUser({
+        const response = await logginUser({
           email,
           password,
           remember_me: rememberMe
         });
 
         if ('data' in response) {
-          // TODO Se almacenará el bearerToken en cookie y los datos del usuario en el localStorage y luego lo gestionare en el store
-          // El cookie es porque permite manejar fecha de expiración
-          // Pero queda pendiente implementar JWT para obtener los datos del usuario en un token encriptado
-
-          response.data.user.rememberToken = rememberMe ? response.data?.user.rememberToken : null;
-
+          response.data.user.rememberToken = rememberMe ? response.data.user.rememberToken : null;
           savePersistenDataUser(response);
-          await userIsLoggedInPromise(response.data?.user);
-
-          // setCookie('bearerToken', response.data?.bearerToken, response.data?.bearerExpire);
-          // localStorage.setItem('rememberToken', response.data?.user.rememberToken);
-          // const userInfo = response.data?.user;
-          // // TODO Ver si es buena opcion Almacenar datos del usuario en store en redux
-          // localStorage.setItem('user', JSON.stringify(userInfo));
-
-          // dispatch(
-          //   userIsLoggin({
-          //     email: userInfo.email,
-          //     id: userInfo.id,
-          //     isVerified: userInfo.isVerified,
-          //     name: userInfo.name
-          //   })
-          // );
-
+          await userIsLoggedInPromise(response.data.user);
           navigate('/app/dashboard', { replace: true });
         } else if ('error' in response) {
-          const errorsDetail = response.error?.detail;
+          const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {
             // TODO colocar el nombre apiResponse de manera global en una constante o cambiar nombre
-            if (key !== 'apiResponse') {
+            if (key !== 'apiResponseMessageError') {
               addValidationError({ [key]: errorsDetail[key] });
             }
           });
 
-          if ('apiResponse' in errorsDetail) {
-            if (errorsDetail.apiResponse !== null) throw new Error(errorsDetail.apiResponse);
+          if ('apiResponseMessageError' in errorsDetail) {
+            if (errorsDetail.apiResponseMessageError !== null)
+              throw new Error(errorsDetail.apiResponseMessageError);
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
@@ -138,7 +109,7 @@ const LoginFormContainer: React.FC = () => {
 
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    handleSubmit(e); // Invocar la función handleSubmit sin esperar la promesa
+    handleSubmit(e);
   };
 
   return (

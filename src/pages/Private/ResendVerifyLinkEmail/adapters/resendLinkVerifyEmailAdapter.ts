@@ -1,4 +1,4 @@
-import { type ApiErrorResponse } from '@/models/apiResponse.type';
+import { type ApiErrorResponse } from '@/apiResponse';
 
 interface ResendLinkVerifyEmailSuccessResponse {
   data: {

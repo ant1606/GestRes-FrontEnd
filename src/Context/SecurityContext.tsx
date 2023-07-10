@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import securityReducer, { initialState } from '../reducers/securityReducer.js';
-import types from '../types/types.js';
+import types from '../typing/types/types.js';
 import { deleteCookie, getCookie, setCookie } from '../helpers/manageCookies.js';
 import { toastNotifications } from '../helpers/notificationsSwal.js';
 

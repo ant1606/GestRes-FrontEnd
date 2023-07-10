@@ -6,7 +6,7 @@
  * recourseLinks: Object, Contiene la informacion de los links para paginacion
  * error: Array<Object>, Recibe los errores de validacion del formulario
  *  */
-import types from "../types/types.js";
+import types from "../typing/types/types.js";
 
 //TODO Validar que el objeto error funcione como Object o como Array
 export const initialState = {
