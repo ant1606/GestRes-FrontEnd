@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 // import SideBarContext from '../../Context/SideBarContext';
 import menus from '@/config/menus';
 import UserInfo from './UserInfo';
 import TitleSideBar from './TitleSideBar';
 import ItemSideBar from './ItemSideBar';
+import { useAppSelector } from '@/hooks/redux';
+import { type RootState } from '@/redux/store';
 
 const Sidebar: React.FC = () => {
+  const { collapseSidebar } = useAppSelector((state: RootState) => state.ui);
   // const { open } = useContext(SideBarContext);
 
   // <div
@@ -15,7 +18,7 @@ const Sidebar: React.FC = () => {
   //     duration-300 ease-in-out sticky top-0 left-0`}></div>
   return (
     <div
-      className={`w-80
+      className={`${!collapseSidebar ? 'w-80' : 'w-18'}
       h-screen bg-gray-800 text-white 
       duration-300 ease-in-out sticky top-0 left-0`}>
       <TitleSideBar />

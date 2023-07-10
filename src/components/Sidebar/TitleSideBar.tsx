@@ -1,12 +1,20 @@
-import React, { useContext } from 'react';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { toggleSidebar } from '@/redux/slice/uiSlice';
+import { type RootState } from '@/redux/store';
+import React from 'react';
 // import SideBarContext from '../../Context/SideBarContext';
 
-const TitleSideBar = () => {
-  // const { open, toggle } = useContext(SideBarContext);
-  // Aplicar onClick={toggle} en svg
+const TitleSideBar: React.FC = () => {
+  const { collapseSidebar } = useAppSelector((state: RootState) => state.ui);
+  const dispatch = useAppDispatch();
+  const handleClick = (): void => {
+    dispatch(toggleSidebar());
+  };
   return (
     <div className="flex relative justify-center text-base uppercase leading-4 font-black items-center gap-4 bg-gray-900 p-4 h-14">
-      <h2 className={`${!open && 'scale-0 absolute '} origin-left duration-300 truncate`}>
+      <h2
+        className={` 
+        ${collapseSidebar ? 'scale-0 absolute ' : ''} origin-left duration-300 truncate`}>
         Gestor de Recursos
       </h2>
 
@@ -16,7 +24,8 @@ const TitleSideBar = () => {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className="w-6 h-6 cursor-pointer">
+        className="w-6 h-6 cursor-pointer"
+        onClick={handleClick}>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"

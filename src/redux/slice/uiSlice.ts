@@ -2,11 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface LoadingState {
-  value: boolean;
+  loadingState: boolean;
+  collapseSidebar: boolean;
 }
 
 const initialState: LoadingState = {
-  value: false
+  loadingState: false,
+  collapseSidebar: false
 };
 
 export const uiSlice = createSlice({
@@ -14,10 +16,13 @@ export const uiSlice = createSlice({
   initialState,
   reducers: {
     isLoading: (state, action: PayloadAction<boolean>) => {
-      state.value = action.payload;
+      state.loadingState = action.payload;
+    },
+    toggleSidebar: (state) => {
+      state.collapseSidebar = !state.collapseSidebar;
     }
   }
 });
 
-export const { isLoading } = uiSlice.actions;
+export const { isLoading, toggleSidebar } = uiSlice.actions;
 export default uiSlice.reducer;

@@ -1,11 +1,17 @@
-import React, { useContext } from 'react';
+import { useAppSelector } from '@/hooks/redux';
+import { type RootState } from '@/redux/store';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 // import SideBarContext from '../../Context/SideBarContext';
+interface Props {
+  title: string;
+  icon: string;
+  link: boolean;
+  path: string;
+}
+const ItemSideBar: React.FC<Props> = ({ title, icon, link, path }) => {
+  const { collapseSidebar } = useAppSelector((state: RootState) => state.ui);
 
-const ItemSideBar = ({ title, icon, link, path }) => {
-  // const { open } = useContext(SideBarContext);
-
-  //  ({isActive }) => isActive ? "bg-blue-600" : undefined`}
   return (
     <>
       {
@@ -20,13 +26,17 @@ const ItemSideBar = ({ title, icon, link, path }) => {
             }>
             {/* <div className='flex items-center rounded-lg mx-4 mb-4 py-2 pl-2 gap-3 
             text-base font-bold hover:bg-blue-600 text-white h-12 cursor-pointer'> */}
-            <img className="w-6 h-6 " src={icon} alt="icon" />
-            <p className={`${!open && 'scale-0'} origin-left duration-300 truncate`}>{title}</p>
+            <img className="w-6 h-6" src={icon} alt="icon" />
+            <p className={`${collapseSidebar ? 'scale-0' : ''} origin-left duration-300 truncate`}>
+              {title}
+            </p>
             {/* </div> */}
           </NavLink>
         ) : (
           <div className="p-4">
-            <p className={`${!open && 'scale-0 '}  origin-left duration-300 truncate`}>{title}</p>
+            <p className={`${collapseSidebar ? 'scale-0' : ''}  origin-left duration-300 truncate`}>
+              {title}
+            </p>
           </div>
         )
       }
