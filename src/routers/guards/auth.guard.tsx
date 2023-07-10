@@ -9,7 +9,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const AuthGuard: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
-  console.log(userLoggin);
   return userLoggin.isLogged ? <Outlet /> : <Navigate replace to="/login" />;
 };
 

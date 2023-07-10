@@ -4,7 +4,6 @@ import { Navigate, Route } from 'react-router-dom';
 import RoutesWithPageNotFound from './RoutesWithPageNotFound';
 
 export const Private: React.FC = () => {
-  console.log('desde private');
   return (
     <AppLayout>
       <RoutesWithPageNotFound isPrivatePage={true}>

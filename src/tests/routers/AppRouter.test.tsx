@@ -6,7 +6,6 @@ import {
   setServiceRememberResponseSuccess,
   setServiceRememberUserVerified
 } from '../mocks/login.handlers';
-import { MemoryRouter } from 'react-router-dom';
 
 describe('AppRouter test', () => {
   const BEARER_TOKEN = 'bearerToken';
@@ -88,9 +87,10 @@ describe('AppRouter test', () => {
         rememberToken: null
       })
     );
-    renderWithProviders(<AppRouter />);
+    const wrapper = renderWithProviders(<AppRouter />);
     await waitFor(() => {
-      expect(screen.getAllByText(/dashboard/i)).toBeDefined();
+      expect(wrapper.getByText(/gestor de recursos/i)).toBeInTheDocument();
+      wrapper.unmount();
     });
   });
 
@@ -98,9 +98,10 @@ describe('AppRouter test', () => {
     localStorage.setItem(REMEMBER_ME_TOKEN, 'MiRememberToken');
     setServiceRememberUserVerified(true);
     setServiceRememberResponseSuccess(true);
-    renderWithProviders(<AppRouter />);
+    const wrapper = renderWithProviders(<AppRouter />);
     await waitFor(() => {
-      expect(screen.getAllByText(/dashboard/i)).toBeDefined();
+      expect(wrapper.getByText(/dashboard/i)).toBeDefined();
+      wrapper.unmount();
     });
   });
 });
