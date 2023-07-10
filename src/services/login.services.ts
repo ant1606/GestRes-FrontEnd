@@ -4,6 +4,7 @@ import {
 } from '@/pages/Login/adapters/LoginAdapter';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util';
 import fetch from 'cross-fetch';
+import Cookies from 'js-cookie';
 
 interface LoginCredentials {
   email: string;
@@ -48,5 +49,25 @@ export const refreshUserFromRememberToken = async (
       return await res.json();
     })
     .then(async (data) => loginSuccessResponseAdapter(await data))
+    .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
+};
+
+export const loggoutUser = async (): Promise<Record<string, string | any>> => {
+  const bearerToken = Cookies.get('bearerToken');
+  if (bearerToken === null || bearerToken === undefined)
+    throw new Error('Token de autorización inválido');
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/logout`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
+    }
+  })
+    .then(async (res) => {
+      if (!res.ok) return await Promise.reject(res.json());
+      return await res.json();
+    })
+    .then(async (data) => data)
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
 };

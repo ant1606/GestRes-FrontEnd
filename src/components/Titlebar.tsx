@@ -4,18 +4,46 @@ import { mdiExitToApp } from '@mdi/js';
 import { useAppDispatch } from '@/hooks/redux';
 import { userIsLogout } from '@/redux/slice/authenticationSlice';
 import Cookies from 'js-cookie';
+import { isLoading } from '@/redux/slice/uiSlice';
+import { loggoutUser } from '@/services';
+import { toastNotifications } from '@/utilities/notificationsSwal';
+import { useNavigate } from 'react-router-dom';
 
 // import { useNavigate } from 'react-router-dom';
 // import { useSecurity } from '../../Context/SecurityContext.jsx';
 
 const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const handleExitAppClick = (): void => {
+  const handleExitAppClick = async (): Promise<void> => {
     // TODO ELiminar el LocalStorage de usuario y el bearerToken
-    Cookies.remove('bearerToken');
-    localStorage.clear();
-    dispatch(userIsLogout());
+    try {
+      dispatch(isLoading(true));
+      console.log('haciendo el logout');
+      const response = await loggoutUser();
+      console.log(response);
+      if ('data' in response) {
+        Cookies.remove('bearerToken');
+        localStorage.clear();
+        dispatch(userIsLogout());
+        toastNotifications().toastSuccesCustomize(response.data.message);
+        navigate('/login', { replace: true });
+      } else if ('error' in response) {
+        const errorsDetail = response.error?.detail;
+        if ('apiResponse' in errorsDetail) {
+          if (errorsDetail.apiResponse !== null) throw new Error(errorsDetail.apiResponse);
+        }
+      }
+    } catch (error) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
+    }
+  };
+
+  const handleClickWrapper = (): void => {
+    handleExitAppClick();
   };
   // TODO Colocar el titulo por cada página de la aplicación en la barra de título
 
@@ -24,12 +52,12 @@ const Titlebar: React.FC = () => {
       {/* <p>{title}</p> */}
       <p>Colocar Titulo</p>
       <div
-        onClick={handleExitAppClick}
+        onClick={handleClickWrapper}
         role="button"
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === 'Enter' || event.key === ' ') {
-            handleExitAppClick();
+            handleClickWrapper();
           }
         }}>
         <Icon path={mdiExitToApp} size={1.5} className="cursor-pointer hover:text-blue-400" />
