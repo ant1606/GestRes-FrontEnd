@@ -1,4 +1,4 @@
-import { type LoginFormData, type ValidationInputMessage } from './index.types';
+import { type LoginFormData, type ValidationInputMessage } from '../index.types';
 
 export const validateUserEmail = (values: LoginFormData): ValidationInputMessage => {
   const emailToValidate = values.email.trim();

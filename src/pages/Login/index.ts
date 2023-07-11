@@ -1,1 +1,1 @@
-export { LoginScreen as default } from './LoginScreen';
+export { LoginContainer as default } from './LoginContainer';

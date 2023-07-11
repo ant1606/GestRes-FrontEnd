@@ -4,14 +4,14 @@ import { isLoading } from '@/redux/slice/uiSlice.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { useForm } from '@/hooks/useForm.js';
 
-import { validateUserEmail, validateUserPassword } from './LoginFormValidationInputs.js';
-import { useLogin } from './context/login.context.js';
+import { validateUserEmail, validateUserPassword } from '../utils/LoginFormValidationInputs.js';
+import { useLogin } from '../context/login.context.js';
 import { logginUser } from '@/services/login.services.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
-import LoginFormView from './LoginFormView.js';
+import FormView from './FormView.js';
 import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
 import { savePersistenDataUser } from '@/utilities/authenticationManagement.js';
-import { type ValidationFunctions } from './index.types.js';
+import { type ValidationFunctions } from '../index.types.js';
 
 const validateFunctionsFormInputs: ValidationFunctions = {
   email: validateUserEmail,
@@ -23,7 +23,7 @@ const initialValue = {
   password: ''
 };
 
-const LoginFormContainer: React.FC = () => {
+const FormContainer: React.FC = () => {
   const { loginError, addValidationError } = useLogin();
   const {
     values: formValues,
@@ -113,7 +113,7 @@ const LoginFormContainer: React.FC = () => {
   };
 
   return (
-    <LoginFormView
+    <FormView
       email={email}
       handleCheckBoxClick={handleCheckBoxClick}
       handleInput={handleInputChange}
@@ -124,5 +124,4 @@ const LoginFormContainer: React.FC = () => {
     />
   );
 };
-
-export default LoginFormContainer;
+export default FormContainer;

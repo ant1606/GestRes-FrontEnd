@@ -4,7 +4,7 @@ import Field from '@/components/Field';
 import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
 import { mdiAccountCircle, mdiLock } from '@mdi/js';
-import { type loginValidationError } from './context/login.context';
+import { type loginValidationError } from '../context/login.context';
 
 interface Props {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -15,7 +15,7 @@ interface Props {
   rememberMe: boolean;
   loginError: loginValidationError;
 }
-const LoginFormView: React.FC<Props> = ({
+const FormView: React.FC<Props> = ({
   handleSubmit,
   handleInput,
   handleCheckBoxClick,
@@ -89,4 +89,4 @@ const LoginFormView: React.FC<Props> = ({
   );
 };
 
-export default LoginFormView;
+export default FormView;
