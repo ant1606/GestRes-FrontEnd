@@ -3,7 +3,7 @@ import Icon from '@mdi/react';
 import { mdiEmail } from '@mdi/js';
 import Field from '@/components/Field';
 import Button from '@/components/Button';
-import { validateUserEmail } from '../../Register/RegisterFormValidationInputs.js';
+import { validateUserEmail } from '../../Register/utils/RegisterFormValidationInputs.js';
 // import useUser from '../../../Context/UserContext.jsx';
 import { useForm } from '@/hooks/useForm.js';
 import { usePasswordForget } from '../context/passwordForget.context.js';

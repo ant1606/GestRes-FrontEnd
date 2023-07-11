@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import FormView from './FormView';
-import { validateUserEmail } from '../../Register/RegisterFormValidationInputs.js';
+import { validateUserEmail } from '../../Register/utils/RegisterFormValidationInputs.js';
 import { useForm } from '@/hooks/useForm.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { isLoading } from '@/redux/slice/uiSlice.js';

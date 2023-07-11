@@ -7,7 +7,7 @@ import {
   validateUserEmail,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from '../../Register/RegisterFormValidationInputs.js';
+} from '../../Register/utils/RegisterFormValidationInputs.js';
 import useUser from '../../../Context/UserContext.jsx';
 import { useForm } from '../../../hooks/useForm.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';

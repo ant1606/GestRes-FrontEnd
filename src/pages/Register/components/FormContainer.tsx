@@ -1,23 +1,17 @@
 import React, { useEffect, useRef } from 'react';
-import FormView from './FormView';
 import { useForm } from '@/hooks/useForm';
+import { toastNotifications } from '@/utilities/notificationsSwal';
+import { useAppDispatch } from '@/hooks/redux';
+import { isLoading } from '@/redux/slice/uiSlice';
+import { savingUser } from '@/services/register.services';
+import FormView from './FormView';
 import {
   validateUserEmail,
   validateUserName,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from '../RegisterFormValidationInputs';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
+} from '../utils/RegisterFormValidationInputs';
 import { useRegister } from '../context/register.context';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
-import { savingUser } from '@/services/register.services';
-
-interface ResponseAPI {
-  data?: Record<string, any>;
-  error?: Record<string, any>;
-}
 
 const validateFunctionsFormInputs = {
   name: validateUserName,
@@ -25,6 +19,7 @@ const validateFunctionsFormInputs = {
   password: validateUserPassword,
   passwordConfirmation: validateUserPasswordConfirmation
 };
+
 const initialState = {
   name: '',
   email: '',
@@ -59,30 +54,29 @@ export const FormContainer: React.FC = () => {
         (el) => registerErrorRef.current[el] === null
       );
       if (existValidationMessage) {
-        const response: ResponseAPI = await savingUser({
+        const response = await savingUser({
           name,
           email,
           password,
-          password_confirmation: passwordConfirmation
+          passwordConfirmation
         });
         if ('data' in response) {
           setUserWasRegistered(true);
         } else if ('error' in response) {
-          console.log(response);
           const errorsDetail = response.error?.detail;
           Object.keys(errorsDetail).forEach((key) => {
-            // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
-            if (key !== 'apiResponse') {
+            if (key !== 'apiResponseMessageError') {
               addValidationError({ [key]: errorsDetail[key] });
             }
           });
 
-          if ('apiResponse' in errorsDetail) {
-            if (errorsDetail.apiResponse !== null) throw new Error(errorsDetail.apiResponse);
+          if ('apiResponseMessageError' in errorsDetail) {
+            if (errorsDetail.apiResponseMessageError !== null)
+              throw new Error(errorsDetail.apiResponseMessageError);
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
@@ -91,7 +85,7 @@ export const FormContainer: React.FC = () => {
 
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    handleSubmit(e); // Invocar la función handleSubmit sin esperar la promesa
+    handleSubmit(e);
   };
   return (
     <FormView

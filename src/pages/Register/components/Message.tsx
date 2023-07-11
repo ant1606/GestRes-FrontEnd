@@ -1,6 +1,6 @@
-import Button from '@/components/Button';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '@/components/Button';
 
 export const Message: React.FC = () => {
   const navigate = useNavigate();
