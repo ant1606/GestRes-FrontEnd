@@ -1,57 +1,58 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-// import { useSecurity } from '../../Context/SecurityContext.js';
 import AuthenticationTemplate from '../../components/AuthenticationTemplate.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { isLoading } from '@/redux/slice/uiSlice.js';
 import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
-import Cookies from 'js-cookie';
 import { verifyUserEmail } from '@/services/verifyEmail.services.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
+import { savePersistenDataUser } from '@/utilities/authenticationManagement.js';
 
 export const VerifyEmail: React.FC = () => {
   const { id, hash } = useParams();
-  // const { verifyUserEmail } = useSecurity();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     verifyEmail();
-  }, []);
+  });
+
+  const userIsLoggedInPromise = async (params: User): Promise<void> => {
+    await new Promise<void>((resolve) => {
+      dispatch(
+        userIsLoggin({
+          email: params.email,
+          id: parseInt(params.id),
+          isVerified: params.isVerified,
+          name: params.name
+        })
+      );
+      resolve();
+    });
+  };
 
   const verifyEmail = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
-
-      if (typeof id !== 'string') throw new Error('No se identifico al usuario');
-      if (typeof hash !== 'string') throw new Error('No se identifico al usuario');
+      if (id?.trim() === '' || id === '0' || id === undefined)
+        throw new Error('No se identifico al usuario');
+      if (hash?.trim() === '' || hash === '' || hash === undefined)
+        throw new Error('No se identifico al usuario');
 
       const response = await verifyUserEmail(id, hash);
-      console.log(response);
       if ('data' in response) {
-        Cookies.set('bearerToken', response.data?.bearerToken, { expires: 1 });
-        localStorage.setItem('rememberToken', response.data?.user.rememberToken);
-        const userInfo = response.data?.user;
-        localStorage.setItem('user', JSON.stringify(userInfo));
-
-        console.log('antes de hacer el dispatch');
-        dispatch(
-          userIsLoggin({
-            email: userInfo.email,
-            id: userInfo.id,
-            isVerified: userInfo.isVerified,
-            name: userInfo.name
-          })
-        );
+        savePersistenDataUser(response);
+        await userIsLoggedInPromise(response.data.user);
         navigate('/app/dashboard', { replace: true });
       } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
+        const errorsDetail = response.error.detail;
 
-        if ('apiResponse' in errorsDetail) {
-          throw new Error(errorsDetail.apiResponse);
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));

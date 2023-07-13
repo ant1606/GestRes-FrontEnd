@@ -1,25 +1,4 @@
-import { type ApiErrorResponse } from '@/apiResponse';
-
-interface VerifyEmailSuccessResponse {
-  data: {
-    bearerToken: string;
-    bearerExpire: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      isVerified: boolean;
-      rememberToken: string;
-    };
-  };
-}
-
-interface VerifyEmailErrorResponse {
-  error: {
-    status: string;
-    detail: ApiErrorResponse;
-  };
-}
+import { type VerifyEmailErrorResponse, type VerifyEmailSuccessResponse } from '../index.types';
 
 export const verifyEmailSuccessResponseAdapter = (user: any): VerifyEmailSuccessResponse => {
   return {
@@ -42,7 +21,7 @@ export const verifyEmailErrorResponseAdapter = (error: any): VerifyEmailErrorRes
     error: {
       status: error.error.status,
       detail: {
-        apiResponse: error.error.detail.api_response ?? null
+        apiResponseMessageError: error.error.detail.api_response ?? null
       }
     }
   };

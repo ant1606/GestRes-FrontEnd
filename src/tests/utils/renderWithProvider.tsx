@@ -26,7 +26,7 @@ export function renderWithProviders(
   ui: React.ReactElement,
   {
     preloadedState = {
-      ui: { value: false },
+      ui: { loadingState: false, collapseSidebar: false },
       authentication: {
         id: 99999,
         name: '',

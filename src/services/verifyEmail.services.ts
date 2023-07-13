@@ -6,13 +6,17 @@ import {
   verifyEmailErrorResponseAdapter,
   verifyEmailSuccessResponseAdapter
 } from '@/pages/VerifyEmail/adapters/VerifyEmailAdapter';
+import {
+  type VerifyEmailErrorResponse,
+  type VerifyEmailSuccessResponse
+} from '@/pages/VerifyEmail/index.types';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const verifyUserEmail = async (
   id: string,
   hash: string
-): Promise<Record<string, string | any>> => {
+): Promise<VerifyEmailSuccessResponse | VerifyEmailErrorResponse> => {
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/email/verify/${id}/${hash}`, {
     method: 'GET',
     headers: {
