@@ -1,3 +1,9 @@
+/**
+ * proccessErrorResponse
+ * Cambia los valores de las propiedades del objeto error.detail obtenido por la api
+ * de un array ["mensajeError1", "mensajeError2"] a un string uniendo cada elemento del array
+ * a "mensajeError1/nmensajeError2"
+ */
 export const processErrorResponse = (error: any): Record<string, string | any> => {
   const errorDetailToArray = Object.entries(error.error?.detail);
   const errorDetailSanitized = errorDetailToArray.reduce((acc, current) => {

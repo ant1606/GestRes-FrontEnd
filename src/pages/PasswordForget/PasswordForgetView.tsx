@@ -9,7 +9,7 @@ import { type RootState } from '@/redux/store';
 
 const PasswordForgetView: React.FC = () => {
   const { resetUrlIsGenerated } = usePasswordForget();
-  const uiLoading = useAppSelector((state: RootState) => state.ui.value);
+  const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   return (
     <>
       {uiLoading && <Loader />}

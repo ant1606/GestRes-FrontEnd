@@ -52,10 +52,12 @@ export const FormContainer: React.FC = () => {
       );
       if (existValidationMessage) {
         const response: ResponseAPI = await forgetPassword(email);
+        console.log(response);
         if ('data' in response) {
           setIfResetLinkWasGenerated(true);
         } else if ('error' in response) {
-          const errorProcesed = processErrorResponse(response.error?.detail);
+          const errorProcesed = processErrorResponse(response).error.detail;
+
           Object.keys(errorProcesed).forEach((key) => {
             // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
             if (key !== 'api_response') {
