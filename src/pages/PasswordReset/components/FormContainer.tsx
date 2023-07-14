@@ -69,7 +69,6 @@ export const FormContainer: React.FC = () => {
           password_confirmation: passwordConfirmation,
           token: token ?? ''
         });
-        console.log(response);
         if ('data' in response) {
           toastNotifications().toastSuccesCustomize('Su contraseña fue cambiada con éxito.');
           navigate('/login', { replace: true });
