@@ -1,4 +1,5 @@
 import { PasswordReset } from '@/pages/PasswordReset';
+import { setServiceResetPasswordResponseSuccess } from '@/tests/mocks/resetPassword.handlers';
 import { renderWithProviders } from '@/tests/utils/renderWithProvider';
 import { cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,19 +7,79 @@ import { Route, Routes } from 'react-router-dom';
 
 describe('Test en PasswordReset', () => {
   beforeEach(() => {
+    setServiceResetPasswordResponseSuccess(true);
     cleanup();
   });
 
-  test.todo('', () => { });
+  test('Debe mostrar notificación indicando que se cambio la contraseña y redirigir al login', async () => {
+    const miToken = 'miToken';
+    const wrapper = renderWithProviders(
+      <Routes>
+        <Route path="reset-password" element={<PasswordReset />} />
+        <Route path="login" element={<>Login</>} />
+      </Routes>,
+      undefined,
+      [`/reset-password?token=${miToken}`]
+    );
+    const user = userEvent.setup();
+    await user.type(wrapper.getByTestId('email'), 'miemail@valido.com');
+    await user.type(wrapper.getByTestId('password'), 'micontraseña');
+    await user.type(wrapper.getByTestId('passwordConfirmation'), 'micontraseña');
+    await user.click(wrapper.getByText('Cambiar Contraseña'));
 
-  test.todo('Debe mostrar ventana de dialogo mostrando el error recibido por parte de la API');
-  test.todo(
-    'Debe mostrar ventana de dialogo si no se llego a ingresar el token para el reseteo de password'
-  );
-  test.todo(
-    'Debe mostrar notificación indicando que se cambio la contraseña y redirigir al login',
-    () => { }
-  );
+    await waitFor(() => {
+      expect(wrapper.getByText(/Su contraseña fue cambiada con éxito/i)).toBeInTheDocument();
+      expect(wrapper.getByText(/login/i)).toBeInTheDocument();
+      wrapper.unmount();
+    });
+  });
+
+  test('Debe mostrar ventana de dialogo mostrando el error recibido por parte de la API', async () => {
+    setServiceResetPasswordResponseSuccess(false);
+    const miToken = 'miToken';
+    const wrapper = renderWithProviders(
+      <Routes>
+        <Route path="reset-password" element={<PasswordReset />} />
+        <Route path="login" element={<>Login</>} />
+      </Routes>,
+      undefined,
+      [`/reset-password?token=${miToken}`]
+    );
+    const user = userEvent.setup();
+    await user.type(wrapper.getByTestId('email'), 'miemail@valido.com');
+    await user.type(wrapper.getByTestId('password'), 'micontraseña');
+    await user.type(wrapper.getByTestId('passwordConfirmation'), 'micontraseña');
+    await user.click(wrapper.getByText('Cambiar Contraseña'));
+
+    await waitFor(() => {
+      expect(
+        wrapper.getByText(/Hubo problemas en la comunicación con el servidor/i)
+      ).toBeInTheDocument();
+      wrapper.unmount();
+    });
+  });
+
+  test('Debe mostrar ventana de dialogo si no se llego a ingresar el token para el reseteo de password', async () => {
+    const miToken = '';
+    const wrapper = renderWithProviders(
+      <Routes>
+        <Route path="reset-password" element={<PasswordReset />} />
+        <Route path="login" element={<>Login</>} />
+      </Routes>,
+      undefined,
+      [`/reset-password?token=${miToken}`]
+    );
+    const user = userEvent.setup();
+    await user.type(wrapper.getByTestId('email'), 'miemail@valido.com');
+    await user.type(wrapper.getByTestId('password'), 'micontraseña');
+    await user.type(wrapper.getByTestId('passwordConfirmation'), 'micontraseña');
+    await user.click(wrapper.getByText('Cambiar Contraseña'));
+
+    await waitFor(() => {
+      expect(wrapper.getByText(/Token no válido/i)).toBeInTheDocument();
+      wrapper.unmount();
+    });
+  });
 
   describe('Test de validación del formulario', () => {
     beforeEach(() => {

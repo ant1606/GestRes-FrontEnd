@@ -73,16 +73,16 @@ export const FormContainer: React.FC = () => {
           toastNotifications().toastSuccesCustomize('Su contraseña fue cambiada con éxito.');
           navigate('/login', { replace: true });
         } else if ('error' in response) {
-          const errorProcesed = processErrorResponse(response.error?.detail);
-          Object.keys(errorProcesed).forEach((key) => {
+          const errorProcesed = processErrorResponse(response);
+          Object.keys(errorProcesed.error.detail).forEach((key) => {
             // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
             if (key !== 'api_response') {
               addValidationError({ [key]: errorProcesed[key] });
             }
           });
 
-          if ('api_response' in errorProcesed) {
-            throw new Error(errorProcesed.api_response);
+          if ('api_response' in errorProcesed.error.detail) {
+            throw new Error(errorProcesed.error.detail.api_response);
           }
         }
       }
