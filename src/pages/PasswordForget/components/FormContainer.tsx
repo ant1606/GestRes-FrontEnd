@@ -52,7 +52,6 @@ export const FormContainer: React.FC = () => {
       );
       if (existValidationMessage) {
         const response: ResponseAPI = await forgetPassword(email);
-        console.log(response);
         if ('data' in response) {
           setIfResetLinkWasGenerated(true);
         } else if ('error' in response) {

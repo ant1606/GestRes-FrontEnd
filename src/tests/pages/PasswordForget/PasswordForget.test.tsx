@@ -22,7 +22,7 @@ describe('Test en PasswordForget', () => {
     const user = userEvent.setup();
     await user.click(wrapper.getByText(/siguiente/i));
     await waitFor(() => {
-      expect(wrapper.getByText('Debe ingresar el email del usuario'));
+      expect(wrapper.getByText('Debe ingresar el email del usuario')).toBeInTheDocument();
       wrapper.unmount();
     });
   });
@@ -39,7 +39,7 @@ describe('Test en PasswordForget', () => {
     await user.type(wrapper.getByTestId('email'), 'emailNoValido');
     await user.click(wrapper.getByText(/siguiente/i));
     await waitFor(() => {
-      expect(wrapper.getByText('Formato incorrecto ingresado del email'));
+      expect(wrapper.getByText('Formato incorrecto ingresado del email')).toBeInTheDocument();
       wrapper.unmount();
     });
   });
@@ -57,7 +57,9 @@ describe('Test en PasswordForget', () => {
     await user.type(wrapper.getByTestId('email'), 'micorreo@email.com');
     await user.click(wrapper.getByText(/siguiente/i));
     await waitFor(() => {
-      expect(wrapper.getByText('Hubo problemas en la comunicación con el servidor'));
+      expect(
+        wrapper.getByText('Hubo problemas en la comunicación con el servidor')
+      ).toBeInTheDocument();
       wrapper.unmount();
     });
   });
@@ -75,7 +77,7 @@ describe('Test en PasswordForget', () => {
     await user.type(wrapper.getByTestId('email'), 'micorreo@email.com');
     await user.click(wrapper.getByText(/siguiente/i));
     await waitFor(() => {
-      expect(wrapper.getByText(/Hemos enviado un link a tu email/i));
+      expect(wrapper.getByText(/Hemos enviado un link a tu email/i)).toBeInTheDocument();
       wrapper.unmount();
     });
   });
