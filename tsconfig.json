@@ -26,7 +26,8 @@
     "src",
     "./src/types/env.d.ts",
     "./src/types/apiResponse.d.ts",
-    "./src/types/models.d.ts"
+    "./src/types/models.d.ts",
+    "./src/types/globals.d.ts"
   ],
   "references": [
     {

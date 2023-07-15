@@ -1,6 +1,6 @@
-import { type PasswordForgetFormData, type ValidationInputMessage } from '../index.types';
+import { type PasswordForgetFormData } from '../index.types';
 
-export const validateUserEmail = (values: PasswordForgetFormData): ValidationInputMessage => {
+export const validateUserEmail = (values: PasswordForgetFormData): ValidationInputResult => {
   const emailToValidate = values.email.trim();
   const regExFormatEmail = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   const emailValidFormat = regExFormatEmail.test(emailToValidate);

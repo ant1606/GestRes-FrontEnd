@@ -1,6 +1,6 @@
-import { type LoginFormData, type ValidationInputMessage } from '../index.types';
+import { type LoginFormData } from '../index.types';
 
-export const validateUserEmail = (values: LoginFormData): ValidationInputMessage => {
+export const validateUserEmail = (values: LoginFormData): ValidationInputResult => {
   const emailToValidate = values.email.trim();
   const regExFormatEmail = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
   const emailValidFormat = regExFormatEmail.test(emailToValidate);
@@ -13,7 +13,7 @@ export const validateUserEmail = (values: LoginFormData): ValidationInputMessage
   return null;
 };
 
-export const validateUserPassword = (values: LoginFormData): ValidationInputMessage => {
+export const validateUserPassword = (values: LoginFormData): ValidationInputResult => {
   const passwordToValidate = values.password.trim();
   if (passwordToValidate.length === 0) {
     return 'Debe ingresar el password del usuario';

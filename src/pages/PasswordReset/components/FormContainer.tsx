@@ -1,34 +1,30 @@
 import React, { useEffect, useRef } from 'react';
+import { useForm } from '@/hooks/useForm';
+import { useAppDispatch } from '@/hooks/redux';
+import { isLoading } from '@/redux/slice/uiSlice';
+import { toastNotifications } from '@/utilities/notificationsSwal';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { passwordReset } from '@/services';
 import FormView from './FormView';
 import { usePasswordReset } from '../context/passwordReset.context';
 import {
   validateUserEmail,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from '../validationInputs';
-import { useForm } from '@/hooks/useForm';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { resetPassword } from '@/services/resetPassword.services';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-
-interface ResponseAPI {
-  data?: Record<string, any>;
-  error?: Record<string, any>;
-}
+} from '../utils/validationInputs';
 
 const initialState = {
   email: '',
   password: '',
   passwordConfirmation: ''
 };
+
 const validateFunctionsFormInputs = {
   email: validateUserEmail,
   password: validateUserPassword,
   passwordConfirmation: validateUserPasswordConfirmation
 };
+
 export const FormContainer: React.FC = () => {
   const { passwordResetError, addValidationError } = usePasswordReset();
   const {
@@ -63,7 +59,7 @@ export const FormContainer: React.FC = () => {
         if (token?.trim().length === 0 || token === null) {
           throw new Error('Token no válido');
         }
-        const response: ResponseAPI = await resetPassword({
+        const response = await passwordReset({
           email,
           password,
           password_confirmation: passwordConfirmation,
@@ -73,20 +69,20 @@ export const FormContainer: React.FC = () => {
           toastNotifications().toastSuccesCustomize('Su contraseña fue cambiada con éxito.');
           navigate('/login', { replace: true });
         } else if ('error' in response) {
-          const errorProcesed = processErrorResponse(response);
-          Object.keys(errorProcesed.error.detail).forEach((key) => {
-            // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
-            if (key !== 'api_response') {
-              addValidationError({ [key]: errorProcesed[key] });
+          const errorsDetail = response.error?.detail;
+          Object.keys(errorsDetail).forEach((key) => {
+            if (key !== 'apiResponseMessageError') {
+              addValidationError({ [key]: errorsDetail[key] });
             }
           });
 
-          if ('api_response' in errorProcesed.error.detail) {
-            throw new Error(errorProcesed.error.detail.api_response);
+          if ('apiResponseMessageError' in errorsDetail) {
+            if (errorsDetail.apiResponseMessageError !== null)
+              throw new Error(errorsDetail.apiResponseMessageError);
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
@@ -95,7 +91,7 @@ export const FormContainer: React.FC = () => {
 
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    handleSubmit(e); // Invocar la función handleSubmit sin esperar la promesa
+    handleSubmit(e);
   };
   return (
     <FormView

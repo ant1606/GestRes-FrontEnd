@@ -1,0 +1,1 @@
+type ValidationInputResult = string | null;

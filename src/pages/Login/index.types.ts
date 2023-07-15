@@ -1,6 +1,3 @@
-export type ValidationFunctions = Record<string, (values: LoginFormData) => ValidationInputMessage>;
-export type ValidationInputMessage = string | null;
-
 export interface LoginFormData {
   email: string;
   password: string;

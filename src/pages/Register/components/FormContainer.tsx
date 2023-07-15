@@ -10,7 +10,7 @@ import {
   validateUserName,
   validateUserPassword,
   validateUserPasswordConfirmation
-} from '../utils/RegisterFormValidationInputs';
+} from '../utils/validationInputs';
 import { useRegister } from '../context/register.context';
 
 const validateFunctionsFormInputs = {

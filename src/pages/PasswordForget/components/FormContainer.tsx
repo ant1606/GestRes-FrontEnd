@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import FormView from './FormView';
-import { validateUserEmail } from '../../Register/utils/RegisterFormValidationInputs.js';
+import { validateUserEmail } from '../utils/validationInputs.js';
 import { useForm } from '@/hooks/useForm.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { isLoading } from '@/redux/slice/uiSlice.js';
@@ -59,7 +59,8 @@ export const FormContainer: React.FC = () => {
           });
 
           if ('apiResponseMessageError' in errorProcesed) {
-            throw new Error(errorProcesed.apiResponseMessageError);
+            if (errorProcesed.apiResponseMessageError !== null)
+              throw new Error(errorProcesed.apiResponseMessageError);
           }
         }
       }
