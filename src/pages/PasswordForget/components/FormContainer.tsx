@@ -5,14 +5,9 @@ import { useForm } from '@/hooks/useForm.js';
 import { useAppDispatch } from '@/hooks/redux/index.js';
 import { isLoading } from '@/redux/slice/uiSlice.js';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util.js';
-import { forgetPassword } from '@/services/forgetPassword.services.js';
+import { passwordForget } from '@/services/passwordForget.services.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { usePasswordForget } from '../context/passwordForget.context.js';
-
-interface ResponseAPI {
-  data?: Record<string, any>;
-  error?: Record<string, any>;
-}
 
 const validateFunctionsFormInputs = {
   email: validateUserEmail
@@ -51,25 +46,24 @@ export const FormContainer: React.FC = () => {
         (el) => passwordForgetErrorRef.current[el] === null
       );
       if (existValidationMessage) {
-        const response: ResponseAPI = await forgetPassword(email);
+        const response = await passwordForget(email);
         if ('data' in response) {
           setIfResetLinkWasGenerated(true);
         } else if ('error' in response) {
           const errorProcesed = processErrorResponse(response).error.detail;
 
           Object.keys(errorProcesed).forEach((key) => {
-            // TODO colocar el nombre api_response de manera global en una constante o cambiar nombre
-            if (key !== 'api_response') {
+            if (key !== 'apiResponseMessageError') {
               addValidationError({ [key]: errorProcesed[key] });
             }
           });
 
-          if ('api_response' in errorProcesed) {
-            throw new Error(errorProcesed.api_response);
+          if ('apiResponseMessageError' in errorProcesed) {
+            throw new Error(errorProcesed.apiResponseMessageError);
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
@@ -78,7 +72,7 @@ export const FormContainer: React.FC = () => {
 
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    handleSubmit(e); // Invocar la función handleSubmit sin esperar la promesa
+    handleSubmit(e);
   };
 
   return (
