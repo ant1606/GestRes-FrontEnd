@@ -10,7 +10,7 @@ import RecourseRouter from './RecourseRouter.js';
 import TagRouter from './TagRouter.js';
 import useSettings from '../Context/SettingsContext.js';
 import LoginScreen from '../Components/Pages/Authentication/LoginScreen.jsx';
-import { useSecurity } from '../Context/SecurityContext.js';
+import { useSecurity } from '../Context/del.SecurityContext.js';
 import { tokenExpired } from '../helpers/authenticationManagement.js';
 
 import RegisterUserScreen from '../Components/Pages/Authentication/RegisterUserScreen.jsx';

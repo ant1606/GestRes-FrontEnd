@@ -3,11 +3,11 @@ import Icon from '@mdi/react';
 import { mdiExitToApp } from '@mdi/js';
 import { useAppDispatch } from '@/hooks/redux';
 import { userIsLogout } from '@/redux/slice/authenticationSlice';
-import Cookies from 'js-cookie';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { loggoutUser } from '@/services';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { useNavigate } from 'react-router-dom';
+import { deletePersistenDataUser } from '@/utilities/authenticationManagement';
 
 // import { useNavigate } from 'react-router-dom';
 // import { useSecurity } from '../../Context/SecurityContext.jsx';
@@ -17,15 +17,13 @@ const Titlebar: React.FC = () => {
   const navigate = useNavigate();
 
   const handleExitAppClick = async (): Promise<void> => {
-    // TODO ELiminar el LocalStorage de usuario y el bearerToken
     try {
       dispatch(isLoading(true));
-      console.log('haciendo el logout');
+
       const response = await loggoutUser();
-      console.log(response);
+
       if ('data' in response) {
-        Cookies.remove('bearerToken');
-        localStorage.clear();
+        deletePersistenDataUser();
         dispatch(userIsLogout());
         toastNotifications().toastSuccesCustomize(response.data.message);
         navigate('/login', { replace: true });

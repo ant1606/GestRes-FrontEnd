@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import Button from '../../../Button.js';
-import RecourseForm from '../../Organisms/Recourse/RecourseForm.js';
+import Button from '../../../components/Button.js';
+import RecourseForm from '../../../components/Components/Organisms/Recourse/RecourseForm.js';
 import { Link } from 'react-router-dom';
-import TitleContext from '../../../Context/TitleContext.jsx';
-import useRecourse from '../../../Context/RecourseContext.jsx';
-import useSettings from '../../../Context/SettingsContext.jsx';
+import TitleContext from '../../../Context/TitleContext.js';
+import useRecourse from '../../../Context/RecourseContext.js';
+import useSettings from '../../../Context/SettingsContext.js';
 
 const RecourseScreenForm = () => {
   const { changeTitle } = useContext(TitleContext);

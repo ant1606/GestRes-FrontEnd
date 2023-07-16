@@ -1,1 +1,1 @@
-export { PasswordResetContainer as PasswordReset } from './PasswordResetContainer';
+export { PasswordResetContainer as default } from './PasswordResetContainer';

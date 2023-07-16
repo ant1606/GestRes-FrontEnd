@@ -31,7 +31,7 @@ const menus = [
     title: 'Etiquetas',
     icon: tagIcon,
     link: true,
-    path: '/app/etiquetas'
+    path: '/app/tag'
   }
 ];
 

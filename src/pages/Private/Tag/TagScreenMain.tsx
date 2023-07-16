@@ -1,13 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import useTag from '../../../Context/TagContext';
-import TitleContext from '../../../Context/TitleContext';
+import useTag from './context/TagContext.bak.js';
+import TitleContext from '../../../Context/TitleContext.js';
 
-import TagFilter from '../../Organisms/Tag/TagFilter.js';
-import TagForm from '../../Organisms/Tag/TagForm.js';
-import TagTable from '../../Organisms/Tag/TagTable.js';
-import FooterTable from '../../Organisms/FooterTable.js';
+import TagFilter from './components/TagFilter.js';
+import TagForm from '../../../components/Components/Organisms/Tag/TagForm.js';
+import TagTable from '../../../components/Components/Organisms/Tag/TagTable.js';
+import FooterTable from '../../../components/Components/Organisms/FooterTable.js';
 import perPageItemsValue from '../../../helpers/perPageItemsValue.js';
 import Loader from '../../Atoms/Loader.js';
 

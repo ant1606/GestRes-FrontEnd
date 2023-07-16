@@ -4,11 +4,6 @@ import Cookies from 'js-cookie';
 const BEARER_TOKEN = 'bearerToken';
 const REMEMBER_ME_TOKEN = 'rememberToken';
 
-interface ResponseAPI {
-  data?: Record<string, any>;
-  error?: Record<string, any>;
-}
-
 export const getRememberToken: string | null = localStorage.getItem(REMEMBER_ME_TOKEN);
 
 export const tokenExpired = (): boolean => {
@@ -46,6 +41,12 @@ export const savePersistenDataUser = (response: Record<string, string | any>): v
     localStorage.setItem('rememberToken', response.data?.user.rememberToken);
 };
 
+export const deletePersistenDataUser = (): void => {
+  // TODO Formatear la fecha de expiración del bearerToken
+  Cookies.remove('bearerToken');
+  localStorage.clear();
+};
+
 export const checkAuthentication = async (): Promise<Record<string, string | any>> => {
   try {
     if (tokenExpired()) {
@@ -76,50 +77,3 @@ export const checkAuthentication = async (): Promise<Record<string, string | any
     throw new Error('Error en la autenticación');
   }
 };
-
-// export const checkRememberToken = () => {
-//   let success = true;
-
-//   if (
-//     localStorage.getItem('rememberToken') === null ||
-//     localStorage.getItem('rememberToken') === ''
-//   ) {
-//     return false;
-//   }
-
-//   fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/remember`, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       accept: 'application/json'
-//     },
-//     body: JSON.stringify({
-//       remember_me: localStorage.getItem('rememberToken')
-//     })
-//   })
-//     .then(async (res) => {
-//       if (!res.ok) return await Promise.reject(res.json());
-//       return await res.json();
-//     })
-//     .then((data) => {
-//       success = true;
-//       setCookie('bearerToken', data.data.bearer_token, data.data.bearer_expire);
-//       localStorage.setItem('rememberToken', data.data.user.remember_token);
-//       localStorage.setItem('user', JSON.stringify(data.data.user));
-//       setUserIsLogged(data.data.user);
-//     })
-//     .catch(async (error) => {
-//       const err = await error;
-//       const processError = err.error.reduce(
-//         (previous, currrent) => ({
-//           ...previous,
-//           [currrent.inputName]: currrent.detail
-//         }),
-//         {}
-//       );
-//       addNewError(processError);
-//       success = false;
-//     });
-
-//   return success;
-// };
