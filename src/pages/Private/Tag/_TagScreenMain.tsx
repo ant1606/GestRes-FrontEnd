@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import useTag from './context/TagContext.bak.js';
 import TitleContext from '../../../Context/TitleContext.js';
 
-import TagFilter from './components/TagFilter.js';
+import TagFilter from './components/Filter/_TagFilter.js';
 import TagForm from '../../../components/Components/Organisms/Tag/TagForm.js';
 import TagTable from '../../../components/Components/Organisms/Tag/TagTable.js';
 import FooterTable from '../../../components/Components/Organisms/FooterTable.js';

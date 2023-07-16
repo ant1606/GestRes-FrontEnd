@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import useTag from '../context/TagContext.bak.js';
+import useTag from '../../context/TagContext.bak.js';
 import Button from '../../../Button.js';
 import Field from '../../Atoms/Field';
-import { useForm } from '../../../../hooks/useForm.js';
-import { validateTagNombre } from '../utils/TagFormValidationInputs.js';
+import { useForm } from '../../../../../hooks/useForm.js';
+import { validateTagNombre } from '../../utils/TagFormValidationInputs.js';
 
 const validateFunctionsFormInputs = {
   nombre: validateTagNombre
