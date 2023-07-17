@@ -7,10 +7,10 @@ interface TagProviderProps {
 }
 interface ActionReducer {
   type: string;
-  payload: Record<string, unknown> | boolean | number;
+  payload: Record<string, unknown> | boolean | number | Tag;
 }
 
-type typeValidationError = 'name';
+type typeValidationError = 'nombre';
 
 interface InitialState {
   tags: Tag[];
@@ -28,17 +28,20 @@ const initialState: InitialState = {
   tagLinks: null,
   tagPerPage: 0,
   validationError: {
-    name: null
+    nombre: null
   }
 };
 
+const ADD_VALIDATION_ERROR = 'add validation error';
 const SET_TAGS_PER_PAGE = 'set tags per page';
+const SELECT_TAG_ACTIVE = 'select tag active';
 
+// TAG REDUCER
 const tagReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
   action: ActionReducer
 ): InitialState => {
-  // const payloadKey = '';
+  let payloadKey = '';
   let payloadValue;
   switch (action.type) {
     case SET_TAGS_PER_PAGE:
@@ -50,12 +53,35 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
         ...state,
         tagPerPage: action.payload as number
       };
+    case SELECT_TAG_ACTIVE:
+      return {
+        ...state,
+        tagActive: action.payload as Tag
+      };
+    case ADD_VALIDATION_ERROR:
+      payloadKey = Object.getOwnPropertyNames(action.payload)[0];
+      payloadValue = Object.values(action.payload)[0];
+      return {
+        ...state,
+        validationError: {
+          ...state.validationError,
+          [payloadKey]: payloadValue as string | null
+        }
+      };
   }
   throw new Error(`Action desconocida del tipo ${action.type}`);
 };
 
+// TAG PROVIDER
 export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
   const [state, dispatch] = useReducer(tagReducer, initialState);
+
+  const addValidationError = (error: Record<string, string>): void => {
+    dispatch({
+      type: ADD_VALIDATION_ERROR,
+      payload: error
+    });
+  };
 
   const setTagPerPage = (perPage: number): void => {
     dispatch({
@@ -64,9 +90,20 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     });
   };
 
+  const selectedTag = (tag: Tag): void => {
+    dispatch({
+      type: SELECT_TAG_ACTIVE,
+      payload: tag
+    });
+  };
+
   const tagActions = {
+    tagError: state.validationError,
     tagPerPage: state.tagPerPage,
-    setTagPerPage
+    tagActive: state.tagActive,
+    setTagPerPage,
+    selectedTag,
+    addValidationError
   };
 
   return <TagContext.Provider value={tagActions}>{children}</TagContext.Provider>;
