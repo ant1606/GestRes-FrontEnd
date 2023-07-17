@@ -5,3 +5,9 @@ interface User {
   isVerified: boolean;
   rememberToken?: string | null;
 }
+
+interface Tag {
+  id: number;
+  name: string;
+  style: string;
+}

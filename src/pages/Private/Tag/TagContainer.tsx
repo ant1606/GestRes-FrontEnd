@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import TagView from './TagView';
 import { useSearchParams } from 'react-router-dom';
+import { TagProvider } from './context/tag.context';
 
 export const TagContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,5 +26,9 @@ export const TagContainer: React.FC = () => {
   //   // loadTags(searchParams.toString());
   // };
 
-  return <TagView />;
+  return (
+    <TagProvider>
+      <TagView />
+    </TagProvider>
+  );
 };
