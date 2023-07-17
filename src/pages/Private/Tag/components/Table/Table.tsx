@@ -1,9 +1,9 @@
 import React from 'react';
 
-import TagTableRow from '../../Molecules/Tag/TagTableRow.js';
-import useTag from '../../context/TagContext.bak.js';
+import Row from './Row.js';
+import { useTag } from '../../context/tag.context.js';
 
-const TagTable = () => {
+export const Table: React.FC = () => {
   const { tags } = useTag();
 
   return (
@@ -15,12 +15,10 @@ const TagTable = () => {
         </tr>
       </thead>
       <tbody>
-        {tags?.map((tag) => (
-          <TagTableRow key={tag.identificador} tag={tag} />
+        {tags?.map((tag: Tag) => (
+          <Row key={tag.id} tag={tag} />
         ))}
       </tbody>
     </table>
   );
 };
-
-export default TagTable;
