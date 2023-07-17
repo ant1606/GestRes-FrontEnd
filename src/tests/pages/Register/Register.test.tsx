@@ -1,4 +1,4 @@
-import { Register } from '@/pages/Register';
+import Register from '@/pages/Register';
 import { setServiceRegisterResponseSuccess } from '@/tests/mocks/register.handlers';
 import { renderWithProviders } from '@/tests/utils/renderWithProvider';
 import { cleanup, fireEvent, waitFor } from '@testing-library/react';

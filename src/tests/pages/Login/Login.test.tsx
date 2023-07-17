@@ -8,7 +8,7 @@ import {
 } from '@/tests/mocks/login.handlers';
 import Cookies from 'js-cookie';
 import { Route, Routes } from 'react-router-dom';
-import { Register } from '@/pages/Register';
+import Register from '@/pages/Register';
 import PasswordForget from '@/pages/PasswordForget';
 
 describe('Test en Login', () => {

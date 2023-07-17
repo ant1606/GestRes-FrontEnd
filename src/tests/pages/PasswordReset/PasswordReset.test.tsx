@@ -1,4 +1,4 @@
-import { PasswordReset } from '@/pages/PasswordReset';
+import PasswordReset from '@/pages/PasswordReset';
 import { setServiceResetPasswordResponseSuccess } from '@/tests/mocks/resetPassword.handlers';
 import { renderWithProviders } from '@/tests/utils/renderWithProvider';
 import { cleanup, waitFor } from '@testing-library/react';
