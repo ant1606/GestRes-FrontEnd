@@ -61,9 +61,9 @@ const Row: React.FC<Prop> = ({ tag }) => {
       <td className="max-h-14 max-w-xs">
         <div className="flex justify-center items-center">
           <span
-            className={` ${tag.estilos.trim().length > 0 ? tag.estilos : 'bg-gray-900 text-white'} 
+            className={` ${tag.style.trim().length > 0 ? tag.style : 'bg-gray-900 text-white'} 
             m-0 h-7 shrink px-4 py-1 text-sm font-bold rounded-2xl transform-uppercase`}>
-            {tag.nombre}
+            {tag.name}
           </span>
         </div>
       </td>

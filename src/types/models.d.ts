@@ -8,6 +8,6 @@ interface User {
 
 interface Tag {
   id: number;
-  nombre: string;
-  estilos: string;
+  name: string;
+  style: string;
 }

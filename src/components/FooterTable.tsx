@@ -1,14 +1,30 @@
-import React from 'react'
-import ReactPaginate from 'react-paginate'
+import React from 'react';
+import ReactPaginate from 'react-paginate';
 
-const FooterTable = ({ handlePageChange, totalPages, from, to, total, currentPage }) => {
+interface Props {
+  handlePageChange: (selectedItem: { selected: number }) => void;
+  totalPages: number;
+  from: number;
+  to: number;
+  total: number;
+  currentPage: number;
+}
+const FooterTable: React.FC<Props> = ({
+  handlePageChange,
+  totalPages,
+  from,
+  to,
+  total,
+  currentPage
+}) => {
   return (
-    <div className='flex items-end justify-between'>
-      <div className='block h-full flex-none'>
-        <p>{from} a {to}, de {total}</p>
+    <div className="flex items-end justify-between">
+      <div className="block h-full flex-none">
+        <p>
+          {from} a {to}, de {total}
+        </p>
       </div>
-      <div className='grow flex justify-end'>
-
+      <div className="grow flex justify-end">
         <ReactPaginate
           breakLabel="..."
           onPageChange={handlePageChange}
@@ -35,7 +51,7 @@ const FooterTable = ({ handlePageChange, totalPages, from, to, total, currentPag
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FooterTable
+export default FooterTable;

@@ -1,4 +1,5 @@
 import { type ReactNode, createContext, useReducer, useContext, type Reducer } from 'react';
+import { type TagsSuccessResponse } from '../index.types';
 
 const TagContext = createContext({});
 
@@ -7,7 +8,7 @@ interface TagProviderProps {
 }
 interface ActionReducer {
   type: string;
-  payload: Record<string, unknown> | boolean | number | Tag;
+  payload: Record<string, unknown> | boolean | number | Tag | TagsSuccessResponse;
 }
 
 type typeValidationError = 'nombre';
@@ -16,7 +17,7 @@ interface InitialState {
   tags: Tag[];
   tagActive: Tag | null;
   tagMeta: PaginateResultMeta | null;
-  tagLinks: Record<string, string | null> | null;
+  tagLinks: PaginateResultLinks | null;
   tagPerPage: number;
   validationError: Record<typeValidationError, string | null>;
 }
@@ -35,6 +36,7 @@ const initialState: InitialState = {
 const ADD_VALIDATION_ERROR = 'add validation error';
 const SET_TAGS_PER_PAGE = 'set tags per page';
 const SELECT_TAG_ACTIVE = 'select tag active';
+const TAG_LOADED = 'loaded Tags from API';
 
 // TAG REDUCER
 const tagReducer: Reducer<InitialState, ActionReducer> = (
@@ -44,6 +46,14 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
   let payloadKey = '';
   let payloadValue;
   switch (action.type) {
+    case TAG_LOADED:
+      payloadValue = action.payload as TagsSuccessResponse;
+      return {
+        ...state,
+        tags: [...payloadValue.data],
+        tagMeta: payloadValue.meta,
+        tagLinks: payloadValue.links
+      };
     case SET_TAGS_PER_PAGE:
       payloadValue = action.payload;
       if (typeof payloadValue !== 'number') {
@@ -51,7 +61,7 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
       }
       return {
         ...state,
-        tagPerPage: action.payload as number
+        tagPerPage: payloadValue
       };
     case SELECT_TAG_ACTIVE:
       return {
@@ -90,6 +100,13 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     });
   };
 
+  const setTags = (tags: TagsSuccessResponse): void => {
+    dispatch({
+      type: TAG_LOADED,
+      payload: tags
+    });
+  };
+
   const selectedTag = (tag: Tag): void => {
     dispatch({
       type: SELECT_TAG_ACTIVE,
@@ -98,12 +115,15 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
   };
 
   const tagActions = {
+    tags: state.tags,
+    tagMeta: state.tagMeta,
     tagError: state.validationError,
     tagPerPage: state.tagPerPage,
     tagActive: state.tagActive,
     setTagPerPage,
     selectedTag,
-    addValidationError
+    addValidationError,
+    setTags
   };
 
   return <TagContext.Provider value={tagActions}>{children}</TagContext.Provider>;

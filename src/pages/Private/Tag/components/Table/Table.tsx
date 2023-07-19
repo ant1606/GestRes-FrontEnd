@@ -5,7 +5,7 @@ import { useTag } from '../../context/tag.context.js';
 
 export const Table: React.FC = () => {
   const { tags } = useTag();
-
+  console.log(tags, 'desde table');
   return (
     <table className="table-auto w-full">
       <thead>
