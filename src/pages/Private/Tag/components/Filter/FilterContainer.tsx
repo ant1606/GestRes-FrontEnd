@@ -19,17 +19,13 @@ export const FilterContainer: React.FC = () => {
 
     searchParams.sort();
     setSearchParams(searchParams);
-    // TODO Agregar el loadTags al contexto
     const tags = await getTags(searchParams.toString());
-    console.log(tags, 'desde execFilter');
     setTags(tags);
-    // loadTags(searchParams.toString());
   };
 
   useEffect(() => {
-    console.log({ tagPerPage }, 'desde filtercontainer');
     if (tagPerPage > 0) execFilter();
-  }, [tagPerPage]);
+  }, [tagPerPage, searchNombre]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchNombre(e.target.value);
