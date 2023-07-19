@@ -8,7 +8,7 @@ interface Props {
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleCancelClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   tagError: Record<string, string>;
-  nombre: string;
+  name: string;
 }
 
 const FormView: React.FC<Props> = ({
@@ -16,7 +16,7 @@ const FormView: React.FC<Props> = ({
   handleInputChange,
   handleCancelClick,
   tagError,
-  nombre
+  name
 }) => {
   const { tagActive } = useTag();
   return (
@@ -28,11 +28,11 @@ const FormView: React.FC<Props> = ({
             <Field
               type="text"
               label="Ingrese Etiqueta"
-              name="nombre"
+              name="name"
               classBox="grow"
               handleChange={handleInputChange}
-              errorInput={tagError?.nombre}
-              value={nombre}
+              errorInput={tagError?.name}
+              value={name}
             />
           </div>
           <Button text="GUARDAR" type="submit" btnType="main" />

@@ -6,22 +6,23 @@ import Icon from '@mdi/react';
 import { mdiPencil, mdiTrashCan } from '@mdi/js';
 import { useAppDispatch } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
+import { focusInput, setDataInput } from '@/utilities/manipulationDom';
 
 interface Prop {
   tag: Tag;
 }
 const Row: React.FC<Prop> = ({ tag }) => {
-  const { selectedTag, addNewError } = useTag();
+  const { selectedTag, resetValidationError } = useTag();
   // const { selectedTag, addNewError, destroyTag, loadTags } = useTag();
   // const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
   const handleClickEdit = (tag: Tag): void => {
-    addNewError([]);
+    console.log(tag);
+    resetValidationError();
     selectedTag(tag);
-
-    document.querySelector('#nombre').value = tag.nombre;
-    document.querySelector('#nombre').select();
+    setDataInput('#name', tag.name);
+    focusInput('#name');
   };
 
   const handleClickDelete = async (tag: Tag): Promise<void> => {

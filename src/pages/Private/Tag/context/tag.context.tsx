@@ -11,7 +11,7 @@ interface ActionReducer {
   payload: Record<string, unknown> | boolean | number | Tag | TagsSuccessResponse;
 }
 
-type typeValidationError = 'nombre';
+type typeValidationError = 'name';
 
 interface InitialState {
   tags: Tag[];
@@ -29,11 +29,12 @@ const initialState: InitialState = {
   tagLinks: null,
   tagPerPage: 0,
   validationError: {
-    nombre: null
+    name: null
   }
 };
 
 const ADD_VALIDATION_ERROR = 'add validation error';
+const RESET_VALIDATION_ERROR = 'reset validation error';
 const SET_TAGS_PER_PAGE = 'set tags per page';
 const SELECT_TAG_ACTIVE = 'select tag active';
 const TAG_LOADED = 'loaded Tags from API';
@@ -78,6 +79,13 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
           [payloadKey]: payloadValue as string | null
         }
       };
+    case RESET_VALIDATION_ERROR:
+      return {
+        ...state,
+        validationError: {
+          name: null
+        }
+      };
   }
   throw new Error(`Action desconocida del tipo ${action.type}`);
 };
@@ -90,6 +98,13 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     dispatch({
       type: ADD_VALIDATION_ERROR,
       payload: error
+    });
+  };
+
+  const resetValidationError = (): void => {
+    dispatch({
+      type: RESET_VALIDATION_ERROR,
+      payload: true
     });
   };
 
@@ -123,7 +138,8 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     setTagPerPage,
     selectedTag,
     addValidationError,
-    setTags
+    setTags,
+    resetValidationError
   };
 
   return <TagContext.Provider value={tagActions}>{children}</TagContext.Provider>;

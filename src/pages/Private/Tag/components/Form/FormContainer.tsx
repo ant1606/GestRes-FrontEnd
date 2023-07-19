@@ -6,6 +6,7 @@ import { useAppDispatch } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { useForm } from '@/hooks/useForm';
 import { useTag } from '../../context/tag.context';
+import { focusInput } from '@/utilities/manipulationDom';
 
 const validateFunctionsFormInputs = {
   nombre: validateTagNombre
@@ -31,7 +32,7 @@ export const FormContainer: React.FC = () => {
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
     addValidationError
   );
-  const { nombre } = formValues;
+  const { name } = formValues;
   const tagErrorRef = useRef<Record<string, string | null>>({});
 
   useEffect(() => {
@@ -57,7 +58,7 @@ export const FormContainer: React.FC = () => {
     } catch (error) {
     } finally {
       dispatch(isLoading(false));
-      focusInput();
+      focusInput('#name');
     }
   };
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -68,22 +69,15 @@ export const FormContainer: React.FC = () => {
   const handleCancelClick = (): void => {
     // selectedTag(null);
     // addNewError([]);
-    focusInput();
+    focusInput('#name');
   };
-  function focusInput(): void {
-    const nombreElement = document.querySelector('#nombre');
-    if (nombreElement !== null && nombreElement instanceof HTMLInputElement) {
-      nombreElement.focus();
-      nombreElement.select();
-    }
-  }
 
   return (
     <FormView
       handleCancelClick={handleCancelClick}
       handleInputChange={handleInputChange}
       handleSubmit={handleSubmitWrapper}
-      nombre={nombre}
+      name={name}
       tagError={tagError}
     />
   );
