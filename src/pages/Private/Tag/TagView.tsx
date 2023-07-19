@@ -1,5 +1,5 @@
 import Loader from '@/components/Loader';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React, { useEffect } from 'react';
 
@@ -20,18 +20,15 @@ const TagView: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   const { tags, tagMeta, setTags, setTagPerPage, tagPerPage } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setTagPerPage(perPageItemsValue[0].id);
-    // return () => {
-
-    // };
   }, []);
 
   // const tags = [1, 2, 3];
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
     console.log('cambiando');
+    console.log(e, 'desde handlePageChange');
     searchParams.delete('page');
     searchParams.append('page', (e.selected + 1).toString());
     searchParams.delete('perPage');
@@ -39,9 +36,9 @@ const TagView: React.FC = () => {
     // searchParams.append('perPage', (5).toString());
     searchParams.sort();
     setSearchParams(searchParams);
-    const tags = await getTags('');
+    const tags = await getTags(searchParams.toString());
     console.log(tags);
-    dispatch(setTags(tags));
+    setTags(tags);
     // loadTags(searchParams.toString());
   };
 
