@@ -6,37 +6,108 @@ import Icon from '@mdi/react';
 import { mdiPencil, mdiTrashCan } from '@mdi/js';
 import { useAppDispatch } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
-import { focusInput, setDataInput } from '@/utilities/manipulationDom';
+import { focusInput } from '@/utilities/manipulationDom';
+import { destroyTag, getTags } from '@/services/tag.services';
 
 interface Prop {
   tag: Tag;
 }
 const Row: React.FC<Prop> = ({ tag }) => {
-  const { selectedTag, resetValidationError } = useTag();
+  const { selectedTag, resetValidationError, cleanSelectedTag, setTags, addValidationError } =
+    useTag();
   // const { selectedTag, addNewError, destroyTag, loadTags } = useTag();
-  // const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
   const handleClickEdit = (tag: Tag): void => {
-    console.log(tag);
     resetValidationError();
     selectedTag(tag);
-    setDataInput('#name', tag.name);
     focusInput('#name');
   };
 
   const handleClickDelete = async (tag: Tag): Promise<void> => {
     try {
-      const result = await toastNotifications().modalDeleteConfirm(tag);
-      if (result) {
-        dispatch(isLoading(true));
-        // await destroyTag(tag);
-        // loadTags(searchParams.toString());
+      const result = await toastNotifications().modalDeleteConfirm(tag.name);
+      if (!result) return;
+
+      dispatch(isLoading(true));
+      const response = await destroyTag(tag);
+      if ('data' in response) {
+        resetValidationError();
+        toastNotifications().toastSuccesCustomize(
+          `Se elimino la etiqueta ${tag.name} satisfactoriamente`
+        );
+        cleanSelectedTag();
+        const tags = await getTags(searchParams.toString());
+        setTags(tags);
+      } else if ('error' in response) {
+        const errorsDetail = response.error?.detail;
+        Object.keys(errorsDetail).forEach((key) => {
+          if (key !== 'apiResponseMessageError') {
+            addValidationError({ [key]: errorsDetail[key] });
+          }
+        });
+
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
+        }
       }
     } catch (error) {
     } finally {
       dispatch(isLoading(false));
     }
+
+    // try {
+    //   const result = await toastNotifications().modalDeleteConfirm(tag);
+    //   if (result) {
+
+    //   }
+
+    //   dispatch(isLoading(true));
+    //   await validatedSubmitForm();
+    //   const existValidationMessage = Object.keys(tagErrorRef.current).every(
+    //     (el) => tagErrorRef.current[el] === null
+    //   );
+    //   if (existValidationMessage) {
+    //     const response =
+    //       tagActive === null
+    //         ? await savingTag({ id: 0, name, style: '' })
+    //         : await updatingTag({
+    //           id: tagActive.id,
+    //           name: formValues.name,
+    //           style: tagActive.style
+    //         });
+    //     if ('data' in response) {
+    //       reset();
+    //       resetValidationError();
+    //       const message =
+    //         tagActive === null
+    //           ? 'Se registró la etiqueta correctamente .'
+    //           : 'Se actualizó la etiqueta';
+    //       toastNotifications().toastSuccesCustomize(message);
+    //       cleanSelectedTag();
+    //       const tags = await getTags(searchParams.toString());
+    //       setTags(tags);
+    //     } else if ('error' in response) {
+    //       const errorsDetail = response.error?.detail;
+    //       Object.keys(errorsDetail).forEach((key) => {
+    //         if (key !== 'apiResponseMessageError') {
+    //           addValidationError({ [key]: errorsDetail[key] });
+    //         }
+    //       });
+
+    //       if ('apiResponseMessageError' in errorsDetail) {
+    //         if (errorsDetail.apiResponseMessageError !== null)
+    //           throw new Error(errorsDetail.apiResponseMessageError);
+    //       }
+    //     }
+    //   }
+    // } catch (error) {
+    // } finally {
+    //   dispatch(isLoading(false));
+    //   focusInput('#name');
+    // }
   };
 
   return (

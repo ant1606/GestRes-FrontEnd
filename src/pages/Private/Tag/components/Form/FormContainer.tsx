@@ -99,6 +99,7 @@ export const FormContainer: React.FC = () => {
       focusInput('#name');
     }
   };
+
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     handleSubmit();

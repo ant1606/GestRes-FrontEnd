@@ -80,3 +80,25 @@ export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErr
     .then(async (data) => tagAdapter(await data))
     .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
 };
+
+export const destroyTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
+  // TODO Extraer esta logica de verificacion del bearerToken
+  const bearerToken = Cookies.get('bearerToken');
+  if (bearerToken === null || bearerToken === undefined)
+    throw new Error('Token de autorización inválido');
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    }
+  })
+    .then(async (resp) => {
+      if (!resp.ok) return await Promise.reject(resp.json());
+
+      return await resp.json();
+    })
+    .then(async (data) => tagAdapter(await data))
+    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+};

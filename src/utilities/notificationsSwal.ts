@@ -69,11 +69,11 @@ export const toastNotifications = () => {
     });
   };
 
-  const modalDeleteConfirm = async (entity) => {
+  const modalDeleteConfirm = async (name: string): Promise<boolean> => {
     let confirm = false;
 
     await Swal.fire({
-      title: `¿Desea eliminar el registro ${entity.nombre}?`,
+      title: `¿Desea eliminar el registro ${name}?`,
       text: 'Esta acción no podrá ser revertida',
       icon: 'warning',
       showCancelButton: true,
