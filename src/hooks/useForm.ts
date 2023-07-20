@@ -5,6 +5,7 @@ interface useFormOutput {
   handleInputChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   // TODO Cambiar el tipo de validatedSubmitForm
   validatedSubmitForm: any;
+  reset: (newFormState?: Record<string, unknown>) => void;
 }
 
 // TODO Ver si el initialState puede recibir un tipo Genérico para poder tipar el initialState desde el componente en donde se usa useForm()
@@ -68,5 +69,9 @@ export const useForm = <T extends useFormInput>(
     });
   };
 
-  return { values, handleInputChange, validatedSubmitForm };
+  const reset = (newFormState: Record<string, unknown> = initialState): void => {
+    setValues(newFormState);
+  };
+
+  return { values, handleInputChange, validatedSubmitForm, reset };
 };
