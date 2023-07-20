@@ -24,6 +24,7 @@ export const tagAdapter = (response: ApiResponseTag): TagSuccessResponse => {
 };
 
 export const tagsAdapter = (response: any): TagsSuccessResponse => {
+  if (response.data.length === 0) return { meta: null, links: null, data: [] };
   return {
     meta: {
       path: response.meta.path,

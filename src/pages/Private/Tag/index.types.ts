@@ -1,7 +1,7 @@
 export interface TagsSuccessResponse {
-  meta: PaginateResultMeta;
+  meta: PaginateResultMeta | null;
   data: Tag[];
-  links: PaginateResultLinks;
+  links: PaginateResultLinks | null;
 }
 
 export interface TagErrorDetailResponse extends ApiErrorResponse {
