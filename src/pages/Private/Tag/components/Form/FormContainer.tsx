@@ -9,24 +9,25 @@ import { useTag } from '../../context/tag.context';
 import { focusInput } from '@/utilities/manipulationDom';
 
 const validateFunctionsFormInputs = {
-  nombre: validateTagNombre
+  name: validateTagNombre
 };
 
-const initialState = {
-  nombre: ''
+const initialStateGlobal = {
+  name: ''
 };
 
 export const FormContainer: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { tagError, addValidationError } = useTag();
-  // const { savingTag, updatingTag, tagActive, selectedTag, addNewError, tagError, setIsLoading } =
-  //   useTag();
+  const { tagError, addValidationError, cleanSelectedTag, resetValidationError, tagActive } =
+    useTag();
+  const initialState = tagActive !== null ? tagActive : initialStateGlobal;
   const [searchParams, setSearchParams] = useSearchParams();
-  // const initialState = tagActive || initialState;
+
   const {
     values: formValues,
     handleInputChange,
-    validatedSubmitForm
+    validatedSubmitForm,
+    reset
   } = useForm(
     initialState,
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
@@ -37,7 +38,9 @@ export const FormContainer: React.FC = () => {
 
   useEffect(() => {
     tagErrorRef.current = tagError;
-  }, [tagErrorRef]);
+    reset();
+    console.log({ tagActive }, 'Se renderizo ');
+  }, [tagErrorRef, tagActive]);
 
   const handleSubmit = async (): Promise<void> => {
     try {
@@ -69,6 +72,8 @@ export const FormContainer: React.FC = () => {
   const handleCancelClick = (): void => {
     // selectedTag(null);
     // addNewError([]);
+    cleanSelectedTag();
+    resetValidationError();
     focusInput('#name');
   };
 

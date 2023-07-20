@@ -37,6 +37,7 @@ const ADD_VALIDATION_ERROR = 'add validation error';
 const RESET_VALIDATION_ERROR = 'reset validation error';
 const SET_TAGS_PER_PAGE = 'set tags per page';
 const SELECT_TAG_ACTIVE = 'select tag active';
+const CLEAN_SELECT_TAG = 'clean select tag active';
 const TAG_LOADED = 'loaded Tags from API';
 
 // TAG REDUCER
@@ -86,6 +87,11 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
           name: null
         }
       };
+    case CLEAN_SELECT_TAG:
+      return {
+        ...state,
+        tagActive: null
+      };
   }
   throw new Error(`Action desconocida del tipo ${action.type}`);
 };
@@ -129,6 +135,13 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     });
   };
 
+  const cleanSelectedTag = (): void => {
+    dispatch({
+      type: CLEAN_SELECT_TAG,
+      payload: true
+    });
+  };
+
   const tagActions = {
     tags: state.tags,
     tagMeta: state.tagMeta,
@@ -139,7 +152,8 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     selectedTag,
     addValidationError,
     setTags,
-    resetValidationError
+    resetValidationError,
+    cleanSelectedTag
   };
 
   return <TagContext.Provider value={tagActions}>{children}</TagContext.Provider>;
