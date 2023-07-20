@@ -15,3 +15,12 @@ export interface TagErrorResponse {
     detail: TagErrorDetailResponse;
   };
 }
+export interface ApiResponseTag {
+  identificador: string;
+  nombre: string;
+  estilos: string;
+}
+
+export interface TagSuccessResponse {
+  data: Tag;
+}

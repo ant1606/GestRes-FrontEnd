@@ -1,16 +1,26 @@
-import { type TagErrorResponse, type TagsSuccessResponse } from '../index.types';
+import {
+  type TagSuccessResponse,
+  type ApiResponseTag,
+  type TagErrorResponse,
+  type TagsSuccessResponse
+} from '../index.types';
 
-interface ApiResponseTag {
-  identificador: string;
-  nombre: string;
-  estilos: string;
-}
-const adapterTagData = (tags: ApiResponseTag[]): Tag[] => {
+const adapterTagsData = (tags: ApiResponseTag[]): Tag[] => {
   return tags.map((tag: ApiResponseTag) => ({
     id: parseInt(tag.identificador),
     name: tag.nombre,
     style: tag.estilos
   }));
+};
+
+export const tagAdapter = (response: ApiResponseTag): TagSuccessResponse => {
+  return {
+    data: {
+      id: parseInt(response.identificador),
+      name: response.nombre,
+      style: response.estilos
+    }
+  };
 };
 
 export const tagsAdapter = (response: any): TagsSuccessResponse => {
@@ -31,7 +41,7 @@ export const tagsAdapter = (response: any): TagsSuccessResponse => {
       next: response.links.next,
       prev: response.links.prev
     },
-    data: adapterTagData(response.data)
+    data: adapterTagsData(response.data)
   };
 };
 
