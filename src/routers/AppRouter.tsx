@@ -52,6 +52,7 @@ const AppRouter: React.FC = () => {
     try {
       // TODO Cargar los datos de configuracion de la app
       // await loadSettings();
+      // TODO Cargar la última página visitada por el usuario
       const user = await checkAuthentication();
       await userIsLoggedInPromise(user);
     } catch (error) {

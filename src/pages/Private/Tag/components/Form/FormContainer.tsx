@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useRef } from 'react';
 import FormView from './FormView';
 import { validateTagNombre } from '../../utils/TagFormValidationInputs';
@@ -80,7 +81,7 @@ export const FormContainer: React.FC = () => {
           const tags = await getTags(searchParams.toString());
           setTags(tags);
         } else if ('error' in response) {
-          const errorsDetail = response.error?.detail;
+          const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {
             if (key !== 'apiResponseMessageError') {
               addValidationError({ [key]: errorsDetail[key] });

@@ -1,7 +1,7 @@
 import { createContext, useContext, useReducer } from 'react';
-import recourseReducer, { initialState } from '../reducers/recourseReducer.js';
+import recourseReducer, { initialState } from './recourseReducer.js';
 import GLOBAL_CONSTANTES from '../const/globalConstantes.js';
-import useSettings from './SettingsContext.js';
+import useSettings from '../../../../Context/SettingsContext.js';
 import types from '../typing/types/types.js';
 import { toastNotifications } from '../helpers/notificationsSwal.js';
 import Swal from 'sweetalert2';
