@@ -9,6 +9,7 @@ import { getRecourses } from '@/services/recourse.services';
 import { useRecourse } from './context/recourse.context';
 import perPageItemsValue from '@/config/perPageItemsValue';
 import FooterTable from '@/components/FooterTable';
+import Filter from './components/Filter';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -51,7 +52,7 @@ const RecourseView: React.FC = () => {
         <Button text="Registrar Nuevo" btnType="main" type="button" />
       </Link>
 
-      {/* <RecourseFilter /> */}
+      <Filter />
 
       {recourses?.length === 0 ? (
         // TODO Crear un componente que indique que no se encontraron resultados
