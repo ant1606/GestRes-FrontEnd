@@ -6,63 +6,63 @@
  * recourseLinks: Object, Contiene la informacion de los links para paginacion
  * error: Array<Object>, Recibe los errores de validacion del formulario
  *  */
-import types from "../typing/types/types.js";
+// import types from "../typing/types/types.js";
 
-//TODO Validar que el objeto error funcione como Object o como Array
+// TODO Validar que el objeto error funcione como Object o como Array
 export const initialState = {
-    recourses: [],
-    recourseActive : null,
-    recourseMeta: null,
-    recourseLinks: null,
-    error: {},
-    perPage: 0,
-    isLoading: false
+  recourses: [],
+  recourseActive: null,
+  recourseMeta: null,
+  recourseLinks: null,
+  error: {},
+  perPage: 0,
+  isLoading: false
 };
 
-const recourseReducer = (state = initialState, action ) => {
-    const {type, payload} = action;
+const recourseReducer = (state = initialState, action) => {
+  const { type, payload } = action;
 
-    switch (type) {
-        case types.recourseLoaded:
-            return {
-                ...state,
-                recourses: [...action.payload.data],
-                recourseMeta: action.payload.meta,
-                recourseLinks: action.payload.links,
-            };
-        case types.recourseAddError:
-            return {
-                ...state,
-                error: {...state.error, [Object.keys(payload)]: Object.values(payload)[0] },
-            };
-        case types.recourseSetPerPage:
-            return {
-                ...state,
-                perPage: action.payload,
-            }
-        case types.recourseIsLoading:
-            return {
-                ...state,
-                isLoading: action.payload,
-            }
-        case types.recourseGetData:
-            return {
-                ...state,
-                recourseActive: action.payload,
-            }
-        case types.recourseSetActive:
-            return {
-                ...state,
-                recourseActive: action.payload,
-            }
-        case types.recourseCleanActive:
-            return {
-                ...state,
-                recourseActive: null,
-            }
-        default:
-            return state;
-    }
+  switch (type) {
+    case types.recourseLoaded:
+      return {
+        ...state,
+        recourses: [...action.payload.data],
+        recourseMeta: action.payload.meta,
+        recourseLinks: action.payload.links
+      };
+    case types.recourseAddError:
+      return {
+        ...state,
+        error: { ...state.error, [Object.keys(payload)]: Object.values(payload)[0] }
+      };
+    case types.recourseSetPerPage:
+      return {
+        ...state,
+        perPage: action.payload
+      };
+    case types.recourseIsLoading:
+      return {
+        ...state,
+        isLoading: action.payload
+      };
+    case types.recourseGetData:
+      return {
+        ...state,
+        recourseActive: action.payload
+      };
+    case types.recourseSetActive:
+      return {
+        ...state,
+        recourseActive: action.payload
+      };
+    case types.recourseCleanActive:
+      return {
+        ...state,
+        recourseActive: null
+      };
+    default:
+      return state;
+  }
 };
 
-export default  recourseReducer;
+export default recourseReducer;

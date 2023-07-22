@@ -1,10 +1,12 @@
 import { createContext, useContext, useReducer } from 'react';
 import recourseReducer, { initialState } from './recourseReducer.js';
-import GLOBAL_CONSTANTES from '../const/globalConstantes.js';
-import useSettings from '../../../../Context/SettingsContext.js';
-import types from '../typing/types/types.js';
-import { toastNotifications } from '../helpers/notificationsSwal.js';
+
+// import useSettings from '../../../../Context/SettingsContext.js';
+// import types from '../typing/types/types.js';
+
 import Swal from 'sweetalert2';
+import GLOBAL_CONSTANTES from '@/config/globalConstantes.js';
+import { toastNotifications } from '@/utilities/notificationsSwal.js';
 
 const RecourseContext = createContext(initialState);
 

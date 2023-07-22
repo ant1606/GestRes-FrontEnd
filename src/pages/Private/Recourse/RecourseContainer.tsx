@@ -1,6 +1,11 @@
 import React from 'react';
 import RecourseView from './RecourseView';
+import { RecourseProvider } from './context/recourse.context';
 
 export const RecourseContainer: React.FC = () => {
-  return <RecourseView />;
+  return (
+    <RecourseProvider>
+      <RecourseView />
+    </RecourseProvider>
+  );
 };
