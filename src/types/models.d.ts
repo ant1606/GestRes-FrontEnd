@@ -26,6 +26,8 @@ interface Recourse {
   tags: Tag[];
   status: Status[];
   progress: Progress[];
+  currentStatusName?: string;
+  typeName?: string;
 }
 
 interface Status {

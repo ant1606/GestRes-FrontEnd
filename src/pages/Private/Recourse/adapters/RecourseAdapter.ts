@@ -19,7 +19,9 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
     totalHours: recourse.totalHoras === null ? null : recourse.totalHoras,
     status: recourse.status,
     progress: recourse.progress,
-    tags: recourse.tags
+    tags: recourse.tags,
+    currentStatusName: recourse.nombreEstadoActual,
+    typeName: recourse.tipoNombre
   };
 };
 
