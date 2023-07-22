@@ -1,7 +1,15 @@
+import { RecourseErrorResponseAdapter } from './../pages/Private/Recourse/adapters/RecourseAdapter';
+import { recoursesAdapter } from '@/pages/Private/Recourse/adapters/RecourseAdapter';
+import {
+  type RecourseErrorResponse,
+  type RecoursesSuccessResponse
+} from '@/pages/Private/Recourse/index.types';
 import { processErrorResponse } from '@/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
-export const getRecourses = async (queryParams: string): Promise<Record<string, string>> => {
+export const getRecourses = async (
+  queryParams: string
+): Promise<RecoursesSuccessResponse | RecourseErrorResponse> => {
   // TODO Extraer esta logica de verificacion del bearerToken
   const bearerToken = Cookies.get('bearerToken');
   if (bearerToken === null || bearerToken === undefined)
@@ -18,6 +26,6 @@ export const getRecourses = async (queryParams: string): Promise<Record<string, 
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then((data) => data)
-    .catch(async (error) => processErrorResponse(await error));
+    .then(async (data) => recoursesAdapter(await data))
+    .catch(async (error) => RecourseErrorResponseAdapter(processErrorResponse(await error)));
 };

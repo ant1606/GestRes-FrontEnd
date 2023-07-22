@@ -22,7 +22,7 @@ interface Recourse {
   totalPages: number | null;
   totalChapters: number | null;
   totalVideos: number | null;
-  totalHours: Date | null;
+  totalHours: string | null;
   tags: Tag[];
   status: Status[];
   progress: Progress[];
@@ -30,7 +30,7 @@ interface Recourse {
 
 interface Status {
   id: number;
-  date: Date;
+  date: string;
   comment: string | null;
   statusId: number;
   recourseId: number;
@@ -41,7 +41,7 @@ interface Progress {
   id: number;
   done: number;
   pending: number;
-  date: Date;
+  date: string;
   comment: string;
   recourseId: number;
 }
