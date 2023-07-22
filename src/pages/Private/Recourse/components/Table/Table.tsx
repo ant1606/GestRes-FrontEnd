@@ -1,7 +1,7 @@
-import RecourseTableRow from '../../Molecules/Recourse/RecourseTableRow';
-import useRecourse from '../../context/RecourseContext.bak.js';
+import { useRecourse } from '../../context/recourse.context.js';
+import Row from './Row.js';
 
-const RecourseTable = () => {
+export const Table: React.FC = () => {
   const { recourses } = useRecourse();
 
   return (
@@ -16,12 +16,10 @@ const RecourseTable = () => {
         </tr>
       </thead>
       <tbody>
-        {recourses?.map((recourse) => (
-          <RecourseTableRow key={recourse.identificador} recourse={recourse} />
+        {recourses?.map((recourse: Recourse) => (
+          <Row key={recourse.id} recourse={recourse} />
         ))}
       </tbody>
     </table>
   );
 };
-
-export default RecourseTable;
