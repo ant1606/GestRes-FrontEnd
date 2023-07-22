@@ -33,6 +33,7 @@ const initialState: InitialState = {
 };
 
 const RECOURSE_LOADED = 'loaded Recourses from API';
+const SET_RECOURSES_PER_PAGE = 'set recourses per page';
 
 const recourseReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
@@ -49,6 +50,15 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
         recourseMeta: payloadValue.meta,
         recourseLinks: payloadValue.links
       };
+    case SET_RECOURSES_PER_PAGE:
+      payloadValue = action.payload;
+      if (typeof payloadValue !== 'number') {
+        throw new Error('El valor a enviar en SET_RECOURSES_PER_PAGE debe ser un numero');
+      }
+      return {
+        ...state,
+        recoursePerPage: payloadValue
+      };
   }
 
   throw new Error(`Action desconocida del tipo ${action.type}`);
@@ -63,10 +73,19 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
       payload: recourses
     });
   };
+  const setRecoursePerPage = (perPage: number): void => {
+    dispatch({
+      type: SET_RECOURSES_PER_PAGE,
+      payload: perPage
+    });
+  };
 
   const recourseActions = {
     recourses: state.recourses,
-    setRecourses
+    recoursePerPage: state.recoursePerPage,
+    recourseMeta: state.recourseMeta,
+    setRecourses,
+    setRecoursePerPage
   };
   return <RecourseContext.Provider value={recourseActions}>{children}</RecourseContext.Provider>;
 };
