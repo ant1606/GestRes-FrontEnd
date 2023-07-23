@@ -1,17 +1,20 @@
 import { type PreloadedState, configureStore, combineReducers } from '@reduxjs/toolkit';
 import uiReducer from './slice/uiSlice';
 import authenticationReducer from './slice/authenticationSlice';
+import settingsReducer from './slice/settingsSlice';
 export const store = configureStore({
   reducer: {
     ui: uiReducer,
-    authentication: authenticationReducer
+    authentication: authenticationReducer,
+    settings: settingsReducer
   }
 });
 
 // Segun la documentacion
 const rootReducer = combineReducers({
   ui: uiReducer,
-  authentication: authenticationReducer
+  authentication: authenticationReducer,
+  settings: settingsReducer
 });
 
 export function setupStore(preloadedState?: PreloadedState<RootState>) {
