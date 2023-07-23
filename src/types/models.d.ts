@@ -47,3 +47,10 @@ interface Progress {
   comment: string;
   recourseId: number;
 }
+
+interface Settings {
+  id: number;
+  type: string;
+  key: string;
+  value: string;
+}

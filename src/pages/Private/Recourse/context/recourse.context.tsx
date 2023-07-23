@@ -1,16 +1,34 @@
 import { type ReactNode, createContext, useContext, type Reducer, useReducer } from 'react';
+import { type RecoursesSuccessResponse } from '../index.types';
 
 const RecourseContext = createContext({});
 
 interface RecourseProviderProps {
   children: ReactNode;
 }
+type payloadReducerType =
+  | Record<string, unknown>
+  | boolean
+  | number
+  | Recourse
+  | Recourse[]
+  | RecoursesSuccessResponse;
+
 interface ActionReducer {
   type: string;
-  payload: Record<string, unknown> | boolean | number;
+  payload: payloadReducerType;
 }
 
-type typeValidationError = 'name';
+type typeValidationError =
+  | 'name'
+  | 'source'
+  | 'author'
+  | 'editorial'
+  | 'typeId'
+  | 'totalPages'
+  | 'totalChapters'
+  | 'totalVideos'
+  | 'totalHours';
 
 interface InitialState {
   recourses: Recourse[];
@@ -28,27 +46,43 @@ const initialState: InitialState = {
   recourseLinks: null,
   recoursePerPage: 0,
   validationError: {
-    name: null
+    name: null,
+    source: null,
+    author: null,
+    editorial: null,
+    typeId: null,
+    totalPages: null,
+    totalChapters: null,
+    totalVideos: null,
+    totalHours: null
   }
 };
 
 const RECOURSE_LOADED = 'loaded Recourses from API';
 const SET_RECOURSES_PER_PAGE = 'set recourses per page';
+const ADD_VALIDATION_ERROR = 'add validation error';
+const RESET_VALIDATION_ERROR = 'reset validation error';
+const SELECT_RECOURSE_ACTIVE = 'select recourse active';
 
 const recourseReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
   action: ActionReducer
 ): InitialState => {
-  const payloadKey = '';
+  let payloadKey = '';
   let payloadValue;
   switch (action.type) {
     case RECOURSE_LOADED:
-      payloadValue = action.payload;
+      payloadValue = action.payload as RecoursesSuccessResponse;
       return {
         ...state,
         recourses: [...payloadValue.data],
         recourseMeta: payloadValue.meta,
         recourseLinks: payloadValue.links
+      };
+    case SELECT_RECOURSE_ACTIVE:
+      return {
+        ...state,
+        recourseActive: action.payload as Recourse
       };
     case SET_RECOURSES_PER_PAGE:
       payloadValue = action.payload;
@@ -59,6 +93,31 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
         ...state,
         recoursePerPage: payloadValue
       };
+    case ADD_VALIDATION_ERROR:
+      payloadKey = Object.getOwnPropertyNames(action.payload)[0];
+      payloadValue = Object.values(action.payload)[0];
+      return {
+        ...state,
+        validationError: {
+          ...state.validationError,
+          [payloadKey]: payloadValue as string | null
+        }
+      };
+    case RESET_VALIDATION_ERROR:
+      return {
+        ...state,
+        validationError: {
+          name: null,
+          source: null,
+          author: null,
+          editorial: null,
+          typeId: null,
+          totalPages: null,
+          totalChapters: null,
+          totalVideos: null,
+          totalHours: null
+        }
+      };
   }
 
   throw new Error(`Action desconocida del tipo ${action.type}`);
@@ -67,7 +126,7 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
 export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Element => {
   const [state, dispatch] = useReducer(recourseReducer, initialState);
 
-  const setRecourses = (recourses): void => {
+  const setRecourses = (recourses: Recourse[]): void => {
     dispatch({
       type: RECOURSE_LOADED,
       payload: recourses
@@ -79,13 +138,37 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
       payload: perPage
     });
   };
+  const selectedRecourse = (recourse: Recourse): void => {
+    dispatch({
+      type: SELECT_RECOURSE_ACTIVE,
+      payload: recourse
+    });
+  };
+  const addValidationError = (error: Record<string, string>): void => {
+    dispatch({
+      type: ADD_VALIDATION_ERROR,
+      payload: error
+    });
+  };
+
+  const resetValidationError = (): void => {
+    dispatch({
+      type: RESET_VALIDATION_ERROR,
+      payload: true
+    });
+  };
 
   const recourseActions = {
     recourses: state.recourses,
     recoursePerPage: state.recoursePerPage,
     recourseMeta: state.recourseMeta,
+    recourseError: state.validationError,
+    recourseActive: state.recourseActive,
     setRecourses,
-    setRecoursePerPage
+    setRecoursePerPage,
+    addValidationError,
+    resetValidationError,
+    selectedRecourse
   };
   return <RecourseContext.Provider value={recourseActions}>{children}</RecourseContext.Provider>;
 };

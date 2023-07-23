@@ -2,8 +2,8 @@ import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { type RootState } from '../store';
 
 interface SettingsState {
-  settingsType: [];
-  settingsStatus: [];
+  settingsType: Settings[];
+  settingsStatus: Settings[];
 }
 
 const initialState: SettingsState = {
