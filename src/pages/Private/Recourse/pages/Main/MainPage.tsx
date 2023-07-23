@@ -1,6 +1,6 @@
 import Button from '@/components/Button';
 import Loader from '@/components/Loader';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React, { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { useRecourse } from '../../context/recourse.context';
 import perPageItemsValue from '@/config/perPageItemsValue';
 import FooterTable from '@/components/FooterTable';
 import Filter from '../../components/Filter';
+import { changeTitle } from '@/redux/slice/uiSlice';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -20,9 +21,11 @@ export const MainPage: React.FC = () => {
   const { recourses, setRecourses, setRecoursePerPage, recourseMeta, recoursePerPage } =
     useRecourse();
   const [searchParams, setSearchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setRecoursePerPage(perPageItemsValue[0].id);
+    dispatch(changeTitle('Mantenimiento de Recursos'));
   }, []);
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {

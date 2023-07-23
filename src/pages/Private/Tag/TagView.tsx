@@ -1,5 +1,5 @@
 import Loader from '@/components/Loader';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React, { useEffect } from 'react';
 
@@ -11,6 +11,7 @@ import FooterTable from '@/components/FooterTable';
 import { useSearchParams } from 'react-router-dom';
 import { getTags } from '@/services/tag.services';
 import perPageItemsValue from '@/config/perPageItemsValue';
+import { changeTitle } from '@/redux/slice/uiSlice';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -18,11 +19,13 @@ interface ReactPaginaOnPageChangeArgument {
 
 const TagView: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
+  const dispatch = useAppDispatch();
   const { tags, tagMeta, setTags, setTagPerPage, tagPerPage } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     setTagPerPage(perPageItemsValue[0].id);
+    dispatch(changeTitle('Mantenimiento de Etiquetas'));
   }, []);
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
