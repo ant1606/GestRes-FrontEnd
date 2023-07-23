@@ -54,8 +54,8 @@ const AppRouter: React.FC = () => {
     await new Promise<void>((resolve) => {
       dispatch(
         loadSettings({
-          settingsStatus: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_TYPE),
-          settingsType: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_STATUS)
+          settingsType: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_TYPE),
+          settingsStatus: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_STATUS)
         })
       );
       resolve();
