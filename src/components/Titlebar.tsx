@@ -1,13 +1,14 @@
 import React from 'react';
 import Icon from '@mdi/react';
 import { mdiExitToApp } from '@mdi/js';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { userIsLogout } from '@/redux/slice/authenticationSlice';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { loggoutUser } from '@/services';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { useNavigate } from 'react-router-dom';
 import { deletePersistenDataUser } from '@/utilities/authenticationManagement';
+import { type RootState } from '@/redux/store';
 
 // import { useNavigate } from 'react-router-dom';
 // import { useSecurity } from '../../Context/SecurityContext.jsx';
@@ -15,6 +16,7 @@ import { deletePersistenDataUser } from '@/utilities/authenticationManagement';
 const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { titleBarContent } = useAppSelector((state: RootState) => state.ui);
 
   const handleExitAppClick = async (): Promise<void> => {
     try {
@@ -47,8 +49,7 @@ const Titlebar: React.FC = () => {
 
   return (
     <div className="text-2xl font-semibold h-14 px-6 py-3 shadow-lg flex justify-between items-center">
-      {/* <p>{title}</p> */}
-      <p>Colocar Titulo</p>
+      <p>{titleBarContent}</p>
       <div
         onClick={handleClickWrapper}
         role="button"
