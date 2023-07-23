@@ -12,7 +12,7 @@ export const Private: React.FC = () => {
       <RoutesWithPageNotFound isPrivatePage={true}>
         <Route path="dashboard" element={<>Dashboard</>} />
         <Route path="tag" element={<Tag />} />
-        <Route path="recourse" element={<RecourseRouter />} />
+        <Route path="recourse/*" element={<RecourseRouter />} />
         <Route path="/" element={<Navigate replace to="dashboard" />} />
       </RoutesWithPageNotFound>
     </AppLayout>

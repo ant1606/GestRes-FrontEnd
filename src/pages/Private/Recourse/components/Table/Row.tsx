@@ -65,13 +65,13 @@ const Row: React.FC<Props> = ({ recourse }) => {
               onClick={toggleviewDetail}>
               <Icon path={mdiArrowDownDropCircle} title="Down" size={1} color="white" />
             </button>
-            <NavLink to={`/recursos/${recourse.id}`}>
+            <NavLink to={`/app/recourse/${recourse.id}`}>
               <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
                 <Icon path={mdiEye} title="RecourseScreenShow" size={1} color="white" />
               </button>
             </NavLink>
 
-            <NavLink to={`/recursos/${recourse.id}/edit`}>
+            <NavLink to={`/app/recourse/${recourse.id}/edit`}>
               <button
                 className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg"
                 onClick={() => {

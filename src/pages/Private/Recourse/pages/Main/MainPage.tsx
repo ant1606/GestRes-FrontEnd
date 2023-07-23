@@ -4,18 +4,18 @@ import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React, { useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import Table from './components/Table';
+import Table from '../../components/Table';
 import { getRecourses } from '@/services/recourse.services';
-import { useRecourse } from './context/recourse.context';
+import { useRecourse } from '../../context/recourse.context';
 import perPageItemsValue from '@/config/perPageItemsValue';
 import FooterTable from '@/components/FooterTable';
-import Filter from './components/Filter';
+import Filter from '../../components/Filter';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
 }
 
-const RecourseView: React.FC = () => {
+export const MainPage: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   const { recourses, setRecourses, setRecoursePerPage, recourseMeta, recoursePerPage } =
     useRecourse();
@@ -48,7 +48,7 @@ const RecourseView: React.FC = () => {
     */}
       {uiLoading && <Loader />}
 
-      <Link to="/recursos/new">
+      <Link to="/app/recourse/new">
         <Button text="Registrar Nuevo" btnType="main" type="button" />
       </Link>
 
@@ -68,5 +68,3 @@ const RecourseView: React.FC = () => {
     </>
   );
 };
-
-export default RecourseView;
