@@ -14,11 +14,20 @@ import PasswordReset from '@/pages/PasswordReset';
 import Register from '@/pages/Register';
 import VerifyEmail from '@/pages/VerifyEmail';
 import ResendLinkVerifyEmail from '@/pages/Private/ResendVerifyLinkEmail';
+import { getSettings } from '@/services/settings.services';
+import { loadSettings } from '@/redux/slice/settingsSlice';
 
 // interface ResponseAPI {
 //   data?: Record<string, any>;
 //   error?: Record<string, any>;
 // }
+interface UserLoginParams {
+  email: string;
+  id: number;
+  isVerified: boolean;
+  name: string;
+}
+
 const AppRouter: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
   const dispatch = useAppDispatch();
@@ -26,13 +35,6 @@ const AppRouter: React.FC = () => {
   useEffect(() => {
     initApp();
   }, []);
-
-  interface UserLoginParams {
-    email: string;
-    id: number;
-    isVerified: boolean;
-    name: string;
-  }
 
   const userIsLoggedInPromise = async (params: UserLoginParams): Promise<void> => {
     await new Promise<void>((resolve) => {
@@ -47,11 +49,23 @@ const AppRouter: React.FC = () => {
       resolve();
     });
   };
+  const settingsLoadedInPromise = async (params): Promise<void> => {
+    // TODO Ver si puedo refactorizar más esta parte del settings y su service
+    await new Promise<void>((resolve) => {
+      dispatch(
+        loadSettings({
+          settingsStatus: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_TYPE),
+          settingsType: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_STATUS)
+        })
+      );
+      resolve();
+    });
+  };
 
   const initApp = async (): Promise<void> => {
     try {
-      // TODO Cargar los datos de configuracion de la app
-      // await loadSettings();
+      const settings = await getSettings();
+      await settingsLoadedInPromise(settings.data);
       // TODO Cargar la última página visitada por el usuario
       const user = await checkAuthentication();
       await userIsLoggedInPromise(user);
