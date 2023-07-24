@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 
 interface useFormOutput {
-  values: Record<string, any>;
-  handleInputChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+  values: Record<string | number, any>;
+  handleInputChange: (
+    evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+  ) => void;
   // TODO Cambiar el tipo de validatedSubmitForm
   validatedSubmitForm: any;
   reset: (newFormState?: Record<string, unknown>) => void;
@@ -10,7 +12,7 @@ interface useFormOutput {
 
 // TODO Ver si el initialState puede recibir un tipo Genérico para poder tipar el initialState desde el componente en donde se usa useForm()
 interface useFormInput {
-  initialState: Record<string, unknown>;
+  initialState: Record<string | number, unknown>;
   functionsToValidateInputs: Record<string, (values: unknown) => string | null>;
   dispatcherErrorValidations: (values: unknown) => string | null;
 }
@@ -23,13 +25,30 @@ export const useForm = <T extends useFormInput>(
   const [values, setValues] = useState(initialState);
   const [inputToValidate, setInputToValidate] = useState<string | null>(null);
 
-  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleInputChange = (
+    evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const value = convertToType(evt.target.value);
     setValues({
       ...values,
-      [evt.target.name]: evt.target.value
+      [evt.target.name]: value
     });
     setInputToValidate(evt.target.name);
   };
+
+  function convertToType(value: string): any {
+    if (value === 'true') {
+      return true;
+    } else if (value === 'false') {
+      return false;
+    } else if (!isNaN(Number(value))) {
+      return Number(value);
+    } else if (value.match(/^\d{2}:\d{2}:\d{2}$/) != null) {
+      return value;
+    } else {
+      return value;
+    }
+  }
 
   const validatedInput = useCallback(() => {
     if (inputToValidate !== null) {
