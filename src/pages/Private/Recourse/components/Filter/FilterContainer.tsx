@@ -86,9 +86,9 @@ export const FilterContainer: React.FC = () => {
       handleChangeSearchStatus={handleChangeSearchEstado}
       handleChangeSearchType={handleChangeSearchTipo}
       recoursePerPage={recoursePerPage}
-      searchName=""
-      searchStatus=""
-      searchType=""
+      searchName={searchNombre}
+      searchStatus={searchEstado}
+      searchType={searchTipo}
     />
   );
 };

@@ -168,8 +168,6 @@ export const FormContainer: React.FC = () => {
           recourseActive === null
             ? await savingRecourse(recourseToSend)
             : await updatingRecourse(recourseToSend);
-        // ? updatingRecourse(formValues, recourseActive.identificador)
-        // : savingRecourse(formValues);
         if ('data' in response) {
           reset();
           resetValidationError();
@@ -179,7 +177,7 @@ export const FormContainer: React.FC = () => {
               : 'Se actualizó el recurso';
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedRecourse();
-          navigate('/api/recourse');
+          navigate('/app/recourse');
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {

@@ -82,6 +82,7 @@ export const FormContainer: React.FC = () => {
           setTags(tags);
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
+          console.log(errorsDetail);
           Object.keys(errorsDetail).forEach((key) => {
             if (key !== 'apiResponseMessageError') {
               addValidationError({ [key]: errorsDetail[key] });
@@ -94,7 +95,8 @@ export const FormContainer: React.FC = () => {
           }
         }
       }
-    } catch (error) {
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
       focusInput('#name');

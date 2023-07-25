@@ -10,8 +10,8 @@ interface Props {
   handleChangeSearchStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleChangeRecordsPerPage: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   searchName: string;
-  searchType: string;
-  searchStatus: string;
+  searchType: number;
+  searchStatus: number;
   recoursePerPage: string | number | readonly string[] | undefined;
   dataFilterType: FilterData[];
   dataFilterStatus: FilterData[];
