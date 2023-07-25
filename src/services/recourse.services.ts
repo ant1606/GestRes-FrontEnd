@@ -65,18 +65,21 @@ export const updatingRecourse = async (
   const bearerToken = Cookies.get('bearerToken');
   if (bearerToken === null || bearerToken === undefined)
     throw new Error('Token de autorización inválido');
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.id}`, {
-    method: 'PUT',
-    body: JSON.stringify({
-      ...recourse,
-      identificador: recourse.id
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
+  console.log(recourse, 'en endpoint');
+  return await fetch(
+    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.recourse_id}`,
+    {
+      method: 'PUT',
+      body: JSON.stringify({
+        ...recourse,
+        identificador: recourse.id
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json'
+      }
     }
-  })
+  )
     .then(async (resp) => {
       if (!resp.ok) return await Promise.reject(resp.json());
       return await resp.json();

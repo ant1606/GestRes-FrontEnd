@@ -48,6 +48,7 @@ export const FormContainer: React.FC = () => {
   const initialState =
     recourseActive === null
       ? {
+        id: 0,
         name: '',
         source: '',
         author: '',
@@ -60,6 +61,7 @@ export const FormContainer: React.FC = () => {
         recourseType: settingsType
       }
       : {
+        id: recourseActive.id,
         name: recourseActive.name,
         source: recourseActive.source,
         author: recourseActive.author,
@@ -145,8 +147,6 @@ export const FormContainer: React.FC = () => {
           formValues.totalChapters = null;
         }
 
-        // console.log(formValues);
-        // return;
         const recourseToSend = {
           recourse_id: formValues.id,
           name: formValues.name,
@@ -162,8 +162,7 @@ export const FormContainer: React.FC = () => {
           status: [],
           progress: [],
         }
-        // console.log(recourseToSend);
-        // return;
+
         const response =
           recourseActive === null
             ? await savingRecourse(recourseToSend)

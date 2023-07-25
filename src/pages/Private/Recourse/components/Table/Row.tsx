@@ -30,7 +30,7 @@ interface Props {
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
   // const { settingsType } = useSettings();
-  const { setIsLoading, destroyRecourse, loadRecourses, setRecourseActive } = useRecourse();
+  const { setIsLoading, loadRecourses, selectedRecourse } = useRecourse();
   const [searchParams] = useSearchParams();
 
   function toggleviewDetail(): void {
@@ -38,18 +38,18 @@ const Row: React.FC<Props> = ({ recourse }) => {
   }
 
   const handleClickDelete = async (recourse: Recourse): Promise<void> => {
-    const result = await toastNotifications().modalDeleteConfirm(recourse.name);
-    if (result) {
-      setIsLoading(true);
-      await destroyRecourse(recourse);
-      loadRecourses(searchParams.toString());
-      setIsLoading(false);
-    }
+    // const result = await toastNotifications().modalDeleteConfirm(recourse.name);
+    // if (result) {
+    //   setIsLoading(true);
+    //   // await destroyRecourse(recourse);
+    //   loadRecourses(searchParams.toString());
+    //   setIsLoading(false);
+    // }
   };
 
   const handleClickEdit = (recourse: Recourse): void => {
     console.log(recourse);
-    setRecourseActive(recourse);
+    selectedRecourse(recourse);
   };
 
   return (

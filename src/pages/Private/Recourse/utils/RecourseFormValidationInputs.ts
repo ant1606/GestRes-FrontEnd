@@ -67,7 +67,7 @@ export const validateTotalPages = (values) => {
   const typeLibro = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_LIBRO
   );
-  const isTipoLibro = parseInt(values.tipoId) === typeLibro.id;
+  const isTipoLibro = parseInt(values.typeId) === typeLibro.id;
 
   if (isTipoLibro) {
     if (validateTotalPages.length === 0) return 'Total Páginas es requerido';
@@ -85,7 +85,7 @@ export const validateTotalChapters = (values) => {
   const typeLibro = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_LIBRO
   );
-  const isTipoLibro = parseInt(values.tipoId) === typeLibro.id;
+  const isTipoLibro = parseInt(values.typeId) === typeLibro.id;
 
   if (isTipoLibro) {
     if (validateTotalChapters.length === 0) return 'Total Capitulos es requerido';
@@ -100,13 +100,14 @@ export const validateTotalChapters = (values) => {
 };
 
 export const validateTotalVideos = (values) => {
-  const validateTotalVideos = parseInt(values.totalVideos);
   const typeVideo = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
   );
-  const isTipoVideo = parseInt(values.tipoId) === typeVideo.id;
+  const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
 
   if (isTipoVideo) {
+    const validateTotalVideos = parseInt(values.totalVideos);
+
     if (validateTotalVideos.length === 0) return 'Total Videos es requerido';
 
     if (!Number.isInteger(parseInt(validateTotalVideos)))
@@ -119,14 +120,14 @@ export const validateTotalVideos = (values) => {
 };
 
 export const validateTotalHours = (values) => {
-  const validateTotalHours = values.totalHours.trim();
   const typeVideo = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
   );
-  const isTipoVideo = parseInt(values.tipoId) === typeVideo.id;
-  const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
+  const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
 
   if (isTipoVideo) {
+    const validateTotalHours = values.totalHours.trim();
+    const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
     if (validateTotalHours.length === 0) return 'Total Videos es requerido';
 
     // if(validateTotalHours === "00:00:00")
