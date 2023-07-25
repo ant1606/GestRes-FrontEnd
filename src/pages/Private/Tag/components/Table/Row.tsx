@@ -53,7 +53,8 @@ const Row: React.FC<Prop> = ({ tag }) => {
             throw new Error(errorsDetail.apiResponseMessageError);
         }
       }
-    } catch (error) {
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
     }

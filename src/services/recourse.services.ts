@@ -65,7 +65,7 @@ export const updatingRecourse = async (
   const bearerToken = Cookies.get('bearerToken');
   if (bearerToken === null || bearerToken === undefined)
     throw new Error('Token de autorización inválido');
-  console.log(recourse, 'en endpoint');
+
   return await fetch(
     `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.recourse_id}`,
     {
@@ -82,6 +82,30 @@ export const updatingRecourse = async (
   )
     .then(async (resp) => {
       if (!resp.ok) return await Promise.reject(resp.json());
+      return await resp.json();
+    })
+    .then(async (data) => recourseAdapter(await data))
+    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+};
+
+export const destroyRecourse = async (
+  recourse: Recourse
+): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
+  // TODO Extraer esta logica de verificacion del bearerToken
+  const bearerToken = Cookies.get('bearerToken');
+  if (bearerToken === null || bearerToken === undefined)
+    throw new Error('Token de autorización inválido');
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    }
+  })
+    .then(async (resp) => {
+      if (!resp.ok) return await Promise.reject(resp.json());
+
       return await resp.json();
     })
     .then(async (data) => recourseAdapter(await data))

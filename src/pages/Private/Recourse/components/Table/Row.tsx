@@ -21,6 +21,9 @@ import { NavLink, useSearchParams } from 'react-router-dom';
 import GLOBAL_CONSTANTES from '@/config/globalConstantes.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
+import { destroyRecourse, getRecourses } from '@/services/recourse.services';
+import { isLoading } from '@/redux/slice/uiSlice';
+import { useAppDispatch } from '@/hooks/redux';
 
 interface Props {
   recourse: Recourse;
@@ -30,8 +33,9 @@ interface Props {
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
   // const { settingsType } = useSettings();
-  const { setIsLoading, loadRecourses, selectedRecourse } = useRecourse();
+  const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
 
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
@@ -45,6 +49,36 @@ const Row: React.FC<Props> = ({ recourse }) => {
     //   loadRecourses(searchParams.toString());
     //   setIsLoading(false);
     // }
+    try {
+      const result = await toastNotifications().modalDeleteConfirm(recourse.name);
+      if (!result) return;
+
+      dispatch(isLoading(true));
+      const response = await destroyRecourse(recourse);
+      if ('data' in response) {
+        toastNotifications().toastSuccesCustomize(
+          `Se elimino la etiqueta ${recourse.name} satisfactoriamente`
+        );
+        const recourses = await getRecourses(searchParams.toString());
+        setRecourses(recourses);
+      } else if ('error' in response) {
+        const errorsDetail = response.error?.detail;
+        Object.keys(errorsDetail).forEach((key) => {
+          if (key !== 'apiResponseMessageError') {
+            addValidationError({ [key]: errorsDetail[key] });
+          }
+        });
+
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
+        }
+      }
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
+    }
   };
 
   const handleClickEdit = (recourse: Recourse): void => {
