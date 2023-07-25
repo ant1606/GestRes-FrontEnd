@@ -58,7 +58,7 @@ export const recoursesAdapter = (response: any): RecoursesSuccessResponse => {
   };
 };
 
-export const RecourseErrorResponseAdapter = (error: any): RecourseErrorResponse => {
+export const recourseErrorResponseAdapter = (error: any): RecourseErrorResponse => {
   return {
     error: {
       status: error.error.status,

@@ -63,6 +63,7 @@ const SET_RECOURSES_PER_PAGE = 'set recourses per page';
 const ADD_VALIDATION_ERROR = 'add validation error';
 const RESET_VALIDATION_ERROR = 'reset validation error';
 const SELECT_RECOURSE_ACTIVE = 'select recourse active';
+const CLEAN_SELECT_RECOURSE = 'clean select recourse active';
 
 const recourseReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
@@ -118,6 +119,11 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
           totalHours: null
         }
       };
+    case CLEAN_SELECT_RECOURSE:
+      return {
+        ...state,
+        recourseActive: null
+      };
   }
 
   throw new Error(`Action desconocida del tipo ${action.type}`);
@@ -158,6 +164,13 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
     });
   };
 
+  const cleanSelectedRecourse = (): void => {
+    dispatch({
+      type: CLEAN_SELECT_RECOURSE,
+      payload: true
+    });
+  };
+
   const recourseActions = {
     recourses: state.recourses,
     recoursePerPage: state.recoursePerPage,
@@ -168,7 +181,8 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
     setRecoursePerPage,
     addValidationError,
     resetValidationError,
-    selectedRecourse
+    selectedRecourse,
+    cleanSelectedRecourse
   };
   return <RecourseContext.Provider value={recourseActions}>{children}</RecourseContext.Provider>;
 };

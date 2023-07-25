@@ -41,7 +41,7 @@ export const useForm = <T extends useFormInput>(
       return true;
     } else if (value === 'false') {
       return false;
-    } else if (!isNaN(Number(value))) {
+    } else if (!isNaN(Number(value)) && value !== '') {
       return Number(value);
     } else if (value.match(/^\d{2}:\d{2}:\d{2}$/) != null) {
       return value;

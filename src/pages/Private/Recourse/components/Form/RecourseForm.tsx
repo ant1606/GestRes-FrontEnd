@@ -144,6 +144,17 @@ const RecourseForm = ({ children }) => {
     // console.log(isValid);
     if (isValid) {
       // TODO Aplicar cuando se actualice el registro
+      if (
+        parseInt(formValues.typeId) ===
+        settingsType.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id
+      ) {
+        recourse.totalVideos = null;
+        recourse.totalHoras = null;
+      } else {
+        recourse.totalPaginas = null;
+        recourse.totalCapitulos = null;
+      }
+
       const res = (await recourseActive)
         ? updatingRecourse(formValues, recourseActive.identificador)
         : savingRecourse(formValues);

@@ -1,41 +1,42 @@
 import globalConstantes from '@/config/globalConstantes';
+// TODO tipar funciones y validaciones
+const isBetween = (length: number, min: number, max: number): boolean =>
+  length >= min && length <= max;
 
-export const validateNombre = (values) => {
+// TODO crear la interface RecourseFormData
+export const validateName = (values) => {
   const min = 5;
   const max = 150;
-  const nombreToValidate = values.nombre.trim();
-  const isBetween = (length, min, max) => length >= min && length <= max;
+  const nameToValidate = values.name.trim();
 
-  if (!nombreToValidate) return 'El nombre es requerido.';
+  if (nameToValidate === '') return 'El nombre es requerido.';
 
-  if (!isBetween(nombreToValidate.length, min, max))
+  if (!isBetween(nameToValidate.length, min, max))
     return `El nombre debe contener entre ${min} a ${max} caracteres.`;
 
   return null;
 };
 
-export const validateRuta = (values) => {
+export const validateSource = (values) => {
   const min = 5;
   const max = 255;
-  const rutaToValidate = values.ruta.trim();
-  const isBetween = (length, min, max) => length >= min && length <= max;
+  const sourceToValidate = values.source.trim();
 
-  if (!rutaToValidate) return 'La ruta es requerida.';
+  if (sourceToValidate === '') return 'La ruta es requerida.';
 
-  if (!isBetween(rutaToValidate.length, min, max))
+  if (!isBetween(sourceToValidate.length, min, max))
     return `La ruta debe contener entre ${min} a ${max} caracteres.`;
 
   return null;
 };
 
-export const validateAutor = (values) => {
+export const validateAuthor = (values) => {
   const min = 5;
   const max = 75;
-  const autorToValidate = values.autor.trim();
-  const isBetween = (length, min, max) => length >= min && length <= max;
+  const authorToValidate = values.author.trim();
 
-  if (autorToValidate && !isBetween(autorToValidate.length, min, max))
-    return `La ruta debe contener entre ${min} a ${max} caracteres.`;
+  if (authorToValidate !== '' && !isBetween(authorToValidate.length, min, max))
+    return `El autor debe contener entre ${min} a ${max} caracteres.`;
 
   return null;
 };
@@ -44,63 +45,62 @@ export const validateEditorial = (values) => {
   const min = 5;
   const max = 75;
   const editorialToValidate = values.editorial.trim();
-  const isBetween = (length, min, max) => length >= min && length <= max;
 
-  if (editorialToValidate && !isBetween(editorialToValidate.length, min, max))
+  if (editorialToValidate !== '' && !isBetween(editorialToValidate.length, min, max))
     return `La editorial debe contener entre ${min} a ${max} caracteres.`;
 
   return null;
 };
 
-export const validateTipoId = (values) => {
-  const validateTipoId = parseInt(values.tipoId);
-  const isValidTipoId = values.recourseType.some((type) => type.id === validateTipoId);
+export const validateTypeId = (values) => {
+  const validateTypeId = parseInt(values.typeId);
+  const isValidTypeId = values.recourseType.some((type) => type.id === validateTypeId);
 
-  if (!isValidTipoId) return 'Debe seleccionar el Tipo de Recurso válido.';
+  if (!isValidTypeId) return 'Debe seleccionar el Tipo de Recurso válido.';
 
   return null;
 };
 
-export const validateTotalPaginas = (values) => {
-  const validateTotalPaginas = values.totalPaginas.trim();
+export const validateTotalPages = (values) => {
+  // TODO aplicar regex para que sólo se admitan numeros enteros
+  const validateTotalPages = parseInt(values.totalPages);
   const typeLibro = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_LIBRO
   );
   const isTipoLibro = parseInt(values.tipoId) === typeLibro.id;
 
   if (isTipoLibro) {
-    if (validateTotalPaginas.length === 0) return 'Total Páginas es requerido';
+    if (validateTotalPages.length === 0) return 'Total Páginas es requerido';
 
-    if (!Number.isInteger(parseInt(validateTotalPaginas)))
-      return 'Total Páginas debe ser un número entero';
+    if (!Number.isInteger(validateTotalPages)) return 'Total Páginas debe ser un número entero';
 
-    if (parseInt(validateTotalPaginas) <= 0) return 'Total Páginas debe ser mayor a 0';
+    if (parseInt(validateTotalPages) <= 0) return 'Total Páginas debe ser mayor a 0';
   }
 
   return null;
 };
 
-export const validateTotalCapitulos = (values) => {
-  const validateTotalCapitulos = values.totalCapitulos.trim();
+export const validateTotalChapters = (values) => {
+  const validateTotalChapters = parseInt(values.totalChapters);
   const typeLibro = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_LIBRO
   );
   const isTipoLibro = parseInt(values.tipoId) === typeLibro.id;
 
   if (isTipoLibro) {
-    if (validateTotalCapitulos.length === 0) return 'Total Capitulos es requerido';
+    if (validateTotalChapters.length === 0) return 'Total Capitulos es requerido';
 
-    if (!Number.isInteger(parseInt(validateTotalCapitulos)))
+    if (!Number.isInteger(validateTotalChapters))
       return 'Total Capítulos debe ser un número entero';
 
-    if (parseInt(validateTotalCapitulos) <= 0) return 'Total Capítulos debe ser mayor a 0';
+    if (parseInt(validateTotalChapters) <= 0) return 'Total Capítulos debe ser mayor a 0';
   }
 
   return null;
 };
 
 export const validateTotalVideos = (values) => {
-  const validateTotalVideos = values.totalVideos.trim();
+  const validateTotalVideos = parseInt(values.totalVideos);
   const typeVideo = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
   );
@@ -118,8 +118,8 @@ export const validateTotalVideos = (values) => {
   return null;
 };
 
-export const validateTotalHoras = (values) => {
-  const validateTotalHoras = values.totalHoras.trim();
+export const validateTotalHours = (values) => {
+  const validateTotalHours = values.totalHours.trim();
   const typeVideo = values.recourseType.find(
     (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
   );
@@ -127,12 +127,12 @@ export const validateTotalHoras = (values) => {
   const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
 
   if (isTipoVideo) {
-    if (validateTotalHoras.length === 0) return 'Total Videos es requerido';
+    if (validateTotalHours.length === 0) return 'Total Videos es requerido';
 
-    // if(validateTotalHoras === "00:00:00")
+    // if(validateTotalHours === "00:00:00")
     //     return "Total Horas debe tener un valor distinto a 0";
 
-    if (!regex.test(validateTotalHoras)) return 'Total Horas debe ser en formato hh:mm:ss ';
+    if (!regex.test(validateTotalHours)) return 'Total Horas debe ser en formato hh:mm:ss ';
   }
 
   return null;

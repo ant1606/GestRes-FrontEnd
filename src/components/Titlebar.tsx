@@ -45,7 +45,6 @@ const Titlebar: React.FC = () => {
   const handleClickWrapper = (): void => {
     handleExitAppClick();
   };
-  // TODO Colocar el titulo por cada página de la aplicación en la barra de título
 
   return (
     <div className="text-2xl font-semibold h-14 px-6 py-3 shadow-lg flex justify-between items-center">

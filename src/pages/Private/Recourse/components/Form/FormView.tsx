@@ -47,7 +47,7 @@ const FormView: React.FC<Props> = ({
   dataSelectType
 }) => {
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
-  // if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
+  if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
       <div className="flex w-full gap-10 my-5">

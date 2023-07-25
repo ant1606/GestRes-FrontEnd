@@ -1,6 +1,10 @@
-import { RecourseErrorResponseAdapter } from './../pages/Private/Recourse/adapters/RecourseAdapter';
+import {
+  recourseAdapter,
+  recourseErrorResponseAdapter
+} from './../pages/Private/Recourse/adapters/RecourseAdapter';
 import { recoursesAdapter } from '@/pages/Private/Recourse/adapters/RecourseAdapter';
 import {
+  type RecourseSuccessResponse,
   type RecourseErrorResponse,
   type RecoursesSuccessResponse
 } from '@/pages/Private/Recourse/index.types';
@@ -27,5 +31,56 @@ export const getRecourses = async (
       return await res.json();
     })
     .then(async (data) => recoursesAdapter(await data))
-    .catch(async (error) => RecourseErrorResponseAdapter(processErrorResponse(await error)));
+    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+};
+
+export const savingRecourse = async (
+  recourse: any
+): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
+  // TODO Extraer esta logica de verificacion del bearerToken
+  const bearerToken = Cookies.get('bearerToken');
+  if (bearerToken === null || bearerToken === undefined)
+    throw new Error('Token de autorización inválido');
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses`, {
+    method: 'POST',
+    body: JSON.stringify(recourse),
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    }
+  })
+    .then(async (resp) => {
+      if (!resp.ok) return await Promise.reject(resp.json());
+      return await resp.json();
+    })
+    .then(async (data) => recourseAdapter(await data))
+    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+};
+
+export const updatingRecourse = async (
+  recourse: any
+): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
+  // TODO Extraer esta logica de verificacion del bearerToken
+  const bearerToken = Cookies.get('bearerToken');
+  if (bearerToken === null || bearerToken === undefined)
+    throw new Error('Token de autorización inválido');
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      ...recourse,
+      identificador: recourse.id
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    }
+  })
+    .then(async (resp) => {
+      if (!resp.ok) return await Promise.reject(resp.json());
+      return await resp.json();
+    })
+    .then(async (data) => recourseAdapter(await data))
+    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
 };
