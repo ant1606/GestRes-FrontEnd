@@ -23,7 +23,8 @@ import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
 import { destroyRecourse, getRecourses } from '@/services/recourse.services';
 import { isLoading } from '@/redux/slice/uiSlice';
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { type RootState } from '@/redux/store';
 
 interface Props {
   recourse: Recourse;
@@ -32,6 +33,7 @@ interface Props {
 // TODO Añadir el flujo en que se impriman los iconos segun el tipo del recurso
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
+  const { settingsType } = useAppSelector((state: RootState) => state.settings);
   // const { settingsType } = useSettings();
   const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
@@ -184,9 +186,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
                   <p>{recourse.editorial}</p>
                 </div>
                 <div className="flex">
-                  {/* {recourse.typeName ===
-                    settingsType?.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO)
-                      .value ? (
+                  {recourse.typeName ===
+                    settingsType.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO)
+                      ?.value ? (
                     <>
                       <div className="flex gap-4 w-2/4">
                         <Icon
@@ -228,7 +230,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
                         <p>{recourse.totalHours}</p>
                       </div>
                     </>
-                  )} */}
+                  )}
                 </div>
               </div>
               {/* TODO Hacer scrollear las etiquetas */}
