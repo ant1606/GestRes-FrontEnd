@@ -15,6 +15,7 @@ interface Props {
   classBox: string;
   filter: boolean;
   errorCombo?: string | null;
+  isDisabled?: boolean;
 }
 
 // Combobox.propTypes = {
@@ -42,7 +43,8 @@ const Combobox: React.FC<Props> = ({
   value,
   classBox,
   filter,
-  errorCombo
+  errorCombo,
+  isDisabled = false
 }) => {
   const validateLengthError =
     errorCombo === null || errorCombo === undefined ? 0 : errorCombo.trim().length;
@@ -61,7 +63,8 @@ const Combobox: React.FC<Props> = ({
             name={name}
             id={name}
             onChange={handleChange}
-            value={value}>
+            value={value}
+            disabled={isDisabled}>
             {filter && (
               <>
                 <option value={0}>TODOS</option>

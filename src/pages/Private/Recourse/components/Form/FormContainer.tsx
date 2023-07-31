@@ -16,9 +16,8 @@ import {
   validateTotalPages,
   validateTotalChapters
 } from '../../utils/RecourseFormValidationInputs';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
-import { useDispatch } from 'react-redux';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { savingRecourse, updatingRecourse } from '@/services/recourse.services';
 import GLOBAL_CONSTANTES from '@/config/globalConstantes';
@@ -35,8 +34,11 @@ const validateFunctionsFormInputs = {
   totalChapters: validateTotalChapters
 };
 
-export const FormContainer: React.FC = () => {
-  const dispatch = useDispatch();
+interface Props {
+  isShow?: boolean;
+}
+export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
+  const dispatch = useAppDispatch();
   const [comboTypeData, setComboTypeData] = useState<Settings[]>([]);
   const { recourseError, addValidationError, recourseActive, resetValidationError, cleanSelectedRecourse } = useRecourse();
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
@@ -121,10 +123,7 @@ export const FormContainer: React.FC = () => {
 
   // TODO Probar esta funcionalidad
   useEffect(() => {
-    // console.log(recourseActive);
-    // console.log(recourseActive?.tipoId);
     reset();
-    // console.log(recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId)
   }, [recourseActive]);
 
   const handleSubmit = async (): Promise<void> => {
@@ -219,6 +218,7 @@ export const FormContainer: React.FC = () => {
       source={source}
       recourseError={recourseError}
       dataSelectType={comboTypeData}
+      isShow={isShow}
     />
   );
 };

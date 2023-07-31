@@ -28,6 +28,7 @@ interface Props {
   source: string;
   recourseError: Record<string, string | null>;
   dataSelectType: SelectType[];
+  isShow: boolean;
 }
 
 const FormView: React.FC<Props> = ({
@@ -44,7 +45,8 @@ const FormView: React.FC<Props> = ({
   totalHours,
   source,
   recourseError,
-  dataSelectType
+  dataSelectType,
+  isShow
 }) => {
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
   if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
@@ -70,6 +72,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleChangeType}
           value={typeId}
           errorCombo={recourseError?.typeId}
+          isDisabled={isShow}
         />
       </div>
       <div className="flex gap-10 my-5">
@@ -162,13 +165,14 @@ const FormView: React.FC<Props> = ({
         /> */}
       </div>
       {/* TODO añadir logica para mostrar si esta en ventana de Show o Register/Edit */}
-      <div className="flex justify-around">
+      {!isShow ? (<div className="flex justify-around">
         <Button type="submit" text="Registrar" btnType="main" />
 
         <Link to="/app/recourse">
           <Button btnType="danger" text="Cancelar" type="button" />
         </Link>
-      </div>
+      </div>) : (<></>)}
+
     </form>
   );
 };
