@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '../../../Button.js';
 import Modal from '../../Molecules/Modal';
 import StatusForm from './components/Form/StatusForm.js';
-import StatusTable from './components/Table/StatusTable.js';
+import StatusTable from './components/Table/Table.js';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import useSettings from '../../../Context/SettingsContext.jsx';
@@ -11,7 +11,7 @@ const StatusMain = ({ handleClickParent, modalState }) => {
   const MySwal = withReactContent(Swal);
   const { settingsStatus } = useSettings();
 
-  const handleClickNuevo = () => {
+  const handleClickNuevo = (): void => {
     // console.log(settingsStatus);
     MySwal.fire({
       title: <strong>Registrar nuevo estado</strong>,
