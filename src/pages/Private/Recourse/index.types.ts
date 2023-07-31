@@ -1,3 +1,4 @@
+import { type ApiResponseProgress } from './components/Progress/adapters/ProgressAdapter';
 import { type ApiResponseStatus } from './components/Status/adapters/StatusAdapter';
 
 // Detalles de error de Validación
@@ -47,6 +48,6 @@ export interface ApiResponseRecourse {
   totalVideos: string | null;
   totalHoras: string | null;
   status: ApiResponseStatus[];
-  progress: Progress[];
+  progress: ApiResponseProgress[];
   tags: Tag[];
 }

@@ -45,7 +45,7 @@ interface Progress {
   pending: number;
   date: string;
   comment: string;
-  recourseId: number;
+  recourseId?: number;
 }
 
 interface Settings {
