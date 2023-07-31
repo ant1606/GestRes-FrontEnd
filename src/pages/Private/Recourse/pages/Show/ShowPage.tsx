@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Form from '../../components/Form';
 import { useRecourse } from '../../context/recourse.context';
 import StatusRecourse from '../../components/Status';
+import ProgressRecourse from '../../components/Progress';
 
 export const ShowPage: React.FC = () => {
   const { cleanSelectedRecourse } = useRecourse();
@@ -70,7 +71,7 @@ export const ShowPage: React.FC = () => {
 
         <div className={`${toggleTab === 3 ? '' : 'hidden'}`}>
           <div>
-            <p>Progress</p>
+            <ProgressRecourse />
             {/* <ProgressMain
               handleClickParent={handleClickButtonProgress}
               modalState={showModalProgress}
