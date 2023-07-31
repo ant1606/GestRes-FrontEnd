@@ -44,13 +44,6 @@ const Row: React.FC<Props> = ({ recourse }) => {
   }
 
   const handleClickDelete = async (recourse: Recourse): Promise<void> => {
-    // const result = await toastNotifications().modalDeleteConfirm(recourse.name);
-    // if (result) {
-    //   setIsLoading(true);
-    //   // await destroyRecourse(recourse);
-    //   loadRecourses(searchParams.toString());
-    //   setIsLoading(false);
-    // }
     try {
       const result = await toastNotifications().modalDeleteConfirm(recourse.name);
       if (!result) return;
@@ -84,7 +77,10 @@ const Row: React.FC<Props> = ({ recourse }) => {
   };
 
   const handleClickEdit = (recourse: Recourse): void => {
-    console.log(recourse);
+    selectedRecourse(recourse);
+  };
+
+  const handleClickShow = (recourse: Recourse): void => {
     selectedRecourse(recourse);
   };
 
@@ -102,7 +98,11 @@ const Row: React.FC<Props> = ({ recourse }) => {
               <Icon path={mdiArrowDownDropCircle} title="Down" size={1} color="white" />
             </button>
             <NavLink to={`/app/recourse/${recourse.id}`}>
-              <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
+              <button
+                className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg"
+                onClick={() => {
+                  handleClickShow(recourse);
+                }}>
                 <Icon path={mdiEye} title="RecourseScreenShow" size={1} color="white" />
               </button>
             </NavLink>
