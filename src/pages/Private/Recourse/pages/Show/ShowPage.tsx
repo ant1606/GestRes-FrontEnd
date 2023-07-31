@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Form from '../../components/Form';
 import { useRecourse } from '../../context/recourse.context';
+import StatusRecourse from '../../components/Status';
 
 export const ShowPage: React.FC = () => {
   const { cleanSelectedRecourse } = useRecourse();
@@ -63,7 +64,7 @@ export const ShowPage: React.FC = () => {
         </div>
 
         <div className={`${toggleTab === 2 ? '' : 'hidden'}`}>
-          <p>Status</p>
+          <StatusRecourse />
           {/* <StatusMain handleClickParent={handleClickButtonState} modalState={showModalState} /> */}
         </div>
 

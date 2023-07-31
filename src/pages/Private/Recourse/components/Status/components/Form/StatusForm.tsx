@@ -9,7 +9,7 @@ import {
   validateFecha,
   validateComentario,
   validateEstadoId
-} from '../../StatusFormValidationInputs.js';
+} from '../../utils/StatusFormValidationInputs.js';
 
 const StatusForm = ({ statusOptions }) => {
   const [comboStatusData, setComboStatusData] = useState([]);
