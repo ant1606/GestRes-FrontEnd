@@ -1,8 +1,9 @@
 import React from 'react';
-import ProgressTableRow from '../../Molecules/Progress/ProgressTableRow.js';
-import useRecourse from '../../../Context/RecourseContext.jsx';
 
-const ProgressTable = () => {
+import Row from './Row.js';
+import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context.js';
+
+export const Table: React.FC = () => {
   const { recourseActive } = useRecourse();
 
   return (
@@ -17,17 +18,25 @@ const ProgressTable = () => {
         </tr>
       </thead>
       <tbody>
-        {recourseActive &&
+        {recourseActive?.progress.map((progress: Progress, i: number) => (
+          <Row
+            key={i}
+            isLastProgress={i + 1 === (recourseActive?.progress?.length ?? 0)}
+            progress={progress}
+          />
+        ))}
+
+        {/* {recourseActive &&
           recourseActive?.progress.map((progress, i) => {
             if (i + 1 === recourseActive?.progress.length) {
-              return <ProgressTableRow key={i} last={true} progress={progress} />;
+              return <Row key={i} last={true} progress={progress} />;
             } else {
-              return <ProgressTableRow key={i} progress={progress} />;
+              return <Row key={i} progress={progress} />;
             }
-          })}
+          })} */}
       </tbody>
     </table>
   );
 };
 
-export default ProgressTable;
+export default Table;
