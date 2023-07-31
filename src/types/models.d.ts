@@ -35,7 +35,7 @@ interface Status {
   date: string;
   comment: string | null;
   statusId: number;
-  recourseId: number;
+  recourseId?: number;
   statusName: string;
 }
 

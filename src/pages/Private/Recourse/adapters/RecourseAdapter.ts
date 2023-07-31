@@ -1,3 +1,4 @@
+import { adapterStatusesData } from '../components/Status/adapters/StatusAdapter';
 import {
   type RecourseSuccessResponse,
   type ApiResponseRecourse,
@@ -17,7 +18,7 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
     totalChapters: recourse.totalCapitulos === null ? null : parseInt(recourse.totalCapitulos),
     totalVideos: recourse.totalVideos === null ? null : parseInt(recourse.totalVideos),
     totalHours: recourse.totalHoras === null ? null : recourse.totalHoras,
-    status: recourse.status,
+    status: adapterStatusesData(recourse.status),
     progress: recourse.progress,
     tags: recourse.tags,
     currentStatusName: recourse.nombreEstadoActual,

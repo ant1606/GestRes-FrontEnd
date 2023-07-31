@@ -1,3 +1,5 @@
+import { type ApiResponseStatus } from './components/Status/adapters/StatusAdapter';
+
 // Detalles de error de Validación
 export interface RecourseErrorDetailResponse extends ApiErrorResponse {
   name: string | null;
@@ -44,7 +46,7 @@ export interface ApiResponseRecourse {
   totalCapitulos: string | null;
   totalVideos: string | null;
   totalHoras: string | null;
-  status: Status[];
+  status: ApiResponseStatus[];
   progress: Progress[];
   tags: Tag[];
 }
