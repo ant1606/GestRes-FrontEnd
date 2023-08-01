@@ -7,6 +7,7 @@ import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import SelectorTag from '../SelectorTag/SelectorTag';
 
 interface SelectType {
   id: number;
@@ -48,6 +49,7 @@ const FormView: React.FC<Props> = ({
   dataSelectType,
   isShow
 }) => {
+
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
   if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
   return (
@@ -155,6 +157,7 @@ const FormView: React.FC<Props> = ({
         />
       </div>
       <div className="mt-5 mb-24">
+        <SelectorTag />
         {/* <Field
           type="text"
           label="Etiquetas"
@@ -164,7 +167,6 @@ const FormView: React.FC<Props> = ({
           classBox=""
         /> */}
       </div>
-      {/* TODO añadir logica para mostrar si esta en ventana de Show o Register/Edit */}
       {!isShow ? (<div className="flex justify-around">
         <Button type="submit" text="Registrar" btnType="main" />
 
