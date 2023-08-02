@@ -15,9 +15,6 @@ import {
 } from '@mdi/js';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
-// import useSettings from '../../../Context/SettingsContext.jsx';
-
-// import useRecourse from '../../../Context/RecourseContext.jsx';
 import GLOBAL_CONSTANTES from '@/config/globalConstantes.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
@@ -30,11 +27,9 @@ interface Props {
   recourse: Recourse;
 }
 
-// TODO Añadir el flujo en que se impriman los iconos segun el tipo del recurso
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
-  // const { settingsType } = useSettings();
   const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
@@ -235,24 +230,13 @@ const Row: React.FC<Props> = ({ recourse }) => {
               </div>
               {/* TODO Hacer scrollear las etiquetas */}
               <div className="flex flex-1 justify-start items-start flex-wrap gap-2 leading-1">
-                <span className="bg-gray-900 m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase">
-                  Programacion funcional
-                </span>
-                <span className="bg-gray-900 h-7 px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase">
-                  Ethical Hacking
-                </span>
-                <span className="bg-gray-900 h-7 px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase">
-                  CSS
-                </span>
-                <span className="bg-gray-900 h-7 px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase">
-                  HTML
-                </span>
-                <span className="bg-gray-900 h-7 px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase">
-                  Base de Datos
-                </span>
-                <span className="bg-gray-900 h-7 px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase">
-                  Arquitectura de Software
-                </span>
+                {recourse?.tags.map((tag) => (
+                  <div
+                    key={tag.id}
+                    className={`${tag.style} m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase`}>
+                    {tag.name}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
