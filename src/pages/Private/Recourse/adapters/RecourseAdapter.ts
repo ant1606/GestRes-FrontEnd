@@ -1,3 +1,4 @@
+import { adapterTagsData } from '../../Tag/adapters/TagAdapter';
 import { adapterProgressesData } from '../components/Progress/adapters/ProgressAdapter';
 import { adapterStatusesData } from '../components/Status/adapters/StatusAdapter';
 import {
@@ -21,7 +22,7 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
     totalHours: recourse.totalHoras === null ? null : recourse.totalHoras,
     status: adapterStatusesData(recourse.status),
     progress: adapterProgressesData(recourse.progress),
-    tags: recourse.tags,
+    tags: adapterTagsData(recourse.tags),
     currentStatusName: recourse.nombreEstadoActual,
     typeName: recourse.tipoNombre
   };

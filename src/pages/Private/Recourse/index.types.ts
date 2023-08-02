@@ -1,3 +1,4 @@
+import { type ApiResponseTag } from '../Tag/index.types';
 import { type ApiResponseProgress } from './components/Progress/adapters/ProgressAdapter';
 import { type ApiResponseStatus } from './components/Status/adapters/StatusAdapter';
 
@@ -49,5 +50,5 @@ export interface ApiResponseRecourse {
   totalHoras: string | null;
   status: ApiResponseStatus[];
   progress: ApiResponseProgress[];
-  tags: Tag[];
+  tags: ApiResponseTag[];
 }

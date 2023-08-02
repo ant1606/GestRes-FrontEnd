@@ -5,7 +5,7 @@ import {
   type TagsSuccessResponse
 } from '../index.types';
 
-const adapterTagsData = (tags: ApiResponseTag[]): Tag[] => {
+export const adapterTagsData = (tags: ApiResponseTag[]): Tag[] => {
   return tags.map((tag: ApiResponseTag) => ({
     id: parseInt(tag.identificador),
     name: tag.nombre,
