@@ -17,5 +17,5 @@ export const adapterStatus = (status: ApiResponseStatus): Status => {
 };
 
 export const adapterStatusesData = (statuses: ApiResponseStatus[]): Status[] => {
-  return statuses.map((status: ApiResponseStatus) => adapterStatus(status));
+  return statuses?.map((status: ApiResponseStatus) => adapterStatus(status));
 };

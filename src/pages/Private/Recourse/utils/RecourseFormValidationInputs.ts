@@ -124,9 +124,9 @@ export const validateTotalHours = (values) => {
     (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
   );
   const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
-
+  console.log(values.totalHours);
   if (isTipoVideo) {
-    const validateTotalHours = values.totalHours.trim();
+    const validateTotalHours = values.totalHours;
     const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
     if (validateTotalHours.length === 0) return 'Total Videos es requerido';
 

@@ -17,5 +17,5 @@ export const adapterprogress = (progress: ApiResponseProgress): Progress => {
 };
 
 export const adapterProgressesData = (progresses: ApiResponseProgress[]): Progress[] => {
-  return progresses.map((progress: ApiResponseProgress) => adapterprogress(progress));
+  return progresses?.map((progress: ApiResponseProgress) => adapterprogress(progress));
 };

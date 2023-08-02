@@ -82,7 +82,6 @@ export const FormContainer: React.FC = () => {
           setTags(tags);
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
-          console.log(errorsDetail);
           Object.keys(errorsDetail).forEach((key) => {
             if (key !== 'apiResponseMessageError') {
               addValidationError({ [key]: errorsDetail[key] });

@@ -158,7 +158,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_pages: formValues.totalPages,
           total_chapters: formValues.totalChapters,
           total_videos: formValues.totalVideos,
-          total_hours: formValues.toalHours,
+          total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
           status: [],
           progress: [],
@@ -168,12 +168,12 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
             ? await savingRecourse(recourseToSend)
             : await updatingRecourse(recourseToSend);
         if ('data' in response) {
-          reset();
-          resetValidationError();
           const message =
             recourseActive === null
               ? 'Se registró el recurso correctamente .'
               : 'Se actualizó el recurso';
+          reset();
+          resetValidationError();
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedRecourse();
           navigate('/app/recourse');
