@@ -30,6 +30,8 @@ interface Props {
   recourseError: Record<string, string | null>;
   dataSelectType: SelectType[];
   isShow: boolean;
+  selectedTags: number[];
+  setSelectedTags: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const FormView: React.FC<Props> = ({
@@ -47,7 +49,9 @@ const FormView: React.FC<Props> = ({
   source,
   recourseError,
   dataSelectType,
-  isShow
+  isShow,
+  selectedTags,
+  setSelectedTags
 }) => {
 
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
@@ -157,7 +161,7 @@ const FormView: React.FC<Props> = ({
         />
       </div>
       <div className="mt-5 mb-24">
-        <SelectorTag />
+        <SelectorTag setSelectValues={setSelectedTags} />
         {/* <Field
           type="text"
           label="Etiquetas"

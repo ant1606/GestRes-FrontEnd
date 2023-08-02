@@ -45,6 +45,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
 
   const navigate = useNavigate();
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   // TODO QUeda cargar las etiquetas del recurso
 
@@ -158,7 +159,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_chapters: formValues.totalChapters,
           total_videos: formValues.totalVideos,
           total_hours: formValues.toalHours,
-          tags: [],
+          tags: selectedTags ?? [],
           status: [],
           progress: [],
         }
@@ -220,6 +221,8 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       recourseError={recourseError}
       dataSelectType={comboTypeData}
       isShow={isShow}
+      selectedTags={selectedTags}
+      setSelectedTags={setSelectedTags}
     />
   );
 };
