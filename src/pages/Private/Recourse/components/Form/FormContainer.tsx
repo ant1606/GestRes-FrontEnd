@@ -62,7 +62,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
         totalHours: '00:00:00',
         totalPages: 0,
         totalChapters: 0,
-        recourseType: settingsType
+        recourseType: settingsType,
       }
       : {
         id: recourseActive.id,
@@ -126,6 +126,9 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   // TODO Probar esta funcionalidad
   useEffect(() => {
     reset();
+    if (recourseActive !== null) {
+      setSelectedTags(recourseActive.tags?.map((tag: Tag) => tag.id));
+    }
   }, [recourseActive]);
 
   const handleSubmit = async (): Promise<void> => {

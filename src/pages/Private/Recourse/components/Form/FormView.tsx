@@ -161,7 +161,7 @@ const FormView: React.FC<Props> = ({
         />
       </div>
       <div className="mt-5 mb-24">
-        <SelectorTag setSelectValues={setSelectedTags} />
+        <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
         {/* <Field
           type="text"
           label="Etiquetas"

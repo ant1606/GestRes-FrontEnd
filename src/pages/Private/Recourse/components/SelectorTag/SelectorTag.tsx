@@ -5,11 +5,17 @@ import { getTags } from '@/services/tag.services';
 
 interface Props {
   setSelectValues: React.Dispatch<React.SetStateAction<number[]>>;
+  selectedTags: number[];
 }
 
-const SelectorTag: React.FC<Props> = ({ setSelectValues }) => {
+const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
   const selectRef = useRef<HTMLSelectElement>(undefined);
+  const selectedTagsRef = useRef(selectedTags);
   // const [selectedValues, setSelectedValues] = useState<number[]>([]);
+
+  useEffect(() => {
+    selectedTagsRef.current = selectedTags;
+  }, [selectedTags]);
 
   useEffect(() => {
     const choices = new Choices(selectRef.current, {
@@ -19,10 +25,16 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues }) => {
       removeItemButton: true,
       removeItems: true,
       maxItemCount: -1
-    }).setChoices(async function () {
-      const response = await getTags(`searchNombre=`);
-      return response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name }));
-    });
+    })
+      .setChoices(async function () {
+        const response = await getTags(`searchNombre=`);
+        return response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name }));
+      })
+      .then((instance) => {
+        if (selectRef.current !== null) {
+          instance.setChoiceByValue(selectedTagsRef.current);
+        }
+      });
 
     const handleChange = (event: CustomEvent): void => {
       setSelectValues((prevState) => {
@@ -36,6 +48,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues }) => {
 
     // choices.passedElement.addEventListener('change', handleChange);
     selectRef.current.addEventListener('change', handleChange);
+
     return () => {
       // selectRef.current.removeEventListener('change', handleChange);
       // choices.destroy();
