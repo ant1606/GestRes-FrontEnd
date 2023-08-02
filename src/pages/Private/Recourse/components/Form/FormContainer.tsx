@@ -163,7 +163,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           status: [],
           progress: [],
         }
-
         const response =
           recourseActive === null
             ? await savingRecourse(recourseToSend)

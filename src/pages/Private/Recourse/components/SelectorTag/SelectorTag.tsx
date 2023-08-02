@@ -38,7 +38,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues }) => {
     selectRef.current.addEventListener('change', handleChange);
     return () => {
       // selectRef.current.removeEventListener('change', handleChange);
-      choices.destroy();
+      // choices.destroy();
     };
   }, []);
 
