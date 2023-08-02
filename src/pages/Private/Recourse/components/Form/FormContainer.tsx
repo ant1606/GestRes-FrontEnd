@@ -163,8 +163,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_videos: formValues.totalVideos,
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
-          status: [],
-          progress: [],
         }
         const response =
           recourseActive === null
