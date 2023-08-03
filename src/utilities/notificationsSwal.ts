@@ -99,11 +99,45 @@ export const toastNotifications = () => {
     return confirm;
   };
 
+  const modalCustomDialogQuestion = async (
+    title: string = 'Sistema',
+    message: string = ''
+  ): Promise<boolean> => {
+    let confirm = false;
+
+    await Swal.fire({
+      title,
+      text: message,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'ACEPTAR',
+      cancelButtonText: 'CANCELAR',
+      reverseButtons: true,
+      customClass: {
+        confirmButton:
+          'bg-green-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-green-700',
+        cancelButton:
+          'bg-red-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-red-900',
+        actions: 'gap-10'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        confirm = true;
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        confirm = false;
+      }
+    });
+
+    return confirm;
+  };
+
   return {
     toastSucces,
     toastError,
     notificationError,
     modalDeleteConfirm,
-    toastSuccesCustomize
+    toastSuccesCustomize,
+    modalCustomDialogQuestion
   };
 };

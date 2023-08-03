@@ -71,10 +71,10 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
         author: recourseActive.author,
         editorial: recourseActive.editorial,
         typeId: recourseActive.typeId,
-        totalVideos: recourseActive.totalVideos,
-        totalHours: recourseActive.totalHours,
-        totalPages: recourseActive.totalPages,
-        totalChapters: recourseActive.totalChapters,
+        totalVideos: recourseActive.totalVideos ?? 0,
+        totalHours: recourseActive.totalHours ?? "00:00:00",
+        totalPages: recourseActive.totalPages ?? 0,
+        totalChapters: recourseActive.totalChapters ?? 0,
         recourseType: settingsType
       };
 
@@ -164,10 +164,22 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
         }
-        const response =
-          recourseActive === null
-            ? await savingRecourse(recourseToSend)
-            : await updatingRecourse(recourseToSend);
+        // TODO Evaluar cuando se haga una actualizacion y verificar si se cambio el typeId del recurso para lanzar una ventana de dialogo
+        let response;
+        if (recourseActive === null) {
+          response = await savingRecourse(recourseToSend);
+        } else {
+          let resultDialog = true;
+          if (recourseActive.typeId !== formValues.typeId) {
+            resultDialog = await toastNotifications().modalCustomDialogQuestion(
+              'Se modificó el tipo del Recurso',
+              'Si cambio el tipo del recurso, los progresos existentes se resetearan a 0\n¿desea continuar con la actualización?'
+            )
+          }
+          if (!resultDialog) throw new Error("Se cancelo la actualización");
+          response = await updatingRecourse(recourseToSend);
+        }
+
         if ('data' in response) {
           const message =
             recourseActive === null
