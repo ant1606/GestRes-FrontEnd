@@ -32,6 +32,7 @@ interface Props {
   isShow: boolean;
   selectedTags: number[];
   setSelectedTags: React.Dispatch<React.SetStateAction<number[]>>;
+  recourseSelected: Recourse;
 }
 
 const FormView: React.FC<Props> = ({
@@ -51,7 +52,8 @@ const FormView: React.FC<Props> = ({
   dataSelectType,
   isShow,
   selectedTags,
-  setSelectedTags
+  setSelectedTags,
+  recourseSelected
 }) => {
 
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
@@ -161,15 +163,21 @@ const FormView: React.FC<Props> = ({
         />
       </div>
       <div className="mt-5 mb-24">
-        <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
-        {/* <Field
-          type="text"
-          label="Etiquetas"
-          name="etiqueta"
-          value={tags}
-          handleChange={handleInputChange}
-          classBox=""
-        /> */}
+        {
+          !isShow ? (
+            <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
+          ) : (
+            <div className="flex flex-1 justify-start items-start flex-wrap gap-2 leading-1">
+              {recourseSelected?.tags.map((tag) => (
+                <div
+                  key={tag.id}
+                  className={`${tag.style} m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase`}>
+                  {tag.name}
+                </div>
+              ))}
+            </div>
+          )
+        }
       </div>
       {!isShow ? (<div className="flex justify-around">
         <Button type="submit" text="Registrar" btnType="main" />

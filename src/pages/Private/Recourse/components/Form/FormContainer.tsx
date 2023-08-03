@@ -219,6 +219,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       isShow={isShow}
       selectedTags={selectedTags}
       setSelectedTags={setSelectedTags}
+      recourseSelected={recourseActive}
     />
   );
 };
