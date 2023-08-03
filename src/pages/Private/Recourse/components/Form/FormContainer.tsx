@@ -48,35 +48,19 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   // TODO QUeda cargar las etiquetas del recurso
-
-  const initialState =
-    recourseActive === null
-      ? {
-        id: 0,
-        name: '',
-        source: '',
-        author: '',
-        editorial: '',
-        typeId: settingsType[0].id,
-        totalVideos: 0,
-        totalHours: '00:00:00',
-        totalPages: 0,
-        totalChapters: 0,
-        recourseType: settingsType,
-      }
-      : {
-        id: recourseActive.id,
-        name: recourseActive.name,
-        source: recourseActive.source,
-        author: recourseActive.author,
-        editorial: recourseActive.editorial,
-        typeId: recourseActive.typeId,
-        totalVideos: recourseActive.totalVideos ?? 0,
-        totalHours: recourseActive.totalHours ?? "00:00:00",
-        totalPages: recourseActive.totalPages ?? 0,
-        totalChapters: recourseActive.totalChapters ?? 0,
-        recourseType: settingsType
-      };
+  const initialState = {
+    id: recourseActive?.id ?? 0,
+    name: recourseActive?.name ?? '',
+    source: recourseActive?.source ?? '',
+    author: recourseActive?.author ?? '',
+    editorial: recourseActive?.editorial ?? '',
+    typeId: recourseActive?.typeId ?? settingsType[0].id,
+    totalVideos: recourseActive?.totalVideos ?? 0,
+    totalHours: recourseActive?.totalHours ?? "00:00:00",
+    totalPages: recourseActive?.totalPages ?? 0,
+    totalChapters: recourseActive?.totalChapters ?? 0,
+    recourseType: settingsType
+  };
 
   // TODO El campo Tipo Recurso aun no se carga correctamente, al igual que los valores del formulario, generar un meetodo para cargarlos
   // dependiendo de la existencia del recourseActive
