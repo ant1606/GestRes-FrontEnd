@@ -38,6 +38,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
     setviewDetail(!viewDetail);
   }
 
+  const handleClickDeleteWrapper = (recourse: Recourse): void => {
+    handleClickDelete(recourse);
+  };
   const handleClickDelete = async (recourse: Recourse): Promise<void> => {
     try {
       const result = await toastNotifications().modalDeleteConfirm(recourse.name);
@@ -114,8 +117,8 @@ const Row: React.FC<Props> = ({ recourse }) => {
 
             <button
               className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
-              onClick={async () => {
-                await handleClickDelete(recourse);
+              onClick={() => {
+                handleClickDeleteWrapper(recourse);
               }}>
               <Icon path={mdiTrashCan} title="Delete" size={1} color="white" />
             </button>
