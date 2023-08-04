@@ -19,6 +19,7 @@ export const FilterContainer: React.FC = () => {
   const { setRecourses, recoursePerPage, setRecoursePerPage } = useRecourse();
 
   // TODO Extraer esta logica en el ambito de los settings y valores por defectos cargados en la aplicación
+  // TODO considerar que la data esta almacenada en el store y no deberiamos traerlo desde la API
   const getFilterData = async (val: string): Promise<[]> => {
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/settings/${val}`);

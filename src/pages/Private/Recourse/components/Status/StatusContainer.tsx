@@ -2,15 +2,19 @@ import React from 'react';
 import StatusView from './StatusView';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import StatusForm from './components/Form/StatusForm';
+import { useAppSelector } from '@/hooks/redux';
+import { type RootState } from '@/redux/store';
 
 export const StatusContainer: React.FC = () => {
+  const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const MySwal = withReactContent(Swal);
 
   const handleClickNuevo = (): void => {
     // console.log(settingsStatus);
     MySwal.fire({
       title: <strong>Registrar nuevo estado</strong>,
-      html: <div>Hola mi formulario</div>,
+      html: <StatusForm listStatus={settingsStatus} />,
       showCancelButton: true,
       confirmButtonText: 'ACEPTAR',
       cancelButtonText: 'CANCELAR',
@@ -24,6 +28,7 @@ export const StatusContainer: React.FC = () => {
       },
       buttonsStyling: false
     }).then((result) => {
+      console.log(result.value);
       if (result.isConfirmed) {
         console.log('Guardar');
       } else if (result.isDismissed) {
