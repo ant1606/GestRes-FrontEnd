@@ -25,12 +25,17 @@ export const StatusContainer: React.FC = () => {
             listStatus={settingsStatus}
             modalRef={modalRef.current}
             recourseParent={recourseActive}
+            onFormSubmit={() => {
+              console.log('Se cerro el modal');
+              modalRef.current?.close();
+            }}
           />
         </StatusProvider>
       ),
       showConfirmButton: false,
       allowOutsideClick: false
     });
+
     //   showCancelButton: true,
     //   confirmButtonText: 'REGISTRAR',
     //   cancelButtonText: 'CANCELAR',

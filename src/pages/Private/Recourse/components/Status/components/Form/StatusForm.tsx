@@ -24,9 +24,10 @@ interface Props {
   listStatus: Settings[];
   modalRef: any;
   recourseParent: Recourse;
+  onFormSubmit: () => void;
 }
 
-const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent }) => {
+const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onFormSubmit }) => {
   const {
     addValidationError,
     statusError,
@@ -94,7 +95,8 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent }) =
           resetValidationError();
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedStatus();
-          modalRef.close();
+          console.log('se va acerrar el modla');
+          onFormSubmit();
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {
