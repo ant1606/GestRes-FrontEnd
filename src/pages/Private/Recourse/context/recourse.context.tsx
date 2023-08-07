@@ -13,7 +13,8 @@ type payloadReducerType =
   | Recourse
   | Recourse[]
   | RecoursesSuccessResponse
-  | Status[];
+  | Status[]
+  | Progress[];
 
 interface ActionReducer {
   type: string;
@@ -66,6 +67,7 @@ const RESET_VALIDATION_ERROR = 'reset validation error';
 const SELECT_RECOURSE_ACTIVE = 'select recourse active';
 const CLEAN_SELECT_RECOURSE = 'clean select recourse active';
 const GET_STATUS_PER_RECOURSE = 'get statuses from api per recourse active';
+const GET_PROGRESS_PER_RECOURSE = 'get progresses from api per recourse active';
 
 const recourseReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
@@ -138,6 +140,18 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
           status: [...payloadValue.data] as Status[]
         }
       };
+    case GET_PROGRESS_PER_RECOURSE:
+      payloadValue = action.payload;
+      if (payloadValue === null) {
+        throw new Error('El valor a enviar en GET_PROGRESS_PER_RECOURSE no debe ser null');
+      }
+      return {
+        ...state,
+        recourseActive: {
+          ...(state.recourseActive as Recourse),
+          progress: [...payloadValue.data] as Progress[]
+        }
+      };
   }
 
   throw new Error(`Action desconocida del tipo ${action.type}`);
@@ -192,6 +206,13 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
     });
   };
 
+  const setProgressesPerRecourse = (progresses: Progress[]): void => {
+    dispatch({
+      type: GET_PROGRESS_PER_RECOURSE,
+      payload: progresses
+    });
+  };
+
   const recourseActions = {
     recourses: state.recourses,
     recoursePerPage: state.recoursePerPage,
@@ -204,7 +225,8 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
     resetValidationError,
     selectedRecourse,
     cleanSelectedRecourse,
-    setStatusesPerRecourse
+    setStatusesPerRecourse,
+    setProgressesPerRecourse
   };
   return <RecourseContext.Provider value={recourseActions}>{children}</RecourseContext.Provider>;
 };
