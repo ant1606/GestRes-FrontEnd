@@ -95,7 +95,6 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
           resetValidationError();
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedStatus();
-          console.log('se va acerrar el modla');
           onFormSubmit();
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
