@@ -19,7 +19,7 @@ interface ActionReducer {
   payload: payloadReducerType;
 }
 
-type typeValidationError = 'date' | 'progressId' | 'comment';
+type typeValidationError = 'date' | 'done' | 'pending' | 'comment';
 
 interface InitialState {
   progresses: Progress[];
@@ -39,7 +39,8 @@ const initialState: InitialState = {
   validationError: {
     date: null,
     comment: null,
-    progressId: null
+    done: null,
+    pending: null
   }
 };
 
@@ -95,7 +96,8 @@ const progressReducer: Reducer<InitialState, ActionReducer> = (
         validationError: {
           comment: null,
           date: null,
-          progressId: null
+          done: null,
+          pending: null
         }
       };
     case CLEAN_SELECT_PROGRESS:
