@@ -6,8 +6,10 @@ import StatusForm from './components/Form/StatusForm';
 import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import { StatusProvider } from './context/status.context';
+import { useRecourse } from '../../context/recourse.context';
 
 export const StatusContainer: React.FC = () => {
+  const { recourseActive } = useRecourse();
   const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
@@ -19,7 +21,11 @@ export const StatusContainer: React.FC = () => {
       title: 'Registrar nuevo estado',
       html: (
         <StatusProvider>
-          <StatusForm listStatus={settingsStatus} modalRef={modalRef.current} />
+          <StatusForm
+            listStatus={settingsStatus}
+            modalRef={modalRef.current}
+            recourseParent={recourseActive}
+          />
         </StatusProvider>
       ),
       showConfirmButton: false,
