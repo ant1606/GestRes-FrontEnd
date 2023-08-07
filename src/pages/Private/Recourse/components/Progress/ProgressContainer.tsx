@@ -1,35 +1,39 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import ProgressView from './ProgressView';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { useRecourse } from '../../context/recourse.context';
+import ProgressForm from './components/Form/ProgressForm';
+import { ProgressProvider } from './context/progress.context';
+import { getProgressPerRecourse } from '@/services/progress.services';
 
 export const ProgressContainer: React.FC = () => {
+  const { recourseActive, setProgressesPerRecourse } = useRecourse();
   const MySwal = withReactContent(Swal);
+  const modalRef = useRef(MySwal);
 
   const handleClickNuevo = (): void => {
-    // console.log(settingsStatus);
     MySwal.fire({
-      title: <strong>Registrar nuevo estado</strong>,
-      html: <div>Hola mi formulario</div>,
-      showCancelButton: true,
-      confirmButtonText: 'ACEPTAR',
-      cancelButtonText: 'CANCELAR',
-      reverseButtons: true,
-      customClass: {
-        confirmButton:
-          'bg-green-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-green-700',
-        cancelButton:
-          'bg-red-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-red-900',
-        actions: 'gap-10'
-      },
-      buttonsStyling: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log('Guardar');
-      } else if (result.isDismissed) {
-        console.log('Cancelado');
-      }
+      title: 'Registrar nuevo estado',
+      html: (
+        <ProgressProvider>
+          <ProgressForm
+            modalRef={modalRef.current}
+            recourseParent={recourseActive}
+            onFormSubmit={() => {
+              handleFormSubmit();
+            }}
+          />
+        </ProgressProvider>
+      ),
+      showConfirmButton: false,
+      allowOutsideClick: false
     });
+  };
+  const handleFormSubmit = async (): Promise<void> => {
+    modalRef.current?.close();
+    const progressData = await getProgressPerRecourse(recourseActive?.id);
+    setProgressesPerRecourse(progressData);
   };
 
   return <ProgressView handleClick={handleClickNuevo} />;
