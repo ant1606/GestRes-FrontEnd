@@ -19,6 +19,7 @@ export interface ProgressErrorResponse {
 export interface ProgressErrorDetailResponse extends ApiErrorResponse {
   date: string | null;
   comment: string | null;
-  progressId: string | null;
+  pending: string | null;
+  done: string | null;
   [key: string]: string | null;
 }
