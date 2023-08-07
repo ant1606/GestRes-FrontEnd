@@ -19,6 +19,7 @@
   "rules": {
     "prettier/prettier": "error",
     "@typescript-eslint/no-floating-promises": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off"
   }
 }
