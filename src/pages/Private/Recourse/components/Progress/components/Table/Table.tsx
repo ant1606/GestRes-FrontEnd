@@ -25,15 +25,6 @@ export const Table: React.FC = () => {
             progress={progress}
           />
         ))}
-
-        {/* {recourseActive &&
-          recourseActive?.progress.map((progress, i) => {
-            if (i + 1 === recourseActive?.progress.length) {
-              return <Row key={i} last={true} progress={progress} />;
-            } else {
-              return <Row key={i} progress={progress} />;
-            }
-          })} */}
       </tbody>
     </table>
   );

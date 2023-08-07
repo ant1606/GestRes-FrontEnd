@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Icon from '@mdi/react';
 import { mdiTrashCan } from '@mdi/js';
-import Modal from '@/components/Modal';
+import { toastNotifications } from '@/utilities/notificationsSwal';
+import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context';
+import { useAppDispatch } from '@/hooks/redux';
+import { isLoading } from '@/redux/slice/uiSlice';
+import { destroyProgress, getProgressPerRecourse } from '@/services/progress.services';
+import { useProgress } from '../../context/progress.context';
 
 interface Props {
   isLastProgress: boolean;
@@ -9,14 +14,43 @@ interface Props {
 }
 
 const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
-  const [toggleDeleteModal, setToggleDeleteModal] = useState(false);
-
-  const handleClickDeleteModal = (): void => {
-    setToggleDeleteModal(!toggleDeleteModal);
+  const { setProgressesPerRecourse, recourseActive } = useRecourse();
+  const dispatch = useAppDispatch();
+  const { addValidationError } = useProgress();
+  const handleClickDeleteWrapper = (progress: Progress): void => {
+    handleClickDelete(progress);
   };
 
-  const handleClickDelete = (): void => {
-    console.log('eliminar');
+  const handleClickDelete = async (progress: Progress): Promise<void> => {
+    try {
+      const result = await toastNotifications().modalDeleteConfirm('');
+      if (!result) return;
+
+      dispatch(isLoading(true));
+      const response = await destroyProgress(progress);
+      if ('data' in response) {
+        toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
+
+        const progressData = await getProgressPerRecourse(recourseActive?.id);
+        setProgressesPerRecourse(progressData);
+      } else if ('error' in response) {
+        const errorsDetail = response.error?.detail;
+        Object.keys(errorsDetail).forEach((key) => {
+          if (key !== 'apiResponseMessageError') {
+            addValidationError({ [key]: errorsDetail[key] });
+          }
+        });
+
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
+        }
+      }
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
+    }
   };
   return (
     <tr className="h-12">
@@ -26,22 +60,11 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
             <>
               <button
                 className="w-8 h-8 flex justify-center items-center bg-red-600 rounded-lg cursor-pointer"
-                onClick={handleClickDeleteModal}>
+                onClick={() => {
+                  handleClickDeleteWrapper(progress);
+                }}>
                 <Icon path={mdiTrashCan} title="Down" size={1} color="white" />
               </button>
-              {toggleDeleteModal && (
-                <Modal
-                  handleClickAcceptButton={handleClickDelete}
-                  title="Eliminar Progreso"
-                  modalState={toggleDeleteModal}
-                  handleClickParent={handleClickDeleteModal}
-                  modalContent={
-                    <p className="text-center text-xl font-medium">
-                      ¿Está seguro que desea eliminar el registro del Progreso?
-                    </p>
-                  }
-                />
-              )}
             </>
           )}
         </div>
