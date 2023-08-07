@@ -1,5 +1,5 @@
 import { type ReactNode, createContext, useContext, type Reducer, useReducer } from 'react';
-import { type ProgressSuccessResponse } from '../index.types';
+import { type ProgressSuccessResponse } from '../indext.types';
 
 const ProgressContext = createContext({});
 
