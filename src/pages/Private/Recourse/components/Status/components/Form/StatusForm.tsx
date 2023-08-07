@@ -8,39 +8,33 @@ import {
 import Field from '@/components/Field.js';
 import Combobox from '@/components/Combobox.js';
 import TextArea from '@/components/TextArea.js';
+import Button from '@/components/Button.js';
 
 const validateInputs = {
-  fecha: validateFecha,
-  estadoId: validateEstadoId,
-  comentario: validateComentario
+  date: validateFecha,
+  statusId: validateEstadoId,
+  comment: validateComentario
 };
 
 interface Props {
   listStatus: Settings[];
+  modalRef: any;
 }
-const StatusForm: React.FC<Props> = ({ listStatus }) => {
+const StatusForm: React.FC<Props> = ({ listStatus, modalRef }) => {
   const [comboStatusData, setComboStatusData] = useState<Settings[]>([]);
-  // No se detectaba el estado de settingStatus en el form, quizas porque esta incrustado en SweetAlert, investigar luego
-  // const { settingsStatus } = useSettings();
-
   const initialState = {
-    fecha: moment().format('YYYY-MM-DD'),
-    estadoId: 1,
-    comentario: ''
+    date: moment().format('YYYY-MM-DD'),
+    statusId: 1,
+    comment: ''
   };
+
+  useEffect(() => {
+    setComboStatusData(listStatus);
+  }, [listStatus]);
 
   // const [formValues, handleInputChange, reset] = useForm(initialState, validateInputs, () => { });
   // const { fecha, estadoId } = formValues;
   // const statusErrorRef = useRef();
-
-  useEffect(() => {
-    // console.log(fecha);
-    // console.log(settingsStatus);
-    // if (statusOptions !== null) {
-    setComboStatusData(listStatus);
-    // reset();
-    // }
-  }, [listStatus]);
 
   // useEffect(()=>{
   //     statusErrorRef.current = recourseError;
@@ -49,20 +43,26 @@ const StatusForm: React.FC<Props> = ({ listStatus }) => {
   const handleChangesTemp = (): void => {
     console.log('change');
   };
+
+  const handleClickCancel = (): void => {
+    // console.log('cerrando');
+    // console.log(modalRef);
+    modalRef.close();
+  };
   return (
     <div className="flex flex-col py-8 gap-10">
       <Field
         classBox=""
         label="Fecha"
         handleChange={handleChangesTemp}
-        name="fecha"
+        name="date"
         type="date"
         value="12"
         errorInput=""
       />
       <Combobox
         label="Estado"
-        name="estadoId"
+        name="statusId"
         filter={false}
         options={comboStatusData}
         classBox=""
@@ -70,6 +70,11 @@ const StatusForm: React.FC<Props> = ({ listStatus }) => {
         value="231"
       />
       <TextArea label="Comentario" id="comment" />
+      <div>
+        <Button type="submit" text="Registrar" btnType="main" />
+
+        <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
+      </div>
     </div>
   );
 };
