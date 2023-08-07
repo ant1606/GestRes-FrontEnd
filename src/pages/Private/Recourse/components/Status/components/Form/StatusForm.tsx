@@ -9,8 +9,10 @@ import Field from '@/components/Field.js';
 import Combobox from '@/components/Combobox.js';
 import TextArea from '@/components/TextArea.js';
 import Button from '@/components/Button.js';
+import { useForm } from '@/hooks/useForm.js';
+import { useStatus } from '../../context/status.context.js';
 
-const validateInputs = {
+const validateFunctionsFormInputs = {
   date: validateFecha,
   statusId: validateEstadoId,
   comment: validateComentario
@@ -21,6 +23,7 @@ interface Props {
   modalRef: any;
 }
 const StatusForm: React.FC<Props> = ({ listStatus, modalRef }) => {
+  const { addValidationError } = useStatus();
   const [comboStatusData, setComboStatusData] = useState<Settings[]>([]);
   const initialState = {
     date: moment().format('YYYY-MM-DD'),
@@ -32,17 +35,23 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef }) => {
     setComboStatusData(listStatus);
   }, [listStatus]);
 
-  // const [formValues, handleInputChange, reset] = useForm(initialState, validateInputs, () => { });
-  // const { fecha, estadoId } = formValues;
+  const {
+    values: formValues,
+    handleInputChange,
+    validatedSubmitForm,
+    reset
+  } = useForm(
+    initialState,
+    validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
+    addValidationError
+  );
+
+  const { date, statusId, comment } = formValues;
   // const statusErrorRef = useRef();
 
   // useEffect(()=>{
   //     statusErrorRef.current = recourseError;
   // }, [recourseError]);
-
-  const handleChangesTemp = (): void => {
-    console.log('change');
-  };
 
   const handleClickCancel = (): void => {
     // console.log('cerrando');
@@ -54,7 +63,7 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef }) => {
       <Field
         classBox=""
         label="Fecha"
-        handleChange={handleChangesTemp}
+        handleChange={handleInputChange}
         name="date"
         type="date"
         value="12"
@@ -66,7 +75,7 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef }) => {
         filter={false}
         options={comboStatusData}
         classBox=""
-        handleChange={handleChangesTemp}
+        handleChange={handleInputChange}
         value="231"
       />
       <TextArea label="Comentario" id="comment" />

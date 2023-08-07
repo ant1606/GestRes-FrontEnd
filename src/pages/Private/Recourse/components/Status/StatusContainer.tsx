@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import StatusForm from './components/Form/StatusForm';
 import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
+import { StatusProvider } from './context/status.context';
 
 export const StatusContainer: React.FC = () => {
   const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
@@ -16,7 +17,11 @@ export const StatusContainer: React.FC = () => {
 
     MySwal.fire({
       title: 'Registrar nuevo estado',
-      html: <StatusForm listStatus={settingsStatus} modalRef={modalRef.current} />,
+      html: (
+        <StatusProvider>
+          <StatusForm listStatus={settingsStatus} modalRef={modalRef.current} />
+        </StatusProvider>
+      ),
       showConfirmButton: false,
       allowOutsideClick: false
     });
@@ -42,5 +47,9 @@ export const StatusContainer: React.FC = () => {
     // });
   };
 
-  return <StatusView handleClick={handleClickNuevo} />;
+  return (
+    <StatusProvider>
+      <StatusView handleClick={handleClickNuevo} />
+    </StatusProvider>
+  );
 };
