@@ -1,7 +1,7 @@
 export interface StatusesSuccessResponse {
-  meta: PaginateResultMeta | null;
+  meta?: PaginateResultMeta | null;
   data: Status[];
-  links: PaginateResultLinks | null;
+  links?: PaginateResultLinks | null;
 }
 
 export interface StatusSuccessResponse {

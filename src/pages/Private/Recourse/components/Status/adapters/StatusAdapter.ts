@@ -1,4 +1,8 @@
-import { type StatusErrorResponse, type StatusSuccessResponse } from '../index.types';
+import {
+  type StatusesSuccessResponse,
+  type StatusErrorResponse,
+  type StatusSuccessResponse
+} from '../index.types';
 
 export interface ApiResponseStatus {
   identificador: number;
@@ -18,13 +22,19 @@ export const adapterStatus = (status: ApiResponseStatus): Status => {
   };
 };
 
+export const statusAdapter = (status: ApiResponseStatus): StatusSuccessResponse => {
+  return {
+    data: adapterStatus(status)
+  };
+};
+
 export const adapterStatusesData = (statuses: ApiResponseStatus[]): Status[] => {
   return statuses?.map((status: ApiResponseStatus) => adapterStatus(status));
 };
 
-export const statusAdapter = (status: ApiResponseStatus): StatusSuccessResponse => {
+export const statusesAdapter = (response: any): StatusesSuccessResponse => {
   return {
-    data: adapterStatus(status)
+    data: adapterStatusesData(response.data)
   };
 };
 

@@ -1,17 +1,19 @@
 import { useAppDispatch } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
-import { destroyStatus } from '@/services/status.services';
+import { destroyStatus, getStatusPerRecourse } from '@/services/status.services';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { mdiTrashCan } from '@mdi/js';
 import Icon from '@mdi/react';
 import React from 'react';
 import { useStatus } from '../../context/status.context';
+import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context';
 
 interface Props {
   isLastStatus: boolean;
   status: Status;
 }
 const Row: React.FC<Props> = ({ isLastStatus, status }) => {
+  const { setStatusesPerRecourse, recourseActive } = useRecourse();
   const { addValidationError } = useStatus();
   const dispatch = useAppDispatch();
   const handleClickDeleteWrapper = (status: Status): void => {
@@ -27,7 +29,9 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
       const response = await destroyStatus(status);
       if ('data' in response) {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
-        // TODO Obtener el listado de los estados del recurso
+
+        const statusData = await getStatusPerRecourse(recourseActive?.id);
+        setStatusesPerRecourse(statusData);
       } else if ('error' in response) {
         const errorsDetail = response.error?.detail;
         Object.keys(errorsDetail).forEach((key) => {
