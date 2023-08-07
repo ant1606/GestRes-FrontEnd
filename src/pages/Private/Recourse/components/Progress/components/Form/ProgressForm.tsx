@@ -33,7 +33,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
     progressError,
     progressActive,
     resetValidationError,
-    cleanSelectedStatus
+    cleanSelectedProgress
   } = useProgress();
 
   const initialState = {
@@ -85,12 +85,12 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         if ('data' in response) {
           const message =
             progressActive === null
-              ? 'Se registró el estado correctamente .'
-              : 'Se actualizó el estado';
+              ? 'Se registró el progreso correctamente .'
+              : 'Se actualizó el progreso';
           reset();
           resetValidationError();
           toastNotifications().toastSuccesCustomize(message);
-          cleanSelectedStatus();
+          cleanSelectedProgress();
           onFormSubmit();
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
