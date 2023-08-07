@@ -3,7 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 interface useFormOutput {
   values: Record<string | number, any>;
   handleInputChange: (
-    evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+    evt:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
   ) => void;
   // TODO Cambiar el tipo de validatedSubmitForm
   validatedSubmitForm: any;
@@ -26,7 +29,10 @@ export const useForm = <T extends useFormInput>(
   const [inputToValidate, setInputToValidate] = useState<string | null>(null);
 
   const handleInputChange = (
-    evt: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>
+    evt:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
     const value = convertToType(evt.target.value);
     setValues({
