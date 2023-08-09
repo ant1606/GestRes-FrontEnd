@@ -3,6 +3,7 @@ import Field from '@/components/Field';
 import perPageItemsValue from '@/config/perPageItemsValue';
 import React from 'react';
 import { type FilterData } from './FilterContainer';
+import SearchTag from '../SelectorTag/SearchTag';
 
 interface Props {
   handleChangeSearchName: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -77,6 +78,10 @@ const FilterView: React.FC<Props> = ({
         {/*    options={ [ {id: 1, value: "OPCION 1"} ,{id: 2, value: "OPCION 2"} ]} */}
         {/*  /> */}
         {/* </div> */}
+
+        <div className="basis-1/4 items-end">
+          <SearchTag />
+        </div>
         <div className="basis-1/4 items-end">
           <Combobox
             label="Registros por Pagina"
