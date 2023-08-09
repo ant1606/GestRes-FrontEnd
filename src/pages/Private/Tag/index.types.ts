@@ -19,6 +19,7 @@ export interface ApiResponseTag {
   identificador: string;
   nombre: string;
   estilos: string;
+  total: number;
 }
 
 export interface TagSuccessResponse {

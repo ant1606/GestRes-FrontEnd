@@ -9,7 +9,8 @@ export const adapterTagsData = (tags: ApiResponseTag[]): Tag[] => {
   return tags?.map((tag: ApiResponseTag) => ({
     id: parseInt(tag.identificador),
     name: tag.nombre,
-    style: tag.estilos
+    style: tag.estilos,
+    total: tag.total
   }));
 };
 
@@ -18,7 +19,8 @@ export const tagAdapter = (response: ApiResponseTag): TagSuccessResponse => {
     data: {
       id: parseInt(response.identificador),
       name: response.nombre,
-      style: response.estilos
+      style: response.estilos,
+      total: response.total
     }
   };
 };

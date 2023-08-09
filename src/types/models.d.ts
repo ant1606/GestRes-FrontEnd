@@ -10,6 +10,7 @@ interface Tag {
   id: number;
   name: string;
   style: string;
+  total: number;
 }
 
 interface Recourse {

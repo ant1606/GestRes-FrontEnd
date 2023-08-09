@@ -58,57 +58,6 @@ const Row: React.FC<Prop> = ({ tag }) => {
     } finally {
       dispatch(isLoading(false));
     }
-
-    // try {
-    //   const result = await toastNotifications().modalDeleteConfirm(tag);
-    //   if (result) {
-
-    //   }
-
-    //   dispatch(isLoading(true));
-    //   await validatedSubmitForm();
-    //   const existValidationMessage = Object.keys(tagErrorRef.current).every(
-    //     (el) => tagErrorRef.current[el] === null
-    //   );
-    //   if (existValidationMessage) {
-    //     const response =
-    //       tagActive === null
-    //         ? await savingTag({ id: 0, name, style: '' })
-    //         : await updatingTag({
-    //           id: tagActive.id,
-    //           name: formValues.name,
-    //           style: tagActive.style
-    //         });
-    //     if ('data' in response) {
-    //       reset();
-    //       resetValidationError();
-    //       const message =
-    //         tagActive === null
-    //           ? 'Se registró la etiqueta correctamente .'
-    //           : 'Se actualizó la etiqueta';
-    //       toastNotifications().toastSuccesCustomize(message);
-    //       cleanSelectedTag();
-    //       const tags = await getTags(searchParams.toString());
-    //       setTags(tags);
-    //     } else if ('error' in response) {
-    //       const errorsDetail = response.error?.detail;
-    //       Object.keys(errorsDetail).forEach((key) => {
-    //         if (key !== 'apiResponseMessageError') {
-    //           addValidationError({ [key]: errorsDetail[key] });
-    //         }
-    //       });
-
-    //       if ('apiResponseMessageError' in errorsDetail) {
-    //         if (errorsDetail.apiResponseMessageError !== null)
-    //           throw new Error(errorsDetail.apiResponseMessageError);
-    //       }
-    //     }
-    //   }
-    // } catch (error) {
-    // } finally {
-    //   dispatch(isLoading(false));
-    //   focusInput('#name');
-    // }
   };
 
   return (
@@ -139,6 +88,13 @@ const Row: React.FC<Prop> = ({ tag }) => {
             {tag.name}
           </span>
         </div>
+      </td>
+      <td className="max-h-14 max-w-xs">
+        {/* <div className="flex justify-center items-center"> */}
+        <div className="px-3 text-center text-lg text-gray-900 font-semibold">
+          <p>{tag.total}</p>
+        </div>
+        {/* </div> */}
       </td>
     </tr>
   );

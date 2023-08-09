@@ -12,6 +12,7 @@ export const Table: React.FC = () => {
         <tr className="text-gray-600 border-b-gray-400 border-b-2 font-bold text-uppercase ">
           <th className="w-48">ACCIONES</th>
           <th>ETIQUETA</th>
+          <th>TOTAL</th>
         </tr>
       </thead>
       <tbody>
