@@ -16,6 +16,7 @@ export const FilterContainer: React.FC = () => {
   const [searchTipo, setSearchTipo] = useState(0);
   const [searchEstado, setSearchEstado] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTags, setSearchTags] = useState([]);
   const { setRecourses, recoursePerPage, setRecoursePerPage } = useRecourse();
 
   // TODO Extraer esta logica en el ambito de los settings y valores por defectos cargados en la aplicación
@@ -43,12 +44,16 @@ export const FilterContainer: React.FC = () => {
   const handleChangeRecordsPerPage = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setRecoursePerPage(parseInt(e.target.value));
   };
+  const handleChangeSearchTags = (e: any): void => {
+    setSearchTags(e.map((obj) => obj.value));
+  };
 
   const execFilter = async (): Promise<void> => {
     // TODO cambiar el filtro de tipo y estado  para evitar enviar en las queryString el ID de los valores
     searchParams.delete('searchNombre');
     searchParams.delete('searchTipo');
     searchParams.delete('searchEstado');
+    searchParams.delete('searchTags[]');
     searchParams.delete('perPage');
     searchParams.append('perPage', recoursePerPage);
     searchParams.delete('page');
@@ -56,6 +61,7 @@ export const FilterContainer: React.FC = () => {
     if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
     if (searchTipo > 0) searchParams.append('searchTipo', searchTipo.toString());
     if (searchEstado > 0) searchParams.append('searchEstado', searchEstado.toString());
+    if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
 
     searchParams.sort();
     setSearchParams(searchParams);
@@ -76,7 +82,7 @@ export const FilterContainer: React.FC = () => {
 
   useEffect(() => {
     if (recoursePerPage > 0) execFilter();
-  }, [searchNombre, searchTipo, searchEstado, recoursePerPage]);
+  }, [searchNombre, searchTipo, searchEstado, recoursePerPage, searchTags]);
 
   return (
     <FilterView
@@ -86,10 +92,12 @@ export const FilterContainer: React.FC = () => {
       handleChangeSearchName={handleChangeSearchNombre}
       handleChangeSearchStatus={handleChangeSearchEstado}
       handleChangeSearchType={handleChangeSearchTipo}
+      handleChangeSearchTags={handleChangeSearchTags}
       recoursePerPage={recoursePerPage}
       searchName={searchNombre}
       searchStatus={searchEstado}
       searchType={searchTipo}
+      searchTag={searchTags}
     />
   );
 };

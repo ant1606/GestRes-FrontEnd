@@ -10,9 +10,11 @@ interface Props {
   handleChangeSearchType: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleChangeSearchStatus: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleChangeRecordsPerPage: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChangeSearchTags: React.Dispatch<React.SetStateAction<number[]>>;
   searchName: string;
   searchType: number;
   searchStatus: number;
+  searchTag: [];
   recoursePerPage: string | number | readonly string[] | undefined;
   dataFilterType: FilterData[];
   dataFilterStatus: FilterData[];
@@ -23,9 +25,11 @@ const FilterView: React.FC<Props> = ({
   handleChangeSearchType,
   handleChangeSearchStatus,
   handleChangeRecordsPerPage,
+  handleChangeSearchTags,
   searchName,
   searchStatus,
   searchType,
+  searchTag,
   recoursePerPage,
   dataFilterStatus,
   dataFilterType
@@ -69,18 +73,8 @@ const FilterView: React.FC<Props> = ({
             errorCombo={null}
           />
         </div>
-        {/* //TODO Crear componente para multiselect de etiqueta */}
-        {/* <div className='basis-1/4 items-end'> */}
-        {/*  <Combobox */}
-        {/*    name="etiqueta" */}
-        {/*    label="Etiqueta" */}
-        {/*    filter={true} */}
-        {/*    options={ [ {id: 1, value: "OPCION 1"} ,{id: 2, value: "OPCION 2"} ]} */}
-        {/*  /> */}
-        {/* </div> */}
-
         <div className="basis-1/4 items-end">
-          <SearchTag />
+          <SearchTag handleChange={handleChangeSearchTags} value={searchTag} />
         </div>
         <div className="basis-1/4 items-end">
           <Combobox

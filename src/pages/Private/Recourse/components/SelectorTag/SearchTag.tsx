@@ -17,39 +17,43 @@ const MultiValue = (props) => (
   </components.MultiValue>
 );
 
-const SearchTag: React.FC = () => {
-  const [selected, setSelected] = useState([]);
+interface Props {
+  handleChange: React.Dispatch<React.SetStateAction<number[]>>;
+  value: [];
+}
+const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
+  // console.log(value);
+  // const [selected, setSelected] = useState([]);
   const [listTags, setListTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     const populateListTags = async (): Promise<void> => {
       const response = await getTags(`searchNombre=`);
-      console.log(response);
+      // console.log(response);
       setListTags(response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name })));
     };
 
     populateListTags();
   }, []);
 
-  const onSelectChange = useCallback((e) => {
-    setSelected(e);
-  }, []);
+  const onSelectChange = (e) => {
+    handleChange(e);
+  };
 
   const placeholder = useMemo(() => {
-    console.log(selected);
-    if (selected.length > 0) {
-      if (selected.length === 1) {
-        return selected[0].label;
+    if (value.length > 0) {
+      if (value.length === 1) {
+        return value[0].label;
       } else {
-        return 'Multiple options selected';
-        // return Object.values(selected)
+        return `${value.length} Tags seleccionadas`;
+        // return Object.values(value)
         //   .map((s) => s.label)
         //   .join(", ");
       }
     } else {
-      return 'No options selected';
+      return 'Seleccione Tags';
     }
-  }, [selected]);
+  }, [value]);
 
   return (
     <Select
@@ -66,7 +70,7 @@ const SearchTag: React.FC = () => {
       styles={{
         placeholder: (defaultStyles) => ({
           ...defaultStyles,
-          ...(selected.length > 0 && { color: 'black' })
+          ...(value.length > 0 && { color: 'black' })
         })
       }}
       // overrides values in control input
