@@ -2,7 +2,7 @@
 import Button from '@/components/Button';
 import Combobox from '@/components/Combobox';
 import Field from '@/components/Field';
-import GLOBAL_CONSTANTES from '@/config/globalConstantes';
+import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
 import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React from 'react';
@@ -95,7 +95,7 @@ const FormView: React.FC<Props> = ({
         />
 
         {typeId ===
-          settingsType.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO)?.id ? (
+          settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
           <Field
             type="text"
             label="Total Paginas"
@@ -129,7 +129,7 @@ const FormView: React.FC<Props> = ({
         />
 
         {typeId ===
-          settingsType?.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO)?.id ? (
+          settingsType?.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
           <Field
             type="text"
             label="Total Capitulos"

@@ -5,7 +5,7 @@ import Combobox from '../../Atoms/Combobox';
 import Field from '../../Atoms/Field';
 import { useForm } from '../../../hooks/useForm.js';
 import useRecourse from '../../../Context/RecourseContext.jsx';
-import GLOBAL_CONSTANTES from '../../../const/globalConstantes.js';
+import { GLOBAL_TYPES_RECOURSE } from '../../../const/globalConstantes.js';
 import useSettings from '../../../Context/SettingsContext';
 import {
   validateAutor,
@@ -146,7 +146,7 @@ const RecourseForm = ({ children }) => {
       // TODO Aplicar cuando se actualice el registro
       if (
         parseInt(formValues.typeId) ===
-        settingsType.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id
+        settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO).id
       ) {
         recourse.totalVideos = null;
         recourse.totalHoras = null;
@@ -221,7 +221,7 @@ const RecourseForm = ({ children }) => {
           />
 
           {parseInt(tipoId) ===
-            settingsType?.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id ? (
+            settingsType?.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO).id ? (
             <Field
               type="text"
               label="Total Paginas"
@@ -256,7 +256,7 @@ const RecourseForm = ({ children }) => {
           />
 
           {parseInt(tipoId) ===
-            settingsType?.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO).id ? (
+            settingsType?.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO).id ? (
             <Field
               type="text"
               label="Total Capitulos"

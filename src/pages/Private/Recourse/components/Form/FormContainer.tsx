@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { savingRecourse, updatingRecourse } from '@/services/recourse.services';
-import GLOBAL_CONSTANTES from '@/config/globalConstantes';
+import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
 import FormView from './FormView';
 
 const validateFunctionsFormInputs = {
@@ -126,7 +126,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       if (existValidationMessage) {
         if (
           parseInt(formValues.typeId) ===
-          settingsType.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO)?.id
+          settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id
         ) {
           formValues.totalVideos = null;
           formValues.totalHours = null;

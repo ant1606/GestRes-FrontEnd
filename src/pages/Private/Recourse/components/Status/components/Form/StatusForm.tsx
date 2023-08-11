@@ -39,7 +39,7 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
   const [comboStatusData, setComboStatusData] = useState<Settings[]>([]);
   const initialState = {
     date: moment().format('YYYY-MM-DD'),
-    statusId: 1,
+    statusId: listStatus[0].id,
     comment: ''
   };
   const {

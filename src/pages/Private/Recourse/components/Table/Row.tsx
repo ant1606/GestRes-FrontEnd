@@ -15,7 +15,7 @@ import {
 } from '@mdi/js';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
-import GLOBAL_CONSTANTES from '@/config/globalConstantes.js';
+import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
 import { destroyRecourse, getRecourses } from '@/services/recourse.services';
@@ -185,7 +185,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
                 </div>
                 <div className="flex">
                   {recourse.typeName ===
-                    settingsType.find((val) => val.key === GLOBAL_CONSTANTES.RECOURSE_TYPE_LIBRO)
+                    settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)
                       ?.value ? (
                     <>
                       <div className="flex gap-4 w-2/4">

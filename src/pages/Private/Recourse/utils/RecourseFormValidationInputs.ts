@@ -1,4 +1,4 @@
-import globalConstantes from '@/config/globalConstantes';
+import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
 // TODO tipar funciones y validaciones
 const isBetween = (length: number, min: number, max: number): boolean =>
   length >= min && length <= max;
@@ -101,7 +101,7 @@ export const validateTotalChapters = (values) => {
 
 export const validateTotalVideos = (values) => {
   const typeVideo = values.recourseType.find(
-    (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
+    (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_VIDEO
   );
   const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
 
@@ -121,7 +121,7 @@ export const validateTotalVideos = (values) => {
 
 export const validateTotalHours = (values) => {
   const typeVideo = values.recourseType.find(
-    (value) => value.key === globalConstantes.RECOURSE_TYPE_VIDEO
+    (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_VIDEO
   );
   const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
 
