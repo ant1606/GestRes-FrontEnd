@@ -117,6 +117,12 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
     handleSubmit();
   };
 
+  const minDate = (): string => {
+    return (
+      recourseParent.progress[recourseParent.progress.length - 1].date ??
+      new Date().toISOString().split('T')[0]
+    );
+  };
   return (
     <form onSubmit={handleSubmitWrapper}>
       <div className="flex flex-col py-8 gap-10">
@@ -128,6 +134,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
           value={date}
           errorInput={progressError.date}
           handleChange={handleInputChange}
+          min={minDate()}
         />
         <div className="flex gap-10">
           <Field
