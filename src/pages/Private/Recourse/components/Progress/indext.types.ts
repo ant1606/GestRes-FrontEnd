@@ -23,3 +23,11 @@ export interface ProgressErrorDetailResponse extends ApiErrorResponse {
   done: string | null;
   [key: string]: string | null;
 }
+
+export interface ProgressFormData {
+  date: string;
+  done: number;
+  pending: number;
+  comment: string;
+  lastProgress?: Progress;
+}

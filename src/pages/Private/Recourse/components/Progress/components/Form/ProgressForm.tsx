@@ -10,13 +10,11 @@ import { savingProgress } from '@/services/progress.services';
 import {
   validateComment,
   validateDate,
-  validateDoneAmount,
-  validatePendingAmount
+  validateDoneAmount
 } from '../../utils/ProgressFormValidationInputs';
 
 const validateFunctionsFormInputs = {
   done: validateDoneAmount,
-  pending: validatePendingAmount,
   date: validateDate,
   comment: validateComment
 };
@@ -38,9 +36,9 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
 
   const initialState = {
     done: 0,
-    pending: 0,
     date: moment().format('YYYY-MM-DD'),
-    comment: ''
+    comment: '',
+    lastProgress: recourseParent.progress[recourseParent.progress.length - 1]
   };
   const {
     values: formValues,
@@ -52,8 +50,9 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
     addValidationError
   );
-  const { done, pending, date, comment } = formValues;
+  const { done, date, comment } = formValues;
   const progressErrorRef = useRef<Record<string, string | null>>({});
+
   useEffect(() => {
     progressErrorRef.current = progressError;
   }, [progressError]);
@@ -65,7 +64,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
 
   const handleSubmit = async (): Promise<void> => {
     try {
-      // Ver como añadir un loader al modal
+      // TODO Ver como añadir un loader al modal
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(progressErrorRef.current).every(
         (el) => progressErrorRef.current[el] === null
@@ -75,7 +74,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         const response = await savingProgress(
           {
             done: formValues.done,
-            pending: formValues.pending,
+            pending: recourseParent.progress[recourseParent.progress.length - 1].pending - done,
             comment: formValues.comment,
             date: formValues.date
           },
@@ -150,10 +149,13 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
             type="number"
             label="Pendiente"
             classBox=""
-            errorInput={progressError.pending}
-            handleChange={handleInputChange}
+            errorInput={''}
+            handleChange={(e) => {
+              return null;
+            }}
             name="pending"
-            value={pending}
+            value={recourseParent.progress[recourseParent.progress.length - 1].pending - done}
+            disabled
           />
         </div>
         <TextArea
