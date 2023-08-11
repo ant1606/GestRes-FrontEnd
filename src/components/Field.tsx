@@ -9,6 +9,7 @@ interface Props {
   classBox: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   errorInput: string | null;
+  min?: string;
 }
 
 const Field: React.FC<Props> = ({
@@ -18,7 +19,8 @@ const Field: React.FC<Props> = ({
   value,
   classBox,
   handleChange,
-  errorInput
+  errorInput,
+  ...props
 }) => {
   const validateLengthErrorInput = errorInput !== null ? errorInput.trim().length : 0;
   return (
@@ -38,6 +40,7 @@ const Field: React.FC<Props> = ({
           value={value}
           autoComplete="off"
           data-testid={name}
+          {...props}
         />
         <label
           htmlFor={name}

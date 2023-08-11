@@ -22,3 +22,10 @@ export interface StatusErrorDetailResponse extends ApiErrorResponse {
   statusId: string | null;
   [key: string]: string | null;
 }
+
+export interface StatusFormData {
+  date: string;
+  statusId: number;
+  comment: string;
+  lastStatusOfRecourse?: Status;
+}

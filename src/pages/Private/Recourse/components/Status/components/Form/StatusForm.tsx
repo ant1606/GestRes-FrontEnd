@@ -28,19 +28,15 @@ interface Props {
 }
 
 const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onFormSubmit }) => {
-  const {
-    addValidationError,
-    statusError,
-    statusActive,
-    resetValidationError,
-    cleanSelectedStatus
-  } = useStatus();
+  const { addValidationError, statusError, resetValidationError, cleanSelectedStatus } =
+    useStatus();
 
   const [comboStatusData, setComboStatusData] = useState<Settings[]>([]);
   const initialState = {
     date: moment().format('YYYY-MM-DD'),
     statusId: listStatus[0].id,
-    comment: ''
+    comment: '',
+    lastStatusOfRecourse: recourseParent.status[recourseParent.status.length - 1]
   };
   const {
     values: formValues,
@@ -83,14 +79,9 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
           },
           recourseParent.id
         );
-        // const response =
-        //   statusActive === null ? await savingStatus(formValues) : await updatingTag(formValues);
 
         if ('data' in response) {
-          const message =
-            statusActive === null
-              ? 'Se registró el estado correctamente .'
-              : 'Se actualizó el estado';
+          const message = 'Se registró el estado correctamente .';
           reset();
           resetValidationError();
           toastNotifications().toastSuccesCustomize(message);
@@ -121,6 +112,13 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
     handleSubmit();
   };
 
+  const minDate = (): string => {
+    return (
+      recourseParent.status[recourseParent.status.length - 1].date ??
+      new Date().toISOString().split('T')[0]
+    );
+  };
+
   return (
     <form onSubmit={handleSubmitWrapper}>
       <div className="flex flex-col py-8 gap-10">
@@ -132,6 +130,7 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
           type="date"
           value={date}
           errorInput={statusError.date}
+          min={minDate()}
         />
         <Combobox
           label="Estado"
