@@ -22,12 +22,19 @@ const validateFunctionsFormInputs = {
 
 interface Props {
   listStatus: Settings[];
+  recourseStatus: Settings[];
   modalRef: any;
   recourseParent: Recourse;
   onFormSubmit: () => void;
 }
 
-const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onFormSubmit }) => {
+const StatusForm: React.FC<Props> = ({
+  listStatus,
+  modalRef,
+  recourseParent,
+  onFormSubmit,
+  recourseStatus
+}) => {
   const { addValidationError, statusError, resetValidationError, cleanSelectedStatus } =
     useStatus();
 
@@ -36,7 +43,8 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
     date: moment().format('YYYY-MM-DD'),
     statusId: listStatus[0].id,
     comment: '',
-    lastStatusOfRecourse: recourseParent.status[recourseParent.status.length - 1]
+    lastStatusOfRecourse: recourseParent.status[recourseParent.status.length - 1],
+    recourseStatus
   };
   const {
     values: formValues,
@@ -57,6 +65,11 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
     statusErrorRef.current = statusError;
   }, [statusError]);
 
+  useEffect(() => {
+    addValidationError({ comment: null });
+    // TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
+  }, [statusId]);
+
   const handleClickCancel = (): void => {
     reset();
     modalRef.close();
@@ -69,6 +82,7 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
       const existValidationMessage = Object.keys(statusErrorRef.current).every(
         (el) => statusErrorRef.current[el] === null
       );
+      console.log(existValidationMessage);
 
       if (existValidationMessage) {
         const response = await savingStatus(
@@ -149,6 +163,7 @@ const StatusForm: React.FC<Props> = ({ listStatus, modalRef, recourseParent, onF
           handleChange={handleInputChange}
           classBox=""
           errorInput={statusError.comment}
+          rows={3}
         />
         <div>
           <Button type="submit" text="Registrar" btnType="main" />

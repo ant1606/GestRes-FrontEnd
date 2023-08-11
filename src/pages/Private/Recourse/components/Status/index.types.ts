@@ -28,4 +28,5 @@ export interface StatusFormData {
   statusId: number;
   comment: string;
   lastStatusOfRecourse?: Status;
+  recourseStatus?: Settings[];
 }

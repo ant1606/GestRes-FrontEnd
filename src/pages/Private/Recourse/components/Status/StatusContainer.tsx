@@ -44,6 +44,7 @@ export const StatusContainer: React.FC = () => {
             onFormSubmit={() => {
               handleFormSubmit();
             }}
+            recourseStatus={settingsStatus}
           />
         </StatusProvider>
       ),
