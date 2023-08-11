@@ -91,6 +91,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedProgress();
           onFormSubmit();
+          // TODO Hacer que cuando se halla finalizado el recurso( el valor pendiente sea 0), pase a la pantalla principal de recursos
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {

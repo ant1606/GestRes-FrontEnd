@@ -68,6 +68,13 @@ export const toastNotifications = () => {
       text: msg
     });
   };
+  const notificationSuccess = (msg) => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Sistema',
+      text: msg
+    });
+  };
 
   const modalDeleteConfirm = async (name: string): Promise<boolean> => {
     let confirm = false;
@@ -138,6 +145,7 @@ export const toastNotifications = () => {
     notificationError,
     modalDeleteConfirm,
     toastSuccesCustomize,
-    modalCustomDialogQuestion
+    modalCustomDialogQuestion,
+    notificationSuccess
   };
 };

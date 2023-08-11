@@ -17,10 +17,16 @@ export const ProgressContainer: React.FC = () => {
   const handleClickNuevo = (): void => {
     const lastStatusName = recourseActive.status[recourseActive.status.length - 1]
       .statusName as string;
+    const lastPendingAmount = recourseActive.progress[recourseActive.progress.length - 1]
+      .pending as number;
     if (lastStatusName !== GLOBAL_STATUS_RECOURSE.EN_PROCESO) {
       toastNotifications().notificationError(
         `Sólo puede registrarse el progreso del recurso cuando se encuentre en estado EN PROCESO`
       );
+      return;
+    }
+    if (lastPendingAmount === 0) {
+      toastNotifications().notificationSuccess(`Usted culminó el recurso. ¡FELICIDADES!`);
       return;
     }
 
