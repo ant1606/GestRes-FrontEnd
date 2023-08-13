@@ -1,4 +1,4 @@
-import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { destroyStatus, getStatusPerRecourse } from '@/services/status.services';
 import { toastNotifications } from '@/utilities/notificationsSwal';
@@ -7,6 +7,7 @@ import Icon from '@mdi/react';
 import React from 'react';
 import { useStatus } from '../../context/status.context';
 import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context';
+import { type RootState } from '@/redux/store';
 
 interface Props {
   isLastStatus: boolean;
@@ -15,7 +16,11 @@ interface Props {
 const Row: React.FC<Props> = ({ isLastStatus, status }) => {
   const { setStatusesPerRecourse, recourseActive } = useRecourse();
   const { addValidationError } = useStatus();
+  const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const dispatch = useAppDispatch();
+  // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
+  const styleStatus = settingsStatus.find((val) => val.value === status.statusName)?.value2;
+
   const handleClickDeleteWrapper = (status: Status): void => {
     handleClickDelete(status);
   };
@@ -73,8 +78,16 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
 
       <td className="w-44 ">
         <div className="flex justify-center">
-          <div className="flex justify-center items-center w-38 px-4 py-1 rounded-2xl bg-gray-900">
-            <span className="text-sm font-bold text-white uppercase">{status?.statusName}</span>
+          <div
+            className={`
+              ${styleStatus === undefined ? 'bg-gray-900' : styleStatus.split(' ')[0]}
+              flex justify-center items-center w-38 px-4 py-1 rounded-2xl`}>
+            <span
+              className={`
+                ${styleStatus === undefined ? 'text-white' : styleStatus.split(' ')[1]}
+                text-sm font-bold  uppercase`}>
+              {status?.statusName}
+            </span>
           </div>
         </div>
       </td>

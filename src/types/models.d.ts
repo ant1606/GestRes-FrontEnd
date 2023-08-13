@@ -54,4 +54,5 @@ interface Settings {
   type: string;
   key: string;
   value: string;
+  value2: string;
 }

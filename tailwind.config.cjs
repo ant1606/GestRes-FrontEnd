@@ -23,6 +23,11 @@ module.exports = {
     'bg-sky-600',
     'bg-teal-500',
     'bg-yellow-400',
-    'bg-gray-900'
+    'bg-gray-900',
+    'bg-blue-500',
+    'bg-green-800',
+    'bg-gray-300',
+    'text-gray-50',
+    'text-gray-900'
   ]
 };

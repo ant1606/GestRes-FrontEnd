@@ -29,10 +29,14 @@ interface Props {
 
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
-  const { settingsType } = useAppSelector((state: RootState) => state.settings);
+  const { settingsType, settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
+  const styleStatus = settingsStatus.find(
+    (val) => val.value === recourse.currentStatusName
+  )?.value2;
 
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
@@ -130,8 +134,14 @@ const Row: React.FC<Props> = ({ recourse }) => {
           </div>
         </td>
         <td className="w-40 h-14 p-3">
-          <div className="flex justify-center items-center w-38 px-4 py-1 rounded-2xl bg-gray-900">
-            <span className="text-sm font-bold text-white uppercase">
+          <div
+            className={` 
+            ${styleStatus === undefined ? 'bg-gray-900' : styleStatus.split(' ')[0]
+              } flex justify-center items-center w-38 px-4 py-1 rounded-2xl`}>
+            <span
+              className={`
+              ${styleStatus === undefined ? 'text-white' : styleStatus.split(' ')[1]
+                }  text-sm font-bold  uppercase`}>
               {recourse.currentStatusName}
             </span>
           </div>
