@@ -85,6 +85,7 @@ export const StatusContainer: React.FC = () => {
 
   const handleFormSubmit = async (): Promise<void> => {
     modalRef.current?.close();
+    toastNotifications().toastSuccesCustomize('Se registró el estado correctamente.');
     const statusData = await getStatusPerRecourse(recourseActive?.id);
     setStatusesPerRecourse(statusData);
   };

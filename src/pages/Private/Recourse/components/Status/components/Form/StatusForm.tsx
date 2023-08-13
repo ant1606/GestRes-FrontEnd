@@ -95,10 +95,8 @@ const StatusForm: React.FC<Props> = ({
         );
 
         if ('data' in response) {
-          const message = 'Se registró el estado correctamente .';
           reset();
           resetValidationError();
-          toastNotifications().toastSuccesCustomize(message);
           cleanSelectedStatus();
           onFormSubmit();
         } else if ('error' in response) {
