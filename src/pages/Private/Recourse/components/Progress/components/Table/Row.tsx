@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/hooks/redux';
 import { isLoading } from '@/redux/slice/uiSlice';
 import { destroyProgress, getProgressPerRecourse } from '@/services/progress.services';
 import { useProgress } from '../../context/progress.context';
+import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
 
 interface Props {
   isLastProgress: boolean;
@@ -23,6 +24,16 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
 
   const handleClickDelete = async (progress: Progress): Promise<void> => {
     try {
+      const lastStatusName = recourseActive.status[recourseActive.status.length - 1]
+        .statusName as string;
+
+      if (lastStatusName !== GLOBAL_STATUS_RECOURSE.EN_PROCESO) {
+        toastNotifications().notificationError(
+          `Sólo pueden eliminarse los registros de progreso del recurso cuando se encuentre en estado EN PROCESO`
+        );
+        return;
+      }
+
       const result = await toastNotifications().modalDeleteConfirm('');
       if (!result) return;
 
