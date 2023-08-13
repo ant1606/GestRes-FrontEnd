@@ -22,17 +22,12 @@ const validateFunctionsFormInputs = {
 interface Props {
   modalRef: any;
   recourseParent: Recourse;
-  onFormSubmit: () => void;
+  onFormSubmit: (pending: number) => void;
 }
 
 const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit }) => {
-  const {
-    addValidationError,
-    progressError,
-    progressActive,
-    resetValidationError,
-    cleanSelectedProgress
-  } = useProgress();
+  const { addValidationError, progressError, resetValidationError, cleanSelectedProgress } =
+    useProgress();
 
   const initialState = {
     done: 0,
@@ -74,7 +69,6 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         const response = await savingProgress(
           {
             done: formValues.done,
-            pending: recourseParent.progress[recourseParent.progress.length - 1].pending - done,
             comment: formValues.comment,
             date: formValues.date
           },
@@ -82,16 +76,19 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         );
 
         if ('data' in response) {
-          const message =
-            progressActive === null
-              ? 'Se registró el progreso correctamente .'
-              : 'Se actualizó el progreso';
+          const pendingAmount =
+            recourseParent.progress[recourseParent.progress.length - 1].pending - done;
+          // pendingAmount === 0
+          //   ? toastNotifications().notificationSuccess(
+          //     `Finalizó el recurso ${recourseParent.name}, Felicidades`
+          //   )
+          //   : toastNotifications().toastSucces();
           reset();
           resetValidationError();
-          toastNotifications().toastSuccesCustomize(message);
+
           cleanSelectedProgress();
-          onFormSubmit();
-          // TODO Hacer que cuando se halla finalizado el recurso( el valor pendiente sea 0), pase a la pantalla principal de recursos
+
+          onFormSubmit(pendingAmount);
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {

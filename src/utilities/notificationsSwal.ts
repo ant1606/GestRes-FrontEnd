@@ -68,11 +68,14 @@ export const toastNotifications = () => {
       text: msg
     });
   };
-  const notificationSuccess = (msg) => {
+  const notificationSuccess = (msg: string, callback = () => {}): void => {
     Swal.fire({
       icon: 'success',
       title: 'Sistema',
-      text: msg
+      text: msg,
+      willClose: () => {
+        callback();
+      }
     });
   };
 
