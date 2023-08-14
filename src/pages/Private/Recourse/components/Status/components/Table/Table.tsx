@@ -1,10 +1,11 @@
 import React from 'react';
 
 import Row from './Row.js';
-import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context.js';
+// import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context.js';
+import { useStatus } from '../../context/status.context.js';
 
 export const Table: React.FC = () => {
-  const { recourseActive } = useRecourse();
+  const { statuses } = useStatus();
 
   return (
     <table className="table-auto w-full mt-8">
@@ -17,14 +18,11 @@ export const Table: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {recourseActive?.status.map((status: Status, i: number) => (
-          <Row
-            key={i}
-            isLastStatus={i + 1 === (recourseActive?.status?.length ?? 0)}
-            status={status}
-          />
+        {statuses.map((status: Status, i: number) => (
+          <Row key={i} isLastStatus={true} status={status} />
         ))}
       </tbody>
     </table>
   );
 };
+// isLastStatus={i + 1 === (recourseActive?.status?.length ?? 0)}

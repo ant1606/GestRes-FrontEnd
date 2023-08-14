@@ -1,27 +1,41 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import StatusView from './StatusView';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import StatusForm from './components/Form/StatusForm';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
-import { StatusProvider } from './context/status.context';
+import { StatusProvider, useStatus } from './context/status.context';
 import { useRecourse } from '../../context/recourse.context';
 import { getStatusPerRecourse } from '@/services/status.services';
 import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { changeColorTitleBar } from '@/redux/slice/uiSlice';
+import { getRecourse } from '@/services/recourse.services';
+
+interface ReactPaginaOnPageChangeArgument {
+  selected: number;
+}
 
 export const StatusContainer: React.FC = () => {
-  const { recourseActive, setStatusesPerRecourse } = useRecourse();
+  const { recourseActive, selectedRecourse } = useRecourse();
+  const { setStatuses } = useStatus();
   const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const searchFirstTimeStatuses = async (): Promise<void> => {
+      const statuses = await getStatusPerRecourse(recourseActive.id, 1);
+      setStatuses(statuses);
+    };
+    searchFirstTimeStatuses();
+  }, []);
+
   const handleClickNuevo = (): void => {
-    const lastStatusName = recourseActive.status[recourseActive.status.length - 1]
-      .statusName as string;
+    // TODO Obtener el ultimo estado
+    const lastStatusName = recourseActive.status.statusName as string;
     if (
       lastStatusName === GLOBAL_STATUS_RECOURSE.CULMINADO ||
       lastStatusName === GLOBAL_STATUS_RECOURSE.DESCARTADO
@@ -43,8 +57,8 @@ export const StatusContainer: React.FC = () => {
             listStatus={statusAvailable}
             modalRef={modalRef.current}
             recourseParent={recourseActive}
-            onFormSubmit={() => {
-              handleFormSubmit();
+            onFormSubmit={(statusIdRegistered) => {
+              handleFormSubmit(statusIdRegistered);
             }}
             recourseStatus={settingsStatus}
           />
@@ -85,19 +99,28 @@ export const StatusContainer: React.FC = () => {
     return recourseStatuses;
   };
 
-  const handleFormSubmit = async (): Promise<void> => {
+  const handleFormSubmit = async (statusIdRegistered: number): Promise<void> => {
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se registró el estado correctamente.');
-    const statusData = await getStatusPerRecourse(recourseActive?.id);
-    setStatusesPerRecourse(statusData);
-    const lastStatus = statusData.data[statusData.data.length - 1];
-    const styleStatus = settingsStatus.find((val) => val.value === lastStatus.statusName)?.value2;
+    const statuses = await getStatusPerRecourse(recourseActive.id, 1);
+    setStatuses(statuses);
+
+    // const lastStatus = statusData.data[statusData.data.length - 1];
+    const styleStatus = settingsStatus.find((val) => val.id === statusIdRegistered)?.value2;
     dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+    const recourseRefreshed = await getRecourse(recourseActive.id);
+    selectedRecourse(recourseRefreshed.data);
   };
 
-  return (
-    <StatusProvider>
-      <StatusView handleClick={handleClickNuevo} />
-    </StatusProvider>
-  );
+  const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    const statuses = await getStatusPerRecourse(recourseActive.id, e.selected + 1);
+    console.log(statuses);
+    setStatuses(statuses);
+  };
+
+  const handlePageChangeWrapper = (e: ReactPaginaOnPageChangeArgument): void => {
+    handlePageChange(e);
+  };
+
+  return <StatusView handleClick={handleClickNuevo} handlePageChange={handlePageChangeWrapper} />;
 };

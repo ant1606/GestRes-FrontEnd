@@ -12,20 +12,24 @@ import { processErrorResponse } from '@/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const getStatusPerRecourse = async (
-  recourseId: number
+  recourseId: number,
+  page: number
 ): Promise<StatusesSuccessResponse | StatusErrorResponse> => {
   // TODO Extraer esta logica de verificacion del bearerToken
   const bearerToken = Cookies.get('bearerToken');
   if (bearerToken === null || bearerToken === undefined)
     throw new Error('Token de autorización inválido');
 
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/status`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
+  return await fetch(
+    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/status?page=${page}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json'
+      }
     }
-  })
+  )
     .then(async (resp) => {
       if (!resp.ok) return await Promise.reject(resp.json());
       return await resp.json();

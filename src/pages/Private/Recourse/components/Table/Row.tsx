@@ -30,7 +30,6 @@ interface Props {
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
   const { settingsType, settingsStatus } = useAppSelector((state: RootState) => state.settings);
-  const { titleBarColor } = useAppSelector((state: RootState) => state.ui);
   const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();

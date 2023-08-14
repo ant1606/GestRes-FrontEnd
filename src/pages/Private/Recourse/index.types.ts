@@ -48,7 +48,7 @@ export interface ApiResponseRecourse {
   totalCapitulos: string | null;
   totalVideos: string | null;
   totalHoras: string | null;
-  status: ApiResponseStatus[];
-  progress: ApiResponseProgress[];
+  status: ApiResponseStatus;
+  progress: ApiResponseProgress;
   tags: ApiResponseTag[];
 }

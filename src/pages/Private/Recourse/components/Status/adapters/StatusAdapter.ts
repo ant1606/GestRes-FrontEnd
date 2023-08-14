@@ -13,6 +13,7 @@ export interface ApiResponseStatus {
 }
 
 export const adapterStatus = (status: ApiResponseStatus): Status => {
+  console.log(status);
   return {
     id: status.identificador,
     date: status.fecha,
@@ -34,6 +35,22 @@ export const adapterStatusesData = (statuses: ApiResponseStatus[]): Status[] => 
 
 export const statusesAdapter = (response: any): StatusesSuccessResponse => {
   return {
+    meta: {
+      path: response.meta.path,
+      currentPage: response.meta.currentPage,
+      perPage: response.meta.perPage,
+      totalPages: response.meta.totalPages,
+      from: response.meta.from,
+      to: response.meta.to,
+      total: response.meta.total
+    },
+    links: {
+      self: response.links.self,
+      first: response.links.first,
+      last: response.links.last,
+      next: response.links.next,
+      prev: response.links.prev
+    },
     data: adapterStatusesData(response.data)
   };
 };

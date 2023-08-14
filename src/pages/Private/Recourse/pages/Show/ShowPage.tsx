@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Form from '../../components/Form';
 import { useRecourse } from '../../context/recourse.context';
-import StatusRecourse from '../../components/Status';
-import ProgressRecourse from '../../components/Progress';
 import { useAppDispatch } from '@/hooks/redux';
 import { changeColorTitleBar } from '@/redux/slice/uiSlice';
+import { StatusProvider } from '../../components/Status/context/status.context';
+import StatusRecourse from '../../components/Status';
+// import ProgressRecourse from '../../components/Progress';
 
 export const ShowPage: React.FC = () => {
   const { cleanSelectedRecourse } = useRecourse();
   const [toggleTab, setToggleTab] = useState(1);
-  const [showModalState, setShowModalState] = useState(false);
-  const [showModalProgress, setShowModalProgress] = useState(false);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -20,14 +19,6 @@ export const ShowPage: React.FC = () => {
     };
   }, []);
 
-  // TODO Cambiar el modalState a un contexto de UI para toda la aplicacion
-  const handleClickButtonState = (): void => {
-    setShowModalState(!showModalState);
-  };
-
-  const handleClickButtonProgress = (): void => {
-    setShowModalProgress(!showModalProgress);
-  };
   return (
     <>
       {/* Tabs Header */}
@@ -69,18 +60,13 @@ export const ShowPage: React.FC = () => {
         </div>
 
         <div className={`${toggleTab === 2 ? '' : 'hidden'}`}>
-          <StatusRecourse />
-          {/* <StatusMain handleClickParent={handleClickButtonState} modalState={showModalState} /> */}
+          <StatusProvider>
+            <StatusRecourse />
+          </StatusProvider>
         </div>
 
         <div className={`${toggleTab === 3 ? '' : 'hidden'}`}>
-          <div>
-            <ProgressRecourse />
-            {/* <ProgressMain
-              handleClickParent={handleClickButtonProgress}
-              modalState={showModalProgress}
-            /> */}
-          </div>
+          <div>{/* <ProgressRecourse /> */}</div>
         </div>
       </div>
       {/* Fin Tabs Content */}

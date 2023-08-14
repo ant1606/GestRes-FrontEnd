@@ -1,6 +1,6 @@
 import { adapterTagsData } from '../../Tag/adapters/TagAdapter';
-import { adapterProgressesData } from '../components/Progress/adapters/ProgressAdapter';
-import { adapterStatusesData } from '../components/Status/adapters/StatusAdapter';
+import { adapterProgress } from '../components/Progress/adapters/ProgressAdapter';
+import { adapterStatus } from '../components/Status/adapters/StatusAdapter';
 import {
   type RecourseSuccessResponse,
   type ApiResponseRecourse,
@@ -9,6 +9,8 @@ import {
 } from '../index.types';
 
 const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
+  console.log(recourse);
+  console.log(recourse.status);
   return {
     id: parseInt(recourse.identificador),
     name: recourse.nombre,
@@ -20,8 +22,8 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
     totalChapters: recourse.totalCapitulos === null ? null : parseInt(recourse.totalCapitulos),
     totalVideos: recourse.totalVideos === null ? null : parseInt(recourse.totalVideos),
     totalHours: recourse.totalHoras === null ? null : recourse.totalHoras,
-    status: adapterStatusesData(recourse.status),
-    progress: adapterProgressesData(recourse.progress),
+    status: adapterStatus(recourse.status),
+    progress: adapterProgress(recourse.progress),
     tags: adapterTagsData(recourse.tags),
     currentStatusName: recourse.nombreEstadoActual,
     typeName: recourse.tipoNombre

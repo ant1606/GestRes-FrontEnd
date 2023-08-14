@@ -1,5 +1,5 @@
 import { type ReactNode, createContext, useContext, type Reducer, useReducer } from 'react';
-import { type StatusSuccessResponse } from '../index.types';
+import { type StatusesSuccessResponse, type StatusSuccessResponse } from '../index.types';
 
 const StatusContext = createContext({});
 
@@ -12,7 +12,8 @@ type payloadReducerType =
   | number
   | Status
   | Status[]
-  | StatusSuccessResponse;
+  | StatusSuccessResponse
+  | StatusesSuccessResponse;
 
 interface ActionReducer {
   type: string;
@@ -58,7 +59,7 @@ const statusReducer: Reducer<InitialState, ActionReducer> = (
   let payloadValue;
   switch (action.type) {
     case STATUS_LOADED:
-      payloadValue = action.payload as StatusSuccessResponse;
+      payloadValue = action.payload as StatusesSuccessResponse;
       return {
         ...state,
         statuses: [...payloadValue.data],

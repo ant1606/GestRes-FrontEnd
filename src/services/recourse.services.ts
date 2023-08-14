@@ -34,6 +34,29 @@ export const getRecourses = async (
     .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
 };
 
+export const getRecourse = async (
+  id: number
+): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
+  // TODO Extraer esta logica de verificacion del bearerToken
+  const bearerToken = Cookies.get('bearerToken');
+  if (bearerToken === null || bearerToken === undefined)
+    throw new Error('Token de autorización inválido');
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json'
+    }
+  })
+    .then(async (res) => {
+      if (!res.ok) return await Promise.reject(res.json());
+      return await res.json();
+    })
+    .then(async (data) => recourseAdapter(await data.data))
+    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+};
+
 export const savingRecourse = async (
   recourse: any
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {

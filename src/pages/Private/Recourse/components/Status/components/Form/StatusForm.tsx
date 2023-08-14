@@ -25,7 +25,7 @@ interface Props {
   recourseStatus: Settings[];
   modalRef: any;
   recourseParent: Recourse;
-  onFormSubmit: () => void;
+  onFormSubmit: (statusIdRegistered: number) => void;
 }
 
 const StatusForm: React.FC<Props> = ({
@@ -43,7 +43,7 @@ const StatusForm: React.FC<Props> = ({
     date: moment().format('YYYY-MM-DD'),
     statusId: listStatus[0].id,
     comment: '',
-    lastStatusOfRecourse: recourseParent.status[recourseParent.status.length - 1],
+    lastStatusOfRecourse: recourseParent.status,
     recourseStatus
   };
   const {
@@ -98,7 +98,7 @@ const StatusForm: React.FC<Props> = ({
           reset();
           resetValidationError();
           cleanSelectedStatus();
-          onFormSubmit();
+          onFormSubmit(formValues.statusId);
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {
@@ -125,10 +125,7 @@ const StatusForm: React.FC<Props> = ({
   };
 
   const minDate = (): string => {
-    return (
-      recourseParent.status[recourseParent.status.length - 1].date ??
-      new Date().toISOString().split('T')[0]
-    );
+    return recourseParent.status.date ?? new Date().toISOString().split('T')[0];
   };
 
   return (
