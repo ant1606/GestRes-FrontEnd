@@ -8,14 +8,15 @@ import React from 'react';
 import { useStatus } from '../../context/status.context';
 import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context';
 import { type RootState } from '@/redux/store';
+import { getRecourse } from '@/services/recourse.services';
 
 interface Props {
   isLastStatus: boolean;
   status: Status;
 }
 const Row: React.FC<Props> = ({ isLastStatus, status }) => {
-  const { setStatusesPerRecourse, recourseActive } = useRecourse();
-  const { addValidationError } = useStatus();
+  const { recourseActive, selectedRecourse } = useRecourse();
+  const { addValidationError, setStatuses } = useStatus();
   const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const dispatch = useAppDispatch();
   // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
@@ -35,13 +36,16 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
       if ('data' in response) {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
 
-        const statusData = await getStatusPerRecourse(recourseActive?.id);
-        setStatusesPerRecourse(statusData);
-        const lastStatus = statusData.data[statusData.data.length - 1];
+        const statusData = await getStatusPerRecourse(recourseActive?.id, 1);
+        setStatuses(statusData);
+        const recourseRefreshed = await getRecourse(recourseActive.id);
+        selectedRecourse(recourseRefreshed.data);
+
         const styleStatus = settingsStatus.find(
-          (val) => val.value === lastStatus.statusName
+          (val) => val.value === recourseRefreshed.data.currentStatusName
         )?.value2;
         dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+        // TODO Change page 1 paginator
       } else if ('error' in response) {
         const errorsDetail = response.error?.detail;
         Object.keys(errorsDetail).forEach((key) => {

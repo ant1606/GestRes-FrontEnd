@@ -71,7 +71,6 @@ const AppRouter: React.FC = () => {
       await userIsLoggedInPromise(user);
     } catch (error) {
       // TODO Investigar como poder hacer el registro de logs de los errores generados
-      // console.log(error);
     }
   };
 

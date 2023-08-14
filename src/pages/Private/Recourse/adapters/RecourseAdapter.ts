@@ -9,8 +9,6 @@ import {
 } from '../index.types';
 
 const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
-  console.log(recourse);
-  console.log(recourse.status);
   return {
     id: parseInt(recourse.identificador),
     name: recourse.nombre,

@@ -13,7 +13,6 @@ export interface ApiResponseStatus {
 }
 
 export const adapterStatus = (status: ApiResponseStatus): Status => {
-  console.log(status);
   return {
     id: status.identificador,
     date: status.fecha,

@@ -24,13 +24,11 @@ const TagView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    console.log('desde useEffect Tag');
     setTagPerPage(perPageItemsValue[0].id);
     dispatch(changeTitle('Mantenimiento de Etiquetas'));
   }, []);
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
-    console.log('desde handlePageChange Tag');
     searchParams.delete('page');
     searchParams.append('page', (e.selected + 1).toString());
     searchParams.delete('perPage');

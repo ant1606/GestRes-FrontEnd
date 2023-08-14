@@ -5,7 +5,6 @@
  * a "mensajeError1/nmensajeError2"
  */
 export const processErrorResponse = (error: any): Record<string, string | any> => {
-  console.log(error);
   const errorDetailToArray = Object.entries(error.error?.detail);
   const errorDetailSanitized = errorDetailToArray.reduce((acc, current) => {
     let value = current[1];

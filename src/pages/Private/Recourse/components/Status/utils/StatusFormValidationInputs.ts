@@ -3,7 +3,6 @@ import { type StatusFormData } from '../index.types';
 import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
 
 export const validateFecha = (values: StatusFormData): ValidationInputResult => {
-  console.log(values);
   const myDate = moment(values.date);
   const dateOfLastStatus = moment(values.lastStatusOfRecourse?.date);
   const differenceBetweenDays = myDate.diff(dateOfLastStatus, 'days');

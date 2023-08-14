@@ -114,7 +114,6 @@ export const StatusContainer: React.FC = () => {
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
     const statuses = await getStatusPerRecourse(recourseActive.id, e.selected + 1);
-    console.log(statuses);
     setStatuses(statuses);
   };
 

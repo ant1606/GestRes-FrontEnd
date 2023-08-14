@@ -127,10 +127,7 @@ const RecourseForm = ({ children }) => {
   }, [tipoId]);
 
   useEffect(() => {
-    // console.log(recourseActive);
-    // console.log(recourseActive?.tipoId);
     reset();
-    // console.log(recourseActive === null ? (!settingsType ? 0 : settingsType[0].id) : recourseActive?.tipoId)
   }, [recourseActive]);
 
   const handleSubmit = async (e) => {
@@ -141,7 +138,6 @@ const RecourseForm = ({ children }) => {
     const isValid = Object.keys(recourseErrorRef.current).every(
       (el) => recourseErrorRef.current[el] === null
     );
-    // console.log(isValid);
     if (isValid) {
       // TODO Aplicar cuando se actualice el registro
       if (

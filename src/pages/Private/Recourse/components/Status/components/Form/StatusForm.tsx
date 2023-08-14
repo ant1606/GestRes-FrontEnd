@@ -82,7 +82,6 @@ const StatusForm: React.FC<Props> = ({
       const existValidationMessage = Object.keys(statusErrorRef.current).every(
         (el) => statusErrorRef.current[el] === null
       );
-      console.log(existValidationMessage);
 
       if (existValidationMessage) {
         const response = await savingStatus(

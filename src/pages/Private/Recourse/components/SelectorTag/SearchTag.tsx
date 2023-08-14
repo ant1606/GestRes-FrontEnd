@@ -22,7 +22,6 @@ interface Props {
   value: [];
 }
 const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
-  // console.log(value);
   // const [selected, setSelected] = useState([]);
   const [listTags, setListTags] = useState<Tag[]>([]);
 

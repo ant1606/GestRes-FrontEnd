@@ -44,7 +44,6 @@ export const ResendLinkVerifyEmail: React.FC = () => {
     e.preventDefault();
     handleSubmit();
   };
-  // console.log(uiLoading);
 
   return (
     <>
