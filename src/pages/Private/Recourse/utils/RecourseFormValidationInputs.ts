@@ -65,7 +65,7 @@ export const validateTotalPages = (values) => {
   // TODO aplicar regex para que sólo se admitan numeros enteros
   const validateTotalPages = parseInt(values.totalPages);
   const typeLibro = values.recourseType.find(
-    (value) => value.key === globalConstantes.RECOURSE_TYPE_LIBRO
+    (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO
   );
   const isTipoLibro = parseInt(values.typeId) === typeLibro.id;
 
@@ -83,7 +83,7 @@ export const validateTotalPages = (values) => {
 export const validateTotalChapters = (values) => {
   const validateTotalChapters = parseInt(values.totalChapters);
   const typeLibro = values.recourseType.find(
-    (value) => value.key === globalConstantes.RECOURSE_TYPE_LIBRO
+    (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO
   );
   const isTipoLibro = parseInt(values.typeId) === typeLibro.id;
 

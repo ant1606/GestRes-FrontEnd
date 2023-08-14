@@ -16,12 +16,12 @@ import { type RootState } from '@/redux/store';
 const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { titleBarContent } = useAppSelector((state: RootState) => state.ui);
+  const { titleBarContent, titleBarColor } = useAppSelector((state: RootState) => state.ui);
 
   const handleExitAppClick = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
-
+      // TODO Verificar funcionamiento de logout
       const response = await loggoutUser();
 
       if ('data' in response) {
@@ -47,7 +47,10 @@ const Titlebar: React.FC = () => {
   };
 
   return (
-    <div className="text-2xl font-semibold h-14 px-6 py-3 shadow-lg flex justify-between items-center">
+    <div
+      className={` 
+      ${titleBarColor === null ? '' : titleBarColor} text-2xl font-semibold 
+      h-14 px-6 py-3 shadow-lg flex justify-between items-center`}>
       <p>{titleBarContent}</p>
       <div
         onClick={handleClickWrapper}

@@ -35,7 +35,7 @@ const FilterView: React.FC<Props> = ({
   dataFilterType
 }) => {
   return (
-    <div className="shadow-2xl p-4 rounded-xl flex flex-col gap-6 mb-16">
+    <div className="shadow-2xl p-4 rounded-xl flex flex-col gap-6 mb-10">
       <p>Filtros</p>
       <div className="flex justify-between items-center gap-12">
         <div className="basis-1/4 items-end">

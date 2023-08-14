@@ -45,13 +45,13 @@ const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
       if (value.length === 1) {
         return value[0].label;
       } else {
-        return `${value.length} Tags seleccionadas`;
+        return `${value.length} Tags`;
         // return Object.values(value)
         //   .map((s) => s.label)
         //   .join(", ");
       }
     } else {
-      return 'Seleccione Tags';
+      return 'Tags';
     }
   }, [value]);
 

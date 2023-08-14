@@ -19,7 +19,7 @@ import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes.js';
 import { toastNotifications } from '@/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
 import { destroyRecourse, getRecourses } from '@/services/recourse.services';
-import { isLoading } from '@/redux/slice/uiSlice';
+import { changeColorTitleBar, isLoading } from '@/redux/slice/uiSlice';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 
@@ -30,9 +30,11 @@ interface Props {
 const Row: React.FC<Props> = ({ recourse }) => {
   const [viewDetail, setviewDetail] = useState(false);
   const { settingsType, settingsStatus } = useAppSelector((state: RootState) => state.settings);
+  const { titleBarColor } = useAppSelector((state: RootState) => state.ui);
   const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+
   // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
   const styleStatus = settingsStatus.find(
     (val) => val.value === recourse.currentStatusName
@@ -83,6 +85,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
   };
 
   const handleClickShow = (recourse: Recourse): void => {
+    dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
     selectedRecourse(recourse);
   };
 

@@ -3,15 +3,19 @@ import Form from '../../components/Form';
 import { useRecourse } from '../../context/recourse.context';
 import StatusRecourse from '../../components/Status';
 import ProgressRecourse from '../../components/Progress';
+import { useAppDispatch } from '@/hooks/redux';
+import { changeColorTitleBar } from '@/redux/slice/uiSlice';
 
 export const ShowPage: React.FC = () => {
   const { cleanSelectedRecourse } = useRecourse();
   const [toggleTab, setToggleTab] = useState(1);
   const [showModalState, setShowModalState] = useState(false);
   const [showModalProgress, setShowModalProgress] = useState(false);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     return () => {
+      dispatch(changeColorTitleBar(null));
       cleanSelectedRecourse();
     };
   }, []);
