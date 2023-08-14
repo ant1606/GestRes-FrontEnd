@@ -3,19 +3,21 @@ import StatusView from './StatusView';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import StatusForm from './components/Form/StatusForm';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import { StatusProvider } from './context/status.context';
 import { useRecourse } from '../../context/recourse.context';
 import { getStatusPerRecourse } from '@/services/status.services';
 import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
 import { toastNotifications } from '@/utilities/notificationsSwal';
+import { changeColorTitleBar } from '@/redux/slice/uiSlice';
 
 export const StatusContainer: React.FC = () => {
   const { recourseActive, setStatusesPerRecourse } = useRecourse();
   const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
+  const dispatch = useAppDispatch();
 
   const handleClickNuevo = (): void => {
     const lastStatusName = recourseActive.status[recourseActive.status.length - 1]
@@ -88,6 +90,9 @@ export const StatusContainer: React.FC = () => {
     toastNotifications().toastSuccesCustomize('Se registró el estado correctamente.');
     const statusData = await getStatusPerRecourse(recourseActive?.id);
     setStatusesPerRecourse(statusData);
+    const lastStatus = statusData.data[statusData.data.length - 1];
+    const styleStatus = settingsStatus.find((val) => val.value === lastStatus.statusName)?.value2;
+    dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
   };
 
   return (

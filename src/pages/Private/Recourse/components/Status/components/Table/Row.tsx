@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
+import { changeColorTitleBar, isLoading } from '@/redux/slice/uiSlice';
 import { destroyStatus, getStatusPerRecourse } from '@/services/status.services';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { mdiTrashCan } from '@mdi/js';
@@ -37,6 +37,11 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
 
         const statusData = await getStatusPerRecourse(recourseActive?.id);
         setStatusesPerRecourse(statusData);
+        const lastStatus = statusData.data[statusData.data.length - 1];
+        const styleStatus = settingsStatus.find(
+          (val) => val.value === lastStatus.statusName
+        )?.value2;
+        dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
       } else if ('error' in response) {
         const errorsDetail = response.error?.detail;
         Object.keys(errorsDetail).forEach((key) => {
