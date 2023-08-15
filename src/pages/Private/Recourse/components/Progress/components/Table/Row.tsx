@@ -8,6 +8,7 @@ import { isLoading } from '@/redux/slice/uiSlice';
 import { destroyProgress, getProgressPerRecourse } from '@/services/progress.services';
 import { useProgress } from '../../context/progress.context';
 import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
+import { getRecourse } from '@/services/recourse.services';
 
 interface Props {
   isLastProgress: boolean;
@@ -15,17 +16,16 @@ interface Props {
 }
 
 const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
-  const { setProgressesPerRecourse, recourseActive } = useRecourse();
+  const { selectedRecourse, recourseActive } = useRecourse();
   const dispatch = useAppDispatch();
-  const { addValidationError } = useProgress();
+  const { addValidationError, setProgresses } = useProgress();
   const handleClickDeleteWrapper = (progress: Progress): void => {
     handleClickDelete(progress);
   };
 
   const handleClickDelete = async (progress: Progress): Promise<void> => {
     try {
-      const lastStatusName = recourseActive.status[recourseActive.status.length - 1]
-        .statusName as string;
+      const lastStatusName = recourseActive.status.statusName as string;
 
       if (lastStatusName !== GLOBAL_STATUS_RECOURSE.EN_PROCESO) {
         toastNotifications().notificationError(
@@ -42,8 +42,10 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
       if ('data' in response) {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
 
-        const progressData = await getProgressPerRecourse(recourseActive?.id);
-        setProgressesPerRecourse(progressData);
+        const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
+        setProgresses(progressData);
+        const recourseRefreshed = await getRecourse(recourseActive.id);
+        selectedRecourse(recourseRefreshed.data);
       } else if ('error' in response) {
         const errorsDetail = response.error?.detail;
         Object.keys(errorsDetail).forEach((key) => {
@@ -58,6 +60,7 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
         }
       }
     } catch (error: any) {
+      console.log(error);
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
