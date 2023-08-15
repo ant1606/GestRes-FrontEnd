@@ -1,5 +1,5 @@
 import { type ReactNode, createContext, useContext, type Reducer, useReducer } from 'react';
-import { type ProgressSuccessResponse } from '../indext.types';
+import { type ProgressesSuccessResponse, type ProgressSuccessResponse } from '../indext.types';
 
 const ProgressContext = createContext({});
 
@@ -12,7 +12,8 @@ type payloadReducerType =
   | number
   | Progress
   | Progress[]
-  | ProgressSuccessResponse;
+  | ProgressSuccessResponse
+  | ProgressesSuccessResponse;
 
 interface ActionReducer {
   type: string;
@@ -59,7 +60,7 @@ const progressReducer: Reducer<InitialState, ActionReducer> = (
   let payloadValue;
   switch (action.type) {
     case PROGRESS_LOADED:
-      payloadValue = action.payload as ProgressSuccessResponse;
+      payloadValue = action.payload as ProgressesSuccessResponse;
       return {
         ...state,
         progresses: [...payloadValue.data],

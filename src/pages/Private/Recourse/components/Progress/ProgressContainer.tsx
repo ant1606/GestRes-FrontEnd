@@ -1,26 +1,37 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ProgressView from './ProgressView';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { useRecourse } from '../../context/recourse.context';
 import ProgressForm from './components/Form/ProgressForm';
-import { ProgressProvider } from './context/progress.context';
+import { ProgressProvider, useProgress } from './context/progress.context';
 import { getProgressPerRecourse } from '@/services/progress.services';
 import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 
+interface ReactPaginaOnPageChangeArgument {
+  selected: number;
+}
+
 export const ProgressContainer: React.FC = () => {
   const { recourseActive, setProgressesPerRecourse } = useRecourse();
+  const { setProgresses } = useProgress();
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const searchFirstTimeStatuses = async (): Promise<void> => {
+      const progresses = await getProgressPerRecourse(recourseActive.id, 1);
+      setProgresses(progresses);
+    };
+    searchFirstTimeStatuses();
+  }, []);
+
   const handleClickNuevo = (): void => {
-    const lastStatusName = recourseActive.status[recourseActive.status.length - 1]
-      .statusName as string;
-    const lastPendingAmount = recourseActive.progress[recourseActive.progress.length - 1]
-      .pending as number;
+    const lastStatusName = recourseActive.status.statusName as string;
+    const lastPendingAmount = recourseActive.progress.pending as number;
     if (lastPendingAmount === 0) {
       toastNotifications().notificationSuccess(`Usted culminó el recurso. ¡FELICIDADES!`);
       return;
@@ -67,9 +78,18 @@ export const ProgressContainer: React.FC = () => {
 
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se registró el progreso correctamente.');
-    const progressData = await getProgressPerRecourse(recourseActive?.id);
+    const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
     setProgressesPerRecourse(progressData);
   };
 
-  return <ProgressView handleClick={handleClickNuevo} />;
+  const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    const statuses = await getProgressPerRecourse(recourseActive.id, e.selected + 1);
+    setProgresses(statuses);
+  };
+
+  const handlePageChangeWrapper = (e: ReactPaginaOnPageChangeArgument): void => {
+    handlePageChange(e);
+  };
+
+  return <ProgressView handleClick={handleClickNuevo} handlePageChange={handlePageChangeWrapper} />;
 };

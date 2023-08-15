@@ -12,7 +12,8 @@ import { processErrorResponse } from '@/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const getProgressPerRecourse = async (
-  recourseId: number
+  recourseId: number,
+  page: number
 ): Promise<ProgressesSuccessResponse | ProgressErrorResponse> => {
   // TODO Extraer esta logica de verificacion del bearerToken
   const bearerToken = Cookies.get('bearerToken');
@@ -20,7 +21,9 @@ export const getProgressPerRecourse = async (
     throw new Error('Token de autorización inválido');
 
   return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/progress`,
+    `${
+      import.meta.env.VITE_BACKEND_ENDPOINT
+    }/v1/recourses/${recourseId}/progress?page=${page}&perPage=5`,
     {
       method: 'GET',
       headers: {

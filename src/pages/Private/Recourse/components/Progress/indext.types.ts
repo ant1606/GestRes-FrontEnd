@@ -1,7 +1,7 @@
 export interface ProgressesSuccessResponse {
-  meta?: PaginateResultMeta | null;
+  meta: PaginateResultMeta | null;
   data: Progress[];
-  links?: PaginateResultLinks | null;
+  links: PaginateResultLinks | null;
 }
 
 export interface ProgressSuccessResponse {

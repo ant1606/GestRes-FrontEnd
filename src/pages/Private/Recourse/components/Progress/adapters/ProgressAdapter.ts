@@ -36,6 +36,22 @@ export const adapterProgressesData = (progresses: ApiResponseProgress[]): Progre
 
 export const progressesAdapter = (response: any): ProgressesSuccessResponse => {
   return {
+    meta: {
+      path: response.meta.path,
+      currentPage: response.meta.currentPage,
+      perPage: response.meta.perPage,
+      totalPages: response.meta.totalPages,
+      from: response.meta.from,
+      to: response.meta.to,
+      total: response.meta.total
+    },
+    links: {
+      self: response.links.self,
+      first: response.links.first,
+      last: response.links.last,
+      next: response.links.next,
+      prev: response.links.prev
+    },
     data: adapterProgressesData(response.data)
   };
 };
