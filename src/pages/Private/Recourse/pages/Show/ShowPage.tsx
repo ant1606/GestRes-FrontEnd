@@ -5,7 +5,8 @@ import { useAppDispatch } from '@/hooks/redux';
 import { changeColorTitleBar } from '@/redux/slice/uiSlice';
 import { StatusProvider } from '../../components/Status/context/status.context';
 import StatusRecourse from '../../components/Status';
-// import ProgressRecourse from '../../components/Progress';
+import { ProgressProvider } from '../../components/Progress/context/progress.context';
+import ProgressRecourse from '../../components/Progress';
 
 export const ShowPage: React.FC = () => {
   const { cleanSelectedRecourse } = useRecourse();
@@ -66,7 +67,11 @@ export const ShowPage: React.FC = () => {
         </div>
 
         <div className={`${toggleTab === 3 ? '' : 'hidden'}`}>
-          <div>{/* <ProgressRecourse /> */}</div>
+          <div>
+            <ProgressProvider>
+              <ProgressRecourse />
+            </ProgressProvider>
+          </div>
         </div>
       </div>
       {/* Fin Tabs Content */}
