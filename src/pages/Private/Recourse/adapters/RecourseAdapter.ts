@@ -34,7 +34,7 @@ const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
 
 export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
   return {
-    data: adapterRecourse(recourse)
+    data: adapterRecourse(recourse.data)
   };
 };
 

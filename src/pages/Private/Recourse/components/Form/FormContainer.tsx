@@ -189,7 +189,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
         }
       }
     } catch (error: any) {
-      console.log(error);
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
