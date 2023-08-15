@@ -48,6 +48,7 @@ interface Progress {
   date: string;
   comment: string;
   recourseId?: number;
+  isLastRecord: boolean;
 }
 
 interface Settings {

@@ -25,4 +25,3 @@ export const Table: React.FC = () => {
     </table>
   );
 };
-// isLastStatus={i + 1 === (recourseActive?.status?.length ?? 0)}

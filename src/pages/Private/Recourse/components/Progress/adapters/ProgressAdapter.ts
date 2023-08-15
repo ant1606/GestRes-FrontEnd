@@ -10,6 +10,7 @@ export interface ApiResponseProgress {
   pendiente: number;
   fecha: string;
   comentario: string;
+  esUltimoRegistro: boolean;
 }
 
 export const adapterProgress = (progress: ApiResponseProgress): Progress => {
@@ -18,7 +19,8 @@ export const adapterProgress = (progress: ApiResponseProgress): Progress => {
     done: progress.realizado,
     pending: progress.pendiente,
     date: progress.fecha,
-    comment: progress.comentario
+    comment: progress.comentario,
+    isLastRecord: progress.esUltimoRegistro
   };
 };
 
