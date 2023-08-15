@@ -38,6 +38,7 @@ interface Status {
   statusId: number;
   recourseId?: number;
   statusName: string;
+  isLastRecord: boolean;
 }
 
 interface Progress {

@@ -10,6 +10,7 @@ export interface ApiResponseStatus {
   comentario: string;
   estadoId: number;
   estadoNombre: string;
+  esUltimoRegistro: boolean;
 }
 
 export const adapterStatus = (status: ApiResponseStatus): Status => {
@@ -18,7 +19,8 @@ export const adapterStatus = (status: ApiResponseStatus): Status => {
     date: status.fecha,
     comment: status.comentario,
     statusId: status.estadoId,
-    statusName: status.estadoNombre
+    statusName: status.estadoNombre,
+    isLastRecord: status.esUltimoRegistro
   };
 };
 

@@ -19,7 +19,7 @@ export const Table: React.FC = () => {
       </thead>
       <tbody>
         {statuses.map((status: Status, i: number) => (
-          <Row key={i} isLastStatus={true} status={status} />
+          <Row key={i} isLastStatus={status.isLastRecord} status={status} />
         ))}
       </tbody>
     </table>
