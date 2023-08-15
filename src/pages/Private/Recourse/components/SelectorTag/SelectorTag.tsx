@@ -15,6 +15,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
 
   useEffect(() => {
     selectedTagsRef.current = selectedTags;
+    console.log(selectedTags);
   }, [selectedTags]);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
       maxItemCount: -1
     })
       .setChoices(async function () {
-        const response = await getTags(`searchNombre=`);
+        const response = await getTags(`perPage=50`);
         return response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name }));
       })
       .then((instance) => {
