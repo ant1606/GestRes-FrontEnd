@@ -33,7 +33,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
     done: 0,
     date: moment().format('YYYY-MM-DD'),
     comment: '',
-    lastProgress: recourseParent.progress[recourseParent.progress.length - 1]
+    lastProgress: recourseParent.progress
   };
   const {
     values: formValues,
@@ -76,8 +76,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         );
 
         if ('data' in response) {
-          const pendingAmount =
-            recourseParent.progress[recourseParent.progress.length - 1].pending - done;
+          const pendingAmount = recourseParent.progress.pending - done;
           // pendingAmount === 0
           //   ? toastNotifications().notificationSuccess(
           //     `Finalizó el recurso ${recourseParent.name}, Felicidades`
@@ -115,10 +114,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
   };
 
   const minDate = (): string => {
-    return (
-      recourseParent.progress[recourseParent.progress.length - 1].date ??
-      new Date().toISOString().split('T')[0]
-    );
+    return recourseParent.progress.date ?? new Date().toISOString().split('T')[0];
   };
   return (
     <form onSubmit={handleSubmitWrapper}>
@@ -152,7 +148,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
               return null;
             }}
             name="pending"
-            value={recourseParent.progress[recourseParent.progress.length - 1].pending - done}
+            value={recourseParent.progress.pending - done}
             disabled
           />
         </div>

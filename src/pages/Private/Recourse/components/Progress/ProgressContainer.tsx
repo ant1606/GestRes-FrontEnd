@@ -9,13 +9,14 @@ import { getProgressPerRecourse } from '@/services/progress.services';
 import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
 import { toastNotifications } from '@/utilities/notificationsSwal';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { getRecourse } from '@/services/recourse.services';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
 }
 
 export const ProgressContainer: React.FC = () => {
-  const { recourseActive, setProgressesPerRecourse } = useRecourse();
+  const { recourseActive, selectedRecourse } = useRecourse();
   const { setProgresses } = useProgress();
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
@@ -79,7 +80,9 @@ export const ProgressContainer: React.FC = () => {
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se registró el progreso correctamente.');
     const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
-    setProgressesPerRecourse(progressData);
+    setProgresses(progressData);
+    const recourseRefreshed = await getRecourse(recourseActive.id);
+    selectedRecourse(recourseRefreshed.data);
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
