@@ -148,17 +148,31 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
         }
-        // TODO Evaluar cuando se haga una actualizacion y verificar si se cambio el typeId del recurso para lanzar una ventana de dialogo
+
         let response;
         if (recourseActive === null) {
           response = await savingRecourse(recourseToSend);
         } else {
           let resultDialog = true;
+
+
           if (recourseActive.typeId !== formValues.typeId) {
             resultDialog = await toastNotifications().modalCustomDialogQuestion(
               'Se modificó el tipo del Recurso',
               'Si cambio el tipo del recurso, los progresos existentes se resetearan a 0\n¿desea continuar con la actualización?'
             )
+          } else {
+            const isTypeLibro = parseInt(formValues.typeId) ===
+              settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id;
+            const $totalAmount = isTypeLibro
+              ? formValues.totalPages - recourseActive.totalPages
+              : formValues.totalVideos - recourseActive.totalVideos;
+            if ($totalAmount !== 0) {
+              resultDialog = await toastNotifications().modalCustomDialogQuestion(
+                `Se modificó el valor total de ${isTypeLibro ? 'Páginas' : 'Videos'} del Recurso`,
+                'Si este valor es menor al total ingresado anteriormente, es probable que el último registro existente del progreso se elimine, \n¿desea continuar con la actualización?'
+              )
+            }
           }
           if (!resultDialog) throw new Error("Se cancelo la actualización");
           response = await updatingRecourse(recourseToSend);
