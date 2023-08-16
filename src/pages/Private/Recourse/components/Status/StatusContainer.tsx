@@ -109,6 +109,7 @@ export const StatusContainer: React.FC = () => {
     const styleStatus = settingsStatus.find((val) => val.id === statusIdRegistered)?.value2;
     dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
     const recourseRefreshed = await getRecourse(recourseActive.id);
+    console.log(recourseRefreshed);
     selectedRecourse(recourseRefreshed.data);
   };
 

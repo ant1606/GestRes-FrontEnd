@@ -53,7 +53,7 @@ export const getRecourse = async (
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then(async (data) => recourseAdapter(await data.data))
+    .then(async (data) => recourseAdapter(await data))
     .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
 };
 
