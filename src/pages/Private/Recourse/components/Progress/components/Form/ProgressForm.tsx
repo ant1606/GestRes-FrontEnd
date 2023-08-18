@@ -160,7 +160,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
           name="comment"
           value={comment}
         />
-        <div>
+        <div className="flex justify-around gap-12">
           <Button type="submit" text="Registrar" btnType="main" />
 
           <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />

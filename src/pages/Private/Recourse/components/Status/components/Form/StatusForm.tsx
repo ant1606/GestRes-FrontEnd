@@ -159,7 +159,7 @@ const StatusForm: React.FC<Props> = ({
           errorInput={statusError.comment}
           rows={3}
         />
-        <div>
+        <div className="flex justify-around gap-12">
           <Button type="submit" text="Registrar" btnType="main" />
 
           <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />

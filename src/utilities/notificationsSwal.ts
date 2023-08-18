@@ -92,9 +92,9 @@ export const toastNotifications = () => {
       reverseButtons: true,
       customClass: {
         confirmButton:
-          'bg-green-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-green-700',
+          'bg-green-700 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-green-600',
         cancelButton:
-          'bg-red-600 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-red-900',
+          'bg-red-800 rounded-xl text-white py-2 px-5 text-xl font-medium hover:bg-red-600',
         actions: 'gap-10'
       },
       buttonsStyling: false

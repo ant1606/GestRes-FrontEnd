@@ -6,7 +6,7 @@ import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
 import { useAppSelector } from '@/hooks/redux';
 import { type RootState } from '@/redux/store';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SelectorTag from '../SelectorTag/SelectorTag';
 
 interface SelectType {
@@ -57,6 +57,12 @@ const FormView: React.FC<Props> = ({
 }) => {
 
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
+  const navigate = useNavigate();
+
+  const handleClickCancel = (): void => {
+    navigate('/app/recourse');
+  }
+
   if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
@@ -179,13 +185,15 @@ const FormView: React.FC<Props> = ({
           )
         }
       </div>
-      {!isShow ? (<div className="flex justify-around">
-        <Button type="submit" text="Registrar" btnType="main" />
-
-        <Link to="/app/recourse">
-          <Button btnType="danger" text="Cancelar" type="button" />
-        </Link>
-      </div>) : (<></>)}
+      {!isShow ?
+        (
+          <div className="flex justify-around gap-14">
+            <Button type="submit" text="Registrar" btnType="main" />
+            <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
+          </div>
+        ) :
+        (<></>)
+      }
 
     </form>
   );
