@@ -1,16 +1,16 @@
 import {
   resendLinkVerifyEmailErrorResponseAdapter,
   resendLinkVerifyEmailSuccessResponseAdapter
-} from '@/pages/Private/ResendVerifyLinkEmail/adapters/resendLinkVerifyEmailAdapter';
+} from '#/pages/Private/ResendVerifyLinkEmail/adapters/resendLinkVerifyEmailAdapter';
 import {
   verifyEmailErrorResponseAdapter,
   verifyEmailSuccessResponseAdapter
-} from '@/pages/VerifyEmail/adapters/VerifyEmailAdapter';
+} from '#/pages/VerifyEmail/adapters/VerifyEmailAdapter';
 import {
   type VerifyEmailErrorResponse,
   type VerifyEmailSuccessResponse
-} from '@/pages/VerifyEmail/index.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/VerifyEmail/index.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const verifyUserEmail = async (

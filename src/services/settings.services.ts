@@ -1,4 +1,4 @@
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getSettings = async (): Promise<Record<string, string>> => {
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/settings`, {

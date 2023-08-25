@@ -2,13 +2,13 @@ import {
   statusAdapter,
   statusErrorResponseAdapter,
   statusesAdapter
-} from '@/pages/Private/Recourse/components/Status/adapters/StatusAdapter';
+} from '#/pages/Private/Recourse/components/Status/adapters/StatusAdapter';
 import {
   type StatusesSuccessResponse,
   type StatusErrorResponse,
   type StatusSuccessResponse
-} from '@/pages/Private/Recourse/components/Status/index.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/Private/Recourse/components/Status/index.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const getStatusPerRecourse = async (

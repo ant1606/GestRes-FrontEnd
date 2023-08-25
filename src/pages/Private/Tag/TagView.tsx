@@ -1,17 +1,17 @@
-import Loader from '@/components/Loader';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
+import Loader from '#/components/Loader';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 import React, { useEffect } from 'react';
 
 import Filter from './components/Filter';
 import Table from './components/Table';
 import Form from './components/Form';
 import { useTag } from './context/tag.context';
-import FooterTable from '@/components/FooterTable';
+import FooterTable from '#/components/FooterTable';
 import { useSearchParams } from 'react-router-dom';
-import { getTags } from '@/services/tag.services';
-import perPageItemsValue from '@/config/perPageItemsValue';
-import { changeTitle } from '@/redux/slice/uiSlice';
+import { getTags } from '#/services/tag.services';
+import perPageItemsValue from '#/config/perPageItemsValue';
+import { changeTitle } from '#/redux/slice/uiSlice';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;

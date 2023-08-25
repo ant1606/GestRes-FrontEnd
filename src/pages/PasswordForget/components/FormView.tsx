@@ -1,7 +1,7 @@
-import Button from '@/components/Button';
-import Field from '@/components/Field';
-import { mdiEmail } from '@mdi/js';
-import Icon from '@mdi/react';
+import Button from '#/components/Button';
+import Field from '#/components/Field';
+// import { mdiEmail } from '@mdi/js';
+// import Icon from '@mdi/react';
 import React from 'react';
 
 interface Props {
@@ -17,7 +17,7 @@ const FormView: React.FC<Props> = ({ handleSubmit, handleInput, email, userError
       <p className="text-4xl leading-10 font-bold text-center">Ingrese el email del usuario</p>
       <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
         <div className="flex gap-3 items-center">
-          <Icon path={mdiEmail} size={1} />
+          {/* <Icon path={mdiEmail} size={1} /> */}
           <Field
             type="text"
             name="email"

@@ -13,8 +13,8 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "dependencies": {
-    "@mdi/font": "^7.0.96",
-    "@mdi/js": "^7.0.96",
+    "@mdi/font": "^7.2.96",
+    "@mdi/js": "^7.2.96",
     "@mdi/react": "^1.6.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/js-cookie": "^3.0.3",

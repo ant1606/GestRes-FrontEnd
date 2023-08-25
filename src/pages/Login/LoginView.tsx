@@ -1,7 +1,7 @@
 import React from 'react';
-import { useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
-import Loader from '@/components/Loader';
+import { useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
+import Loader from '#/components/Loader';
 import Form from './components/FormContainer';
 
 const LoginView: React.FC = () => {

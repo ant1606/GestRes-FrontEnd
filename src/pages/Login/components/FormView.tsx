@@ -1,10 +1,13 @@
 import React from 'react';
-import Button from '@/components/Button';
-import Field from '@/components/Field';
-import Icon from '@mdi/react';
+// import Button from '#/components/Button';
+
+// import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
-import { mdiAccountCircle, mdiLock } from '@mdi/js';
+// import { mdiAccountCircle, mdiLock } from '@mdi/js';
 import { type loginValidationError } from '../context/login.context';
+import Button from '#/components/Button';
+import Field from '#/components/Field';
+
 
 interface Props {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -34,7 +37,7 @@ const FormView: React.FC<Props> = ({
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
         <div className="flex gap-3 items-center">
-          <Icon path={mdiAccountCircle} size={1} />
+          {/* <Icon path={mdiAccountCircle} size={1} /> */}
           <Field
             type="text"
             name="email"
@@ -46,7 +49,7 @@ const FormView: React.FC<Props> = ({
           />
         </div>
         <div className="flex gap-3 items-center">
-          <Icon path={mdiLock} size={1} />
+          {/* <Icon path={mdiLock} size={1} /> */}
           <Field
             type="password"
             name="password"

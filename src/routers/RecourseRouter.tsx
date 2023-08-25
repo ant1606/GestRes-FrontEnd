@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import Recourse from '@/pages/Private/Recourse';
-import RecourseNew from '@/pages/Private/Recourse/pages/Register';
-import RecourseEdit from '@/pages/Private/Recourse/pages/Edit';
-import RecourseShow from '@/pages/Private/Recourse/pages/Show';
+import Recourse from '#/pages/Private/Recourse';
+import RecourseNew from '#/pages/Private/Recourse/pages/Register';
+import RecourseEdit from '#/pages/Private/Recourse/pages/Edit';
+import RecourseShow from '#/pages/Private/Recourse/pages/Show';
 import RoutesWithPageNotFound from './RoutesWithPageNotFound';
-import { RecourseProvider } from '@/pages/Private/Recourse/context/recourse.context';
+import { RecourseProvider } from '#/pages/Private/Recourse/context/recourse.context';
 
 const RecourseRouter: React.FC = () => {
   return (

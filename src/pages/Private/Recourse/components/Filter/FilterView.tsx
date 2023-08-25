@@ -1,6 +1,6 @@
-import Combobox from '@/components/Combobox';
-import Field from '@/components/Field';
-import perPageItemsValue from '@/config/perPageItemsValue';
+import Combobox from '#/components/Combobox';
+import Field from '#/components/Field';
+import perPageItemsValue from '#/config/perPageItemsValue';
 import React from 'react';
 import { type FilterData } from './FilterContainer';
 import SearchTag from '../SelectorTag/SearchTag';

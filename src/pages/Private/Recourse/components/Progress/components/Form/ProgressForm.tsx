@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useProgress } from '../../context/progress.context';
-import { useForm } from '@/hooks/useForm';
+import { useForm } from '#/hooks/useForm';
 import moment from 'moment';
-import Field from '@/components/Field';
-import TextArea from '@/components/TextArea';
-import Button from '@/components/Button';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { savingProgress } from '@/services/progress.services';
+import Field from '#/components/Field';
+import TextArea from '#/components/TextArea';
+import Button from '#/components/Button';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { savingProgress } from '#/services/progress.services';
 import {
   validateComment,
   validateDate,

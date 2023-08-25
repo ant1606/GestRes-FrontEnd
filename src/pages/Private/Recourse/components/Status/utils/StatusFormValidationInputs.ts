@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { type StatusFormData } from '../index.types';
-import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
+import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
 
 export const validateFecha = (values: StatusFormData): ValidationInputResult => {
   const myDate = moment(values.date);

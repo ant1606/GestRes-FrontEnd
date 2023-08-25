@@ -1,13 +1,13 @@
 import React from 'react';
 import { useTag } from '../../context/tag.context';
 import { useSearchParams } from 'react-router-dom';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import Icon from '@mdi/react';
-import { mdiPencil, mdiTrashCan } from '@mdi/js';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { focusInput } from '@/utilities/manipulationDom';
-import { destroyTag, getTags } from '@/services/tag.services';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+// import Icon from '@mdi/react';
+// import { mdiPencil, mdiTrashCan } from '@mdi/js';
+import { useAppDispatch } from '#/hooks/redux';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { focusInput } from '#/utilities/manipulationDom';
+import { destroyTag, getTags } from '#/services/tag.services';
 
 interface Prop {
   tag: Tag;
@@ -69,14 +69,14 @@ const Row: React.FC<Prop> = ({ tag }) => {
             onClick={() => {
               handleClickEdit(tag);
             }}>
-            <Icon path={mdiPencil} title="Edit" size={1} color="white" />
+            {/* <Icon path={mdiPencil} title="Edit" size={1} color="white" /> */}
           </button>
           <button
             className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
             onClick={() => {
               handleClickDelete(tag);
             }}>
-            <Icon path={mdiTrashCan} title="Delete" size={1} color="white" />
+            {/* <Icon path={mdiTrashCan} title="Delete" size={1} color="white" /> */}
           </button>
         </div>
       </td>

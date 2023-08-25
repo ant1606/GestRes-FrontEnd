@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Row from './Row.js';
-// import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context.js';
+// import { useRecourse } from '#/pages/Private/Recourse/context/recourse.context.js';
 import { useStatus } from '../../context/status.context.js';
 
 export const Table: React.FC = () => {

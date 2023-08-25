@@ -1,14 +1,14 @@
 import React from 'react';
-import Icon from '@mdi/react';
-import { mdiExitToApp } from '@mdi/js';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { userIsLogout } from '@/redux/slice/authenticationSlice';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { loggoutUser } from '@/services';
-import { toastNotifications } from '@/utilities/notificationsSwal';
+// import Icon from '@mdi/react';
+// import { mdiExitToApp } from '@mdi/js';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { userIsLogout } from '#/redux/slice/authenticationSlice';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { loggoutUser } from '#/services';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useNavigate } from 'react-router-dom';
-import { deletePersistenDataUser } from '@/utilities/authenticationManagement';
-import { type RootState } from '@/redux/store';
+import { deletePersistenDataUser } from '#/utilities/authenticationManagement';
+import { type RootState } from '#/redux/store';
 
 // import { useNavigate } from 'react-router-dom';
 // import { useSecurity } from '../../Context/SecurityContext.jsx';
@@ -61,7 +61,7 @@ const Titlebar: React.FC = () => {
             handleClickWrapper();
           }
         }}>
-        <Icon path={mdiExitToApp} size={1.5} className="cursor-pointer hover:text-blue-400" />
+        {/* <Icon path={mdiExitToApp} size={1.5} className="cursor-pointer hover:text-blue-400" /> */}
       </div>
     </div>
   );

@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { Navigate, Route } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { authenticatedUser, userIsLoggin } from '@/redux/slice/authenticationSlice';
-import { checkAuthentication } from '@/utilities/authenticationManagement';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { authenticatedUser, userIsLoggin } from '#/redux/slice/authenticationSlice';
+import { checkAuthentication } from '#/utilities/authenticationManagement';
 import AuthGuard from './guards/auth.guard';
 import PublicGuard from './guards/public.guard';
 import UserVerifiedGuard from './guards/userVerified.guard';
 import RoutesWithPageNotFound from './RoutesWithPageNotFound';
 import { Private } from './Private';
-import Login from '@/pages/Login';
-import PasswordForget from '@/pages/PasswordForget';
-import PasswordReset from '@/pages/PasswordReset';
-import Register from '@/pages/Register';
-import VerifyEmail from '@/pages/VerifyEmail';
-import ResendLinkVerifyEmail from '@/pages/Private/ResendVerifyLinkEmail';
-import { getSettings } from '@/services/settings.services';
-import { loadSettings } from '@/redux/slice/settingsSlice';
+import Login from '#/pages/Login';
+import PasswordForget from '#/pages/PasswordForget';
+import PasswordReset from '#/pages/PasswordReset';
+import Register from '#/pages/Register';
+import VerifyEmail from '#/pages/VerifyEmail';
+import ResendLinkVerifyEmail from '#/pages/Private/ResendVerifyLinkEmail';
+import { getSettings } from '#/services/settings.services';
+import { loadSettings } from '#/redux/slice/settingsSlice';
 
 // interface ResponseAPI {
 //   data?: Record<string, any>;

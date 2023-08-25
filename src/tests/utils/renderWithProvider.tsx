@@ -4,7 +4,7 @@ import type { RenderOptions } from '@testing-library/react';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
-import { setupStore, type AppStore, type RootState } from '@/redux/store';
+import { setupStore, type AppStore, type RootState } from '#/redux/store';
 // As a basic setup, import your same slice reducer
 import { MemoryRouter } from 'react-router-dom';
 

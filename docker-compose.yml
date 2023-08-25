@@ -2,7 +2,7 @@ version: '3'
 services:
   app:
     build:
-      context: ./Dockerfile
+      context: .
       dockerfile: Dockerfile
     environment:
       - VITEST_UI_BASE_URL=http://172.18.0.4:51204/__vitest__/
@@ -19,7 +19,11 @@ services:
       - pygesres_net
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+# networks:
+#     pygesres_net:
+#         name: pygesres
+#         external: true
 networks:
-    pygesres_net:
-        name: pygesres
-        external: true
+  pygesres_net:
+    driver: bridge
+    name: pygesres 

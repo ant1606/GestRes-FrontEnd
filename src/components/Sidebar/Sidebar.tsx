@@ -1,12 +1,12 @@
 import React from 'react';
 
 // import SideBarContext from '../../Context/SideBarContext';
-import menus from '@/config/menus';
+import menus from '#/config/menus';
 import UserInfo from './UserInfo';
 import TitleSideBar from './TitleSideBar';
 import ItemSideBar from './ItemSideBar';
-import { useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
+import { useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 
 const Sidebar: React.FC = () => {
   const { collapseSidebar } = useAppSelector((state: RootState) => state.ui);

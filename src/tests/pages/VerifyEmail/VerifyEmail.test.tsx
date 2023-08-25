@@ -1,6 +1,6 @@
-import { VerifyEmail } from '@/pages/VerifyEmail/VerifyEmail';
-import { setServiceVerifyEmailResponseSuccess } from '@/tests/mocks/verifyEmail.handlers';
-import { renderWithProviders } from '@/tests/utils/renderWithProvider';
+import { VerifyEmail } from '#/pages/VerifyEmail/VerifyEmail';
+import { setServiceVerifyEmailResponseSuccess } from '#/tests/mocks/verifyEmail.handlers';
+import { renderWithProviders } from '#/tests/utils/renderWithProvider';
 import { cleanup, waitFor } from '@testing-library/react';
 import Cookies from 'js-cookie';
 import { Route, Routes } from 'react-router-dom';

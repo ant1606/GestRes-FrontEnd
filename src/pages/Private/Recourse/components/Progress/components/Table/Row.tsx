@@ -1,14 +1,14 @@
 import React from 'react';
-import Icon from '@mdi/react';
-import { mdiTrashCan } from '@mdi/js';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { destroyProgress, getProgressPerRecourse } from '@/services/progress.services';
+// import Icon from '@mdi/react';
+// import { mdiTrashCan } from '@mdi/js';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { useRecourse } from '#/pages/Private/Recourse/context/recourse.context';
+import { useAppDispatch } from '#/hooks/redux';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { destroyProgress, getProgressPerRecourse } from '#/services/progress.services';
 import { useProgress } from '../../context/progress.context';
-import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
-import { getRecourse } from '@/services/recourse.services';
+import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
+import { getRecourse } from '#/services/recourse.services';
 
 interface Props {
   isLastProgress: boolean;
@@ -77,7 +77,7 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
                 onClick={() => {
                   handleClickDeleteWrapper(progress);
                 }}>
-                <Icon path={mdiTrashCan} title="Down" size={1} color="white" />
+                {/* <Icon path={mdiTrashCan} title="Down" size={1} color="white" /> */}
               </button>
             </>
           )}

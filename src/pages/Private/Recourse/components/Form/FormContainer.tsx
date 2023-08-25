@@ -3,8 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useRecourse } from '../../context/recourse.context';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from '@/hooks/useForm';
-import { toastNotifications } from '@/utilities/notificationsSwal';
+import { useForm } from '#/hooks/useForm';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 import {
   validateName,
   validateSource,
@@ -16,11 +16,11 @@ import {
   validateTotalPages,
   validateTotalChapters
 } from '../../utils/RecourseFormValidationInputs';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { savingRecourse, updatingRecourse } from '@/services/recourse.services';
-import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { savingRecourse, updatingRecourse } from '#/services/recourse.services';
+import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
 import FormView from './FormView';
 
 const validateFunctionsFormInputs = {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import FilterView from './FilterView';
 import { useSearchParams } from 'react-router-dom';
 import { useTag } from '../../context/tag.context';
-import { getTags } from '@/services/tag.services';
+import { getTags } from '#/services/tag.services';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();

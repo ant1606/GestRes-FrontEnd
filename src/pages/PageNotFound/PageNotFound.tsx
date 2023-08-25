@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthenticationTemplate from '@/components/AuthenticationTemplate';
-import Button from '@/components/Button';
+import AuthenticationTemplate from '#/components/AuthenticationTemplate';
+import Button from '#/components/Button';
 
 interface Props {
   isPrivatePage: boolean;

@@ -1,14 +1,14 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { changeColorTitleBar, isLoading } from '@/redux/slice/uiSlice';
-import { destroyStatus, getStatusPerRecourse } from '@/services/status.services';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { mdiTrashCan } from '@mdi/js';
-import Icon from '@mdi/react';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { changeColorTitleBar, isLoading } from '#/redux/slice/uiSlice';
+import { destroyStatus, getStatusPerRecourse } from '#/services/status.services';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+// import { mdiTrashCan } from '@mdi/js';
+// import Icon from '@mdi/react';
 import React from 'react';
 import { useStatus } from '../../context/status.context';
-import { useRecourse } from '@/pages/Private/Recourse/context/recourse.context';
-import { type RootState } from '@/redux/store';
-import { getRecourse } from '@/services/recourse.services';
+import { useRecourse } from '#/pages/Private/Recourse/context/recourse.context';
+import { type RootState } from '#/redux/store';
+import { getRecourse } from '#/services/recourse.services';
 
 interface Props {
   isLastStatus: boolean;
@@ -76,7 +76,7 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
                 onClick={() => {
                   handleClickDeleteWrapper(status);
                 }}>
-                <Icon path={mdiTrashCan} title="Down" size={1} color="white" />
+                {/* <Icon path={mdiTrashCan} title="Down" size={1} color="white" /> */}
               </button>
             </>
           )}

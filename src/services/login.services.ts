@@ -1,9 +1,9 @@
 import {
   loginErrorResponseAdapter,
   loginSuccessResponseAdapter
-} from '@/pages/Login/adapters/LoginAdapter';
-import { type LoginSuccessResponse, type LoginErrorResponse } from '@/pages/Login/index.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/Login/adapters/LoginAdapter';
+import { type LoginSuccessResponse, type LoginErrorResponse } from '#/pages/Login/index.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import fetch from 'cross-fetch';
 import Cookies from 'js-cookie';
 

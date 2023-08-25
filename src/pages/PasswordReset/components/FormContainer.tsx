@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { useForm } from '@/hooks/useForm';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { toastNotifications } from '@/utilities/notificationsSwal';
+import { useForm } from '#/hooks/useForm';
+import { useAppDispatch } from '#/hooks/redux';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { passwordReset } from '@/services';
+import { passwordReset } from '#/services';
 import FormView from './FormView';
 import { usePasswordReset } from '../context/passwordReset.context';
 import {

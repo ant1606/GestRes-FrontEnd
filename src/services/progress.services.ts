@@ -2,13 +2,13 @@ import {
   progressAdapter,
   progressErrorResponseAdapter,
   progressesAdapter
-} from '@/pages/Private/Recourse/components/Progress/adapters/ProgressAdapter';
+} from '#/pages/Private/Recourse/components/Progress/adapters/ProgressAdapter';
 import {
   type ProgressSuccessResponse,
   type ProgressErrorResponse,
   type ProgressesSuccessResponse
-} from '@/pages/Private/Recourse/components/Progress/indext.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/Private/Recourse/components/Progress/indext.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const getProgressPerRecourse = async (

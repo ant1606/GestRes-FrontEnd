@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
-import { useForm } from '@/hooks/useForm';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { savingUser } from '@/services/register.services';
+import { useForm } from '#/hooks/useForm';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { useAppDispatch } from '#/hooks/redux';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { savingUser } from '#/services/register.services';
 import FormView from './FormView';
 import {
   validateUserEmail,

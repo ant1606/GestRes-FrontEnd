@@ -1,8 +1,8 @@
-import Button from '@/components/Button';
+import Button from '#/components/Button';
 import React from 'react';
 import Table from './components/Table';
 import { useProgress } from './context/progress.context';
-import FooterTable from '@/components/FooterTable';
+import FooterTable from '#/components/FooterTable';
 
 interface Props {
   handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

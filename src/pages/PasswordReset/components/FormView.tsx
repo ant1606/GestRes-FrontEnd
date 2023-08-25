@@ -1,7 +1,7 @@
-import Button from '@/components/Button';
-import Field from '@/components/Field';
-import { mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
-import Icon from '@mdi/react';
+import Button from '#/components/Button';
+import Field from '#/components/Field';
+// import { mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
+// import Icon from '@mdi/react';
 import React from 'react';
 
 interface Props {
@@ -23,7 +23,7 @@ const FormView: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
       <div className="flex gap-3 items-center">
-        <Icon path={mdiEmail} size={1} />
+        {/* <Icon path={mdiEmail} size={1} /> */}
         <Field
           type="text"
           name="email"
@@ -35,7 +35,7 @@ const FormView: React.FC<Props> = ({
         />
       </div>
       <div className="flex gap-3 items-center">
-        <Icon path={mdiLock} size={1} />
+        {/* <Icon path={mdiLock} size={1} /> */}
         <Field
           type="password"
           name="password"
@@ -47,7 +47,7 @@ const FormView: React.FC<Props> = ({
         />
       </div>
       <div className="flex gap-3 items-center">
-        <Icon path={mdiLockCheck} size={1} />
+        {/* <Icon path={mdiLockCheck} size={1} /> */}
         <Field
           type="password"
           name="passwordConfirmation"

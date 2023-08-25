@@ -2,13 +2,13 @@ import {
   recourseAdapter,
   recourseErrorResponseAdapter
 } from './../pages/Private/Recourse/adapters/RecourseAdapter';
-import { recoursesAdapter } from '@/pages/Private/Recourse/adapters/RecourseAdapter';
+import { recoursesAdapter } from '#/pages/Private/Recourse/adapters/RecourseAdapter';
 import {
   type RecourseSuccessResponse,
   type RecourseErrorResponse,
   type RecoursesSuccessResponse
-} from '@/pages/Private/Recourse/index.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/Private/Recourse/index.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const getRecourses = async (

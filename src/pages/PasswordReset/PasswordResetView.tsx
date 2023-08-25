@@ -1,9 +1,9 @@
-import AuthenticationTemplate from '@/components/AuthenticationTemplate';
+import AuthenticationTemplate from '#/components/AuthenticationTemplate';
 import React from 'react';
 import { Form } from './components';
-import { useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
-import Loader from '@/components/Loader';
+import { useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
+import Loader from '#/components/Loader';
 
 export const PasswordResetView: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);

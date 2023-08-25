@@ -1,4 +1,4 @@
-import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
+import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
 // TODO tipar funciones y validaciones
 const isBetween = (length: number, min: number, max: number): boolean =>
   length >= min && length <= max;

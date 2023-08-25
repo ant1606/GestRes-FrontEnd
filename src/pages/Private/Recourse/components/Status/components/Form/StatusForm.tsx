@@ -5,14 +5,14 @@ import {
   validateComentario,
   validateEstadoId
 } from '../../utils/StatusFormValidationInputs.js';
-import Field from '@/components/Field.js';
-import Combobox from '@/components/Combobox.js';
-import TextArea from '@/components/TextArea.js';
-import Button from '@/components/Button.js';
-import { useForm } from '@/hooks/useForm.js';
+import Field from '#/components/Field.js';
+import Combobox from '#/components/Combobox.js';
+import TextArea from '#/components/TextArea.js';
+import Button from '#/components/Button.js';
+import { useForm } from '#/hooks/useForm.js';
 import { useStatus } from '../../context/status.context.js';
-import { savingStatus } from '@/services/status.services.js';
-import { toastNotifications } from '@/utilities/notificationsSwal.js';
+import { savingStatus } from '#/services/status.services.js';
+import { toastNotifications } from '#/utilities/notificationsSwal.js';
 
 const validateFunctionsFormInputs = {
   date: validateFecha,

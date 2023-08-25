@@ -1,5 +1,5 @@
-import { cleanup, screen, waitFor } from '@/tests/utils/test-utils';
-import AppRouter from '@/routers/AppRouter';
+import { cleanup, screen, waitFor } from '#/tests/utils/test-utils';
+import AppRouter from '#/routers/AppRouter';
 import Cookies from 'js-cookie';
 import { renderWithProviders } from '../utils/renderWithProvider';
 import {

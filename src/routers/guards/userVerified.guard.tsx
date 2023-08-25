@@ -1,5 +1,5 @@
-import { useAppSelector } from '@/hooks/redux';
-import { authenticatedUser } from '@/redux/slice/authenticationSlice';
+import { useAppSelector } from '#/hooks/redux';
+import { authenticatedUser } from '#/redux/slice/authenticationSlice';
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 interface Props {

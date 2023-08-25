@@ -1,6 +1,6 @@
-import PasswordReset from '@/pages/PasswordReset';
-import { setServiceResetPasswordResponseSuccess } from '@/tests/mocks/resetPassword.handlers';
-import { renderWithProviders } from '@/tests/utils/renderWithProvider';
+import PasswordReset from '#/pages/PasswordReset';
+import { setServiceResetPasswordResponseSuccess } from '#/tests/mocks/resetPassword.handlers';
+import { renderWithProviders } from '#/tests/utils/renderWithProvider';
 import { cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router-dom';

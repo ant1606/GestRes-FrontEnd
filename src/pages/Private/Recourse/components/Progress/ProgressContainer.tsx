@@ -5,11 +5,11 @@ import Swal from 'sweetalert2';
 import { useRecourse } from '../../context/recourse.context';
 import ProgressForm from './components/Form/ProgressForm';
 import { ProgressProvider, useProgress } from './context/progress.context';
-import { getProgressPerRecourse } from '@/services/progress.services';
-import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
-import { toastNotifications } from '@/utilities/notificationsSwal';
+import { getProgressPerRecourse } from '#/services/progress.services';
+import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
-import { getRecourse } from '@/services/recourse.services';
+import { getRecourse } from '#/services/recourse.services';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;

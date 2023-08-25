@@ -2,13 +2,13 @@ import {
   tagAdapter,
   tagErrorResponseAdapter,
   tagsAdapter
-} from '@/pages/Private/Tag/adapters/TagAdapter';
+} from '#/pages/Private/Tag/adapters/TagAdapter';
 import {
   type TagSuccessResponse,
   type TagErrorResponse,
   type TagsSuccessResponse
-} from '@/pages/Private/Tag/index.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/Private/Tag/index.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import Cookies from 'js-cookie';
 
 export const getTags = async (

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
+import { useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 
 const UserInfo: React.FC = () => {
   const {

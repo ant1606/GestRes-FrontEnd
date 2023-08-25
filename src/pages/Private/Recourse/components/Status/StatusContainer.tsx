@@ -3,15 +3,15 @@ import StatusView from './StatusView';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import StatusForm from './components/Form/StatusForm';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 import { StatusProvider, useStatus } from './context/status.context';
 import { useRecourse } from '../../context/recourse.context';
-import { getStatusPerRecourse } from '@/services/status.services';
-import { GLOBAL_STATUS_RECOURSE } from '@/config/globalConstantes';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { changeColorTitleBar } from '@/redux/slice/uiSlice';
-import { getRecourse } from '@/services/recourse.services';
+import { getStatusPerRecourse } from '#/services/status.services';
+import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { changeColorTitleBar } from '#/redux/slice/uiSlice';
+import { getRecourse } from '#/services/recourse.services';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;

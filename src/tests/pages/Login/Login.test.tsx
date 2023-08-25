@@ -1,15 +1,15 @@
-import { renderWithProviders } from '@/tests/utils/renderWithProvider';
+import { renderWithProviders } from '#/tests/utils/renderWithProvider';
 import { act, cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Login from '@/pages/Login';
+import Login from '#/pages/Login';
 import {
   setServiceLoginResponseSuccess,
   setserviceLoginUserWithRememberToken
-} from '@/tests/mocks/login.handlers';
+} from '#/tests/mocks/login.handlers';
 import Cookies from 'js-cookie';
 import { Route, Routes } from 'react-router-dom';
-import Register from '@/pages/Register';
-import PasswordForget from '@/pages/PasswordForget';
+import Register from '#/pages/Register';
+import PasswordForget from '#/pages/PasswordForget';
 
 describe('Test en Login', () => {
   beforeEach(() => {

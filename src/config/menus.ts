@@ -1,7 +1,7 @@
-import dashboardIcon from '@/assets/dashboard.svg';
-import youtubeIcon from '@/assets/youtube.svg';
-import graduateIcon from '@/assets/graduate.svg';
-import tagIcon from '@/assets/tag.svg';
+import dashboardIcon from '#/assets/dashboard.svg';
+import youtubeIcon from '#/assets/youtube.svg';
+import graduateIcon from '#/assets/graduate.svg';
+import tagIcon from '#/assets/tag.svg';
 const menus = [
   {
     title: 'Dashboard',

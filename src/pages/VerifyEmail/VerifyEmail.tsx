@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthenticationTemplate from '../../components/AuthenticationTemplate.js';
-import { useAppDispatch } from '@/hooks/redux/index.js';
-import { isLoading } from '@/redux/slice/uiSlice.js';
-import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
-import { verifyUserEmail } from '@/services/verifyEmail.services.js';
-import { toastNotifications } from '@/utilities/notificationsSwal.js';
-import { savePersistenDataUser } from '@/utilities/authenticationManagement.js';
+import { useAppDispatch } from '#/hooks/redux/index.js';
+import { isLoading } from '#/redux/slice/uiSlice.js';
+import { userIsLoggin } from '#/redux/slice/authenticationSlice.js';
+import { verifyUserEmail } from '#/services/verifyEmail.services.js';
+import { toastNotifications } from '#/utilities/notificationsSwal.js';
+import { savePersistenDataUser } from '#/utilities/authenticationManagement.js';
 
 export const VerifyEmail: React.FC = () => {
   const { id, hash } = useParams();

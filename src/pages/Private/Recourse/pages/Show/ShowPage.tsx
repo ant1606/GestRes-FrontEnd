@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Form from '../../components/Form';
 import { useRecourse } from '../../context/recourse.context';
-import { useAppDispatch } from '@/hooks/redux';
-import { changeColorTitleBar } from '@/redux/slice/uiSlice';
+import { useAppDispatch } from '#/hooks/redux';
+import { changeColorTitleBar } from '#/redux/slice/uiSlice';
 import { StatusProvider } from '../../components/Status/context/status.context';
 import StatusRecourse from '../../components/Status';
 import { ProgressProvider } from '../../components/Progress/context/progress.context';

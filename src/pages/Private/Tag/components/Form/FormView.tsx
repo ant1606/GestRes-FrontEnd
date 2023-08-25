@@ -1,5 +1,5 @@
-import Button from '@/components/Button';
-import Field from '@/components/Field';
+import Button from '#/components/Button';
+import Field from '#/components/Field';
 import React from 'react';
 import { useTag } from '../../context/tag.context';
 

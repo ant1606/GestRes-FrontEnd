@@ -1,4 +1,4 @@
-import { refreshUserFromRememberToken } from '@/services/login.services.js';
+import { refreshUserFromRememberToken } from '#/services/login.services.js';
 import Cookies from 'js-cookie';
 
 const BEARER_TOKEN = 'bearerToken';

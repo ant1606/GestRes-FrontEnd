@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import FormView from './FormView';
 import { validateUserEmail } from '../utils/validationInputs.js';
-import { useForm } from '@/hooks/useForm.js';
-import { useAppDispatch } from '@/hooks/redux/index.js';
-import { isLoading } from '@/redux/slice/uiSlice.js';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util.js';
-import { passwordForget } from '@/services/passwordForget.services.js';
-import { toastNotifications } from '@/utilities/notificationsSwal.js';
+import { useForm } from '#/hooks/useForm.js';
+import { useAppDispatch } from '#/hooks/redux/index.js';
+import { isLoading } from '#/redux/slice/uiSlice.js';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util.js';
+import { passwordForget } from '#/services/passwordForget.services.js';
+import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { usePasswordForget } from '../context/passwordForget.context.js';
 
 const validateFunctionsFormInputs = {

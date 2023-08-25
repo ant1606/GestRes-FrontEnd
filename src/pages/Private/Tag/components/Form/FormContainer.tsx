@@ -3,13 +3,13 @@ import React, { useEffect, useRef } from 'react';
 import FormView from './FormView';
 import { validateTagNombre } from '../../utils/TagFormValidationInputs';
 import { useSearchParams } from 'react-router-dom';
-import { useAppDispatch } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { useForm } from '@/hooks/useForm';
+import { useAppDispatch } from '#/hooks/redux';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { useForm } from '#/hooks/useForm';
 import { useTag } from '../../context/tag.context';
-import { focusInput } from '@/utilities/manipulationDom';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { getTags, savingTag, updatingTag } from '@/services/tag.services';
+import { focusInput } from '#/utilities/manipulationDom';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { getTags, savingTag, updatingTag } from '#/services/tag.services';
 
 const validateFunctionsFormInputs = {
   name: validateTagNombre

@@ -1,8 +1,8 @@
-import Combobox from '@/components/Combobox';
-import Field from '@/components/Field';
-import perPageItemsValue from '@/config/perPageItemsValue';
-import { mdiMagnify } from '@mdi/js';
-import Icon from '@mdi/react';
+import Combobox from '#/components/Combobox';
+import Field from '#/components/Field';
+import perPageItemsValue from '#/config/perPageItemsValue';
+// import { mdiMagnify } from '@mdi/js';
+// import Icon from '@mdi/react';
 import React from 'react';
 
 interface Props {
@@ -20,7 +20,7 @@ const FilterView: React.FC<Props> = ({
   return (
     <div className="flex mb-4 gap-x-10">
       <div className="flex">
-        <Icon path={mdiMagnify} title="Search" size={1.5} color="black" />
+        {/* <Icon path={mdiMagnify} title="Search" size={1.5} color="black" /> */}
         <Field
           type="text"
           label="Buscar Etiqueta"

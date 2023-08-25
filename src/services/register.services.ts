@@ -1,13 +1,13 @@
 import {
   registerErrorResponseAdapter,
   registerSuccessResponseAdapter
-} from '@/pages/Register/adapters/RegisterAdapter';
+} from '#/pages/Register/adapters/RegisterAdapter';
 import {
   type RegisterFormData,
   type RegisterErrorResponse,
   type RegisterSuccessResponse
-} from '@/pages/Register/index.types';
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+} from '#/pages/Register/index.types';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const savingUser = async (
   registerUserData: RegisterFormData

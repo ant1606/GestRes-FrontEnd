@@ -1,12 +1,12 @@
 import React from 'react';
-import AuthenticationTemplate from '@/components/AuthenticationTemplate.js';
-import Button from '@/components/Button.js';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { isLoading } from '@/redux/slice/uiSlice';
-import { toastNotifications } from '@/utilities/notificationsSwal';
-import { resendLinkVerifyUserEmail } from '@/services/verifyEmail.services';
-import { type RootState } from '@/redux/store';
-import Loader from '@/components/Loader';
+import AuthenticationTemplate from '#/components/AuthenticationTemplate.js';
+import Button from '#/components/Button.js';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { resendLinkVerifyUserEmail } from '#/services/verifyEmail.services';
+import { type RootState } from '#/redux/store';
+import Loader from '#/components/Loader';
 
 interface ResponseAPI {
   data?: Record<string, any>;

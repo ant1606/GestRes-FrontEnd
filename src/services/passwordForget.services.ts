@@ -1,12 +1,12 @@
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import {
   passwordForgetErrorResponseAdapter,
   passwordForgetSuccessResponseAdapter
-} from '@/pages/PasswordForget/adapters/PasswordForgetAdapter';
+} from '#/pages/PasswordForget/adapters/PasswordForgetAdapter';
 import {
   type PasswordForgetErrorResponse,
   type PasswordForgetSuccessResponse
-} from '@/pages/PasswordForget/index.types';
+} from '#/pages/PasswordForget/index.types';
 
 export const passwordForget = async (
   email: string

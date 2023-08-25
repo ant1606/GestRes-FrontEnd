@@ -1,4 +1,4 @@
-import { getTags } from '@/services/tag.services';
+import { getTags } from '#/services/tag.services';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Select, { components } from 'react-select';
 

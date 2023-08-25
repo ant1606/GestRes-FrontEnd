@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import { renderWithProviders } from '@/tests/utils/renderWithProvider';
-import PasswordForget from '@/pages/PasswordForget';
+import { renderWithProviders } from '#/tests/utils/renderWithProvider';
+import PasswordForget from '#/pages/PasswordForget';
 import userEvent from '@testing-library/user-event';
 import { cleanup, waitFor } from '@testing-library/react';
-import { setServiceForgetPasswordResponseSuccess } from '@/tests/mocks/forgetPassword.handlers';
+import { setServiceForgetPasswordResponseSuccess } from '#/tests/mocks/forgetPassword.handlers';
 
 describe('Test en PasswordForget', () => {
   beforeEach(() => {

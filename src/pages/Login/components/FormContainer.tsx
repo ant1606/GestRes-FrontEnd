@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isLoading } from '@/redux/slice/uiSlice.js';
-import { useAppDispatch } from '@/hooks/redux/index.js';
-import { useForm } from '@/hooks/useForm.js';
+import { isLoading } from '#/redux/slice/uiSlice.js';
+import { useAppDispatch } from '#/hooks/redux/index.js';
+import { useForm } from '#/hooks/useForm.js';
 
 import { validateUserEmail, validateUserPassword } from '../utils/validationInputs.js';
 import { useLogin } from '../context/login.context.js';
-import { logginUser } from '@/services/login.services.js';
-import { toastNotifications } from '@/utilities/notificationsSwal.js';
+import { logginUser } from '#/services/login.services.js';
+import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import FormView from './FormView.js';
-import { userIsLoggin } from '@/redux/slice/authenticationSlice.js';
-import { savePersistenDataUser } from '@/utilities/authenticationManagement.js';
+import { userIsLoggin } from '#/redux/slice/authenticationSlice.js';
+import { savePersistenDataUser } from '#/utilities/authenticationManagement.js';
 
 const validateFunctionsFormInputs = {
   email: validateUserEmail,

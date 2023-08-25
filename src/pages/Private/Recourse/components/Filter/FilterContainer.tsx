@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import FilterView from './FilterView';
 import { useSearchParams } from 'react-router-dom';
 import { useRecourse } from '../../context/recourse.context';
-import { getRecourses } from '@/services/recourse.services';
+import { getRecourses } from '#/services/recourse.services';
 
 export interface FilterData {
   id: number;

@@ -1,4 +1,4 @@
-import { processErrorResponse } from '@/utilities/processAPIResponse.util';
+import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import {
   passwordResetErrorResponseAdapter,
   passwordResetSuccessResponseAdapter
@@ -6,7 +6,7 @@ import {
 import {
   type PasswordResetErrorResponse,
   type PasswordResetSuccessResponse
-} from '@/pages/PasswordReset/index.types';
+} from '#/pages/PasswordReset/index.types';
 
 interface PasswordResetData {
   email: string;

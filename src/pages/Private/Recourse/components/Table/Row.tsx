@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
-import Icon from '@mdi/react';
-import {
-  mdiWeb,
-  mdiTooltipAccount,
-  mdiDomain,
-  mdiArrowDownDropCircle,
-  mdiEye,
-  mdiPencil,
-  mdiTrashCan,
-  mdiBookOpenPageVariantOutline,
-  mdiTextBoxMultipleOutline,
-  mdiVideoVintage,
-  mdiTimerOutline
-} from '@mdi/js';
+// import Icon from '@mdi/react';
+// import {
+//   mdiWeb,
+//   mdiTooltipAccount,
+//   mdiDomain,
+//   mdiArrowDownDropCircle,
+//   mdiEye,
+//   mdiPencil,
+//   mdiTrashCan,
+//   mdiBookOpenPageVariantOutline,
+//   mdiTextBoxMultipleOutline,
+//   mdiVideoVintage,
+//   mdiTimerOutline
+// } from '@mdi/js';
 import { NavLink, useSearchParams } from 'react-router-dom';
 
-import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes.js';
-import { toastNotifications } from '@/utilities/notificationsSwal.js';
+import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes.js';
+import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
-import { destroyRecourse, getRecourses } from '@/services/recourse.services';
-import { changeColorTitleBar, isLoading } from '@/redux/slice/uiSlice';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
+import { destroyRecourse, getRecourses } from '#/services/recourse.services';
+import { changeColorTitleBar, isLoading } from '#/redux/slice/uiSlice';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 
 interface Props {
   recourse: Recourse;
@@ -99,7 +99,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
               className={` ${!viewDetail ? '' : 'rotate-180'} 
               duration-300 transition-all w-8 h-8 flex justify-center items-center bg-gray-900 rounded-lg`}
               onClick={toggleviewDetail}>
-              <Icon path={mdiArrowDownDropCircle} title="Down" size={1} color="white" />
+              {/* <Icon path={mdiArrowDownDropCircle} title="Down" size={1} color="white" /> */}
             </button>
             <NavLink to={`/app/recourse/${recourse.id}`}>
               <button
@@ -107,7 +107,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
                 onClick={() => {
                   handleClickShow(recourse);
                 }}>
-                <Icon path={mdiEye} title="RecourseScreenShow" size={1} color="white" />
+                {/* <Icon path={mdiEye} title="RecourseScreenShow" size={1} color="white" /> */}
               </button>
             </NavLink>
 
@@ -117,7 +117,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
                 onClick={() => {
                   handleClickEdit(recourse);
                 }}>
-                <Icon path={mdiPencil} title="Edit" size={1} color="white" />
+                {/* <Icon path={mdiPencil} title="Edit" size={1} color="white" /> */}
               </button>
             </NavLink>
 
@@ -126,7 +126,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
               onClick={() => {
                 handleClickDeleteWrapper(recourse);
               }}>
-              <Icon path={mdiTrashCan} title="Delete" size={1} color="white" />
+              {/* <Icon path={mdiTrashCan} title="Delete" size={1} color="white" /> */}
             </button>
           </div>
         </td>
@@ -177,22 +177,22 @@ const Row: React.FC<Props> = ({ recourse }) => {
             className={` ${!viewDetail ? 'max-h-0 px-0 py-0' : 'max-h-44 px-8 py-4 bg-gray-100'} 
             origin-top duration-300 transition-all flex flex-col items-stretch text-base font-semibold overflow-y-scroll`}>
             <div className="flex gap-4 pb-3 ">
-              <Icon path={mdiWeb} title="Source" size={1} color="rgb(17 24 39 / 1)" />
+              {/* <Icon path={mdiWeb} title="Source" size={1} color="rgb(17 24 39 / 1)" /> */}
               <p className="truncate max-w-4xl">{recourse.source}</p>
             </div>
             <div className="flex justify-between gap-4">
               <div className="flex flex-1 flex-col gap-3">
                 <div className="flex gap-4">
-                  <Icon
+                  {/* <Icon
                     path={mdiTooltipAccount}
                     title="Source"
                     size={1}
                     color="rgb(17 24 39 / 1)"
-                  />
+                  /> */}
                   <p>{recourse.author}</p>
                 </div>
                 <div className="flex gap-4">
-                  <Icon path={mdiDomain} title="Source" size={1} color="rgb(17 24 39 / 1)" />
+                  {/* <Icon path={mdiDomain} title="Source" size={1} color="rgb(17 24 39 / 1)" /> */}
                   <p>{recourse.editorial}</p>
                 </div>
                 <div className="flex">
@@ -201,42 +201,42 @@ const Row: React.FC<Props> = ({ recourse }) => {
                       ?.value ? (
                     <>
                       <div className="flex gap-4 w-2/4">
-                        <Icon
+                        {/* <Icon
                           path={mdiTextBoxMultipleOutline}
                           title="Source"
                           size={1}
                           color="rgb(17 24 39 / 1)"
-                        />
+                        /> */}
                         <p>{recourse.totalPages}</p>
                       </div>
                       <div className="flex gap-4">
-                        <Icon
+                        {/* <Icon
                           path={mdiBookOpenPageVariantOutline}
                           title="Source"
                           size={1}
                           color="rgb(17 24 39 / 1)"
-                        />
+                        /> */}
                         <p>{recourse.totalChapters}</p>
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="flex gap-4 w-2/4">
-                        <Icon
+                        {/* <Icon
                           path={mdiVideoVintage}
                           title="Source"
                           size={1}
                           color="rgb(17 24 39 / 1)"
-                        />
+                        /> */}
                         <p>{recourse.totalVideos}</p>
                       </div>
                       <div className="flex gap-4">
-                        <Icon
+                        {/* <Icon
                           path={mdiTimerOutline}
                           title="Source"
                           size={1}
                           color="rgb(17 24 39 / 1)"
-                        />
+                        /> */}
                         <p>{recourse.totalHours}</p>
                       </div>
                     </>

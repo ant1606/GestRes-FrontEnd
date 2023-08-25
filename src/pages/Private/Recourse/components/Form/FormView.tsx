@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
-import Button from '@/components/Button';
-import Combobox from '@/components/Combobox';
-import Field from '@/components/Field';
-import { GLOBAL_TYPES_RECOURSE } from '@/config/globalConstantes';
-import { useAppSelector } from '@/hooks/redux';
-import { type RootState } from '@/redux/store';
+import Button from '#/components/Button';
+import Combobox from '#/components/Combobox';
+import Field from '#/components/Field';
+import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
+import { useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SelectorTag from '../SelectorTag/SelectorTag';
