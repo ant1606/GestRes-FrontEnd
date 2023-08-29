@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate, Route, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { authenticatedUser, userIsLoggin } from '#/redux/slice/authenticationSlice';
 import { checkAuthentication } from '#/utilities/authenticationManagement';
@@ -31,6 +31,7 @@ interface UserLoginParams {
 const AppRouter: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     initApp();
@@ -69,6 +70,16 @@ const AppRouter: React.FC = () => {
       // TODO Cargar la última página visitada por el usuario
       const user = await checkAuthentication();
       await userIsLoggedInPromise(user);
+      const lastPath = localStorage.getItem('lastPath') as string;
+      if (
+        lastPath !== null ||
+        lastPath !== 'null' ||
+        lastPath !== '' ||
+        lastPath !== 'undefined' ||
+        lastPath !== undefined
+      ) {
+        navigate(lastPath);
+      }
     } catch (error) {
       // TODO Investigar como poder hacer el registro de logs de los errores generados
     }
