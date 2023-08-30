@@ -4,6 +4,10 @@ export interface TagsSuccessResponse {
   links: PaginateResultLinks | null;
 }
 
+export interface TagFormData {
+  name: string;
+}
+
 export interface TagErrorDetailResponse extends ApiErrorResponse {
   name: string | null;
   [key: string]: string | null;
