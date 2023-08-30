@@ -1,10 +1,10 @@
 import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
-// TODO tipar funciones y validaciones
+import { type RecourseFormData } from '../index.types';
+
 const isBetween = (length: number, min: number, max: number): boolean =>
   length >= min && length <= max;
 
-// TODO crear la interface RecourseFormData
-export const validateName = (values) => {
+export const validateName = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 150;
   const nameToValidate = values.name.trim();
@@ -17,7 +17,7 @@ export const validateName = (values) => {
   return null;
 };
 
-export const validateSource = (values) => {
+export const validateSource = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 255;
   const sourceToValidate = values.source.trim();
@@ -30,7 +30,7 @@ export const validateSource = (values) => {
   return null;
 };
 
-export const validateAuthor = (values) => {
+export const validateAuthor = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 75;
   const authorToValidate = values.author.trim();
@@ -41,7 +41,7 @@ export const validateAuthor = (values) => {
   return null;
 };
 
-export const validateEditorial = (values) => {
+export const validateEditorial = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 75;
   const editorialToValidate = values.editorial.trim();
@@ -52,7 +52,7 @@ export const validateEditorial = (values) => {
   return null;
 };
 
-export const validateTypeId = (values) => {
+export const validateTypeId = (values: RecourseFormData): ValidationInputResult => {
   const validateTypeId = parseInt(values.typeId);
   const isValidTypeId = values.recourseType.some((type) => type.id === validateTypeId);
 
@@ -61,69 +61,68 @@ export const validateTypeId = (values) => {
   return null;
 };
 
-export const validateTotalPages = (values) => {
+export const validateTotalPages = (values: RecourseFormData): ValidationInputResult => {
   // TODO aplicar regex para que sólo se admitan numeros enteros
   const validateTotalPages = parseInt(values.totalPages);
   const typeLibro = values.recourseType.find(
     (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO
   );
-  const isTipoLibro = parseInt(values.typeId) === typeLibro.id;
+  const isTipoLibro = parseInt(values.typeId) === typeLibro?.id;
 
   if (isTipoLibro) {
-    if (validateTotalPages.length === 0) return 'Total Páginas es requerido';
+    if (validateTotalPages === 0) return 'Total Páginas es requerido';
 
     if (!Number.isInteger(validateTotalPages)) return 'Total Páginas debe ser un número entero';
 
-    if (parseInt(validateTotalPages) <= 0) return 'Total Páginas debe ser mayor a 0';
+    if (validateTotalPages <= 0) return 'Total Páginas debe ser mayor a 0';
   }
 
   return null;
 };
 
-export const validateTotalChapters = (values) => {
+export const validateTotalChapters = (values: RecourseFormData): ValidationInputResult => {
   const validateTotalChapters = parseInt(values.totalChapters);
   const typeLibro = values.recourseType.find(
     (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO
   );
-  const isTipoLibro = parseInt(values.typeId) === typeLibro.id;
+  const isTipoLibro = parseInt(values.typeId) === typeLibro?.id;
 
   if (isTipoLibro) {
-    if (validateTotalChapters.length === 0) return 'Total Capitulos es requerido';
+    if (validateTotalChapters === 0) return 'Total Capitulos es requerido';
 
     if (!Number.isInteger(validateTotalChapters))
       return 'Total Capítulos debe ser un número entero';
 
-    if (parseInt(validateTotalChapters) <= 0) return 'Total Capítulos debe ser mayor a 0';
+    if (validateTotalChapters <= 0) return 'Total Capítulos debe ser mayor a 0';
   }
 
   return null;
 };
 
-export const validateTotalVideos = (values) => {
+export const validateTotalVideos = (values: RecourseFormData): ValidationInputResult => {
   const typeVideo = values.recourseType.find(
     (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_VIDEO
   );
-  const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
+  const isTipoVideo = parseInt(values.typeId) === typeVideo?.id;
 
   if (isTipoVideo) {
     const validateTotalVideos = parseInt(values.totalVideos);
 
-    if (validateTotalVideos.length === 0) return 'Total Videos es requerido';
+    if (validateTotalVideos === 0) return 'Total Videos es requerido';
 
-    if (!Number.isInteger(parseInt(validateTotalVideos)))
-      return 'Total Videos debe ser un número entero';
+    if (!Number.isInteger(validateTotalVideos)) return 'Total Videos debe ser un número entero';
 
-    if (parseInt(validateTotalVideos) <= 0) return 'Total Videos debe ser mayor a 0';
+    if (validateTotalVideos <= 0) return 'Total Videos debe ser mayor a 0';
   }
 
   return null;
 };
 
-export const validateTotalHours = (values) => {
+export const validateTotalHours = (values: RecourseFormData): ValidationInputResult => {
   const typeVideo = values.recourseType.find(
     (value) => value.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_VIDEO
   );
-  const isTipoVideo = parseInt(values.typeId) === typeVideo.id;
+  const isTipoVideo = parseInt(values.typeId) === typeVideo?.id;
 
   if (isTipoVideo) {
     const validateTotalHours = values.totalHours;
