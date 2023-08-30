@@ -13,9 +13,6 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "dependencies": {
-    "@mdi/font": "^7.2.96",
-    "@mdi/js": "^7.2.96",
-    "@mdi/react": "^1.6.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/js-cookie": "^3.0.3",
     "animate.css": "^4.1.1",
@@ -28,6 +25,7 @@
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.10.1",
     "react-loading": "^2.0.3",
     "react-modal": "^3.16.1",
     "react-paginate": "^8.1.3",
