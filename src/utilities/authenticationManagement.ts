@@ -35,8 +35,10 @@ export const rememberTokenExists = (): boolean => {
 
 export const savePersistenDataUser = (response: Record<string, string | any>): void => {
   const date = new Date(response.data?.bearerExpire);
+  const dateFixedTime = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
   Cookies.set('bearerToken', response.data?.bearerToken, {
-    expires: date
+    expires: dateFixedTime
   });
   localStorage.setItem('user', JSON.stringify(response.data?.user));
   if (typeof response.data?.user.rememberToken === 'string')
@@ -44,7 +46,6 @@ export const savePersistenDataUser = (response: Record<string, string | any>): v
 };
 
 export const deletePersistenDataUser = (): void => {
-  // TODO Formatear la fecha de expiración del bearerToken
   Cookies.remove('bearerToken');
   localStorage.clear();
 };
