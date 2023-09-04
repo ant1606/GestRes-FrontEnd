@@ -23,7 +23,8 @@ export const getTags = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (res) => {
@@ -45,7 +46,8 @@ export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagError
     body: JSON.stringify(tag),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -70,7 +72,8 @@ export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErr
     }),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -91,7 +94,8 @@ export const destroyTag = async (tag: Tag): Promise<TagSuccessResponse | TagErro
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {

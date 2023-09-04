@@ -23,7 +23,8 @@ export const getRecourses = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (res) => {
@@ -46,7 +47,8 @@ export const getRecourse = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (res) => {
@@ -70,7 +72,8 @@ export const savingRecourse = async (
     body: JSON.stringify(recourse),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -99,7 +102,8 @@ export const updatingRecourse = async (
       }),
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -123,7 +127,8 @@ export const destroyRecourse = async (
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {

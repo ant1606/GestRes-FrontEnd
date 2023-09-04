@@ -26,7 +26,8 @@ export const getStatusPerRecourse = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -52,7 +53,8 @@ export const savingStatus = async (
     body: JSON.stringify(status),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -75,7 +77,8 @@ export const destroyStatus = async (
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {

@@ -28,7 +28,8 @@ export const getProgressPerRecourse = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -56,7 +57,8 @@ export const savingProgress = async (
       body: JSON.stringify(progress),
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -80,7 +82,8 @@ export const destroyProgress = async (
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
