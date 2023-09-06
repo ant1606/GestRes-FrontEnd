@@ -131,7 +131,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
           </div>
         </td>
         <td className="max-h-14 max-w-xs">
-          <div className="flex justify-center items-center">
+          <div className="flex justify-start items-center">
             <p className="text-lg font-semibold text-gray-900 truncate "> {recourse.name}</p>
           </div>
         </td>
@@ -150,8 +150,10 @@ const Row: React.FC<Props> = ({ recourse }) => {
         </td>
         <td className="w-36">
           <div className="flex flex-col p-3 items-center justify-center ">
-            <div className="w-full">
-              <div className="w-full h-3 bg-gray-800 rounded-full"></div>
+            <div className="w-full border-gray-900 border-2 rounded-full ">
+              <div
+                className="h-3 bg-gray-800 rounded-full"
+                style={{ width: `${recourse.totalProgressPercentage}%` }}></div>
             </div>
             <span className="text-gray-500 text-sm font-bold">
               {recourse.totalProgressPercentage}%
@@ -165,7 +167,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
         </td>
       </tr>
 
-      {/* Fila de Detalles */}
+      {/* Fila de Detalles 
+      w-[${recourse.totalProgressPercentage}%]
+      */}
       {/* <tr className={ ` ${!viewDetail ? "scale-y-0 row_viewDetail_collapse" : ""} origin-top bg-gray-100 duration-300 transition-all`}> */}
       {/* <td className='max-h-14 max-w-xs'>
           <div className='flex justify-center items-center'>
