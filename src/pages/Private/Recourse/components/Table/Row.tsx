@@ -153,8 +153,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
             <div className="w-full">
               <div className="w-full h-3 bg-gray-800 rounded-full"></div>
             </div>
-            {/* TODO Generar el calculo del avance de cada recurso */}
-            <span className="text-gray-500 text-sm font-semibold">100%</span>
+            <span className="text-gray-500 text-sm font-bold">
+              {recourse.totalProgressPercentage}%
+            </span>
           </div>
         </td>
         <td className="w-56 ">

@@ -24,6 +24,7 @@ interface Recourse {
   totalChapters: number | null;
   totalVideos: number | null;
   totalHours: string | null;
+  totalProgressPercentage: number | null;
   tags: Tag[];
   status: Status | Status[];
   progress: Progress | Progress[];
