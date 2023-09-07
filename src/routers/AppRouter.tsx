@@ -34,6 +34,7 @@ const AppRouter: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log('Entrando a la app');
     initApp();
   }, []);
 
@@ -52,6 +53,7 @@ const AppRouter: React.FC = () => {
   };
   const settingsLoadedInPromise = async (params): Promise<void> => {
     // TODO Ver si puedo refactorizar más esta parte del settings y su service
+    console.log(params, 'Dsde settingsLoadedInPromise');
     await new Promise<void>((resolve) => {
       dispatch(
         loadSettings({
@@ -69,6 +71,7 @@ const AppRouter: React.FC = () => {
       await settingsLoadedInPromise(settings.data);
       // TODO Cargar la última página visitada por el usuario
       const user = await checkAuthentication();
+      // TODO ANalizar adecuadamente esta parte, ya que sólo deberia llamarse cuando exista el usuario en el remember
       await userIsLoggedInPromise(user);
       const lastPath = localStorage.getItem('lastPath') as string;
       if (
@@ -81,6 +84,7 @@ const AppRouter: React.FC = () => {
         navigate(lastPath);
       }
     } catch (error) {
+      console.log(error);
       // TODO Investigar como poder hacer el registro de logs de los errores generados
     }
   };

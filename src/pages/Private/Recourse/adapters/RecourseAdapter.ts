@@ -35,7 +35,7 @@ const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
 };
 
 export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
-  console.log(recourse);
+  // console.log(recourse);
   return {
     data: adapterRecourse(recourse.data)
   };

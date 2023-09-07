@@ -15,7 +15,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
 
   useEffect(() => {
     selectedTagsRef.current = selectedTags;
-    console.log(selectedTags);
+    // console.log(selectedTags);
   }, [selectedTags]);
 
   useEffect(() => {
