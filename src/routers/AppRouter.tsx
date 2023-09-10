@@ -16,6 +16,7 @@ import VerifyEmail from '#/pages/VerifyEmail';
 import ResendLinkVerifyEmail from '#/pages/Private/ResendVerifyLinkEmail';
 import { getSettings } from '#/services/settings.services';
 import { loadSettings } from '#/redux/slice/settingsSlice';
+import Cookies from 'js-cookie';
 
 // interface ResponseAPI {
 //   data?: Record<string, any>;
@@ -34,9 +35,19 @@ const AppRouter: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('Entrando a la app');
+    window.addEventListener('beforeunload', behaviorClosingApp);
+    // window.addEventListener('unload', handleTabClosing);
     initApp();
+    return () => {
+      window.removeEventListener('beforeunload', behaviorClosingApp);
+      // window.removeEventListener('unload', handleTabClosing);
+    };
   }, []);
+
+  const behaviorClosingApp = (): void => {
+    // TODO Añadir restricción que no se elimine si es que existe el rememberToken
+    Cookies.remove('bearerToken');
+  };
 
   const userIsLoggedInPromise = async (params: UserLoginParams): Promise<void> => {
     await new Promise<void>((resolve) => {
@@ -53,7 +64,6 @@ const AppRouter: React.FC = () => {
   };
   const settingsLoadedInPromise = async (params): Promise<void> => {
     // TODO Ver si puedo refactorizar más esta parte del settings y su service
-    console.log(params, 'Dsde settingsLoadedInPromise');
     await new Promise<void>((resolve) => {
       dispatch(
         loadSettings({
@@ -86,6 +96,12 @@ const AppRouter: React.FC = () => {
     } catch (error) {
       console.log(error);
       // TODO Investigar como poder hacer el registro de logs de los errores generados
+      // TODO Ver el siguiente error
+      /**
+       * Error: Error en la autenticación
+       * at checkAuthentication (authenticationManagement.ts:80:11)
+       * at initApp (AppRouter.tsx:84:26)
+       */
     }
   };
 
