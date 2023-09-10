@@ -79,7 +79,7 @@ const StatusForm: React.FC<Props> = ({
   const handleSubmit = async (): Promise<void> => {
     try {
       // TODO Ver como añadir un loader al modal
-      setDisabledButton(!disabledButton);
+      setDisabledButton(true);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(statusErrorRef.current).every(
         (el) => statusErrorRef.current[el] === null
@@ -118,7 +118,7 @@ const StatusForm: React.FC<Props> = ({
       toastNotifications().notificationError(error.message);
     } finally {
       // dispatch(isLoading(false));
-      setDisabledButton(!disabledButton);
+      setDisabledButton(false);
     }
   };
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {

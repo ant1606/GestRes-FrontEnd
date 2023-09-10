@@ -57,7 +57,7 @@ export const FormContainer: React.FC = () => {
   const handleSubmit = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
-      setDisabledButton(!disabledButton);
+      setDisabledButton(true);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(tagErrorRef.current).every(
         (el) => tagErrorRef.current[el] === null
@@ -99,7 +99,7 @@ export const FormContainer: React.FC = () => {
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
-      setDisabledButton(!disabledButton);
+      setDisabledButton(false);
       dispatch(isLoading(false));
       focusInput('#name');
     }

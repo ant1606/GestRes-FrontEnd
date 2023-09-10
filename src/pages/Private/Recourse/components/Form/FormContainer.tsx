@@ -125,7 +125,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const handleSubmit = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
-      setDisabledButton(!disabledButton);
+      setDisabledButton(true);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(recourseErrorRef.current).every(
         (el) => recourseErrorRef.current[el] === null
@@ -213,7 +213,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
-      setDisabledButton(!disabledButton);
+      setDisabledButton(false);
       dispatch(isLoading(false));
     }
   };

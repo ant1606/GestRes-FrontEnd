@@ -61,7 +61,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
   const handleSubmit = async (): Promise<void> => {
     try {
       // TODO Ver como añadir un loader al modal
-      setDisabledButton(!disabledButton);
+      setDisabledButton(true);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(progressErrorRef.current).every(
         (el) => progressErrorRef.current[el] === null
@@ -108,7 +108,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
       toastNotifications().notificationError(error.message);
     } finally {
       // dispatch(isLoading(false));
-      setDisabledButton(!disabledButton);
+      setDisabledButton(false);
     }
   };
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
