@@ -1,5 +1,6 @@
 import { refreshUserFromRememberToken } from '#/services/login.services.js';
 import Cookies from 'js-cookie';
+import { AES, enc } from 'crypto-js';
 
 const BEARER_TOKEN = 'bearerToken';
 const REMEMBER_ME_TOKEN = 'rememberToken';
@@ -40,9 +41,17 @@ export const savePersistenDataUser = (response: Record<string, string | any>): v
   Cookies.set('bearerToken', response.data?.bearerToken, {
     expires: dateFixedTime
   });
-  localStorage.setItem('user', JSON.stringify(response.data?.user));
+  localStorage.setItem('user', encryptUserData(JSON.stringify(response.data?.user)));
   if (typeof response.data?.user.rememberToken === 'string')
     localStorage.setItem('rememberToken', response.data?.user.rememberToken);
+};
+
+const encryptUserData = (userData: string): string => {
+  return AES.encrypt(userData, 'miclave').toString();
+};
+const decryptUserData = (userDataEncrypt: string): string => {
+  const bytes = AES.decrypt(userDataEncrypt, 'miclave');
+  return bytes.toString(enc.Utf8);
 };
 
 export const deletePersistenDataUser = (): void => {
@@ -72,8 +81,8 @@ export const checkAuthentication = async (): Promise<Record<string, string | any
           'Los datos del usuario no son válidos, limpiar cache y datos del navegador'
         );
       }
-
-      const userData = JSON.parse(userJson);
+      // TODO Verificar la encriptacion en este punto
+      const userData = JSON.parse(decryptUserData(userJson));
       return userData;
     }
   } catch (error) {
