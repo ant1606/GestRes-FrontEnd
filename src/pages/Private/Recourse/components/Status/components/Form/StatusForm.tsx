@@ -37,6 +37,7 @@ const StatusForm: React.FC<Props> = ({
 }) => {
   const { addValidationError, statusError, resetValidationError, cleanSelectedStatus } =
     useStatus();
+  const [disabledButton, setDisabledButton] = useState(false);
 
   const [comboStatusData, setComboStatusData] = useState<Settings[]>([]);
   const initialState = {
@@ -77,7 +78,8 @@ const StatusForm: React.FC<Props> = ({
 
   const handleSubmit = async (): Promise<void> => {
     try {
-      // Ver como añadir un loader al modal
+      // TODO Ver como añadir un loader al modal
+      setDisabledButton(!disabledButton);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(statusErrorRef.current).every(
         (el) => statusErrorRef.current[el] === null
@@ -116,6 +118,7 @@ const StatusForm: React.FC<Props> = ({
       toastNotifications().notificationError(error.message);
     } finally {
       // dispatch(isLoading(false));
+      setDisabledButton(!disabledButton);
     }
   };
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -160,7 +163,7 @@ const StatusForm: React.FC<Props> = ({
           rows={3}
         />
         <div className="flex justify-around gap-12">
-          <Button type="submit" text="Registrar" btnType="main" />
+          <Button type="submit" text="Registrar" btnType="main" isDisable={disabledButton} />
 
           <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
         </div>

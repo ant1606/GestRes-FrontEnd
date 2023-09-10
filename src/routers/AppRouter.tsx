@@ -46,6 +46,7 @@ const AppRouter: React.FC = () => {
 
   const behaviorClosingApp = (): void => {
     // TODO Añadir restricción que no se elimine si es que existe el rememberToken
+    // TODO Se elimina el bearerToken al momento de actualizar y manda al login, verificar esto
     Cookies.remove('bearerToken');
   };
 

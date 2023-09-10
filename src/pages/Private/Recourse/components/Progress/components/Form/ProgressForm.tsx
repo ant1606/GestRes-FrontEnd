@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useProgress } from '../../context/progress.context';
 import { useForm } from '#/hooks/useForm';
 import moment from 'moment';
@@ -28,6 +28,7 @@ interface Props {
 const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit }) => {
   const { addValidationError, progressError, resetValidationError, cleanSelectedProgress } =
     useProgress();
+  const [disabledButton, setDisabledButton] = useState(false);
 
   const initialState = {
     done: 0,
@@ -60,6 +61,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
   const handleSubmit = async (): Promise<void> => {
     try {
       // TODO Ver como añadir un loader al modal
+      setDisabledButton(!disabledButton);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(progressErrorRef.current).every(
         (el) => progressErrorRef.current[el] === null
@@ -106,6 +108,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
       toastNotifications().notificationError(error.message);
     } finally {
       // dispatch(isLoading(false));
+      setDisabledButton(!disabledButton);
     }
   };
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -161,7 +164,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
           value={comment}
         />
         <div className="flex justify-around gap-12">
-          <Button type="submit" text="Registrar" btnType="main" />
+          <Button type="submit" text="Registrar" btnType="main" isDisable={disabledButton} />
 
           <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
         </div>

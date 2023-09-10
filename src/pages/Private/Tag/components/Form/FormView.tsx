@@ -9,6 +9,7 @@ interface Props {
   handleCancelClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   tagError: Record<string, string>;
   name: string;
+  submitIsDisabled: boolean;
 }
 
 const FormView: React.FC<Props> = ({
@@ -16,7 +17,8 @@ const FormView: React.FC<Props> = ({
   handleInputChange,
   handleCancelClick,
   tagError,
-  name
+  name,
+  submitIsDisabled
 }) => {
   const { tagActive } = useTag();
   return (
@@ -35,7 +37,7 @@ const FormView: React.FC<Props> = ({
               value={name}
             />
           </div>
-          <Button text="GUARDAR" type="submit" btnType="main" />
+          <Button text="GUARDAR" type="submit" btnType="main" isDisable={submitIsDisabled} />
 
           {tagActive !== null && (
             <Button

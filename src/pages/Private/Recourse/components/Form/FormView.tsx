@@ -33,6 +33,7 @@ interface Props {
   selectedTags: number[];
   setSelectedTags: React.Dispatch<React.SetStateAction<number[]>>;
   recourseSelected: Recourse;
+  submitIsDisabled: boolean;
 }
 
 const FormView: React.FC<Props> = ({
@@ -53,7 +54,8 @@ const FormView: React.FC<Props> = ({
   isShow,
   selectedTags,
   setSelectedTags,
-  recourseSelected
+  recourseSelected,
+  submitIsDisabled
 }) => {
 
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
@@ -188,7 +190,7 @@ const FormView: React.FC<Props> = ({
       {!isShow ?
         (
           <div className="flex justify-around gap-14">
-            <Button type="submit" text="Registrar" btnType="main" />
+            <Button type="submit" text="Registrar" btnType="main" isDisable={submitIsDisabled} />
             <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
           </div>
         ) :
