@@ -35,6 +35,19 @@ export const rememberTokenExists = (): boolean => {
   return true;
 };
 
+export const getBearerToken = (): string => {
+  const bearerToken = sessionStorage.getItem(BEARER_TOKEN);
+  if (
+    bearerToken === null ||
+    bearerToken === 'null' ||
+    bearerToken === '' ||
+    bearerToken === 'undefined' ||
+    bearerToken === undefined
+  )
+    throw new Error('Token de autorización inválido');
+  return bearerToken;
+};
+
 export const savePersistenDataUser = (response: Record<string, string | any>): void => {
   // const date = new Date(response.data?.bearerExpire);
   // const dateFixedTime = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);

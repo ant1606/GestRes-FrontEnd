@@ -10,8 +10,8 @@ import {
   type VerifyEmailErrorResponse,
   type VerifyEmailSuccessResponse
 } from '#/pages/VerifyEmail/index.types';
+import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import Cookies from 'js-cookie';
 
 export const verifyUserEmail = async (
   id: string,
@@ -35,9 +35,7 @@ export const verifyUserEmail = async (
 export const resendLinkVerifyUserEmail = async (
   id: number
 ): Promise<Record<string, string | any>> => {
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(
     `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/email/verification-notification`,

@@ -8,16 +8,13 @@ import {
   type TagErrorResponse,
   type TagsSuccessResponse
 } from '#/pages/Private/Tag/index.types';
+import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import Cookies from 'js-cookie';
 
 export const getTags = async (
   queryParams: string
 ): Promise<TagsSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag?${queryParams}`, {
     method: 'GET',
@@ -36,10 +33,7 @@ export const getTags = async (
 };
 
 export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag`, {
     method: 'POST',
@@ -59,10 +53,7 @@ export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagError
 };
 
 export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
     method: 'PUT',
@@ -85,10 +76,7 @@ export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErr
 };
 
 export const destroyTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
     method: 'delete',

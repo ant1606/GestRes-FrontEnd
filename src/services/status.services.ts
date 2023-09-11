@@ -8,17 +8,14 @@ import {
   type StatusErrorResponse,
   type StatusSuccessResponse
 } from '#/pages/Private/Recourse/components/Status/index.types';
+import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import Cookies from 'js-cookie';
 
 export const getStatusPerRecourse = async (
   recourseId: number,
   page: number
 ): Promise<StatusesSuccessResponse | StatusErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(
     `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/status?page=${page}`,
@@ -43,10 +40,7 @@ export const savingStatus = async (
   status: any,
   recourseId: number
 ): Promise<StatusSuccessResponse | StatusErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/status`, {
     method: 'POST',
@@ -68,10 +62,7 @@ export const savingStatus = async (
 export const destroyStatus = async (
   status: Status
 ): Promise<StatusSuccessResponse | StatusErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/status/${status.id}`, {
     method: 'DELETE',
