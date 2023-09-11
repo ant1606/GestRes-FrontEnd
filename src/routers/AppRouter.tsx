@@ -16,7 +16,6 @@ import VerifyEmail from '#/pages/VerifyEmail';
 import ResendLinkVerifyEmail from '#/pages/Private/ResendVerifyLinkEmail';
 import { getSettings } from '#/services/settings.services';
 import { loadSettings } from '#/redux/slice/settingsSlice';
-import Cookies from 'js-cookie';
 
 // interface ResponseAPI {
 //   data?: Record<string, any>;
@@ -35,20 +34,8 @@ const AppRouter: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.addEventListener('beforeunload', behaviorClosingApp);
-    // window.addEventListener('unload', handleTabClosing);
     initApp();
-    return () => {
-      window.removeEventListener('beforeunload', behaviorClosingApp);
-      // window.removeEventListener('unload', handleTabClosing);
-    };
   }, []);
-
-  const behaviorClosingApp = (): void => {
-    // TODO Añadir restricción que no se elimine si es que existe el rememberToken
-    // TODO Se elimina el bearerToken al momento de actualizar y manda al login, verificar esto
-    Cookies.remove('bearerToken');
-  };
 
   const userIsLoggedInPromise = async (params: UserLoginParams): Promise<void> => {
     await new Promise<void>((resolve) => {
