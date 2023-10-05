@@ -77,6 +77,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={name}
           errorInput={recourseError?.name}
+          readonly={isShow}
         />
 
         <Combobox
@@ -100,6 +101,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={editorial}
           errorInput={recourseError?.editorial}
+          readonly={isShow}
         />
 
         {typeId ===
@@ -112,6 +114,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalPages}
             errorInput={recourseError.totalPages}
+            readonly={isShow}
           />
         ) : (
           <Field
@@ -122,6 +125,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalVideos}
             errorInput={recourseError.totalVideos}
+            readonly={isShow}
           />
         )}
       </div>
@@ -134,6 +138,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={author}
           errorInput={recourseError.author}
+          readonly={isShow}
         />
 
         {typeId ===
@@ -146,6 +151,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalChapters}
             errorInput={recourseError.totalChapters}
+            readonly={isShow}
           />
         ) : (
           <Field
@@ -156,6 +162,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalHours}
             errorInput={recourseError.totalHours}
+            readonly={isShow}
           />
         )}
       </div>
@@ -168,6 +175,7 @@ const FormView: React.FC<Props> = ({
           value={source}
           errorInput={recourseError.source}
           classBox=""
+          readonly={isShow}
         />
       </div>
       <div className="mt-5 mb-24">

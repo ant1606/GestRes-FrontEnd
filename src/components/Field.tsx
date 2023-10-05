@@ -11,6 +11,7 @@ interface Props {
   errorInput: string | null;
   min?: string;
   disabled?: boolean;
+  readonly?: boolean;
 }
 
 const Field: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const Field: React.FC<Props> = ({
   classBox,
   handleChange,
   errorInput,
+  readonly,
   ...props
 }) => {
   const validateLengthErrorInput = errorInput !== null ? errorInput.trim().length : 0;
@@ -42,6 +44,7 @@ const Field: React.FC<Props> = ({
             value={value}
             autoComplete="off"
             data-testid={name}
+            readOnly={readonly}
             {...props}
           />
           <label
