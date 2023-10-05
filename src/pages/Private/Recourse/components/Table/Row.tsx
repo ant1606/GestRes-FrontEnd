@@ -4,7 +4,7 @@ import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
 import { destroyRecourse, getRecourses } from '#/services/recourse.services';
-import { changeColorTitleBar, isLoading } from '#/redux/slice/uiSlice';
+import { changeColorTitleBar, changeTitle, isLoading } from '#/redux/slice/uiSlice';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
 import { IconContext } from 'react-icons';
@@ -77,6 +77,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
 
   const handleClickShow = (recourse: Recourse): void => {
     dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+    dispatch(changeTitle(recourse.name));
     selectedRecourse(recourse);
   };
 

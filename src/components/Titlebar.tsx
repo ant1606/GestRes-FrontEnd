@@ -13,7 +13,9 @@ import { type RootState } from '#/redux/store';
 const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { titleBarContent, titleBarColor } = useAppSelector((state: RootState) => state.ui);
+  const { titleBarContent, titleBarColor, collapseSidebar } = useAppSelector(
+    (state: RootState) => state.ui
+  );
 
   const handleExitAppClick = async (): Promise<void> => {
     try {
@@ -42,12 +44,16 @@ const Titlebar: React.FC = () => {
     handleExitAppClick();
   };
 
+  const maxWidthTitleBarText = collapseSidebar ? `max-w-[85vw] delay-100` : `max-w-[70vw] delay-0`;
+
   return (
     <div
       className={` 
       ${titleBarColor === null ? '' : titleBarColor} text-2xl font-semibold 
       h-14 px-6 py-3 shadow-lg flex justify-between items-center`}>
-      <p>{titleBarContent}</p>
+      <p className={`truncate transition-all ease-in-out  ${maxWidthTitleBarText} `}>
+        {titleBarContent}
+      </p>
       <div
         onClick={handleClickWrapper}
         role="button"
