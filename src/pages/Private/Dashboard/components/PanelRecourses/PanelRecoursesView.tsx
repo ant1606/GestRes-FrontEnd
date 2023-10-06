@@ -47,6 +47,48 @@ const PanelRecoursesView: React.FC = () => {
               unde harum porro, dolores labore illum possimus et placeat eveniet illo quidem?
             </span>
           </li>
+          <li className="flex">
+            <div className="inline-block p-2">
+              <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
+                <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                  <FaEye />
+                </IconContext.Provider>
+              </button>
+            </div>
+            <span className="p-2 text-lg leading-7 font-semibold truncate">
+              Mi Recurso numero 1 de prueba hasta Lorem ipsum, dolor sit amet consectetur
+              adipisicing elit. Facilis est ab consequatur doloremque amet id at dignissimos quasi,
+              unde harum porro, dolores labore illum possimus et placeat eveniet illo quidem?
+            </span>
+          </li>
+          <li className="flex">
+            <div className="inline-block p-2">
+              <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
+                <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                  <FaEye />
+                </IconContext.Provider>
+              </button>
+            </div>
+            <span className="p-2 text-lg leading-7 font-semibold truncate">
+              Mi Recurso numero 1 de prueba hasta Lorem ipsum, dolor sit amet consectetur
+              adipisicing elit. Facilis est ab consequatur doloremque amet id at dignissimos quasi,
+              unde harum porro, dolores labore illum possimus et placeat eveniet illo quidem?
+            </span>
+          </li>
+          <li className="flex">
+            <div className="inline-block p-2">
+              <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
+                <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                  <FaEye />
+                </IconContext.Provider>
+              </button>
+            </div>
+            <span className="p-2 text-lg leading-7 font-semibold truncate">
+              Mi Recurso numero 1 de prueba hasta Lorem ipsum, dolor sit amet consectetur
+              adipisicing elit. Facilis est ab consequatur doloremque amet id at dignissimos quasi,
+              unde harum porro, dolores labore illum possimus et placeat eveniet illo quidem?
+            </span>
+          </li>
         </ol>
       </div>
     </div>
