@@ -51,7 +51,7 @@ export const tagsAdapter = (response: any): TagsSuccessResponse => {
 export const tagErrorResponseAdapter = (error: any): TagErrorResponse => {
   return {
     error: {
-      status: error.error.status,
+      status: error.error.status.toString(),
       detail: {
         apiResponseMessageError: error.error.detail.api_response ?? null,
         name: error.error.detail.name ?? null
