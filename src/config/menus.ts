@@ -15,12 +15,7 @@ const menus = [
     link: false,
     path: ''
   },
-  {
-    title: 'Videos Youtube',
-    icon: youtubeIcon,
-    link: true,
-    path: '/app/canales'
-  },
+
   {
     title: 'Recursos Educativos',
     icon: graduateIcon,
@@ -36,3 +31,12 @@ const menus = [
 ];
 
 export default menus;
+
+/**
+ * {
+    title: 'Videos Youtube',
+    icon: youtubeIcon,
+    link: true,
+    path: '/app/canales'
+  },
+ * / */

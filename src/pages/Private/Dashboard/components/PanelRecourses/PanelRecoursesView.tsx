@@ -5,7 +5,7 @@ import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 
 const PanelRecoursesView: React.FC = () => {
   return (
-    <div className="flex flex-col shadow-2xl rounded-2xl col-span-4">
+    <div className="flex flex-col shadow-2xl rounded-2xl col-span-4 h-fit">
       <div className="flex justify-between items-end">
         <div className="bg-yellow-400 text-gray-900 rounded-tl-2xl py-1 px-9 text-3xl font-bold uppercase">
           por empezar
