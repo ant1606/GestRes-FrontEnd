@@ -98,7 +98,7 @@ const AppRouter: React.FC = () => {
       <Route path="forget-password" element={<PasswordForget />} />
       <Route path="reset-password" element={<PasswordReset />} />
       <Route path="register" element={<Register />} />
-      <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail />} />
+      <Route path="verifyEmail/:id/:hash" element={<VerifyEmail />} />
       <Route element={<PublicGuard />}>
         <Route path="login" element={<Login />} />
       </Route>
