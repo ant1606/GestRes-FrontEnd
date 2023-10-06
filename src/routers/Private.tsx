@@ -3,7 +3,7 @@ import React from 'react';
 import { Navigate, Route, useLocation } from 'react-router-dom';
 import RoutesWithPageNotFound from './RoutesWithPageNotFound';
 import Tag from '#/pages/Private/Tag';
-
+import Dashboard from '#/pages/Private/Dashboard';
 import RecourseRouter from './RecourseRouter';
 
 export const Private: React.FC = () => {
@@ -12,7 +12,7 @@ export const Private: React.FC = () => {
   return (
     <AppLayout>
       <RoutesWithPageNotFound isPrivatePage={true}>
-        <Route path="dashboard" element={<>Dashboard</>} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="tag" element={<Tag />} />
         <Route path="recourse/*" element={<RecourseRouter />} />
         <Route path="/" element={<Navigate replace to="dashboard" />} />
