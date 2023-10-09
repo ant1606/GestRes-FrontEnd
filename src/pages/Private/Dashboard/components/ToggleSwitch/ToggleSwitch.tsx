@@ -22,10 +22,13 @@
 
 import React from 'react';
 
-const ToggleSwitch: React.FC = () => {
+interface Prop {
+  handleChange: React.ChangeEventHandler<HTMLInputElement>;
+}
+const ToggleSwitch: React.FC<Prop> = ({ handleChange }) => {
   return (
     <div className="toggle-container">
-      <input className="toggle-input" type="checkbox" />
+      <input className="toggle-input" type="checkbox" onChange={handleChange} />
       <div className="toggle-handle-wrapper">
         <div className="toggle-handle">
           <div className="toggle-handle-knob"></div>
