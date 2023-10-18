@@ -1,4 +1,4 @@
-import { getTags } from '#/services/tag.services';
+import { getTagsForTagSelector } from '#/services/tag.services';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Select, { components } from 'react-select';
 
@@ -27,7 +27,7 @@ const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
 
   useEffect(() => {
     const populateListTags = async (): Promise<void> => {
-      const response = await getTags(`searchNombre=`);
+      const response = await getTagsForTagSelector();
       // console.log(response);
       setListTags(response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name })));
     };
