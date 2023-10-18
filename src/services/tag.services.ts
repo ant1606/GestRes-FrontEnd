@@ -32,6 +32,25 @@ export const getTags = async (
     .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
 };
 
+export const getTagsForTagSelector = async (): Promise<TagsSuccessResponse | TagErrorResponse> => {
+  const bearerToken = getBearerToken();
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/getTagsForTagSelector`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
+    }
+  })
+    .then(async (res) => {
+      if (!res.ok) return await Promise.reject(res.json());
+      return await res.json();
+    })
+    .then(async (data) => data)
+    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+};
+
 export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
   const bearerToken = getBearerToken();
 

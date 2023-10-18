@@ -1,7 +1,7 @@
 import Choices from 'choices.js';
 import React, { useEffect, useRef, useState } from 'react';
 import 'choices.js/src/styles/choices.scss';
-import { getTags } from '#/services/tag.services';
+import { getTagsForTagSelector } from '#/services/tag.services';
 // TODO Ver si es combeniente cambiar el componente choices por react-select
 interface Props {
   setSelectValues: React.Dispatch<React.SetStateAction<number[]>>;
@@ -28,7 +28,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
       maxItemCount: -1
     })
       .setChoices(async function () {
-        const response = await getTags(`perPage=50`);
+        const response = await getTagsForTagSelector();
         return response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name }));
       })
       .then((instance) => {
