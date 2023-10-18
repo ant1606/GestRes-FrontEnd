@@ -26,7 +26,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
-  // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
+  // TODO ver como hacer de esto una funcion global o util para obtener el estilo
   const styleStatus = settingsStatus.find(
     (val) => val.value === recourse.currentStatusName
   )?.value2;

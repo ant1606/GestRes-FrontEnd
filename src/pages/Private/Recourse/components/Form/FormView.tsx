@@ -57,7 +57,6 @@ const FormView: React.FC<Props> = ({
   recourseSelected,
   submitIsDisabled
 }) => {
-
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
   const navigate = useNavigate();
 
