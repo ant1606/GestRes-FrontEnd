@@ -12,6 +12,7 @@ interface Props {
   min?: string;
   disabled?: boolean;
   readonly?: boolean;
+  classInput?: string;
 }
 
 const Field: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const Field: React.FC<Props> = ({
   handleChange,
   errorInput,
   readonly,
+  classInput = '',
   ...props
 }) => {
   const validateLengthErrorInput = errorInput !== null ? errorInput.trim().length : 0;
@@ -39,7 +41,7 @@ const Field: React.FC<Props> = ({
             name={name}
             // eslint-disable-next-line prettier/prettier
             className={`${validateLengthErrorInput > 0 ? 'border-2 border-rose-500 text-rose-500 ' : 'border-gray-900'}
-            px-3 py-1  border-b-2 bg-white peer w-full text-base transition-colors h-8 focus:outline-none`}
+            px-3 py-1  border-b-2 bg-white peer w-full text-base transition-colors h-8 focus:outline-none ${classInput}`}
             onChange={handleChange}
             value={value}
             autoComplete="off"

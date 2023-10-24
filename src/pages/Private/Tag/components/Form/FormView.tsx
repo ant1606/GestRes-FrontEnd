@@ -35,6 +35,7 @@ const FormView: React.FC<Props> = ({
               handleChange={handleInputChange}
               errorInput={tagError?.name}
               value={name}
+              classInput="uppercase"
             />
           </div>
           <Button text="GUARDAR" type="submit" btnType="main" isDisable={submitIsDisabled} />
