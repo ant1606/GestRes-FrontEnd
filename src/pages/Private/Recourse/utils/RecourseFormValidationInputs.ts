@@ -7,7 +7,7 @@ const isBetween = (length: number, min: number, max: number): boolean =>
 export const validateName = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 150;
-  const nameToValidate = values.name.trim();
+  const nameToValidate = values.name.toString().trim();
 
   if (nameToValidate === '') return 'El nombre es requerido.';
 
@@ -20,7 +20,7 @@ export const validateName = (values: RecourseFormData): ValidationInputResult =>
 export const validateSource = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 255;
-  const sourceToValidate = values.source.trim();
+  const sourceToValidate = values.source.toString().trim();
 
   if (sourceToValidate === '') return 'La ruta es requerida.';
 
@@ -33,7 +33,7 @@ export const validateSource = (values: RecourseFormData): ValidationInputResult 
 export const validateAuthor = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 75;
-  const authorToValidate = values.author.trim();
+  const authorToValidate = values.author.toString().trim();
 
   if (authorToValidate !== '' && !isBetween(authorToValidate.length, min, max))
     return `El autor debe contener entre ${min} a ${max} caracteres.`;
@@ -44,7 +44,7 @@ export const validateAuthor = (values: RecourseFormData): ValidationInputResult 
 export const validateEditorial = (values: RecourseFormData): ValidationInputResult => {
   const min = 5;
   const max = 75;
-  const editorialToValidate = values.editorial.trim();
+  const editorialToValidate = values.editorial.toString().trim();
 
   if (editorialToValidate !== '' && !isBetween(editorialToValidate.length, min, max))
     return `La editorial debe contener entre ${min} a ${max} caracteres.`;
@@ -127,7 +127,7 @@ export const validateTotalHours = (values: RecourseFormData): ValidationInputRes
   if (isTipoVideo) {
     const validateTotalHours = values.totalHours;
     const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
-    if (validateTotalHours.length === 0) return 'Total Videos es requerido';
+    if (validateTotalHours.length === 0) return 'Total Horas es requerido';
 
     // if(validateTotalHours === "00:00:00")
     //     return "Total Horas debe tener un valor distinto a 0";
