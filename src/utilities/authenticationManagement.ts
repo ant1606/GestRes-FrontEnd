@@ -62,7 +62,7 @@ export const savePersistenDataUser = (response: Record<string, string | any>): v
     localStorage.setItem(REMEMBER_ME_TOKEN, response.data?.user.rememberToken);
 };
 
-const encryptUserData = (userData: string): string => {
+export const encryptUserData = (userData: string): string => {
   return AES.encrypt(userData, MY_SECRET_KEY).toString();
 };
 const decryptUserData = (userDataEncrypt: string): string => {
