@@ -6,7 +6,6 @@ import {
   setServiceLoginResponseSuccess,
   setserviceLoginUserWithRememberToken
 } from '#/tests/mocks/login.handlers';
-import Cookies from 'js-cookie';
 import { Route, Routes } from 'react-router-dom';
 import Register from '#/pages/Register';
 import PasswordForget from '#/pages/PasswordForget';
@@ -14,16 +13,18 @@ import PasswordForget from '#/pages/PasswordForget';
 describe('Test en Login', () => {
   beforeEach(() => {
     cleanup();
-    Cookies.remove('bearerToken');
+    // Cookies.remove('bearerToken');
     localStorage.clear();
+    sessionStorage.clear();
     setServiceLoginResponseSuccess(true);
     setserviceLoginUserWithRememberToken(true);
   });
 
   afterAll(() => {
     cleanup();
-    Cookies.remove('bearerToken');
+    // Cookies.remove('bearerToken');
     localStorage.clear();
+    sessionStorage.clear();
     setServiceLoginResponseSuccess(true);
     setserviceLoginUserWithRememberToken(true);
   });
@@ -35,7 +36,7 @@ describe('Test en Login', () => {
     fireEvent.change(wrapper.getByTestId('password'), { target: { value: 'password' } });
     fireEvent.click(wrapper.getByText('Ingresar'));
     await waitFor(() => {
-      expect(Cookies.get('bearerToken')).toEqual('miToken');
+      expect(sessionStorage.getItem('bearerToken')).toEqual('miToken');
       expect(localStorage.getItem('rememberToken')).toEqual(null);
     });
     wrapper.unmount();
@@ -52,7 +53,7 @@ describe('Test en Login', () => {
     await user.click(wrapper.getByText('Ingresar'));
 
     await waitFor(() => {
-      expect(Cookies.get('bearerToken')).toEqual('miToken');
+      expect(sessionStorage.getItem('bearerToken')).toEqual('miToken');
       expect(localStorage.getItem('rememberToken')).toEqual('miRememberToken');
     });
     wrapper.unmount();
@@ -69,7 +70,7 @@ describe('Test en Login', () => {
 
     await waitFor(() => {
       expect(wrapper.getByText('No se encontro el remembertoken')).toBeInTheDocument();
-      expect(Cookies.get('bearerToken')).toEqual(undefined);
+      expect(sessionStorage.getItem('bearerToken')).toEqual(null);
       expect(localStorage.getItem('rememberToken')).toEqual(null);
     });
     wrapper.unmount();
@@ -93,7 +94,7 @@ describe('Test en Login', () => {
     await user.type(wrapper.getByTestId('password'), 'password');
     await user.click(wrapper.getByText('Ingresar'));
 
-    expect(Cookies.get('bearerToken')).toEqual('miToken');
+    expect(sessionStorage.getItem('bearerToken')).toEqual('miToken');
     // Es null porque no se marco la casilla rememberMe
     expect(localStorage.getItem('rememberToken')).toEqual(null);
     await waitFor(async () => {

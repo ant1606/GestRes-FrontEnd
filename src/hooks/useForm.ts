@@ -35,7 +35,6 @@ export const useForm = <T extends useFormInput>(
       | React.ChangeEvent<HTMLTextAreaElement>
   ): void => {
     const value = convertToType(evt.target.value);
-    console.log(value, typeof value);
     setValues({
       ...values,
       [evt.target.name]: value
