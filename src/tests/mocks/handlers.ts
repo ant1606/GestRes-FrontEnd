@@ -3,11 +3,13 @@ import { handlersLogin } from './login.handlers';
 import { handlersRegister } from './register.handlers';
 import { handlersResetPassword } from './resetPassword.handlers';
 import { handlersVerifyEmail } from './verifyEmail.handlers';
+import { handlersSettings } from './settings.handlers';
 
 export const handlers = [
   ...handlersLogin,
   ...handlersRegister,
   ...handlersVerifyEmail,
   ...handlersForgetPassword,
-  ...handlersResetPassword
+  ...handlersResetPassword,
+  ...handlersSettings
 ];
