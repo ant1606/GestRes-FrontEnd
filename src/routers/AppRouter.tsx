@@ -65,6 +65,7 @@ const AppRouter: React.FC = () => {
 
   const initApp = async (): Promise<void> => {
     try {
+      // TODO Hacer una verificación de la obtención de los settings y capturarlo
       const settings = await getSettings();
       await settingsLoadedInPromise(settings.data);
       // TODO Cargar la última página visitada por el usuario
