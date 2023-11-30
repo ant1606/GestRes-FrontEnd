@@ -108,7 +108,7 @@ describe('Test en VerifyEmail', () => {
       [`/verifyEmail/${id}/${hash}`]
     );
     await waitFor(() => {
-      expect(Cookies.get('bearerToken')).toBe('miToken');
+      expect(sessionStorage.getItem('bearerToken')).toBe('miToken');
       expect(localStorage.getItem('user')).not.toBe(undefined);
     });
     wrapper.unmount();
