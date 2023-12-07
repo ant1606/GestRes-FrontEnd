@@ -7,32 +7,36 @@ interface Props {
   name: string;
   value: string | number | readonly string[] | undefined;
   classBox: string;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: React.ChangeEventHandler<HTMLInputElement>;
   errorInput: string | null;
-  min?: string;
-  disabled?: boolean;
   readonly?: boolean;
   classInput?: string;
+  [key: string]: any;
 }
 
-const Field: React.FC<Props> = ({
-  type,
-  label,
-  name,
-  value,
-  classBox,
-  handleChange,
-  errorInput,
-  readonly,
-  classInput = '',
-  ...props
-}) => {
-  const validateLengthErrorInput = errorInput !== null ? errorInput.trim().length : 0;
+const validateLengthError = (errorInput: string | null | undefined): number => {
+  return errorInput === null || errorInput === undefined ? 0 : errorInput.trim().length;
+};
+
+const Field: React.FC<Props> = (props) => {
+  const {
+    type,
+    label,
+    name,
+    value,
+    classBox,
+    handleChange,
+    errorInput,
+    readonly,
+    classInput = '',
+    ...rest
+  } = props;
+  const LengthError = validateLengthError(errorInput);
   return (
     <>
       <div className={`flex flex-col relative ${classBox}`}>
         <div
-          className={`${validateLengthErrorInput > 0 ? 'animate__animated animate__headShake' : ''} 
+          className={`${LengthError > 0 ? 'animate__animated animate__headShake' : ''} 
         relative `}>
           <input
             type={type}
@@ -40,25 +44,26 @@ const Field: React.FC<Props> = ({
             placeholder=" "
             name={name}
             // eslint-disable-next-line prettier/prettier
-            className={`${validateLengthErrorInput > 0 ? 'border-2 border-rose-500 text-rose-500 ' : 'border-gray-900'}
+            className={`${LengthError > 0 ? 'border-2 border-rose-500 text-rose-500 ' : 'border-gray-900'}
             px-3 py-1  border-b-2 bg-white peer w-full text-base transition-colors h-8 focus:outline-none ${classInput}`}
             onChange={handleChange}
             value={value}
             autoComplete="off"
             data-testid={name}
             readOnly={readonly}
-            {...props}
+            {...rest}
           />
+
           <label
             htmlFor={name}
             // eslint-disable-next-line prettier/prettier
-            className={`${validateLengthErrorInput > 0 ? 'text-rose-500 peer-focus:text-rose-500' : 'text-gray-600 peer-focus:text-gray-900'} 
+            className={`${LengthError > 0 ? 'text-rose-500 peer-focus:text-rose-500' : 'text-gray-600 peer-focus:text-gray-900'} 
           absolute left-0 -top-4 text-xs cursor-text transition-all px-0 peer-placeholder-shown:top-1 peer-placeholder-shown:text-base peer-placeholder-shown:px-3
           peer-focus:-top-4 peer-focus:text-xs  peer-focus:px-0`}>
             {label}
           </label>
         </div>
-        {validateLengthErrorInput > 0 && (
+        {LengthError > 0 && (
           <span className="text-xs absolute -bottom-5 z-10 text-red-500 font-bold ">
             {errorInput}
           </span>
