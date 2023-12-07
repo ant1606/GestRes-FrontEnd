@@ -197,8 +197,8 @@ const FormView: React.FC<Props> = ({
       {!isShow ?
         (
           <div className="flex justify-around gap-14">
-            <Button type="submit" text="Registrar" btnType="main" isDisable={submitIsDisabled} />
-            <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
+            <Button type="submit" text="Registrar" btnType="main" isDisabled={submitIsDisabled} />
+            <Button btnType="danger" text="Cancelar" type="button" onClick={handleClickCancel} />
           </div>
         ) :
         (<></>)

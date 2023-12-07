@@ -38,15 +38,10 @@ const FormView: React.FC<Props> = ({
               classInput="uppercase"
             />
           </div>
-          <Button text="GUARDAR" type="submit" btnType="main" isDisable={submitIsDisabled} />
+          <Button text="GUARDAR" type="submit" btnType="main" isDisabled={submitIsDisabled} />
 
           {tagActive !== null && (
-            <Button
-              text="CANCELAR"
-              btnType="warning"
-              handleClick={handleCancelClick}
-              type="button"
-            />
+            <Button text="CANCELAR" btnType="warning" onClick={handleCancelClick} type="button" />
           )}
         </div>
       </form>

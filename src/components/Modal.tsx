@@ -39,8 +39,8 @@ const Modal = ({ title, modalState, handleClickParent, modalContent, handleClick
                 {modalContent}
               </div>
               <div className="px-7 py-3 border-t-2 flex justify-around">
-                <Button text="Registrar" handleClick={handleClickAcceptButton} />
-                <Button text="Cancelar" handleClick={handleClick} />
+                <Button text="Registrar" onClick={handleClickAcceptButton} />
+                <Button text="Cancelar" onClick={handleClick} />
               </div>
             </div>
           </div>

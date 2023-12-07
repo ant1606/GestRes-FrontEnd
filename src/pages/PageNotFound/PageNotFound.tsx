@@ -26,7 +26,7 @@ const ContentPageNotFound: React.FC = () => {
     <>
       <p className="text-6xl font-bold">Página no Encontrada</p>
       <div className="flex justify-center items-center">
-        <Button btnType="main" text="Regresar" type="button" handleClick={handleClick} />
+        <Button btnType="main" text="Regresar" type="button" onClick={handleClick} />
       </div>
     </>
   );

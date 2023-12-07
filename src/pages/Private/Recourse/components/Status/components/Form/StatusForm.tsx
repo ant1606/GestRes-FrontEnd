@@ -163,9 +163,9 @@ const StatusForm: React.FC<Props> = ({
           rows={3}
         />
         <div className="flex justify-around gap-12">
-          <Button type="submit" text="Registrar" btnType="main" isDisable={disabledButton} />
+          <Button type="submit" text="Registrar" btnType="main" isDisabled={disabledButton} />
 
-          <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
+          <Button btnType="danger" text="Cancelar" type="button" onClick={handleClickCancel} />
         </div>
       </div>
     </form>

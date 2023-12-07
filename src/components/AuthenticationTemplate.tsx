@@ -1,4 +1,9 @@
-const AuthenticationTemplate = ({ children }) => {
+import React, { type ReactNode } from 'react';
+
+interface Props {
+  children: ReactNode;
+}
+const AuthenticationTemplate: React.FC<Props> = ({ children }) => {
   return (
     <div className="flex flex-col h-screen">
       <div className="bg-gray-800 min-h-[5rem]"></div>

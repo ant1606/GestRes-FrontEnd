@@ -13,7 +13,7 @@ const ProgressView: React.FC<Props> = ({ handleClick, handlePageChange }) => {
   const { progresses, progressMeta } = useProgress();
   return (
     <>
-      <Button text="Registrar Nuevo" handleClick={handleClick} btnType="main" type="button" />
+      <Button text="Registrar Nuevo" onClick={handleClick} btnType="main" type="button" />
       {progresses.length === 0 ? (
         <p>No se encontraron resultados</p>
       ) : (
