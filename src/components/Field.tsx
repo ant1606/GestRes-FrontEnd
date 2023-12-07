@@ -1,5 +1,6 @@
 import React from 'react';
 import 'animate.css';
+import ErrorMessage from './ErrorMessage';
 
 interface Props {
   type: string;
@@ -63,11 +64,7 @@ const Field: React.FC<Props> = (props) => {
             {label}
           </label>
         </div>
-        {LengthError > 0 && (
-          <span className="text-xs absolute -bottom-5 z-10 text-red-500 font-bold ">
-            {errorInput}
-          </span>
-        )}
+        {LengthError > 0 && <ErrorMessage error={errorInput} />}
       </div>
     </>
   );

@@ -1,4 +1,5 @@
 import React from 'react';
+import ErrorMessage from './ErrorMessage';
 
 interface Options {
   id: number;
@@ -72,9 +73,7 @@ const Combobox: React.FC<Props> = ({
           {label}
         </label>
       </div>
-      {lengthError > 0 && (
-        <span className="text-xs absolute -bottom-5 z-10 text-red-500 font-bold">{errorCombo}</span>
-      )}
+      {lengthError > 0 && <ErrorMessage error={errorCombo} />}
     </div>
   );
 };
