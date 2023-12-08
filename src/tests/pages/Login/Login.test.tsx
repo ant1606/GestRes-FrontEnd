@@ -13,7 +13,6 @@ import PasswordForget from '#/pages/PasswordForget';
 describe('Test en Login', () => {
   beforeEach(() => {
     cleanup();
-    // Cookies.remove('bearerToken');
     localStorage.clear();
     sessionStorage.clear();
     setServiceLoginResponseSuccess(true);
@@ -22,7 +21,6 @@ describe('Test en Login', () => {
 
   afterAll(() => {
     cleanup();
-    // Cookies.remove('bearerToken');
     localStorage.clear();
     sessionStorage.clear();
     setServiceLoginResponseSuccess(true);
