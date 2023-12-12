@@ -5,14 +5,13 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - VITEST_UI_BASE_URL=http://172.18.0.4:51204/__vitest__/
+      - VITEST_UI_BASE_URL=http://172.18.0.4:5173/__vitest__/
     volumes: 
       - ./:/app
       - /etc/localtime:/etc/localtime:ro
     working_dir: /app
     ports: 
-      - 3000:3000
-      - 51204:51204
+      - 5173:5173
     command: yarn run dev
     tty: true
     networks:
