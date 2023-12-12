@@ -5,7 +5,7 @@ import { store } from '#/redux/store';
 import { HashRouter } from 'react-router-dom';
 import AppRouter from './routers/AppRouter';
 
-// Se usa HashRouter por el tema de que npm serve no esta amanejando correctamente las ruta scon BRowserRoute
+// Se usa HashRouter por el tema de que npm serve no esta amanejando correctamente las rutas con BRowserRoute
 const App: React.FC = () => {
   return (
     <HashRouter>
