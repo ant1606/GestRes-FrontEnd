@@ -9,6 +9,9 @@ interface AuthenticationState {
   email: string;
   isVerified: boolean;
   isLogged?: boolean;
+  isLoaded: boolean;
+  isOAuthAccess: boolean;
+  comeFromOAuthCallback: boolean;
 }
 
 const initialState: AuthenticationState = {
@@ -16,7 +19,10 @@ const initialState: AuthenticationState = {
   name: '',
   email: '',
   isVerified: false,
-  isLogged: false
+  isLogged: false,
+  isLoaded: true,
+  isOAuthAccess: false,
+  comeFromOAuthCallback: false
 };
 
 export const authenticationSlice = createSlice({
@@ -29,6 +35,7 @@ export const authenticationSlice = createSlice({
       state.email = action.payload.email;
       state.isVerified = action.payload.isVerified;
       state.isLogged = true;
+      state.isLoaded = false;
     },
     userIsLogout: (state) => {
       state.id = 0;
@@ -36,10 +43,20 @@ export const authenticationSlice = createSlice({
       state.email = '';
       state.isVerified = false;
       state.isLogged = false;
+    },
+    userAccessOAuthGoogle: (state, action: PayloadAction<boolean>) => {
+      state.isOAuthAccess = action.payload;
+      state.comeFromOAuthCallback = true;
+    },
+    resetOAuthGoogle: (state) => {
+      state.isOAuthAccess = false;
+      state.comeFromOAuthCallback = false;
     }
   }
 });
 
-export const { userIsLoggin, userIsLogout } = authenticationSlice.actions;
+// TODO EXtraer los métodos relacionados al OAuth en otro slice
+export const { userIsLoggin, userIsLogout, userAccessOAuthGoogle, resetOAuthGoogle } =
+  authenticationSlice.actions;
 export const authenticatedUser = (state: RootState): AuthenticationState => state.authentication;
 export default authenticationSlice.reducer;
