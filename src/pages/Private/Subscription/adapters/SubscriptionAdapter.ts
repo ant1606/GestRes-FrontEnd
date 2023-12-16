@@ -1,6 +1,6 @@
 import {
   type YoutubeSubscriptionErrorResponse,
-  type YoutubeSubscriptionsSuccessRespose
+  type YoutubeSubscriptionsSuccessResponse
 } from './../index.types';
 import {
   type ApiResponseYoutubeSubscription,
@@ -41,7 +41,7 @@ export const adapterYoutubeSubscriptionsData = (
   }));
 };
 
-export const youtubeSubscriptionsAdapter = (response: any): YoutubeSubscriptionsSuccessRespose => {
+export const youtubeSubscriptionsAdapter = (response: any): YoutubeSubscriptionsSuccessResponse => {
   if (response.data.length === 0) return { meta: null, links: null, data: [] };
   return {
     meta: {

@@ -1,4 +1,6 @@
-export interface YoutubeSubscriptionsSuccessRespose {
+import { type ReactNode } from 'react';
+
+export interface YoutubeSubscriptionsSuccessResponse {
   meta: PaginateResultMeta | null;
   data: YoutubeSubscription[];
   links: PaginateResultLinks | null;
@@ -31,3 +33,40 @@ export interface ApiResponseYoutubeSubscription {
 export interface YoutubeSubscriptionSuccessResponse {
   data: YoutubeSubscription;
 }
+
+// CONTEXT
+
+export interface YoutubeSubscriptionProviderProps {
+  children: ReactNode;
+}
+export interface ActionReducer {
+  type: string;
+  payload:
+    | Record<string, unknown>
+    | boolean
+    | number
+    | YoutubeSubscription
+    | YoutubeSubscriptionsSuccessResponse;
+}
+
+export type typeValidationError = 'message';
+
+export interface InitialState {
+  youtubeSubscriptions: YoutubeSubscription[];
+  youtubeSubscriptionActive: YoutubeSubscription | null;
+  youtubeSubscriptionMeta: PaginateResultMeta | null;
+  youtubeSubscriptionLinks: PaginateResultLinks | null;
+  youtubeSubscriptionPerPage: number;
+  validationError: Record<typeValidationError, string | null>;
+}
+
+export const initialState: InitialState = {
+  youtubeSubscriptions: [],
+  youtubeSubscriptionActive: null,
+  youtubeSubscriptionMeta: null,
+  youtubeSubscriptionLinks: null,
+  youtubeSubscriptionPerPage: 0,
+  validationError: {
+    message: null
+  }
+};
