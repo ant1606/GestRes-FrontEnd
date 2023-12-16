@@ -26,7 +26,7 @@ const menus = [
     title: 'Suscripciones Youtube',
     icon: youtubeIcon,
     link: true,
-    path: '/app/suscription'
+    path: '/app/subscription'
   },
   {
     title: 'Etiquetas',
