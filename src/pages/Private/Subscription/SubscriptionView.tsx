@@ -10,6 +10,8 @@ import { useYoutubeSubscription } from './context/subscription.context';
 import { useSearchParams } from 'react-router-dom';
 import Table from './components/Table';
 import FooterTable from '#/components/FooterTable';
+import perPageItemsValue from '#/config/perPageItemsValue';
+import Filter from './components/Filter';
 
 const clientId = '462247420719-77pia3qk05j3vu6u00blu0ev05u4pajr.apps.googleusercontent.com';
 
@@ -22,9 +24,10 @@ const SubscriptionView: React.FC = () => {
   const dispatch = useAppDispatch();
   const {
     youtubeSubscriptions,
-    youtubeSubscriptionsMeta,
+    youtubeSubscriptionMeta,
     setYoutubeSubscriptions,
-    youtubeSubscriptionPerPage
+    youtubeSubscriptionPerPage,
+    setYoutubeSubscriptionPerPage
   } = useYoutubeSubscription();
   const [searchParams, setSearchParams] = useSearchParams();
   const { comeFromOAuthCallback, isOAuthAccess } = useAppSelector(
@@ -32,7 +35,11 @@ const SubscriptionView: React.FC = () => {
   );
 
   useEffect(() => {
+    setYoutubeSubscriptionPerPage(perPageItemsValue[0].id);
     dispatch(changeTitle('Mantenimiento de Suscripciones de Youtube'));
+  }, []);
+
+  useEffect(() => {
     const initSubscription = async (): Promise<void> => {
       if (comeFromOAuthCallback) {
         if (isOAuthAccess) {
@@ -46,24 +53,11 @@ const SubscriptionView: React.FC = () => {
         console.log('Resetenado store de oauth');
         dispatch(resetOAuthGoogle());
       }
-      {
-        // Mostrando registros ya existentes;
-        const res = await getSubscriptions();
-        setYoutubeSubscriptions(res);
-        console.log(res);
-      }
     };
+
     initSubscription();
-  }, []);
+  }, [comeFromOAuthCallback]);
 
-  // useEffect(() => {
-  //   if (youtubeSubscriptionPerPage > 0) execFilter();
-  // }, [youtubeSubscription]);
-
-  // const execFilter = async (): Promise<void> => {
-  //   const res = await getSubscriptions();
-  //   setTags(response);
-  // };
   const pollProcessStatus = async (): Promise<void> => {
     const response = await getStatusProcess();
     // console.log(response.message);
@@ -112,13 +106,15 @@ const SubscriptionView: React.FC = () => {
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
-    // searchParams.delete('page');
-    // searchParams.append('page', (e.selected + 1).toString());
-    // searchParams.delete('perPage');
-    // searchParams.append('perPage', tagPerPage);
-    // searchParams.sort();
-    // setSearchParams(searchParams);
-    const youtubeSubscriptions = await getSubscriptions();
+    searchParams.delete('page');
+    searchParams.append('page', (e.selected + 1).toString());
+    searchParams.delete('perPage');
+    searchParams.append('perPage', youtubeSubscriptionPerPage);
+    searchParams.sort();
+    setSearchParams(searchParams);
+    const youtubeSubscriptions = await getSubscriptions(searchParams.toString());
+    console.log('****desde hadnlePageChange');
+    console.log(youtubeSubscriptions);
     setYoutubeSubscriptions(youtubeSubscriptions);
   };
 
@@ -129,15 +125,15 @@ const SubscriptionView: React.FC = () => {
   return (
     <>
       {uiLoading && <Loader />}
-      <p>Suscripciones de Youtube</p>
-      <Button text="Brindar acceso" onClick={oauthSignIn} btnType="main" type="button" />
+      <Button text="Brindar acceso" onClick={() => { }} btnType="main" type="button" />
+      <Filter />
       {youtubeSubscriptions.length === 0 ? (
         <p>No se encontraron resultados</p>
       ) : (
         <>
           <Table />
-          {youtubeSubscriptionsMeta !== null && (
-            <FooterTable handlePageChange={handlePageChangeWrapper} {...youtubeSubscriptions} />
+          {youtubeSubscriptionMeta !== null && (
+            <FooterTable handlePageChange={handlePageChangeWrapper} {...youtubeSubscriptionMeta} />
           )}
         </>
       )}

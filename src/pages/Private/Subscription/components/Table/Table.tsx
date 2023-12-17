@@ -19,10 +19,9 @@ export const Table: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {youtubeSubscriptions?.map((youtubeSubscription: YoutubeSubscription) => {
-          console.log(youtubeSubscription.id);
-          return <Row key={youtubeSubscription.id} youtubeSubscription={youtubeSubscription} />;
-        })}
+        {youtubeSubscriptions?.map((youtubeSubscription: YoutubeSubscription) => (
+          <Row key={youtubeSubscription.id} youtubeSubscription={youtubeSubscription} />
+        ))}
       </tbody>
     </table>
   );
