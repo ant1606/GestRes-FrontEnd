@@ -6,12 +6,27 @@ import React, { useEffect } from 'react';
 import Button from '#/components/Button';
 import { resetOAuthGoogle } from '#/redux/slice/authenticationSlice';
 import { getStatusProcess, getSubscriptions } from '#/services/subscriptions.services';
+import { useYoutubeSubscription } from './context/subscription.context';
+import { useSearchParams } from 'react-router-dom';
+import Table from './components/Table';
+import FooterTable from '#/components/FooterTable';
 
 const clientId = '462247420719-77pia3qk05j3vu6u00blu0ev05u4pajr.apps.googleusercontent.com';
+
+interface ReactPaginaOnPageChangeArgument {
+  selected: number;
+}
 
 const SubscriptionView: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   const dispatch = useAppDispatch();
+  const {
+    youtubeSubscriptions,
+    youtubeSubscriptionsMeta,
+    setYoutubeSubscriptions,
+    youtubeSubscriptionPerPage
+  } = useYoutubeSubscription();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { comeFromOAuthCallback, isOAuthAccess } = useAppSelector(
     (state: RootState) => state.authentication
   );
@@ -34,12 +49,21 @@ const SubscriptionView: React.FC = () => {
       {
         // Mostrando registros ya existentes;
         const res = await getSubscriptions();
+        setYoutubeSubscriptions(res);
         console.log(res);
       }
     };
     initSubscription();
   }, []);
 
+  // useEffect(() => {
+  //   if (youtubeSubscriptionPerPage > 0) execFilter();
+  // }, [youtubeSubscription]);
+
+  // const execFilter = async (): Promise<void> => {
+  //   const res = await getSubscriptions();
+  //   setTags(response);
+  // };
   const pollProcessStatus = async (): Promise<void> => {
     const response = await getStatusProcess();
     // console.log(response.message);
@@ -49,7 +73,7 @@ const SubscriptionView: React.FC = () => {
     } else {
       // El proceso ha finalizado, ahora puedes hacer la consulta para obtener los datos
       const res = await getSubscriptions();
-      console.log(res);
+      setYoutubeSubscriptions(res);
     }
   };
 
@@ -87,43 +111,19 @@ const SubscriptionView: React.FC = () => {
     form.submit();
   };
 
-  const callApi = (): void => {
-    const apiKey = 'AIzaSyA5bv7LZH0sdh4GFtq6rb7ayEFNun65sSc';
-    const apiUrl = `https://youtube.googleapis.com/youtube/v3/subscriptions?part=snippet,contentDetails&mine=true&key=${apiKey}`;
-
-    fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${tokenOAuth}`,
-        Accept: 'application/json'
-      }
-    })
-      .then(async (response) => await response.json())
-      .then((data) => {
-        console.log('llamando a api');
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error('Error al realizar la solicitud:', error);
-      });
+  const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    // searchParams.delete('page');
+    // searchParams.append('page', (e.selected + 1).toString());
+    // searchParams.delete('perPage');
+    // searchParams.append('perPage', tagPerPage);
+    // searchParams.sort();
+    // setSearchParams(searchParams);
+    const youtubeSubscriptions = await getSubscriptions();
+    setYoutubeSubscriptions(youtubeSubscriptions);
   };
 
-  const logoutOAuth = (): void => {
-    const apiUrl = `https://oauth2.googleapis.com/revoke?token=${tokenOAuth}`;
-    fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    })
-      .then(async (response) => await response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error('Error al realizar la solicitud:', error);
-      });
+  const handlePageChangeWrapper = (e: ReactPaginaOnPageChangeArgument): void => {
+    handlePageChange(e);
   };
 
   return (
@@ -131,6 +131,16 @@ const SubscriptionView: React.FC = () => {
       {uiLoading && <Loader />}
       <p>Suscripciones de Youtube</p>
       <Button text="Brindar acceso" onClick={oauthSignIn} btnType="main" type="button" />
+      {youtubeSubscriptions.length === 0 ? (
+        <p>No se encontraron resultados</p>
+      ) : (
+        <>
+          <Table />
+          {youtubeSubscriptionsMeta !== null && (
+            <FooterTable handlePageChange={handlePageChangeWrapper} {...youtubeSubscriptions} />
+          )}
+        </>
+      )}
     </>
   );
 };
