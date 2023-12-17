@@ -25,19 +25,31 @@ export const toastNotifications = () => {
         popup: 'p-2'
       }
     });
-
-    // Swal.fire({
-    //     position: 'top-end',
-    //     icon: 'error',
-    //     title: `ERROR`,
-    //     text: `Ocurrio un error en el formulario.`,
-    //     color: 'red',
-    //     background: 'red',
-    //     showConfirmButton: false,
-    //     timer: 30000,
-    //     toast: true
-    // });
   };
+
+  const toastErrorCustomize = (message) => {
+    Toast.fire({
+      icon: 'error',
+      title: 'ERROR',
+      text: message,
+      customClass: {
+        title: 'text-red-700',
+        popup: 'p-2'
+      }
+    });
+  };
+
+  // Swal.fire({
+  //     position: 'top-end',
+  //     icon: 'error',
+  //     title: `ERROR`,
+  //     text: `Ocurrio un error en el formulario.`,
+  //     color: 'red',
+  //     background: 'red',
+  //     showConfirmButton: false,
+  //     timer: 30000,
+  //     toast: true
+  // });
 
   const toastSucces = () => {
     Swal.fire({
@@ -149,6 +161,7 @@ export const toastNotifications = () => {
     modalDeleteConfirm,
     toastSuccesCustomize,
     modalCustomDialogQuestion,
-    notificationSuccess
+    notificationSuccess,
+    toastErrorCustomize
   };
 };
