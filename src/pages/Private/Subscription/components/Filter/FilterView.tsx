@@ -19,7 +19,7 @@ const FilterView: React.FC<Props> = ({
   youtubeSubscriptionPerPage
 }) => {
   return (
-    <div className="flex mb-4 gap-x-10">
+    <div className="shadow-2xl px-4 pt-6 pb-4 rounded-xl flex flex-col gap-6 mt-4 mb-10">
       {/* <div className="flex">
         <IconContext.Provider value={{ size: '1.80em' }}>
           <FaMagnifyingGlass />
