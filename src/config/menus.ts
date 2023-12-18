@@ -17,16 +17,16 @@ const menus = [
   },
 
   {
-    title: 'Recursos Educativos',
-    icon: graduateIcon,
-    link: true,
-    path: '/app/recourse'
-  },
-  {
     title: 'Suscripciones Youtube',
     icon: youtubeIcon,
     link: true,
     path: '/app/subscription'
+  },
+  {
+    title: 'Recursos Educativos',
+    icon: graduateIcon,
+    link: true,
+    path: '/app/recourse'
   },
   {
     title: 'Etiquetas',

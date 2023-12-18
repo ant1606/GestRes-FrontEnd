@@ -13,8 +13,7 @@ import FooterTable from '#/components/FooterTable';
 import perPageItemsValue from '#/config/perPageItemsValue';
 import Filter from './components/Filter';
 import { toastNotifications } from '#/utilities/notificationsSwal';
-
-const clientId = '462247420719-77pia3qk05j3vu6u00blu0ev05u4pajr.apps.googleusercontent.com';
+import { oauthSignIn } from './utils/helpers';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -44,14 +43,12 @@ const SubscriptionView: React.FC = () => {
     const initSubscription = async (): Promise<void> => {
       if (comeFromOAuthCallback) {
         if (isOAuthAccess) {
-          // Implementar consulta de subscriptions ya procesados
           pollProcessStatus();
         } else {
           toastNotifications().toastErrorCustomize(
             'Operación Cancelada: Autorización denegada por el usuario'
           );
         }
-        console.log('Resetenado store de oauth');
         dispatch(resetOAuthGoogle());
       }
     };
@@ -61,48 +58,14 @@ const SubscriptionView: React.FC = () => {
 
   const pollProcessStatus = async (): Promise<void> => {
     const response = await getStatusProcess();
-    // console.log(response.message);
     if (response.message === 'procesando') {
-      // El proceso aún está en curso, configura un temporizador y realiza otra solicitud después de cierto tiempo
       setTimeout(() => {
         pollProcessStatus();
-      }, 5000); // por ejemplo, espera 5 segundos antes de hacer la siguiente solicitud
+      }, 5000);
     } else {
-      // El proceso ha finalizado, ahora puedes hacer la consulta para obtener los datos
       const res = await getSubscriptions('');
       setYoutubeSubscriptions(res);
     }
-  };
-
-  const oauthSignIn = (): void => {
-    // Google's OAuth 2.0 endpoint for requesting an access token
-    const oauth2Endpoint = 'https://accounts.google.com/o/oauth2/v2/auth';
-
-    // Parameters to pass to OAuth 2.0 endpoint.
-    const params = {
-      client_id: clientId,
-      redirect_uri: 'http://localhost:5173/oauthcallback',
-      response_type: 'token',
-      scope: 'https://www.googleapis.com/auth/youtube.readonly',
-      include_granted_scopes: 'true',
-      state: 'pass-through value'
-    };
-
-    // Create <form> element to submit parameters to OAuth 2.0 endpoint.
-    const form = document.createElement('form');
-    form.setAttribute('method', 'GET'); // Send as a GET request.
-    form.setAttribute('action', oauth2Endpoint);
-
-    for (const p in params) {
-      const input = document.createElement('input');
-      input.setAttribute('type', 'hidden');
-      input.setAttribute('name', p);
-      input.setAttribute('value', params[p]);
-      form.appendChild(input);
-    }
-    // Add form to page and submit it to open the OAuth 2.0 endpoint.
-    document.body.appendChild(form);
-    form.submit();
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
@@ -123,7 +86,7 @@ const SubscriptionView: React.FC = () => {
   return (
     <>
       {uiLoading && <Loader />}
-      <Button text="Brindar acceso" onClick={oauthSignIn} btnType="main" type="button" />
+      <Button text="Importar desde Google" onClick={oauthSignIn} btnType="default" type="button" />
       <Filter />
       {youtubeSubscriptions.length === 0 ? (
         <p>No se encontraron resultados</p>
