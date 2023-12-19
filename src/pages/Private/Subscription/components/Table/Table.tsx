@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Row from './Row.js';
 import { useYoutubeSubscription } from '../../context/subscription.context.js';
 

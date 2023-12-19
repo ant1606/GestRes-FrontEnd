@@ -6,7 +6,9 @@ import {
   type ApiResponseYoutubeSubscription,
   type YoutubeSubscriptionSuccessResponse
 } from '../index.types';
+import { adapterTagsData } from '../../Tag/adapters/TagAdapter';
 
+// TODO Analizar estos adapters contra el RecourseAdapter
 export const youtubeSubscriptionAdapter = (
   response: ApiResponseYoutubeSubscription
 ): YoutubeSubscriptionSuccessResponse => {
@@ -17,28 +19,38 @@ export const youtubeSubscriptionAdapter = (
       description: response.descripcion,
       published_at: response.fechaSubscripcion,
       thumbnail_default: response.fotoDefault,
-      thumbnail_hig: response.fotoHigh,
+      thumbnail_high: response.fotoHigh,
       thumbnail_medium: response.fotoMedium,
       title: response.titulo,
+      tags: adapterTagsData(response.tags),
       user_id: parseInt(response.usuarioId)
     }
+  };
+};
+
+const adapterYoutubeSubscription = (
+  youtubeSubscription: ApiResponseYoutubeSubscription
+): YoutubeSubscription => {
+  return {
+    id: youtubeSubscription.identificador,
+    channel_id: youtubeSubscription.canalId,
+    description: youtubeSubscription.descripcion,
+    published_at: youtubeSubscription.fechaSubscripcion,
+    thumbnail_default: youtubeSubscription.fotoDefault,
+    thumbnail_high: youtubeSubscription.fotoHigh,
+    thumbnail_medium: youtubeSubscription.fotoMedium,
+    title: youtubeSubscription.titulo,
+    user_id: parseInt(youtubeSubscription.usuarioId),
+    tags: adapterTagsData(youtubeSubscription.tags)
   };
 };
 
 export const adapterYoutubeSubscriptionsData = (
   youtubeSubscriptions: ApiResponseYoutubeSubscription[]
 ): YoutubeSubscription[] => {
-  return youtubeSubscriptions?.map((subscription: ApiResponseYoutubeSubscription) => ({
-    id: subscription.identificador,
-    channel_id: subscription.canalId,
-    description: subscription.descripcion,
-    published_at: subscription.fechaSubscripcion,
-    thumbnail_default: subscription.fotoDefault,
-    thumbnail_hig: subscription.fotoHigh,
-    thumbnail_medium: subscription.fotoMedium,
-    title: subscription.titulo,
-    user_id: parseInt(subscription.usuarioId)
-  }));
+  return youtubeSubscriptions?.map((subscription: ApiResponseYoutubeSubscription) =>
+    adapterYoutubeSubscription(subscription)
+  );
 };
 
 export const youtubeSubscriptionsAdapter = (response: any): YoutubeSubscriptionsSuccessResponse => {

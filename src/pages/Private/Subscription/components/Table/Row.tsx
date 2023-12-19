@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useAppDispatch } from '#/hooks/redux';
 import { isLoading } from '#/redux/slice/uiSlice';
@@ -7,15 +7,20 @@ import { focusInput } from '#/utilities/manipulationDom';
 import { destroyTag, getTags } from '#/services/tag.services';
 import { IconContext } from 'react-icons';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
-import { useYoutubeSubscription } from '../../context/subscription.context';
+import { SubscriptionYoutubeProvider } from '../../context/subscription.context';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { IoMdPricetags } from 'react-icons/io';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import Form from '../Form/Form';
 
 interface Prop {
   youtubeSubscription: YoutubeSubscription;
 }
 const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   const [viewDetail, setviewDetail] = useState(false);
+  const MySwal = withReactContent(Swal);
+  const modalRef = useRef(MySwal);
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
   }
@@ -66,6 +71,40 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   //   }
   // };
 
+  const handleClickEdit = (youtubeSubscription: YoutubeSubscription): void => {
+    // TODO: Implementar el modal en el componente Table para evitar múltiples renderizados en Row, y manipular los datos
+    // por medio del contexto. Se inteno renderizar el modal con SweetAlert mediante una renderización condicional pero no funciono
+    // Intentar hacer lo mismo pero com un componente Modal
+    // Este cambio sugerido es para verificar la performance
+    MySwal.fire({
+      title: 'Editar Etiquetas',
+      html: (
+        <BrowserRouter>
+          <SubscriptionYoutubeProvider>
+            <Form
+              modalRef={modalRef.current}
+              subscription={youtubeSubscription}
+              onFormSubmit={() => {
+                handleFormSubmit();
+              }}
+            />
+          </SubscriptionYoutubeProvider>
+        </BrowserRouter>
+      ),
+      showConfirmButton: false,
+      allowOutsideClick: true
+    });
+  };
+
+  const handleFormSubmit = async (): Promise<void> => {
+    modalRef.current?.close();
+    toastNotifications().toastSuccesCustomize('Se actualizaron las etiquetas correctamente.');
+    // const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
+    // setProgresses(progressData);
+    // const recourseRefreshed = await getRecourse(recourseActive.id);
+    // selectedRecourse(recourseRefreshed.data);
+  };
+
   return (
     <>
       <tr className="hover:bg-slate-100 ">
@@ -82,7 +121,7 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
             <button
               className="w-8 h-8  flex justify-center items-center bg-yellow-400 rounded-lg"
               onClick={() => {
-                // handleClickEdit(tag);
+                handleClickEdit(youtubeSubscription);
               }}>
               <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
                 <FaPencilAlt />

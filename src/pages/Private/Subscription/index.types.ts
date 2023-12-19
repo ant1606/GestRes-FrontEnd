@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { type ApiResponseTag } from '../Tag/index.types';
 
 export interface YoutubeSubscriptionsSuccessResponse {
   meta: PaginateResultMeta | null;
@@ -28,6 +29,7 @@ export interface ApiResponseYoutubeSubscription {
   fotoDefault: string;
   fotoMedium: string;
   fotoHigh: string;
+  tags: ApiResponseTag[];
 }
 
 export interface YoutubeSubscriptionSuccessResponse {

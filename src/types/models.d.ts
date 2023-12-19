@@ -69,5 +69,6 @@ interface YoutubeSubscription {
   description: string;
   thumbnail_default: string;
   thumbnail_medium: string;
-  thumbnail_hig: string;
+  thumbnail_high: string;
+  tags: Tag[];
 }
