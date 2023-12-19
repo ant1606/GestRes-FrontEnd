@@ -61,14 +61,15 @@ interface Settings {
 }
 
 interface YoutubeSubscription {
-  id: string;
-  user_id: number;
-  channel_id: string;
+  id: number;
+  youtubeId: string;
+  userId: number;
+  channelId: string;
   title: string;
-  published_at: string;
+  publishedAt: string;
   description: string;
-  thumbnail_default: string;
-  thumbnail_medium: string;
-  thumbnail_high: string;
+  thumbnailDefault: string;
+  thumbnailMedium: string;
+  thumbnailHigh: string;
   tags: Tag[];
 }

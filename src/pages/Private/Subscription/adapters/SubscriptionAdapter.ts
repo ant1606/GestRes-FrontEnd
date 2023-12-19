@@ -14,16 +14,17 @@ export const youtubeSubscriptionAdapter = (
 ): YoutubeSubscriptionSuccessResponse => {
   return {
     data: {
-      id: response.identificador,
-      channel_id: response.canalId,
+      id: parseInt(response.identificador),
+      youtubeId: response.youtubeId,
+      channelId: response.canalId,
       description: response.descripcion,
-      published_at: response.fechaSubscripcion,
-      thumbnail_default: response.fotoDefault,
-      thumbnail_high: response.fotoHigh,
-      thumbnail_medium: response.fotoMedium,
+      publishedAt: response.fechaSubscripcion,
+      thumbnailDefault: response.fotoDefault,
+      thumbnailHigh: response.fotoHigh,
+      thumbnailMedium: response.fotoMedium,
       title: response.titulo,
       tags: adapterTagsData(response.tags),
-      user_id: parseInt(response.usuarioId)
+      userId: parseInt(response.usuarioId)
     }
   };
 };
@@ -32,15 +33,16 @@ const adapterYoutubeSubscription = (
   youtubeSubscription: ApiResponseYoutubeSubscription
 ): YoutubeSubscription => {
   return {
-    id: youtubeSubscription.identificador,
-    channel_id: youtubeSubscription.canalId,
+    id: parseInt(youtubeSubscription.identificador),
+    youtubeId: youtubeSubscription.youtubeId,
+    channelId: youtubeSubscription.canalId,
     description: youtubeSubscription.descripcion,
-    published_at: youtubeSubscription.fechaSubscripcion,
-    thumbnail_default: youtubeSubscription.fotoDefault,
-    thumbnail_high: youtubeSubscription.fotoHigh,
-    thumbnail_medium: youtubeSubscription.fotoMedium,
+    publishedAt: youtubeSubscription.fechaSubscripcion,
+    thumbnailDefault: youtubeSubscription.fotoDefault,
+    thumbnailHigh: youtubeSubscription.fotoHigh,
+    thumbnailMedium: youtubeSubscription.fotoMedium,
     title: youtubeSubscription.titulo,
-    user_id: parseInt(youtubeSubscription.usuarioId),
+    userId: parseInt(youtubeSubscription.usuarioId),
     tags: adapterTagsData(youtubeSubscription.tags)
   };
 };

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { BrowserRouter, useSearchParams } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useAppDispatch } from '#/hooks/redux';
 import { isLoading } from '#/redux/slice/uiSlice';
@@ -141,12 +141,12 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
         <td className="w-30 h-14 ">
           <div className="flex justify-around items-center">
             <a
-              href={`https://www.youtube.com/channel/${youtubeSubscription.channel_id}`}
+              href={`https://www.youtube.com/channel/${youtubeSubscription.channelId}`}
               target="_blank"
               rel="noreferrer"
               className="hover:animate-spin cursor-pointer">
               <img
-                src={youtubeSubscription.thumbnail_default}
+                src={youtubeSubscription.thumbnailDefault}
                 alt={`${youtubeSubscription.title} foto`}
                 className="w-12 h-12 rounded-full"
               />
@@ -160,7 +160,7 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
         </td>
         <td className="h-14 w-26">
           <div className="px-3 text-center text-lg text-gray-900 font-semibold">
-            <p>{youtubeSubscription.published_at}</p>
+            <p>{youtubeSubscription.publishedAt}</p>
           </div>
         </td>
         {/* <td className="max-h-14 max-w-xs">
@@ -193,14 +193,13 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
             <div className="flex justify-between gap-4">
               {/* TODO Hacer scrollear las etiquetas */}
               <div className="flex flex-1 justify-start items-start flex-wrap gap-2 leading-1">
-                {/* {recourse?.tags.map((tag) => (
-              <div
-                key={tag.id}
-                className={`${tag.style} m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase`}>
-                {tag.name}
-              </div> 
-            ))}
-            */}
+                {youtubeSubscription?.tags.map((tag) => (
+                  <div
+                    key={tag.id}
+                    className={`${tag.style} m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase`}>
+                    {tag.name}
+                  </div>
+                ))}
               </div>
             </div>
           </div>

@@ -21,6 +21,7 @@ export interface YoutubeSubscriptionErrorResponse {
 
 export interface ApiResponseYoutubeSubscription {
   identificador: string;
+  youtubeId: string;
   usuarioId: string;
   canalId: string;
   titulo: string;

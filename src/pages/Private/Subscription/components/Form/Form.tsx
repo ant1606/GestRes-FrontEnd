@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-
-import Field from '#/components/Field';
 import Button from '#/components/Button';
-
 import SelectorTag from '../SelectorTag/SelectorTag';
+import { updatingSubscription } from '#/services/subscriptions.services';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 
 interface Props {
   modalRef: any;
   subscription: YoutubeSubscription;
-  onFormSubmit: (pending: number) => void;
+  onFormSubmit: () => void;
 }
 
 const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
@@ -23,51 +22,28 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
   };
 
   const handleSubmit = async (): Promise<void> => {
-    // try {
-    //   // TODO Ver como añadir un loader al modal
-    //   await validatedSubmitForm();
-    //   const existValidationMessage = Object.keys(progressErrorRef.current).every(
-    //     (el) => progressErrorRef.current[el] === null
-    //   );
-    //   if (existValidationMessage) {
-    //     const response = await savingProgress(
-    //       {
-    //         done: formValues.done,
-    //         comment: formValues.comment,
-    //         date: formValues.date
-    //       },
-    //       recourseParent.id
-    //     );
-    //     if ('data' in response) {
-    //       const pendingAmount = recourseParent.progress.pending - done;
-    //       // pendingAmount === 0
-    //       //   ? toastNotifications().notificationSuccess(
-    //       //     `Finalizó el recurso ${recourseParent.name}, Felicidades`
-    //       //   )
-    //       //   : toastNotifications().toastSucces();
-    //       reset();
-    //       resetValidationError();
-    //       cleanSelectedProgress();
-    //       onFormSubmit(pendingAmount);
-    //     } else if ('error' in response) {
-    //       const errorsDetail = response.error.detail;
-    //       Object.keys(errorsDetail).forEach((key) => {
-    //         if (key !== 'apiResponseMessageError') {
-    //           addValidationError({ [key]: errorsDetail[key] });
-    //         }
-    //       });
-    //       if ('apiResponseMessageError' in errorsDetail) {
-    //         if (errorsDetail.apiResponseMessageError !== null)
-    //           throw new Error(errorsDetail.apiResponseMessageError);
-    //       }
-    //     }
-    //   }
-    // } catch (error: any) {
-    //   toastNotifications().notificationError(error.message);
-    // } finally {
-    //   // dispatch(isLoading(false));
-    //   setDisabledButton(false);
-    // }
+    try {
+      // TODO Ver como añadir un loader al modal
+      const response = await updatingSubscription({
+        tags: selectedTags,
+        id: subscription.id
+      });
+      console.log(response);
+      if ('data' in response) {
+        toastNotifications().toastSucces();
+        onFormSubmit();
+      } else if ('error' in response) {
+        const errorsDetail = response.error.detail;
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
+        }
+      }
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      // dispatch(isLoading(false));
+    }
   };
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -82,12 +58,12 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
           <div className="flex flex-col">
             <div className=" flex flex-col justify-center text-start h-full ">
               <p className="text-lg font-semibold text-gray-900">Fecha Subscripción:</p>
-              <p className="text-lg font-semibold ">{subscription.published_at}</p>
+              <p className="text-lg font-semibold ">{subscription.publishedAt}</p>
             </div>
           </div>
           <div className="w-36 h-36">
             <img
-              src={subscription.thumbnail_default}
+              src={subscription.thumbnailDefault}
               alt={`${subscription.title} foto`}
               className="rounded-xl object-fill w-full h-full"
             />
