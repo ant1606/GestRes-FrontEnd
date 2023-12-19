@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FilterView from './FilterView';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toastNotifications } from '#/utilities/notificationsSwal';
@@ -14,25 +14,35 @@ export const FilterContainer: React.FC = () => {
     useYoutubeSubscription();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchTags, setSearchTags] = useState([]);
+
+  const handleChangeSearchTitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchTitle(e.target.value);
+  };
+  const handleChangeSearchTags = (e: any): void => {
+    setSearchTags(e.map((obj: any) => obj.value));
+  };
+  const handleChangeRecordsPerPage = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setYoutubeSubscriptionPerPage(parseInt(e.target.value));
+  };
 
   const execFilter = async (): Promise<void> => {
     try {
       console.log('Ejecutando execFilter');
-      // searchParams.delete('searchNombre');
+      searchParams.delete('searchTitle');
+      searchParams.delete('searchTags[]');
       searchParams.delete('perPage');
       searchParams.append('perPage', youtubeSubscriptionPerPage);
       searchParams.delete('page');
       searchParams.append('page', '1');
-      // if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
+      if (searchTitle !== '') searchParams.append('searchTitle', searchTitle);
+      if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
 
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getSubscriptions(searchParams.toString());
-      // console.log(tags);
-      //
       if ('data' in response) {
-        console.log('desde FilterConainer execFilter', youtubeSubscriptionPerPage);
-        console.log(response);
         setYoutubeSubscriptions(response);
       } else if ('error' in response) {
         // TODO Ver como encapsular esta lógica en todas las llamadas al endpoint
@@ -56,23 +66,16 @@ export const FilterContainer: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log('Desde useEffect de FilterContainer ', youtubeSubscriptionPerPage);
     if (youtubeSubscriptionPerPage > 0) execFilter();
-  }, [youtubeSubscriptionPerPage]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    // setSearchNombre(e.target.value);
-  };
-
-  const handleChangeCombo = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    setYoutubeSubscriptionPerPage(parseInt(e.target.value));
-  };
+  }, [youtubeSubscriptionPerPage, searchTags, searchTitle]);
 
   return (
     <FilterView
-      handleChangeCombo={handleChangeCombo}
-      // handleChangeInput={handleChange}
-      // searchValue={searchNombre}
+      handleChangeSearchTitle={handleChangeSearchTitle}
+      handleChangeSearchTags={handleChangeSearchTags}
+      handleChangeRecordsPerPage={handleChangeRecordsPerPage}
+      searchTitle={searchTitle}
+      searchTag={searchTags}
       youtubeSubscriptionPerPage={youtubeSubscriptionPerPage}
     />
   );
