@@ -1,20 +1,8 @@
-import { type ReactNode, createContext, useContext, useReducer, type Reducer } from 'react';
+import { createContext, useContext, useReducer } from 'react';
+import { type InitialState, type LoginProviderProps } from '../index.types';
 
-interface LoginProviderProps {
-  children: ReactNode;
-}
-interface ActionReducer {
-  type: string;
-  payload: Record<string, unknown>;
-}
-
-type typeValidationError = 'email' | 'password';
-export type loginValidationError = Record<typeValidationError, string | null>;
-interface InitialState {
-  validationError: loginValidationError;
-}
-
-const ADD_VALIDATION_ERROR = 'add validation error';
+import { ADD_VALIDATION_ERROR } from './types';
+import { loginReducer } from './login.reducer';
 
 const initialState: InitialState = {
   validationError: {
@@ -24,27 +12,6 @@ const initialState: InitialState = {
 };
 
 const LoginContext = createContext({});
-
-const loginReducer: Reducer<InitialState, ActionReducer> = (
-  state: InitialState,
-  action: ActionReducer
-): InitialState => {
-  let payloadKey = '';
-  let payloadValue;
-  switch (action.type) {
-    case ADD_VALIDATION_ERROR:
-      payloadKey = Object.getOwnPropertyNames(action.payload)[0];
-      payloadValue = Object.values(action.payload)[0];
-      return {
-        ...state,
-        validationError: {
-          ...state.validationError,
-          [payloadKey]: payloadValue as string | null
-        }
-      };
-  }
-  throw Error(`Action desconocida del tipo ${action.type}`);
-};
 
 export const LoginProvider = ({ children }: LoginProviderProps): JSX.Element => {
   const [state, dispatch] = useReducer(loginReducer, initialState);

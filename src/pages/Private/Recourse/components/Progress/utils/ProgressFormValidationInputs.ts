@@ -5,7 +5,7 @@ export const validateDoneAmount = (values: ProgressFormData): ValidationInputRes
   if (values.done < 1) {
     return 'Avance debe ser mayor a 0';
   }
-  if (values.done > values.lastProgress.pending) {
+  if (values.lastProgress !== undefined && values.done > values.lastProgress.pending) {
     return 'Avance debe ser menor a Pendiente';
   }
   return null;

@@ -1,8 +1,10 @@
 import Button from '#/components/Button';
 import Field from '#/components/Field';
-// import { mdiAccountCircle, mdiEmail, mdiLock, mdiLockCheck } from '@mdi/js';
-// import Icon from '@mdi/react';
 import React from 'react';
+import { IconContext } from 'react-icons';
+import { BsFillShieldLockFill } from 'react-icons/bs';
+import { MdEmail } from 'react-icons/md';
+import { RiAccountCircleFill, RiLock2Fill } from 'react-icons/ri';
 interface Props {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,7 +28,9 @@ const FormView: React.FC<Props> = ({
       <p className="text-4xl leading-10 font-bold text-center">Registro de Usuario</p>
       <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
         <div className="flex gap-3 items-center">
-          {/* <Icon path={mdiAccountCircle} size={1} /> */}
+          <IconContext.Provider value={{ size: '2em' }}>
+            <RiAccountCircleFill />
+          </IconContext.Provider>
           <Field
             type="text"
             name="name"
@@ -38,7 +42,9 @@ const FormView: React.FC<Props> = ({
           />
         </div>
         <div className="flex gap-3 items-center">
-          {/* <Icon path={mdiEmail} size={1} /> */}
+          <IconContext.Provider value={{ size: '2em' }}>
+            <MdEmail />
+          </IconContext.Provider>
           <Field
             type="text"
             name="email"
@@ -50,7 +56,9 @@ const FormView: React.FC<Props> = ({
           />
         </div>
         <div className="flex gap-3 items-center">
-          {/* <Icon path={mdiLock} size={1} /> */}
+          <IconContext.Provider value={{ size: '2em' }}>
+            <RiLock2Fill />
+          </IconContext.Provider>
           <Field
             type="password"
             name="password"
@@ -62,7 +70,9 @@ const FormView: React.FC<Props> = ({
           />
         </div>
         <div className="flex gap-3 items-center">
-          {/* <Icon path={mdiLockCheck} size={1} /> */}
+          <IconContext.Provider value={{ size: '2em' }}>
+            <BsFillShieldLockFill />
+          </IconContext.Provider>
           <Field
             type="password"
             name="passwordConfirmation"

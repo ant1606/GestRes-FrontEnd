@@ -8,22 +8,20 @@ import {
   type TagErrorResponse,
   type TagsSuccessResponse
 } from '#/pages/Private/Tag/index.types';
+import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import Cookies from 'js-cookie';
 
 export const getTags = async (
   queryParams: string
 ): Promise<TagsSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag?${queryParams}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (res) => {
@@ -34,18 +32,35 @@ export const getTags = async (
     .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
 };
 
+export const getTagsForTagSelector = async (): Promise<TagsSuccessResponse | TagErrorResponse> => {
+  const bearerToken = getBearerToken();
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/getTagsForTagSelector`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
+    }
+  })
+    .then(async (res) => {
+      if (!res.ok) return await Promise.reject(res.json());
+      return await res.json();
+    })
+    .then(async (data) => data)
+    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+};
+
 export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag`, {
     method: 'POST',
     body: JSON.stringify(tag),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -57,10 +72,7 @@ export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagError
 };
 
 export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
     method: 'PUT',
@@ -70,7 +82,8 @@ export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErr
     }),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -82,16 +95,14 @@ export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErr
 };
 
 export const destroyTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {

@@ -9,21 +9,19 @@ import {
   type RecoursesSuccessResponse
 } from '#/pages/Private/Recourse/index.types';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import Cookies from 'js-cookie';
+import { getBearerToken } from '#/utilities/authenticationManagement';
 
 export const getRecourses = async (
   queryParams: string
 ): Promise<RecoursesSuccessResponse | RecourseErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses?${queryParams}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (res) => {
@@ -37,16 +35,14 @@ export const getRecourses = async (
 export const getRecourse = async (
   id: number
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (res) => {
@@ -60,17 +56,15 @@ export const getRecourse = async (
 export const savingRecourse = async (
   recourse: any
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses`, {
     method: 'POST',
     body: JSON.stringify(recourse),
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {
@@ -84,10 +78,7 @@ export const savingRecourse = async (
 export const updatingRecourse = async (
   recourse: any
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(
     `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.recourse_id}`,
@@ -99,7 +90,8 @@ export const updatingRecourse = async (
       }),
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -114,16 +106,14 @@ export const updatingRecourse = async (
 export const destroyRecourse = async (
   recourse: Recourse
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {

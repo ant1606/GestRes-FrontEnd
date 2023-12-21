@@ -11,7 +11,7 @@ const StatusView: React.FC<Props> = ({ handleClick, handlePageChange }) => {
   const { statuses, statusMeta } = useStatus();
   return (
     <>
-      <Button text="Registrar Nuevo" handleClick={handleClick} btnType="main" type="button" />
+      <Button text="Registrar Nuevo" onClick={handleClick} btnType="main" type="button" />
       {statuses.length === 0 ? (
         <p>No se encontraron resultados</p>
       ) : (

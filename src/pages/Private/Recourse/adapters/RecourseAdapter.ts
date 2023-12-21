@@ -20,6 +20,8 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
     totalChapters: recourse.totalCapitulos === null ? null : parseInt(recourse.totalCapitulos),
     totalVideos: recourse.totalVideos === null ? null : parseInt(recourse.totalVideos),
     totalHours: recourse.totalHoras === null ? null : recourse.totalHoras,
+    totalProgressPercentage:
+      recourse.totalProgresoPorcentaje === null ? 0 : parseFloat(recourse.totalProgresoPorcentaje),
     status: adapterStatus(recourse.status),
     progress: adapterProgress(recourse.progress),
     tags: adapterTagsData(recourse.tags),
@@ -33,7 +35,7 @@ const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
 };
 
 export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
-  console.log(recourse);
+  // console.log(recourse);
   return {
     data: adapterRecourse(recourse.data)
   };

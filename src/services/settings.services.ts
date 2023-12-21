@@ -1,6 +1,9 @@
+// import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getSettings = async (): Promise<Record<string, string>> => {
+  // const bearerToken = getBearerToken();
+
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/settings`, {
     method: 'GET',
     headers: {

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import FormView from './FormView';
 import { validateTagNombre } from '../../utils/TagFormValidationInputs';
 import { useSearchParams } from 'react-router-dom';
@@ -31,6 +31,7 @@ export const FormContainer: React.FC = () => {
   } = useTag();
   const initialState = tagActive !== null ? tagActive : initialStateGlobal;
   const [searchParams] = useSearchParams();
+  const [disabledButton, setDisabledButton] = useState(false);
 
   const {
     values: formValues,
@@ -56,6 +57,7 @@ export const FormContainer: React.FC = () => {
   const handleSubmit = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
+      setDisabledButton(true);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(tagErrorRef.current).every(
         (el) => tagErrorRef.current[el] === null
@@ -97,6 +99,7 @@ export const FormContainer: React.FC = () => {
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
+      setDisabledButton(false);
       dispatch(isLoading(false));
       focusInput('#name');
     }
@@ -120,6 +123,7 @@ export const FormContainer: React.FC = () => {
       handleSubmit={handleSubmitWrapper}
       name={name}
       tagError={tagError}
+      submitIsDisabled={disabledButton}
     />
   );
 };

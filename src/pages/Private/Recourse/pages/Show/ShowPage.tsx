@@ -1,19 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import Form from '../../components/Form';
 import { useRecourse } from '../../context/recourse.context';
-import { useAppDispatch } from '#/hooks/redux';
-import { changeColorTitleBar } from '#/redux/slice/uiSlice';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { changeColorTitleBar, changeTitle } from '#/redux/slice/uiSlice';
 import { StatusProvider } from '../../components/Status/context/status.context';
 import StatusRecourse from '../../components/Status';
 import { ProgressProvider } from '../../components/Progress/context/progress.context';
 import ProgressRecourse from '../../components/Progress';
+import { useParams } from 'react-router-dom';
+import { getRecourse } from '#/services';
+import { type RootState } from '#/redux/store';
 
 export const ShowPage: React.FC = () => {
-  const { cleanSelectedRecourse } = useRecourse();
+  const { cleanSelectedRecourse, selectedRecourse, recourseActive } = useRecourse();
+  const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const [toggleTab, setToggleTab] = useState(1);
   const dispatch = useAppDispatch();
+  const { idrecurso } = useParams();
+
+  // TODO ver como hacer de esto una funcion global o util para obtener el estilo
 
   useEffect(() => {
+    const getRecourseData = async (): Promise<void> => {
+      try {
+        const idRecurso = parseInt(idrecurso);
+        const recourse = await getRecourse(idRecurso);
+        // TODO Hacer validación si se obtiene el recurso o si se obtiene error
+        const styleStatus = settingsStatus.find(
+          (val) => val.value === recourse.data.currentStatusName
+        )?.value2;
+        dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+        dispatch(changeTitle(recourse.data.name));
+        selectedRecourse(recourse.data);
+      } catch (error) {
+        console.log('Hubo un error al obtener los datos');
+      }
+    };
+
+    getRecourseData();
+
     return () => {
       dispatch(changeColorTitleBar(null));
       cleanSelectedRecourse();
@@ -61,16 +86,20 @@ export const ShowPage: React.FC = () => {
         </div>
 
         <div className={`${toggleTab === 2 ? '' : 'hidden'}`}>
-          <StatusProvider>
-            <StatusRecourse />
-          </StatusProvider>
+          {recourseActive && (
+            <StatusProvider>
+              <StatusRecourse />
+            </StatusProvider>
+          )}
         </div>
 
         <div className={`${toggleTab === 3 ? '' : 'hidden'}`}>
           <div>
-            <ProgressProvider>
-              <ProgressRecourse />
-            </ProgressProvider>
+            {recourseActive && (
+              <ProgressProvider>
+                <ProgressRecourse />
+              </ProgressProvider>
+            )}
           </div>
         </div>
       </div>

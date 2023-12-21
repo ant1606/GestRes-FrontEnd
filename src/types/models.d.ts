@@ -24,6 +24,7 @@ interface Recourse {
   totalChapters: number | null;
   totalVideos: number | null;
   totalHours: string | null;
+  totalProgressPercentage: number;
   tags: Tag[];
   status: Status | Status[];
   progress: Progress | Progress[];
@@ -57,4 +58,18 @@ interface Settings {
   key: string;
   value: string;
   value2: string;
+}
+
+interface YoutubeSubscription {
+  id: number;
+  youtubeId: string;
+  userId: number;
+  channelId: string;
+  title: string;
+  publishedAt: string;
+  description: string;
+  thumbnailDefault: string;
+  thumbnailMedium: string;
+  thumbnailHigh: string;
+  tags: Tag[];
 }

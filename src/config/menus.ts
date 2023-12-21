@@ -15,11 +15,12 @@ const menus = [
     link: false,
     path: ''
   },
+
   {
-    title: 'Videos Youtube',
+    title: 'Suscripciones Youtube',
     icon: youtubeIcon,
     link: true,
-    path: '/app/canales'
+    path: '/app/subscription'
   },
   {
     title: 'Recursos Educativos',
@@ -36,3 +37,12 @@ const menus = [
 ];
 
 export default menus;
+
+/**
+ * {
+    title: 'Videos Youtube',
+    icon: youtubeIcon,
+    link: true,
+    path: '/app/canales'
+  },
+ * / */

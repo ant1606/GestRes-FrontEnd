@@ -1,11 +1,12 @@
 import { cleanup, screen, waitFor } from '#/tests/utils/test-utils';
 import AppRouter from '#/routers/AppRouter';
-import Cookies from 'js-cookie';
 import { renderWithProviders } from '../utils/renderWithProvider';
 import {
+  setServiceLoginResponseSuccess,
   setServiceRememberResponseSuccess,
   setServiceRememberUserVerified
 } from '../mocks/login.handlers';
+import { encryptUserData } from '#/utilities/authenticationManagement';
 
 describe('AppRouter test', () => {
   const BEARER_TOKEN = 'bearerToken';
@@ -14,7 +15,7 @@ describe('AppRouter test', () => {
   beforeEach(() => {
     cleanup();
     localStorage.clear();
-    Cookies.remove(BEARER_TOKEN);
+    sessionStorage.clear();
   });
 
   /**
@@ -46,22 +47,25 @@ describe('AppRouter test', () => {
   });
 
   test('Mostrar VerifyEmail cuando el bearerToken existe y el usuario no ha sido verificado', async () => {
-    Cookies.set(BEARER_TOKEN, 'miBearerToken');
+    sessionStorage.setItem(BEARER_TOKEN, 'miBearerToken');
     setServiceRememberUserVerified(false);
     localStorage.setItem(
       'user',
-      JSON.stringify({
-        id: '1',
-        name: 'userTest',
-        email: 'test@mail.com',
-        isVerified: false,
-        rememberToken: null
-      })
+      encryptUserData(
+        JSON.stringify({
+          id: '1',
+          name: 'userTest',
+          email: 'test@mail.com',
+          isVerified: false,
+          rememberToken: null
+        })
+      )
     );
-    renderWithProviders(<AppRouter />);
+    const wrapper = renderWithProviders(<AppRouter />);
 
     await waitFor(() => {
       expect(screen.getByText(/verificar tu correo/i)).toBeDefined();
+      wrapper.unmount();
     });
   });
 
@@ -69,23 +73,26 @@ describe('AppRouter test', () => {
     localStorage.setItem(REMEMBER_ME_TOKEN, 'rememberTokenValido');
     setServiceRememberUserVerified(false);
     setServiceRememberResponseSuccess(true);
-    renderWithProviders(<AppRouter />);
+    const wrapper = renderWithProviders(<AppRouter />);
     await waitFor(() => {
       expect(screen.getByText(/Debes verificar tu correo/i)).toBeDefined();
+      wrapper.unmount();
     });
   });
 
   test('Debe mostrar app/dashboard cuando existe el bearerToken y el usuario esta verificado', async () => {
-    Cookies.set(BEARER_TOKEN, 'miBearerToken');
+    sessionStorage.setItem(BEARER_TOKEN, 'miBearerToken');
     localStorage.setItem(
       'user',
-      JSON.stringify({
-        id: '1',
-        name: 'userTest',
-        email: 'test@mail.com',
-        isVerified: true,
-        rememberToken: null
-      })
+      encryptUserData(
+        JSON.stringify({
+          id: '1',
+          name: 'userTest',
+          email: 'test@mail.com',
+          isVerified: true,
+          rememberToken: null
+        })
+      )
     );
     const wrapper = renderWithProviders(<AppRouter />);
     await waitFor(() => {

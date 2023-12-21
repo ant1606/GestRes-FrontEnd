@@ -8,17 +8,14 @@ import {
   type ProgressErrorResponse,
   type ProgressesSuccessResponse
 } from '#/pages/Private/Recourse/components/Progress/indext.types';
+import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import Cookies from 'js-cookie';
 
 export const getProgressPerRecourse = async (
   recourseId: number,
   page: number
 ): Promise<ProgressesSuccessResponse | ProgressErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(
     `${
@@ -28,7 +25,8 @@ export const getProgressPerRecourse = async (
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -44,10 +42,7 @@ export const savingProgress = async (
   progress: any,
   recourseId: number
 ): Promise<ProgressSuccessResponse | ProgressErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(
     `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/progress`,
@@ -56,7 +51,8 @@ export const savingProgress = async (
       body: JSON.stringify(progress),
       headers: {
         'Content-Type': 'application/json',
-        accept: 'application/json'
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
       }
     }
   )
@@ -71,16 +67,14 @@ export const savingProgress = async (
 export const destroyProgress = async (
   progress: Progress
 ): Promise<ProgressSuccessResponse | ProgressErrorResponse> => {
-  // TODO Extraer esta logica de verificacion del bearerToken
-  const bearerToken = Cookies.get('bearerToken');
-  if (bearerToken === null || bearerToken === undefined)
-    throw new Error('Token de autorización inválido');
+  const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/progress/${progress.id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      accept: 'application/json'
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
     }
   })
     .then(async (resp) => {

@@ -1,13 +1,10 @@
 import React from 'react';
-// import Button from '#/components/Button';
-
-// import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
-// import { mdiAccountCircle, mdiLock } from '@mdi/js';
 import { type loginValidationError } from '../context/login.context';
 import Button from '#/components/Button';
 import Field from '#/components/Field';
-
+import { RiAccountCircleFill, RiLock2Fill } from 'react-icons/ri';
+import { IconContext } from 'react-icons';
 
 interface Props {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -37,7 +34,9 @@ const FormView: React.FC<Props> = ({
       </div>
       <form onSubmit={handleSubmit} className="flex flex-col justify-center gap-4">
         <div className="flex gap-3 items-center">
-          {/* <Icon path={mdiAccountCircle} size={1} /> */}
+          <IconContext.Provider value={{ size: '2em' }}>
+            <RiAccountCircleFill />
+          </IconContext.Provider>
           <Field
             type="text"
             name="email"
@@ -49,7 +48,9 @@ const FormView: React.FC<Props> = ({
           />
         </div>
         <div className="flex gap-3 items-center">
-          {/* <Icon path={mdiLock} size={1} /> */}
+          <IconContext.Provider value={{ size: '2em' }}>
+            <RiLock2Fill />
+          </IconContext.Provider>
           <Field
             type="password"
             name="password"

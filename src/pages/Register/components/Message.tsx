@@ -18,7 +18,7 @@ export const Message: React.FC = () => {
         link de verificación
       </p>
       <div className="flex max-w-[12rem]">
-        <Button text="Ir a Login" type="button" btnType="main" handleClick={handleClick} />
+        <Button text="Ir a Login" type="button" btnType="main" onClick={handleClick} />
       </div>
     </div>
   );

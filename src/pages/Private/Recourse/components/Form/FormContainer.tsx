@@ -43,6 +43,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const [comboTypeData, setComboTypeData] = useState<Settings[]>([]);
   const { recourseError, addValidationError, recourseActive, resetValidationError, cleanSelectedRecourse } = useRecourse();
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
+  const [disabledButton, setDisabledButton] = useState(false);
 
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
@@ -124,6 +125,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const handleSubmit = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
+      setDisabledButton(true);
       await validatedSubmitForm();
       const existValidationMessage = Object.keys(recourseErrorRef.current).every(
         (el) => recourseErrorRef.current[el] === null
@@ -211,6 +213,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
+      setDisabledButton(false);
       dispatch(isLoading(false));
     }
   };
@@ -240,6 +243,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       selectedTags={selectedTags}
       setSelectedTags={setSelectedTags}
       recourseSelected={recourseActive}
+      submitIsDisabled={disabledButton}
     />
   );
 };

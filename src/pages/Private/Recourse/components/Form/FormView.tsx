@@ -33,6 +33,7 @@ interface Props {
   selectedTags: number[];
   setSelectedTags: React.Dispatch<React.SetStateAction<number[]>>;
   recourseSelected: Recourse;
+  submitIsDisabled: boolean;
 }
 
 const FormView: React.FC<Props> = ({
@@ -53,9 +54,9 @@ const FormView: React.FC<Props> = ({
   isShow,
   selectedTags,
   setSelectedTags,
-  recourseSelected
+  recourseSelected,
+  submitIsDisabled
 }) => {
-
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
   const navigate = useNavigate();
 
@@ -75,6 +76,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={name}
           errorInput={recourseError?.name}
+          readonly={isShow}
         />
 
         <Combobox
@@ -98,6 +100,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={editorial}
           errorInput={recourseError?.editorial}
+          readonly={isShow}
         />
 
         {typeId ===
@@ -110,6 +113,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalPages}
             errorInput={recourseError.totalPages}
+            readonly={isShow}
           />
         ) : (
           <Field
@@ -120,6 +124,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalVideos}
             errorInput={recourseError.totalVideos}
+            readonly={isShow}
           />
         )}
       </div>
@@ -132,6 +137,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={author}
           errorInput={recourseError.author}
+          readonly={isShow}
         />
 
         {typeId ===
@@ -144,6 +150,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalChapters}
             errorInput={recourseError.totalChapters}
+            readonly={isShow}
           />
         ) : (
           <Field
@@ -154,6 +161,7 @@ const FormView: React.FC<Props> = ({
             handleChange={handleInputChange}
             value={totalHours}
             errorInput={recourseError.totalHours}
+            readonly={isShow}
           />
         )}
       </div>
@@ -166,6 +174,7 @@ const FormView: React.FC<Props> = ({
           value={source}
           errorInput={recourseError.source}
           classBox=""
+          readonly={isShow}
         />
       </div>
       <div className="mt-5 mb-24">
@@ -188,8 +197,8 @@ const FormView: React.FC<Props> = ({
       {!isShow ?
         (
           <div className="flex justify-around gap-14">
-            <Button type="submit" text="Registrar" btnType="main" />
-            <Button btnType="danger" text="Cancelar" type="button" handleClick={handleClickCancel} />
+            <Button type="submit" text="Registrar" btnType="main" isDisabled={submitIsDisabled} />
+            <Button btnType="danger" text="Cancelar" type="button" onClick={handleClickCancel} />
           </div>
         ) :
         (<></>)

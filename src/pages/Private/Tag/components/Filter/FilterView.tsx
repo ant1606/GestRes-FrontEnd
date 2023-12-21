@@ -1,9 +1,10 @@
 import Combobox from '#/components/Combobox';
 import Field from '#/components/Field';
 import perPageItemsValue from '#/config/perPageItemsValue';
-// import { mdiMagnify } from '@mdi/js';
-// import Icon from '@mdi/react';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
+
 import React from 'react';
+import { IconContext } from 'react-icons';
 
 interface Props {
   handleChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,7 +21,9 @@ const FilterView: React.FC<Props> = ({
   return (
     <div className="flex mb-4 gap-x-10">
       <div className="flex">
-        {/* <Icon path={mdiMagnify} title="Search" size={1.5} color="black" /> */}
+        <IconContext.Provider value={{ size: '1.80em' }}>
+          <FaMagnifyingGlass />
+        </IconContext.Provider>
         <Field
           type="text"
           label="Buscar Etiqueta"

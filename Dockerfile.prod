@@ -15,6 +15,6 @@ RUN npm i -g serve
 
 EXPOSE 3000
 
-CMD ["serve"]
+CMD ["serve", "-s", "."]
 
 # RUN apk add --no-cache xdg-utils

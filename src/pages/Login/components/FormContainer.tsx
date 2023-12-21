@@ -69,8 +69,11 @@ const FormContainer: React.FC = () => {
     try {
       dispatch(isLoading(true));
       await validatedSubmitForm();
-      const existValidationMessage = Object.keys(loginErrorRef.current).every(
-        (el) => loginErrorRef.current[el] === null
+      // const existValidationMessage = Object.keys(loginErrorRef.current).every(
+      //   (el) => loginErrorRef.current[el] === null
+      // );
+      const existValidationMessage = Object.values(loginErrorRef.current).every(
+        (el) => el === null
       );
       if (existValidationMessage) {
         const response = await logginUser({

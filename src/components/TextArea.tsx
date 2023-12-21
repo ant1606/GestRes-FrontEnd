@@ -1,4 +1,6 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
+import ErrorMessage from './ErrorMessage';
 
 interface Props {
   label: string;
@@ -9,6 +11,9 @@ interface Props {
   errorInput: string | null;
   rows?: number;
 }
+const validateLengthError = (errorInput: string | null | undefined): number => {
+  return errorInput === null || errorInput === undefined ? 0 : errorInput.trim().length;
+};
 
 const TextArea: React.FC<Props> = ({
   label,
@@ -19,21 +24,19 @@ const TextArea: React.FC<Props> = ({
   errorInput,
   rows = 1
 }) => {
-  const validateLengthErrorInput = errorInput !== null ? errorInput.trim().length : 0;
+  const lengthError = validateLengthError(errorInput);
   return (
-    <div className={classBox}>
+    <div className={`flex flex-col relative ${classBox}`}>
       <div
-        className={`${validateLengthErrorInput > 0 ? 'animate__animated animate__headShake' : ''} 
+        className={`${lengthError > 0 ? 'animate__animated animate__headShake' : ''} 
     relative `}>
         <textarea
           id={name}
           placeholder=" "
           name={name}
           rows={rows}
-          className={` ${validateLengthErrorInput > 0
-              ? 'border-2 border-rose-500 text-rose-500 '
-              : 'border-gray-900'
-            }
+          className={` 
+          ${lengthError > 0 ? 'border-2 border-rose-500 text-rose-500 ' : 'border-gray-900'}
           px-3 py-1 h-auto resize-y border-b-2  bg-white peer w-full text-base transition-colors
         focus:outline-none`}
           data-testid={name}
@@ -42,7 +45,8 @@ const TextArea: React.FC<Props> = ({
         />
         <label
           htmlFor={name}
-          className={`${validateLengthErrorInput > 0
+          className={`
+          ${lengthError > 0
               ? 'text-rose-500 peer-focus:text-rose-500'
               : 'text-gray-600 peer-focus:text-gray-900'
             } 
@@ -51,10 +55,10 @@ const TextArea: React.FC<Props> = ({
         peer-focus:-top-4 peer-focus:text-xs peer-focus:px-0`}>
           {label}
         </label>
+
       </div>
-      {validateLengthErrorInput > 0 && (
-        <span className="text-xs  z-10 text-red-500 font-bold">{errorInput}</span>
-      )}
+      {lengthError > 0 && <ErrorMessage error={errorInput} />}
+
     </div>
   );
 };

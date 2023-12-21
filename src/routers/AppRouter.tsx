@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate, Route, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { authenticatedUser, userIsLoggin } from '#/redux/slice/authenticationSlice';
 import { checkAuthentication } from '#/utilities/authenticationManagement';
@@ -16,6 +16,7 @@ import VerifyEmail from '#/pages/VerifyEmail';
 import ResendLinkVerifyEmail from '#/pages/Private/ResendVerifyLinkEmail';
 import { getSettings } from '#/services/settings.services';
 import { loadSettings } from '#/redux/slice/settingsSlice';
+import OAuthCallback from '#/pages/OAuthCallback';
 
 // interface ResponseAPI {
 //   data?: Record<string, any>;
@@ -31,6 +32,7 @@ interface UserLoginParams {
 const AppRouter: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     initApp();
@@ -63,14 +65,40 @@ const AppRouter: React.FC = () => {
   };
 
   const initApp = async (): Promise<void> => {
+    console.log('Entramos a initApp AppRouter', performance.now());
     try {
+      // console.log('Entrando a initApp de AppRouter', Date.now());
+      // TODO Hacer una verificación de la obtención de los settings y capturarlo
+      console.log('Hacemos fetch de settings y authentication', performance.now());
       const settings = await getSettings();
       await settingsLoadedInPromise(settings.data);
       // TODO Cargar la última página visitada por el usuario
       const user = await checkAuthentication();
+      // TODO ANalizar adecuadamente esta parte, ya que sólo deberia llamarse cuando exista el usuario en el remember
       await userIsLoggedInPromise(user);
+      console.log(
+        'Finalizmaos fetch en AppRouter initiApp y redirijimos la aplicación',
+        performance.now()
+      );
+      const lastPath = localStorage.getItem('lastPath') as string;
+      if (
+        lastPath !== null ||
+        lastPath !== 'null' ||
+        lastPath !== '' ||
+        lastPath !== 'undefined' ||
+        lastPath !== undefined
+      ) {
+        navigate(lastPath);
+      }
     } catch (error) {
+      console.log(error);
       // TODO Investigar como poder hacer el registro de logs de los errores generados
+      // TODO Ver el siguiente error
+      /**
+       * Error: Error en la autenticación
+       * at checkAuthentication (authenticationManagement.ts:80:11)
+       * at initApp (AppRouter.tsx:84:26)
+       */
     }
   };
 
@@ -79,7 +107,8 @@ const AppRouter: React.FC = () => {
       <Route path="forget-password" element={<PasswordForget />} />
       <Route path="reset-password" element={<PasswordReset />} />
       <Route path="register" element={<Register />} />
-      <Route path="/verifyEmail/:id/:hash" element={<VerifyEmail />} />
+      <Route path="verifyEmail/:id/:hash" element={<VerifyEmail />} />
+      <Route path="oauthcallback" element={<OAuthCallback />} />
       <Route element={<PublicGuard />}>
         <Route path="login" element={<Login />} />
       </Route>

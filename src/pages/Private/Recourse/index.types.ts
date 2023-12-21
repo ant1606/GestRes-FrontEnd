@@ -2,6 +2,19 @@ import { type ApiResponseTag } from '../Tag/index.types';
 import { type ApiResponseProgress } from './components/Progress/adapters/ProgressAdapter';
 import { type ApiResponseStatus } from './components/Status/adapters/StatusAdapter';
 
+export interface RecourseFormData {
+  id: string;
+  name: string;
+  source: string;
+  author: string;
+  editorial: string;
+  typeId: string;
+  totalVideos: string;
+  totalHours: string;
+  totalPages: string;
+  totalChapters: string;
+  recourseType: Settings[];
+}
 // Detalles de error de Validación
 export interface RecourseErrorDetailResponse extends ApiErrorResponse {
   name: string | null;
@@ -48,6 +61,7 @@ export interface ApiResponseRecourse {
   totalCapitulos: string | null;
   totalVideos: string | null;
   totalHoras: string | null;
+  totalProgresoPorcentaje: string;
   status: ApiResponseStatus;
   progress: ApiResponseProgress;
   tags: ApiResponseTag[];

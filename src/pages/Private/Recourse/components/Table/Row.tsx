@@ -1,27 +1,19 @@
 import React, { useState } from 'react';
-// import Icon from '@mdi/react';
-// import {
-//   mdiWeb,
-//   mdiTooltipAccount,
-//   mdiDomain,
-//   mdiArrowDownDropCircle,
-//   mdiEye,
-//   mdiPencil,
-//   mdiTrashCan,
-//   mdiBookOpenPageVariantOutline,
-//   mdiTextBoxMultipleOutline,
-//   mdiVideoVintage,
-//   mdiTimerOutline
-// } from '@mdi/js';
 import { NavLink, useSearchParams } from 'react-router-dom';
-
 import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { useRecourse } from '../../context/recourse.context';
 import { destroyRecourse, getRecourses } from '#/services/recourse.services';
-import { changeColorTitleBar, isLoading } from '#/redux/slice/uiSlice';
+import { changeColorTitleBar, changeTitle, isLoading } from '#/redux/slice/uiSlice';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
+import { IconContext } from 'react-icons';
+import { FaPencilAlt, FaTrashAlt, FaEye } from 'react-icons/fa';
+import { AiFillCaretDown } from 'react-icons/ai';
+import { TbWorldWww } from 'react-icons/tb';
+import { BsFillPersonFill } from 'react-icons/bs';
+import { MdDomain, MdOutlineLibraryBooks, MdOutlineTimer } from 'react-icons/md';
+import { BiSolidBookContent, BiSolidCameraMovie } from 'react-icons/bi';
 
 interface Props {
   recourse: Recourse;
@@ -34,7 +26,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
 
-  // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
+  // TODO ver como hacer de esto una funcion global o util para obtener el estilo
   const styleStatus = settingsStatus.find(
     (val) => val.value === recourse.currentStatusName
   )?.value2;
@@ -85,6 +77,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
 
   const handleClickShow = (recourse: Recourse): void => {
     dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+    dispatch(changeTitle(recourse.name));
     selectedRecourse(recourse);
   };
 
@@ -99,7 +92,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
               className={` ${!viewDetail ? '' : 'rotate-180'} 
               duration-300 transition-all w-8 h-8 flex justify-center items-center bg-gray-900 rounded-lg`}
               onClick={toggleviewDetail}>
-              {/* <Icon path={mdiArrowDownDropCircle} title="Down" size={1} color="white" /> */}
+              <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                <AiFillCaretDown />
+              </IconContext.Provider>
             </button>
             <NavLink to={`/app/recourse/${recourse.id}`}>
               <button
@@ -107,7 +102,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
                 onClick={() => {
                   handleClickShow(recourse);
                 }}>
-                {/* <Icon path={mdiEye} title="RecourseScreenShow" size={1} color="white" /> */}
+                <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                  <FaEye />
+                </IconContext.Provider>
               </button>
             </NavLink>
 
@@ -117,7 +114,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
                 onClick={() => {
                   handleClickEdit(recourse);
                 }}>
-                {/* <Icon path={mdiPencil} title="Edit" size={1} color="white" /> */}
+                <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                  <FaPencilAlt />
+                </IconContext.Provider>
               </button>
             </NavLink>
 
@@ -126,35 +125,40 @@ const Row: React.FC<Props> = ({ recourse }) => {
               onClick={() => {
                 handleClickDeleteWrapper(recourse);
               }}>
-              {/* <Icon path={mdiTrashCan} title="Delete" size={1} color="white" /> */}
+              <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                <FaTrashAlt />
+              </IconContext.Provider>
             </button>
           </div>
         </td>
         <td className="max-h-14 max-w-xs">
-          <div className="flex justify-center items-center">
+          <div className="flex justify-start items-center">
             <p className="text-lg font-semibold text-gray-900 truncate "> {recourse.name}</p>
           </div>
         </td>
         <td className="w-40 h-14 p-3">
           <div
             className={` 
-            ${styleStatus === undefined ? 'bg-gray-900' : styleStatus.split(' ')[0]
-              } flex justify-center items-center w-38 px-4 py-1 rounded-2xl`}>
+            ${styleStatus === undefined ? 'bg-gray-900' : styleStatus.split(' ')[0]}
+            flex justify-center items-center w-38 px-4 py-1 rounded-2xl`}>
             <span
               className={`
-              ${styleStatus === undefined ? 'text-white' : styleStatus.split(' ')[1]
-                }  text-sm font-bold  uppercase`}>
+              ${styleStatus === undefined ? 'text-white' : styleStatus.split(' ')[1]}
+              text-sm font-bold  uppercase`}>
               {recourse.currentStatusName}
             </span>
           </div>
         </td>
         <td className="w-36">
           <div className="flex flex-col p-3 items-center justify-center ">
-            <div className="w-full">
-              <div className="w-full h-3 bg-gray-800 rounded-full"></div>
+            <div className="w-full border-gray-900 border-2 rounded-full ">
+              <div
+                className="h-3 bg-gray-800 rounded-full"
+                style={{ width: `${recourse.totalProgressPercentage}%` }}></div>
             </div>
-            {/* TODO Generar el calculo del avance de cada recurso */}
-            <span className="text-gray-500 text-sm font-semibold">100%</span>
+            <span className="text-gray-500 text-sm font-bold">
+              {recourse.totalProgressPercentage}%
+            </span>
           </div>
         </td>
         <td className="w-56 ">
@@ -164,7 +168,9 @@ const Row: React.FC<Props> = ({ recourse }) => {
         </td>
       </tr>
 
-      {/* Fila de Detalles */}
+      {/* Fila de Detalles 
+      w-[${recourse.totalProgressPercentage}%]
+      */}
       {/* <tr className={ ` ${!viewDetail ? "scale-y-0 row_viewDetail_collapse" : ""} origin-top bg-gray-100 duration-300 transition-all`}> */}
       {/* <td className='max-h-14 max-w-xs'>
           <div className='flex justify-center items-center'>
@@ -177,22 +183,23 @@ const Row: React.FC<Props> = ({ recourse }) => {
             className={` ${!viewDetail ? 'max-h-0 px-0 py-0' : 'max-h-44 px-8 py-4 bg-gray-100'} 
             origin-top duration-300 transition-all flex flex-col items-stretch text-base font-semibold overflow-y-scroll`}>
             <div className="flex gap-4 pb-3 ">
-              {/* <Icon path={mdiWeb} title="Source" size={1} color="rgb(17 24 39 / 1)" /> */}
+              <IconContext.Provider value={{ size: '1.5em' }}>
+                <TbWorldWww />
+              </IconContext.Provider>
               <p className="truncate max-w-4xl">{recourse.source}</p>
             </div>
             <div className="flex justify-between gap-4">
               <div className="flex flex-1 flex-col gap-3">
                 <div className="flex gap-4">
-                  {/* <Icon
-                    path={mdiTooltipAccount}
-                    title="Source"
-                    size={1}
-                    color="rgb(17 24 39 / 1)"
-                  /> */}
+                  <IconContext.Provider value={{ size: '1.5em' }}>
+                    <BsFillPersonFill />
+                  </IconContext.Provider>
                   <p>{recourse.author}</p>
                 </div>
                 <div className="flex gap-4">
-                  {/* <Icon path={mdiDomain} title="Source" size={1} color="rgb(17 24 39 / 1)" /> */}
+                  <IconContext.Provider value={{ size: '1.5em' }}>
+                    <MdDomain />
+                  </IconContext.Provider>
                   <p>{recourse.editorial}</p>
                 </div>
                 <div className="flex">
@@ -201,42 +208,30 @@ const Row: React.FC<Props> = ({ recourse }) => {
                       ?.value ? (
                     <>
                       <div className="flex gap-4 w-2/4">
-                        {/* <Icon
-                          path={mdiTextBoxMultipleOutline}
-                          title="Source"
-                          size={1}
-                          color="rgb(17 24 39 / 1)"
-                        /> */}
+                        <IconContext.Provider value={{ size: '1.5em' }}>
+                          <MdOutlineLibraryBooks />
+                        </IconContext.Provider>
                         <p>{recourse.totalPages}</p>
                       </div>
                       <div className="flex gap-4">
-                        {/* <Icon
-                          path={mdiBookOpenPageVariantOutline}
-                          title="Source"
-                          size={1}
-                          color="rgb(17 24 39 / 1)"
-                        /> */}
+                        <IconContext.Provider value={{ size: '1.5em' }}>
+                          <BiSolidBookContent />
+                        </IconContext.Provider>
                         <p>{recourse.totalChapters}</p>
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="flex gap-4 w-2/4">
-                        {/* <Icon
-                          path={mdiVideoVintage}
-                          title="Source"
-                          size={1}
-                          color="rgb(17 24 39 / 1)"
-                        /> */}
+                        <IconContext.Provider value={{ size: '1.5em' }}>
+                          <BiSolidCameraMovie />
+                        </IconContext.Provider>
                         <p>{recourse.totalVideos}</p>
                       </div>
                       <div className="flex gap-4">
-                        {/* <Icon
-                          path={mdiTimerOutline}
-                          title="Source"
-                          size={1}
-                          color="rgb(17 24 39 / 1)"
-                        /> */}
+                        <IconContext.Provider value={{ size: '1.5em' }}>
+                          <MdOutlineTimer />
+                        </IconContext.Provider>
                         <p>{recourse.totalHours}</p>
                       </div>
                     </>

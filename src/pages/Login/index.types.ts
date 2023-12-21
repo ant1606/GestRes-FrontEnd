@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react';
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -19,4 +21,18 @@ export interface LoginErrorResponse {
     status: string;
     detail: LoginErrorDetailResponse;
   };
+}
+
+export interface LoginProviderProps {
+  children: ReactNode;
+}
+export interface ActionReducer {
+  type: string;
+  payload: Record<string, unknown>;
+}
+
+export type typeValidationError = 'email' | 'password';
+export type loginValidationError = Record<typeValidationError, string | null>;
+export interface InitialState {
+  validationError: loginValidationError;
 }
