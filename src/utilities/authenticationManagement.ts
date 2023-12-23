@@ -77,32 +77,44 @@ export const deletePersistenDataUser = (): void => {
 };
 
 export const checkAuthentication = async (): Promise<Record<string, string | any>> => {
-  try {
-    if (tokenExpired()) {
-      if (rememberTokenExists()) {
-        const response: ResponseAPI = await refreshUserFromRememberToken(getRememberToken);
-
-        if ('data' in response) {
-          savePersistenDataUser(response);
-          return response.data?.user;
-        } else if ('error' in response) {
-          throw new Error('El token no es válido');
+  return await new Promise((resolve, reject) => {
+    try {
+      if (tokenExpired()) {
+        if (rememberTokenExists()) {
+          refreshUserFromRememberToken(getRememberToken)
+            .then((response: ResponseAPI) => {
+              if ('data' in response) {
+                savePersistenDataUser(response);
+                resolve(response.data?.user);
+              } else if ('error' in response) {
+                reject(new Error('El token no es válido'));
+              }
+            })
+            .catch((error) => {
+              reject(new Error('Error en la autenticación'));
+            });
+        } else {
+          reject(new Error('No existen tokens'));
         }
-      }
+      } else {
+        const userJson = localStorage.getItem('user') ?? 'null';
+        if (
+          userJson === null ||
+          userJson === 'null' ||
+          userJson === '' ||
+          userJson === 'undefined'
+        ) {
+          reject(
+            new Error('Los datos del usuario no son válidos, limpiar caché y datos del navegador')
+          );
+        }
 
-      throw new Error('No existen tokens');
-    } else {
-      const userJson = localStorage.getItem('user') ?? 'null';
-      if (userJson === null || userJson === 'null' || userJson === '' || userJson === 'undefined') {
-        throw new Error(
-          'Los datos del usuario no son válidos, limpiar cache y datos del navegador'
-        );
+        // TODO Verificar la encriptación en este punto
+        const userData = JSON.parse(decryptUserData(userJson));
+        resolve(userData);
       }
-      // TODO Verificar la encriptacion en este punto
-      const userData = JSON.parse(decryptUserData(userJson));
-      return userData;
+    } catch (error) {
+      reject(new Error('Error en la autenticación'));
     }
-  } catch (error) {
-    throw new Error('Error en la autenticación');
-  }
+  });
 };

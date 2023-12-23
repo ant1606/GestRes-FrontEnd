@@ -40,7 +40,6 @@ export const getSubscriptions = async (
 export const savingSubscriptions = async (accessToken: string): Promise<void> => {
   const bearerToken = getBearerToken();
 
-  console.log(`iniciando fetch con token ${accessToken}}`);
   fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`, {
     method: 'POST',
     body: JSON.stringify({ access_token: accessToken }),

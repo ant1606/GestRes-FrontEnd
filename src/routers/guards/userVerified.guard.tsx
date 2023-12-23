@@ -8,6 +8,7 @@ interface Props {
 
 const UserVerifiedGuard: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
+  console.log('Pasamos por UserVerifiedGuard');
   return userLoggin.isVerified ? <Outlet /> : <Navigate replace to="/notifyVerifyEmail" />;
 };
 

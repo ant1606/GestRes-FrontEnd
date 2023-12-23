@@ -32,7 +32,6 @@ interface UserLoginParams {
 const AppRouter: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     initApp();
@@ -65,40 +64,12 @@ const AppRouter: React.FC = () => {
   };
 
   const initApp = async (): Promise<void> => {
-    console.log('Entramos a initApp AppRouter', performance.now());
     try {
-      // console.log('Entrando a initApp de AppRouter', Date.now());
-      // TODO Hacer una verificación de la obtención de los settings y capturarlo
-      console.log('Hacemos fetch de settings y authentication', performance.now());
       const settings = await getSettings();
       await settingsLoadedInPromise(settings.data);
-      // TODO Cargar la última página visitada por el usuario
-      const user = await checkAuthentication();
-      // TODO ANalizar adecuadamente esta parte, ya que sólo deberia llamarse cuando exista el usuario en el remember
-      await userIsLoggedInPromise(user);
-      console.log(
-        'Finalizmaos fetch en AppRouter initiApp y redirijimos la aplicación',
-        performance.now()
-      );
-      const lastPath = localStorage.getItem('lastPath') as string;
-      if (
-        lastPath !== null ||
-        lastPath !== 'null' ||
-        lastPath !== '' ||
-        lastPath !== 'undefined' ||
-        lastPath !== undefined
-      ) {
-        navigate(lastPath);
-      }
     } catch (error) {
       console.log(error);
-      // TODO Investigar como poder hacer el registro de logs de los errores generados
-      // TODO Ver el siguiente error
-      /**
-       * Error: Error en la autenticación
-       * at checkAuthentication (authenticationManagement.ts:80:11)
-       * at initApp (AppRouter.tsx:84:26)
-       */
+      // TODO Mostra mensaje de error al cargar Settings en aplicación
     }
   };
 

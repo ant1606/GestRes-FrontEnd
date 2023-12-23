@@ -3,6 +3,8 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { type RootState } from '../store';
 // import type { RootState } from '../store';
 
+// TODO Extraer propiedades de Autorización de Google a otro context
+// isOAuthAccess y comeFromOAuthCallback
 interface AuthenticationState {
   id: number;
   name: string;

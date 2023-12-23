@@ -18,6 +18,7 @@ describe('AppRouter test', () => {
     sessionStorage.clear();
   });
 
+  // TODO Corregir los test a las nuevas aproximaciones de AuthGuard, PublicGuard y useCheckAuthenticationUsers
   /**
    * Datos
    * bearerToken, rememberToken, usuario (usuario verificado)
