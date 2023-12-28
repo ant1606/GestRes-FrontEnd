@@ -1,9 +1,10 @@
 version: '3'
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: nodejs-labdev_nodejs
     environment:
       - VITEST_UI_BASE_URL=http://172.18.0.4:5173/__vitest__/
     volumes: 
@@ -15,10 +16,10 @@ services:
     command: yarn run dev
     tty: true
     networks:
-      - pygesres_net
+      - labdev_net
     extra_hosts:
       - 'host.docker.internal:host-gateway'
 networks:
-  pygesres_net:
-    name: pygesres
+  labdev_net:
     external: true
+
