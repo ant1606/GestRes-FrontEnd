@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { Navigate, Route, useNavigate } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
-import { authenticatedUser, userIsLoggin } from '#/redux/slice/authenticationSlice';
-import { checkAuthentication } from '#/utilities/authenticationManagement';
+import { authenticatedUser } from '#/redux/slice/authenticationSlice';
 import AuthGuard from './guards/auth.guard';
 import PublicGuard from './guards/public.guard';
 import UserVerifiedGuard from './guards/userVerified.guard';
@@ -22,12 +21,12 @@ import OAuthCallback from '#/pages/OAuthCallback';
 //   data?: Record<string, any>;
 //   error?: Record<string, any>;
 // }
-interface UserLoginParams {
-  email: string;
-  id: number;
-  isVerified: boolean;
-  name: string;
-}
+// interface UserLoginParams {
+//   email: string;
+//   id: number;
+//   isVerified: boolean;
+//   name: string;
+// }
 
 const AppRouter: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
@@ -37,19 +36,6 @@ const AppRouter: React.FC = () => {
     initApp();
   }, []);
 
-  const userIsLoggedInPromise = async (params: UserLoginParams): Promise<void> => {
-    await new Promise<void>((resolve) => {
-      dispatch(
-        userIsLoggin({
-          email: params.email,
-          id: params.id,
-          isVerified: params.isVerified,
-          name: params.name
-        })
-      );
-      resolve();
-    });
-  };
   const settingsLoadedInPromise = async (params): Promise<void> => {
     // TODO Ver si puedo refactorizar más esta parte del settings y su service
     await new Promise<void>((resolve) => {

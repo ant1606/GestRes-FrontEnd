@@ -2,6 +2,7 @@ import dashboardIcon from '#/assets/dashboard.svg';
 import youtubeIcon from '#/assets/youtube.svg';
 import graduateIcon from '#/assets/graduate.svg';
 import tagIcon from '#/assets/tag.svg';
+import webPageIcon from '#/assets/web.svg';
 const menus = [
   {
     title: 'Dashboard',
@@ -27,6 +28,12 @@ const menus = [
     icon: graduateIcon,
     link: true,
     path: '/app/recourse'
+  },
+  {
+    title: 'Páginas Web',
+    icon: webPageIcon,
+    link: true,
+    path: '/app/webpage'
   },
   {
     title: 'Etiquetas',
