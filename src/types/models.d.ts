@@ -73,3 +73,12 @@ interface YoutubeSubscription {
   thumbnailHigh: string;
   tags: Tag[];
 }
+
+interface WebPage {
+  id: number;
+  url: string;
+  name: string;
+  description: string;
+  countVisits: number;
+  tags: Tag[];
+}
