@@ -9,6 +9,9 @@ import { FaPencilAlt, FaTrashAlt, FaExternalLinkAlt } from 'react-icons/fa';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { IoMdPricetags } from 'react-icons/io';
 import { MdDescription } from 'react-icons/md';
+import { isLoading } from '#/redux/slice/uiSlice';
+import { toastNotifications } from '#/utilities/notificationsSwal';
+import { destroyWebPage, getWebPages } from '#/services/webPage.services';
 
 interface Prop {
   webPage: WebPage;
@@ -36,36 +39,36 @@ const Row: React.FC<Prop> = ({ webPage }) => {
   }
 
   const handleClickDelete = async (webPage: WebPage): Promise<void> => {
-    // try {
-    //   const result = await toastNotifications().modalDeleteConfirm(webPage.name);
-    //   if (!result) return;
-    //   dispatch(isLoading(true));
-    //   const response = await destroyWebPage(webPage);
-    //   if ('data' in response) {
-    //     resetValidationError();
-    //     toastNotifications().toastSuccesCustomize(
-    //       `Se elimino la etiqueta ${webPage.name} satisfactoriamente`
-    //     );
-    //     cleanSelectedWebPage();
-    //     const webPages = await getWebPages(searchParams.toString());
-    //     setWebPages(webPages);
-    //   } else if ('error' in response) {
-    //     const errorsDetail = response.error?.detail;
-    //     Object.keys(errorsDetail).forEach((key) => {
-    //       if (key !== 'apiResponseMessageError') {
-    //         addValidationError({ [key]: errorsDetail[key] });
-    //       }
-    //     });
-    //     if ('apiResponseMessageError' in errorsDetail) {
-    //       if (errorsDetail.apiResponseMessageError !== null)
-    //         throw new Error(errorsDetail.apiResponseMessageError);
-    //     }
-    //   }
-    // } catch (error: any) {
-    //   toastNotifications().notificationError(error.message);
-    // } finally {
-    //   dispatch(isLoading(false));
-    // }
+    try {
+      const result = await toastNotifications().modalDeleteConfirm(webPage.name);
+      if (!result) return;
+      dispatch(isLoading(true));
+      const response = await destroyWebPage(webPage);
+      if ('data' in response) {
+        resetValidationError();
+        toastNotifications().toastSuccesCustomize(
+          `Se elimino la Página Web ${webPage.name} satisfactoriamente`
+        );
+        cleanSelectedWebPage();
+        const webPages = await getWebPages(searchParams.toString());
+        setWebPages(webPages);
+      } else if ('error' in response) {
+        const errorsDetail = response.error?.detail;
+        Object.keys(errorsDetail).forEach((key) => {
+          if (key !== 'apiResponseMessageError') {
+            addValidationError({ [key]: errorsDetail[key] });
+          }
+        });
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
+        }
+      }
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
+    }
   };
 
   return (

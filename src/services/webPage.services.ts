@@ -53,3 +53,25 @@ export const savingWebPage = async (
     .then(async (data) => webPageAdapter(await data))
     .catch(async (error) => webPageErrorResponseAdapter(processErrorResponse(await error)));
 };
+
+export const destroyWebPage = async (
+  webPage: WebPage
+): Promise<WebPageSuccessResponse | WebPageErrorResponse> => {
+  const bearerToken = getBearerToken();
+
+  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/webpage/${webPage.id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      accept: 'application/json',
+      Authorization: `Bearer ${bearerToken}`
+    }
+  })
+    .then(async (resp) => {
+      if (!resp.ok) return await Promise.reject(resp.json());
+
+      return await resp.json();
+    })
+    .then(async (data) => webPageAdapter(await data))
+    .catch(async (error) => webPageErrorResponseAdapter(processErrorResponse(await error)));
+};
