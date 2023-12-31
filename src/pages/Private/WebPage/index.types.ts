@@ -69,6 +69,6 @@ export interface ApiResponseWebPage {
   url: string;
   nombre: string;
   descripcion: string;
-  conteo_visitas: number;
+  totalVisitas: number;
   tags: ApiResponseTag[];
 }

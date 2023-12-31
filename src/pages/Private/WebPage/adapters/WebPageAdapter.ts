@@ -12,7 +12,7 @@ export const adapterWebPage = (webPage: ApiResponseWebPage): WebPage => {
     name: webPage.nombre,
     url: webPage.url,
     description: webPage.descripcion,
-    countVisits: webPage.conteo_visitas,
+    countVisits: webPage.totalVisitas,
     tags: adapterTagsData(webPage.tags)
   };
 };

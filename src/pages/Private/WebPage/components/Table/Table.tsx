@@ -11,9 +11,9 @@ export const Table: React.FC = () => {
       <thead>
         <tr className="text-gray-600 border-b-gray-400 border-b-2 font-bold text-uppercase ">
           <th className="w-48">ACCIONES</th>
+          <th>IR A LINK</th>
           <th>NOMBRE</th>
-          <th>LINK</th>
-          <th>DESCRIPCIÓN</th>
+          {/* <th>DESCRIPCIÓN</th> */}
           <th># VISITAS</th>
         </tr>
       </thead>

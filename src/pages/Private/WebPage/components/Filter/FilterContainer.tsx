@@ -11,7 +11,9 @@ import { getWebPages } from '#/services/webPage.services';
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchNombre, setSearchNombre] = useState('');
+  const [searchTags, setSearchTags] = useState([]);
   const { webPagePerPage, setWebPagePerPage, setWebPages } = useWebPage();
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -19,10 +21,12 @@ export const FilterContainer: React.FC = () => {
     try {
       searchParams.delete('searchNombre');
       searchParams.delete('perPage');
+      searchParams.delete('searchTags[]');
       searchParams.append('perPage', webPagePerPage);
       searchParams.delete('page');
       searchParams.append('page', '1');
       if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
+      if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
 
       searchParams.sort();
       setSearchParams(searchParams);
@@ -54,10 +58,13 @@ export const FilterContainer: React.FC = () => {
 
   useEffect(() => {
     if (webPagePerPage > 0) execFilter();
-  }, [webPagePerPage, searchNombre]);
+  }, [webPagePerPage, searchNombre, searchTags]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchNombre(e.target.value);
+  };
+  const handleChangeSearchTags = (e: any): void => {
+    setSearchTags(e.map((obj: any) => obj.value));
   };
 
   const handleChangeCombo = (e: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -67,8 +74,10 @@ export const FilterContainer: React.FC = () => {
   return (
     <FilterView
       handleChangeCombo={handleChangeCombo}
+      handleChangeSearchTags={handleChangeSearchTags}
       handleChangeInput={handleChange}
       searchValue={searchNombre}
+      searchTag={searchTags}
       webPagePerPage={webPagePerPage}
     />
   );
