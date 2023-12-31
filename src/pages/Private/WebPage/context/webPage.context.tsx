@@ -129,7 +129,7 @@ export const WebPageProvider = ({ children }: WebPageProviderProps): JSX.Element
   };
 
   const webPageActions = {
-    webPagees: state.webPages,
+    webPages: state.webPages,
     webPagePerPage: state.webPagePerPage,
     webPageMeta: state.webPageMeta,
     webPageError: state.validationError,
