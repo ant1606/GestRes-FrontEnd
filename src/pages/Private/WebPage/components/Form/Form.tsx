@@ -11,11 +11,12 @@ import {
   validateUrl
 } from '../../utils/WebPageFormValidationInputs';
 import { useWebPage } from '../../context/webPage.context';
-import { savingWebPage } from '#/services/webPage.services';
+import { savingWebPage, updatingWebPage } from '#/services/webPage.services';
 
 interface Props {
   modalRef: any;
   onFormSubmit: () => void;
+  webPage?: WebPage;
 }
 
 const validateFunctionsFormInputs = {
@@ -24,21 +25,15 @@ const validateFunctionsFormInputs = {
   description: validateDescription
 };
 
-const Form: React.FC<Props> = ({ modalRef, onFormSubmit }) => {
+const Form: React.FC<Props> = ({ modalRef, onFormSubmit, webPage }) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [disabledButton, setDisabledButton] = useState(false);
-  const {
-    addValidationError,
-    webPageActive,
-    webPageError,
-    resetValidationError,
-    cleanSelectedWebPage
-  } = useWebPage();
+  const { addValidationError, webPageError, resetValidationError } = useWebPage();
 
   const initialState = {
-    url: webPageActive?.url ?? '',
-    name: webPageActive?.name ?? '',
-    description: webPageActive?.description ?? ''
+    url: webPage?.url ?? '',
+    name: webPage?.name ?? '',
+    description: webPage?.description ?? ''
   };
 
   const {
@@ -55,10 +50,10 @@ const Form: React.FC<Props> = ({ modalRef, onFormSubmit }) => {
   const webPageErrorRef = useRef<Record<string, string | null>>({});
 
   useEffect(() => {
-    if (webPageActive !== null) {
-      setSelectedTags(webPageActive.tags?.map((tag: Tag) => tag.id));
+    if (webPage !== null && webPage !== undefined) {
+      setSelectedTags(webPage.tags?.map((tag: Tag) => tag.id));
     }
-  }, [webPageActive]);
+  }, [webPage]);
 
   useEffect(() => {
     webPageErrorRef.current = webPageError;
@@ -87,9 +82,23 @@ const Form: React.FC<Props> = ({ modalRef, onFormSubmit }) => {
           count_visits: 0,
           tags: selectedTags ?? []
         };
-        const response = await savingWebPage(webPageToSend);
+        // TODO Evaluar si se registra o edita
+        let response;
+        if (webPage === null) {
+          response = await savingWebPage(webPageToSend);
+        } else {
+          let resultDialog = true;
+          resultDialog = await toastNotifications().modalCustomDialogQuestion(
+            `Actualización de Página Web`,
+            '¿Desea continuar con la actualización?'
+          );
+
+          if (!resultDialog) throw new Error('Se cancelo la actualización');
+          response = await updatingWebPage({ ...webPageToSend, id: webPage?.id });
+        }
+
+        // const response = await savingWebPage(webPageToSend);
         if ('data' in response) {
-          cleanSelectedWebPage();
           onFormSubmit();
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useWebPage } from '../../context/webPage.context';
-import { useSearchParams } from 'react-router-dom';
+import React, { useRef, useState } from 'react';
+import { WebPageProvider, useWebPage } from '../../context/webPage.context';
+import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { useAppDispatch } from '#/hooks/redux';
 import { focusInput } from '#/utilities/manipulationDom';
 // import { destroyWebPage, getWebPages } from '#/services/webPage.services';
@@ -12,6 +12,9 @@ import { MdDescription } from 'react-icons/md';
 import { isLoading } from '#/redux/slice/uiSlice';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { destroyWebPage, getWebPages } from '#/services/webPage.services';
+import Form from '../Form/Form';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 interface Prop {
   webPage: WebPage;
@@ -28,12 +31,50 @@ const Row: React.FC<Prop> = ({ webPage }) => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [viewDetail, setviewDetail] = useState(false);
+  const MySwal = withReactContent(Swal);
+  const modalRef = useRef(MySwal);
 
   const handleClickEdit = (webPage: WebPage): void => {
     resetValidationError();
     selectedWebPage(webPage);
+    // TODO: Implementar el modal en el componente Table para evitar múltiples renderizados en Row, y manipular los datos
+    // por medio del contexto. Se inteno renderizar el modal con SweetAlert mediante una renderización condicional pero no funciono
+    // Intentar hacer lo mismo pero com un componente Modal
+    // Este cambio sugerido es para verificar la performance
+    MySwal.fire({
+      title: 'Editar Etiquetas',
+      html: (
+        <BrowserRouter>
+          <WebPageProvider>
+            <Form
+              modalRef={modalRef.current}
+              webPage={webPage}
+              onFormSubmit={() => {
+                handleFormSubmit();
+              }}
+            />
+          </WebPageProvider>
+        </BrowserRouter>
+      ),
+      showConfirmButton: false,
+      allowOutsideClick: true
+    });
+    cleanSelectedWebPage();
     focusInput('#name');
   };
+
+  const handleFormSubmit = async (): Promise<void> => {
+    modalRef.current?.close();
+    cleanSelectedWebPage();
+    toastNotifications().toastSuccesCustomize('Se actualizaron las etiquetas correctamente.');
+    const webPages = await getWebPages(searchParams.toString());
+    setWebPages(webPages);
+    // const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
+    // setProgresses(progressData);
+    // const recourseRefreshed = await getRecourse(recourseActive.id);
+    // selectedRecourse(recourseRefreshed.data);
+  };
+
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
   }
