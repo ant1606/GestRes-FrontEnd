@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { WebPageProvider } from './context/webPage.context';
 import Form from './components/Form/Form';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 
 const WebPageView: React.FC = () => {
   const MySwal = withReactContent(Swal);
@@ -22,7 +23,7 @@ const WebPageView: React.FC = () => {
             <Form
               modalRef={modalRef.current}
               onFormSubmit={() => {
-                console.log('Submit del formulario');
+                handleFormSubmit();
               }}
             />
           </WebPageProvider>
@@ -31,6 +32,12 @@ const WebPageView: React.FC = () => {
       showConfirmButton: false,
       allowOutsideClick: true
     });
+  };
+
+  const handleFormSubmit = async (): Promise<void> => {
+    modalRef.current?.close();
+    toastNotifications().toastSucces();
+    // TODO Recargar datos de paginación
   };
 
   return (

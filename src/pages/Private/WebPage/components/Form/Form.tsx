@@ -11,6 +11,7 @@ import {
   validateUrl
 } from '../../utils/WebPageFormValidationInputs';
 import { useWebPage } from '../../context/webPage.context';
+import { savingWebPage } from '#/services/webPage.services';
 
 interface Props {
   modalRef: any;
@@ -79,23 +80,30 @@ const Form: React.FC<Props> = ({ modalRef, onFormSubmit }) => {
       );
 
       if (existValidationMessage) {
-        cleanSelectedWebPage();
-        onFormSubmit();
-        // const response = await updatingSubscription({
-        //   tags: selectedTags,
-        //   id: subscription.id
-        // });
-        // console.log(response);
-        // if ('data' in response) {
-        //   toastNotifications().toastSucces();
-        //   onFormSubmit();
-        // } else if ('error' in response) {
-        //   const errorsDetail = response.error.detail;
-        //   if ('apiResponseMessageError' in errorsDetail) {
-        //     if (errorsDetail.apiResponseMessageError !== null)
-        //       throw new Error(errorsDetail.apiResponseMessageError);
-        //   }
-        // }
+        const webPageToSend = {
+          url: formValues.url,
+          name: formValues.name,
+          description: formValues.description,
+          count_visits: 0,
+          tags: selectedTags ?? []
+        };
+        const response = await savingWebPage(webPageToSend);
+        if ('data' in response) {
+          cleanSelectedWebPage();
+          onFormSubmit();
+        } else if ('error' in response) {
+          const errorsDetail = response.error.detail;
+          Object.keys(errorsDetail).forEach((key) => {
+            if (key !== 'apiResponseMessageError') {
+              addValidationError({ [key]: errorsDetail[key] });
+            }
+          });
+
+          if ('apiResponseMessageError' in errorsDetail) {
+            if (errorsDetail.apiResponseMessageError !== null)
+              throw new Error(errorsDetail.apiResponseMessageError);
+          }
+        }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
@@ -115,7 +123,7 @@ const Form: React.FC<Props> = ({ modalRef, onFormSubmit }) => {
 
   return (
     <form onSubmit={handleSubmitWrapper}>
-      <div className="flex flex-col py-4 gap-8">
+      <div className="flex flex-col py-4 gap-10">
         <Field
           type="text"
           label="URL/Link"
