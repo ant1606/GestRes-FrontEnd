@@ -28,6 +28,7 @@ export const adapterWebPagesData = (webPages: ApiResponseWebPage[]): WebPage[] =
 };
 
 export const webPagesAdapter = (response: any): WebPagesSuccessResponse => {
+  if (response.data.length === 0) return { meta: null, links: null, data: [] };
   return {
     meta: {
       path: response.meta.path,
@@ -52,7 +53,7 @@ export const webPagesAdapter = (response: any): WebPagesSuccessResponse => {
 export const webPageErrorResponseAdapter = (error: any): WebPageErrorResponse => {
   return {
     error: {
-      status: error.error.webPage,
+      status: error.error.status.toString(),
       detail: {
         apiResponseMessageError: error.error.detail.api_response ?? null,
         url: error.error.detail.url ?? null,

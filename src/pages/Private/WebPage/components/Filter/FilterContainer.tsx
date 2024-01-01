@@ -18,42 +18,20 @@ export const FilterContainer: React.FC = () => {
   const navigate = useNavigate();
 
   const execFilter = async (): Promise<void> => {
-    try {
-      searchParams.delete('searchNombre');
-      searchParams.delete('perPage');
-      searchParams.delete('searchTags[]');
-      searchParams.append('perPage', webPagePerPage);
-      searchParams.delete('page');
-      searchParams.append('page', '1');
-      if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
-      if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
+    // try {
+    searchParams.delete('searchNombre');
+    searchParams.delete('perPage');
+    searchParams.delete('searchTags[]');
+    searchParams.append('perPage', webPagePerPage);
+    searchParams.delete('page');
+    searchParams.append('page', '1');
+    if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
+    if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
 
-      searchParams.sort();
-      setSearchParams(searchParams);
-      const response = await getWebPages(searchParams.toString());
-      // console.log(tags);
-      //
-      if ('data' in response) {
-        setWebPages(response);
-      } else if ('error' in response) {
-        // TODO Ver como encapsular esta lógica en todas las llamadas al endpoint
-        // if (response.error.status === '404') {
-        //   toastNotifications().notificationError('Ocurrió un error, será redirigido al Login');
-        //   deletePersistenDataUser();
-        //   dispatch(userIsLogout());
-        //   navigate('/login', { replace: true });
-        // }
-
-        const errorsDetail = response.error.detail;
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
-        }
-      }
-    } catch (error: any) {
-      toastNotifications().notificationError(error.message);
-    }
+    searchParams.sort();
+    setSearchParams(searchParams);
+    const response = await getWebPages(searchParams.toString());
+    setWebPages(response);
   };
 
   useEffect(() => {

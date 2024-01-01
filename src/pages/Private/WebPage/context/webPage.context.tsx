@@ -122,7 +122,6 @@ export const WebPageProvider = ({ children }: WebPageProviderProps): JSX.Element
   };
 
   const cleanSelectedWebPage = (): void => {
-    console.log('limpiando webpageActive');
     dispatch({
       type: CLEAN_SELECT_WEB_PAGE,
       payload: true
