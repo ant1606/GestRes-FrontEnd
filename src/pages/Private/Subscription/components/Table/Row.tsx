@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useAppDispatch } from '#/hooks/redux';
 import { isLoading } from '#/redux/slice/uiSlice';
@@ -7,12 +7,16 @@ import { focusInput } from '#/utilities/manipulationDom';
 import { destroyTag, getTags } from '#/services/tag.services';
 import { IconContext } from 'react-icons';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
-import { SubscriptionYoutubeProvider } from '../../context/subscription.context';
+import {
+  SubscriptionYoutubeProvider,
+  useYoutubeSubscription
+} from '../../context/subscription.context';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { IoMdPricetags } from 'react-icons/io';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Form from '../Form/Form';
+import { getSubscriptions } from '#/services/subscriptions.services';
 
 interface Prop {
   youtubeSubscription: YoutubeSubscription;
@@ -21,6 +25,8 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   const [viewDetail, setviewDetail] = useState(false);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
+  const [searchParams] = useSearchParams();
+  const { setYoutubeSubscriptions } = useYoutubeSubscription();
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
   }
@@ -99,8 +105,8 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   const handleFormSubmit = async (): Promise<void> => {
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se actualizaron las etiquetas correctamente.');
-    // const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
-    // setProgresses(progressData);
+    const youtubeSubscriptions = await getSubscriptions(searchParams.toString());
+    setYoutubeSubscriptions(youtubeSubscriptions);
     // const recourseRefreshed = await getRecourse(recourseActive.id);
     // selectedRecourse(recourseRefreshed.data);
   };
