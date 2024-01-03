@@ -12,6 +12,7 @@ interface Props {
 
 const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const [disabledButton, setDisabledButton] = useState(false);
 
   useEffect(() => {
     setSelectedTags(subscription.tags?.map((tag: Tag) => tag.id));
@@ -24,6 +25,7 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
   const handleSubmit = async (): Promise<void> => {
     try {
       // TODO Ver como añadir un loader al modal
+      setDisabledButton(true);
       const response = await updatingSubscription({
         tags: selectedTags,
         id: subscription.id
@@ -42,6 +44,7 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
+      setDisabledButton(false);
       // dispatch(isLoading(false));
     }
   };
@@ -72,7 +75,7 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
 
         <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
         <div className="flex justify-around gap-12">
-          <Button type="submit" text="Registrar" btnType="main" />
+          <Button type="submit" text="Registrar" btnType="main" isDisabled={disabledButton} />
 
           <Button btnType="danger" text="Cancelar" type="button" onClick={handleClickCancel} />
         </div>
