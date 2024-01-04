@@ -1,11 +1,15 @@
 import AuthenticationTemplate from '#/components/AuthenticationTemplate';
-import { useAppDispatch } from '#/hooks/redux';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { userAccessOAuthGoogle } from '#/redux/slice/authenticationSlice';
+import { type RootState } from '#/redux/store';
 import { savingSubscriptions } from '#/services/subscriptions.services';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const OAuthCallbackContainer: React.FC = () => {
+  const orderSortApiYoutube = useAppSelector(
+    (state: RootState) => state.authentication.orderSortApiYoutube
+  );
   const location = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -20,7 +24,8 @@ export const OAuthCallbackContainer: React.FC = () => {
       // TODO Existe un problema que al momento de llamar al endpoint, existe una demora en la redirección
       // El flujo de alguna forma esta haciendo que al momento de llamar a authGuard se demore más de 10 segundos en redireccionar
       // Ver resultados del loggin abajo
-      savingSubscriptions(accessToken);
+      console.log('Porbando el state global', orderSortApiYoutube);
+      savingSubscriptions(accessToken, orderSortApiYoutube);
       console.log('Finalizo llamada a endpoint', performance.now());
     }
     console.log('Navegando a subscription');

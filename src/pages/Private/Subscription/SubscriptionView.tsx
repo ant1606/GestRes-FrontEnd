@@ -4,7 +4,7 @@ import { changeTitle } from '#/redux/slice/uiSlice';
 import { type RootState } from '#/redux/store';
 import React, { useEffect } from 'react';
 import Button from '#/components/Button';
-import { resetOAuthGoogle } from '#/redux/slice/authenticationSlice';
+import { resetOAuthGoogle, userSelectOrderSortApiYoutube } from '#/redux/slice/authenticationSlice';
 import { getStatusProcess, getSubscriptions } from '#/services/subscriptions.services';
 import { useYoutubeSubscription } from './context/subscription.context';
 import { useSearchParams } from 'react-router-dom';
@@ -86,7 +86,38 @@ const SubscriptionView: React.FC = () => {
   return (
     <>
       {uiLoading && <Loader />}
-      <Button text="Importar desde Google" onClick={oauthSignIn} btnType="default" type="button" />
+      <div className="flex justify-between gap-10">
+        <Button
+          text="Importar de Google - Alfabético"
+          onClick={() => {
+            dispatch(userSelectOrderSortApiYoutube('alphabetical'));
+            oauthSignIn();
+          }}
+          btnType="default"
+          type="button"
+          classButton="text-lg px-2"
+        />
+        <Button
+          text="Importar de Google - Relevante"
+          onClick={() => {
+            dispatch(userSelectOrderSortApiYoutube('relevance'));
+            oauthSignIn();
+          }}
+          btnType="main"
+          type="button"
+          classButton="text-lg px-2"
+        />
+        <Button
+          text="Importar de Google - Actividad"
+          onClick={() => {
+            dispatch(userSelectOrderSortApiYoutube('unread'));
+            oauthSignIn();
+          }}
+          btnType="warning"
+          type="button"
+          classButton="text-lg px-2 text-gray-900"
+        />
+      </div>
       <Filter />
       {youtubeSubscriptions.length === 0 ? (
         <p>No se encontraron resultados</p>

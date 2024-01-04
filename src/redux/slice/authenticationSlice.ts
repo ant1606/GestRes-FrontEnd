@@ -5,6 +5,7 @@ import { type RootState } from '../store';
 
 // TODO Extraer propiedades de Autorización de Google a otro context
 // isOAuthAccess y comeFromOAuthCallback
+type SortApiYoutube = 'alphabetical' | 'relevance' | 'unread';
 interface AuthenticationState {
   id: number;
   name: string;
@@ -14,6 +15,7 @@ interface AuthenticationState {
   isLoaded: boolean;
   isOAuthAccess: boolean;
   comeFromOAuthCallback: boolean;
+  orderSortApiYoutube: SortApiYoutube;
 }
 
 const initialState: AuthenticationState = {
@@ -24,7 +26,8 @@ const initialState: AuthenticationState = {
   isLogged: false,
   isLoaded: true,
   isOAuthAccess: false,
-  comeFromOAuthCallback: false
+  comeFromOAuthCallback: false,
+  orderSortApiYoutube: 'relevance'
 };
 
 export const authenticationSlice = createSlice({
@@ -50,6 +53,9 @@ export const authenticationSlice = createSlice({
       state.isOAuthAccess = action.payload;
       state.comeFromOAuthCallback = true;
     },
+    userSelectOrderSortApiYoutube: (state, action: PayloadAction<SortApiYoutube>) => {
+      state.orderSortApiYoutube = action.payload;
+    },
     resetOAuthGoogle: (state) => {
       state.isOAuthAccess = false;
       state.comeFromOAuthCallback = false;
@@ -58,7 +64,12 @@ export const authenticationSlice = createSlice({
 });
 
 // TODO EXtraer los métodos relacionados al OAuth en otro slice
-export const { userIsLoggin, userIsLogout, userAccessOAuthGoogle, resetOAuthGoogle } =
-  authenticationSlice.actions;
+export const {
+  userIsLoggin,
+  userIsLogout,
+  userAccessOAuthGoogle,
+  resetOAuthGoogle,
+  userSelectOrderSortApiYoutube
+} = authenticationSlice.actions;
 export const authenticatedUser = (state: RootState): AuthenticationState => state.authentication;
 export default authenticationSlice.reducer;

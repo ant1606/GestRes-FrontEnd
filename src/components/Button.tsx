@@ -9,6 +9,7 @@ interface Props {
   onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   type: btnTypeType;
   isDisabled?: boolean;
+  classButton?: string;
 }
 
 const btnColors = {
@@ -18,9 +19,16 @@ const btnColors = {
   default: 'bg-blue-500 hover:bg-blue-400'
 };
 
-const Button: React.FC<Props> = ({ text, btnType, onClick, type, isDisabled }) => {
+const Button: React.FC<Props> = ({
+  text,
+  btnType,
+  onClick,
+  type,
+  isDisabled,
+  classButton = ''
+}) => {
   const buttonClasses = `
-    ${btnColors[btnType]} rounded-xl text-white py-2 px-5 text-2xl font-medium grow disabled:bg-opacity-30
+    ${btnColors[btnType]} rounded-xl text-white py-2 px-5 text-2xl font-medium grow disabled:bg-opacity-30 ${classButton}
   `;
 
   return (
