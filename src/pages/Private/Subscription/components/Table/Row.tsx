@@ -16,7 +16,7 @@ import { IoMdPricetags } from 'react-icons/io';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Form from '../Form/Form';
-import { getSubscriptions } from '#/services/subscriptions.services';
+import { destroySubscription, getSubscriptions } from '#/services/subscriptions.services';
 
 interface Prop {
   youtubeSubscription: YoutubeSubscription;
@@ -26,15 +26,18 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const [searchParams] = useSearchParams();
-  const { setYoutubeSubscriptions } = useYoutubeSubscription();
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
   }
-  // const { selectedTag, resetValidationError, cleanSelectedTag, setTags, addValidationError } =
-  //   useYoutubeSubscription();
+  const {
+    resetValidationError,
+    cleanSelectedYoutubeSubscription,
+    setYoutubeSubscriptions,
+    addValidationError
+  } = useYoutubeSubscription();
 
   // const [searchParams] = useSearchParams();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   // const handleClickEdit = (tag: Tag): void => {
   //   resetValidationError();
@@ -42,40 +45,40 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   //   focusInput('#name');
   // };
 
-  // const handleClickDelete = async (tag: Tag): Promise<void> => {
-  //   try {
-  //     const result = await toastNotifications().modalDeleteConfirm(tag.name);
-  //     if (!result) return;
+  const handleClickDelete = async (youtubeSubscription: YoutubeSubscription): Promise<void> => {
+    try {
+      const result = await toastNotifications().modalDeleteConfirm(youtubeSubscription.title);
+      if (!result) return;
 
-  //     dispatch(isLoading(true));
-  //     const response = await destroyTag(tag);
-  //     if ('data' in response) {
-  //       resetValidationError();
-  //       toastNotifications().toastSuccesCustomize(
-  //         `Se elimino la etiqueta ${tag.name} satisfactoriamente`
-  //       );
-  //       cleanSelectedTag();
-  //       const tags = await getTags(searchParams.toString());
-  //       setTags(tags);
-  //     } else if ('error' in response) {
-  //       const errorsDetail = response.error?.detail;
-  //       Object.keys(errorsDetail).forEach((key) => {
-  //         if (key !== 'apiResponseMessageError') {
-  //           addValidationError({ [key]: errorsDetail[key] });
-  //         }
-  //       });
+      dispatch(isLoading(true));
+      const response = await destroySubscription(youtubeSubscription);
+      if ('data' in response) {
+        resetValidationError();
+        toastNotifications().toastSuccesCustomize(
+          `Se elimino la suscripción ${youtubeSubscription.title} satisfactoriamente`
+        );
+        cleanSelectedYoutubeSubscription();
+        const subscriptions = await getSubscriptions(searchParams.toString());
+        setYoutubeSubscriptions(subscriptions);
+      } else if ('error' in response) {
+        const errorsDetail = response.error?.detail;
+        Object.keys(errorsDetail).forEach((key) => {
+          if (key !== 'apiResponseMessageError') {
+            addValidationError({ [key]: errorsDetail[key] });
+          }
+        });
 
-  //       if ('apiResponseMessageError' in errorsDetail) {
-  //         if (errorsDetail.apiResponseMessageError !== null)
-  //           throw new Error(errorsDetail.apiResponseMessageError);
-  //       }
-  //     }
-  //   } catch (error: any) {
-  //     toastNotifications().notificationError(error.message);
-  //   } finally {
-  //     dispatch(isLoading(false));
-  //   }
-  // };
+        if ('apiResponseMessageError' in errorsDetail) {
+          if (errorsDetail.apiResponseMessageError !== null)
+            throw new Error(errorsDetail.apiResponseMessageError);
+        }
+      }
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
+    }
+  };
 
   const handleClickEdit = (youtubeSubscription: YoutubeSubscription): void => {
     // TODO: Implementar el modal en el componente Table para evitar múltiples renderizados en Row, y manipular los datos
@@ -136,7 +139,7 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
             <button
               className="w-8 h-8  flex justify-center items-center bg-red-600 rounded-lg"
               onClick={() => {
-                // handleClickDelete(tag);
+                handleClickDelete(youtubeSubscription);
               }}>
               <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
                 <FaTrashAlt />

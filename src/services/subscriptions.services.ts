@@ -1,3 +1,4 @@
+import { type YoutubeSubscriptionErrorResponse } from './../pages/Private/Subscription/index.types';
 import {
   youtubeSubscriptionsAdapter,
   youtubeSubscriptionErrorResponseAdapter,
@@ -37,12 +38,12 @@ export const getSubscriptions = async (
     );
 };
 
-export const savingSubscriptions = async (accessToken: string): Promise<void> => {
+export const savingSubscriptions = async (accessToken: string, order: string): Promise<void> => {
   const bearerToken = getBearerToken();
 
   fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`, {
     method: 'POST',
-    body: JSON.stringify({ access_token: accessToken }),
+    body: JSON.stringify({ access_token: accessToken, order }),
     headers: {
       'Content-Type': 'application/json',
       accept: 'application/json',
@@ -73,6 +74,33 @@ export const updatingSubscription = async (
   )
     .then(async (resp) => {
       if (!resp.ok) return await Promise.reject(resp.json());
+      return await resp.json();
+    })
+    .then(async (data) => youtubeSubscriptionAdapter(await data))
+    .catch(async (error) =>
+      youtubeSubscriptionErrorResponseAdapter(processErrorResponse(await error))
+    );
+};
+
+export const destroySubscription = async (
+  youtubeSubscription: YoutubeSubscription
+): Promise<YoutubeSubscriptionSuccessResponse | YoutubeSubscriptionErrorResponse> => {
+  const bearerToken = getBearerToken();
+
+  return await fetch(
+    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${youtubeSubscription.id}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
+      }
+    }
+  )
+    .then(async (resp) => {
+      if (!resp.ok) return await Promise.reject(resp.json());
+
       return await resp.json();
     })
     .then(async (data) => youtubeSubscriptionAdapter(await data))
