@@ -88,9 +88,11 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
 
       <td className="w-32  text-center">{progress?.date}</td>
 
-      <td className="w-36 text-center">{progress?.done}</td>
+      <td className="w-36 text-center">{progress?.advanced}</td>
 
       <td className="w-36 text-center">{progress?.pending}</td>
+
+      <td className="w-36 text-center">{progress?.done}</td>
 
       <td className="">{progress?.comment}</td>
     </tr>

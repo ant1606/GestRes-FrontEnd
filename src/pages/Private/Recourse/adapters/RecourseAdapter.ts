@@ -40,7 +40,6 @@ const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
 };
 
 export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
-  console.log('Desde recourseAdapter luego de destroy', recourse);
   return {
     data: adapterRecourse(recourse.data)
   };

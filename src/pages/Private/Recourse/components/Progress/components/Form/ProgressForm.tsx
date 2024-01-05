@@ -8,6 +8,7 @@ import Button from '#/components/Button';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { savingProgress } from '#/services/progress.services';
 import {
+  validateAdvancedAmount,
   validateComment,
   validateDate,
   validateDoneAmount
@@ -16,7 +17,8 @@ import {
 const validateFunctionsFormInputs = {
   done: validateDoneAmount,
   date: validateDate,
-  comment: validateComment
+  comment: validateComment,
+  advanced: validateAdvancedAmount
 };
 
 interface Props {
@@ -33,6 +35,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
   const initialState = {
     done: 0,
     date: moment().format('YYYY-MM-DD'),
+    advanced: recourseParent.progress.advanced + 1,
     comment: '',
     lastProgress: recourseParent.progress
   };
@@ -46,7 +49,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
     addValidationError
   );
-  const { done, date, comment } = formValues;
+  const { done, date, comment, advanced } = formValues;
   const progressErrorRef = useRef<Record<string, string | null>>({});
 
   useEffect(() => {
@@ -70,6 +73,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
       if (existValidationMessage) {
         const response = await savingProgress(
           {
+            advanced: formValues.advanced,
             done: formValues.done,
             comment: formValues.comment,
             date: formValues.date
@@ -78,7 +82,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         );
 
         if ('data' in response) {
-          const pendingAmount = recourseParent.progress.pending - done;
+          const pendingAmount = recourseParent.progress.total - advanced;
           // pendingAmount === 0
           //   ? toastNotifications().notificationSuccess(
           //     `Finalizó el recurso ${recourseParent.name}, Felicidades`
@@ -135,13 +139,15 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
         <div className="flex gap-10">
           <Field
             type="number"
-            label="Avance"
-            classBox=""
-            errorInput={progressError.done}
+            label="Avance hasta"
+            classBox="w-full"
+            errorInput={progressError.advanced}
             handleChange={handleInputChange}
-            name="done"
-            value={done}
+            name="advanced"
+            value={advanced}
           />
+        </div>
+        <div className="flex gap-10">
           <Field
             type="number"
             label="Pendiente"
@@ -151,7 +157,19 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
               return null;
             }}
             name="pending"
-            value={recourseParent.progress.pending - done}
+            value={recourseParent.progress.total - advanced}
+            disabled
+          />
+          <Field
+            type="number"
+            label="Realizado"
+            classBox=""
+            errorInput={''}
+            handleChange={(e) => {
+              return null;
+            }}
+            name="pending"
+            value={advanced - recourseParent.progress.advanced}
             disabled
           />
         </div>

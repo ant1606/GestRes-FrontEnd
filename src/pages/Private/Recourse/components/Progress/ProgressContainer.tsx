@@ -82,6 +82,7 @@ export const ProgressContainer: React.FC = () => {
     const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
     setProgresses(progressData);
     const recourseRefreshed = await getRecourse(recourseActive.id);
+    console.log('RecourseResreshed', recourseRefreshed);
     selectedRecourse(recourseRefreshed.data);
   };
 
