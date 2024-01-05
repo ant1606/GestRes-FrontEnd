@@ -1,6 +1,9 @@
 import { adapterTagsData } from '../../Tag/adapters/TagAdapter';
-import { adapterProgress } from '../components/Progress/adapters/ProgressAdapter';
-import { adapterStatus } from '../components/Status/adapters/StatusAdapter';
+import {
+  adapterProgress,
+  adapterProgressesData
+} from '../components/Progress/adapters/ProgressAdapter';
+import { adapterStatus, adapterStatusesData } from '../components/Status/adapters/StatusAdapter';
 import {
   type RecourseSuccessResponse,
   type ApiResponseRecourse,
@@ -9,6 +12,7 @@ import {
 } from '../index.types';
 
 const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
+  console.log(recourse);
   return {
     id: parseInt(recourse.identificador),
     name: recourse.nombre,
@@ -16,14 +20,15 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
     source: recourse.ruta,
     editorial: recourse.editorial,
     typeId: parseInt(recourse.tipoId),
+    unitMeasureProgressId: parseInt(recourse.unidadMedidadProgresoId),
     totalPages: recourse.totalPaginas === null ? null : parseInt(recourse.totalPaginas),
     totalChapters: recourse.totalCapitulos === null ? null : parseInt(recourse.totalCapitulos),
     totalVideos: recourse.totalVideos === null ? null : parseInt(recourse.totalVideos),
     totalHours: recourse.totalHoras === null ? null : recourse.totalHoras,
     totalProgressPercentage:
       recourse.totalProgresoPorcentaje === null ? 0 : parseFloat(recourse.totalProgresoPorcentaje),
-    status: adapterStatus(recourse.status),
-    progress: adapterProgress(recourse.progress),
+    status: recourse.status === null ? [] : adapterStatus(recourse.status),
+    progress: recourse.progress === null ? [] : adapterProgress(recourse.progress),
     tags: adapterTagsData(recourse.tags),
     currentStatusName: recourse.nombreEstadoActual,
     typeName: recourse.tipoNombre
@@ -31,17 +36,18 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
 };
 
 const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
-  return recourses.map((recourse: ApiResponseRecourse) => adapterRecourse(recourse));
+  return recourses?.map((recourse: ApiResponseRecourse) => adapterRecourse(recourse));
 };
 
 export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
-  // console.log(recourse);
+  console.log('Desde recourseAdapter luego de destroy', recourse);
   return {
     data: adapterRecourse(recourse.data)
   };
 };
 
 export const recoursesAdapter = (response: any): RecoursesSuccessResponse => {
+  console.log('Desde recourses Adapter, del servicio getRecourses', response);
   if (response.data.length === 0) return { meta: null, links: null, data: [] };
   return {
     meta: {
@@ -75,6 +81,7 @@ export const recourseErrorResponseAdapter = (error: any): RecourseErrorResponse 
         author: error.error.detail.author ?? null,
         editorial: error.error.detail.editorial ?? null,
         typeId: error.error.detail.type_id ?? null,
+        unitMeasureProgressId: error.error.detail.unit_measure_progress_id ?? null,
         totalPages: error.error.detail.total_pages ?? null,
         totalChapters: error.error.detail.total_chapters ?? null,
         totalVideos: error.error.detail.total_videos ?? null,

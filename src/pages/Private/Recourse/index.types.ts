@@ -9,6 +9,7 @@ export interface RecourseFormData {
   author: string;
   editorial: string;
   typeId: string;
+  unitMeasureProgressId: string;
   totalVideos: string;
   totalHours: string;
   totalPages: string;
@@ -22,6 +23,7 @@ export interface RecourseErrorDetailResponse extends ApiErrorResponse {
   author: string | null;
   editorial: string | null;
   typeId: string | null;
+  unitMeasureProgressId: string | null;
   totalPages: string | null;
   totalChapters: string | null;
   totalVideos: string | null;
@@ -55,6 +57,7 @@ export interface ApiResponseRecourse {
   autor: string;
   editorial: string;
   tipoId: string;
+  unidadMedidadProgresoId: string;
   tipoNombre: string;
   nombreEstadoActual: string;
   totalPaginas: string | null;

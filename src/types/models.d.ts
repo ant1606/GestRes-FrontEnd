@@ -20,6 +20,7 @@ interface Recourse {
   author: string | null;
   editorial: string | null;
   typeId: number;
+  unitMeasureProgressId: number;
   totalPages: number | null;
   totalChapters: number | null;
   totalVideos: number | null;
@@ -46,10 +47,12 @@ interface Progress {
   id: number;
   done: number;
   pending: number;
+  advanced: number;
   date: string;
   comment: string;
   recourseId?: number;
   isLastRecord: boolean;
+  total: number;
 }
 
 interface Settings {

@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+// TODO AParece error al momento de registrar un recursos, suele salir el error de CORS
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useRecourse } from '../../context/recourse.context';
@@ -14,11 +15,12 @@ import {
   validateTotalVideos,
   validateTotalHours,
   validateTotalPages,
-  validateTotalChapters
+  validateTotalChapters,
+  validateUnitMeasureProgressId
 } from '../../utils/RecourseFormValidationInputs';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
-import { isLoading } from '#/redux/slice/uiSlice';
+import { changeTitle, isLoading } from '#/redux/slice/uiSlice';
 import { savingRecourse, updatingRecourse } from '#/services/recourse.services';
 import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
 import FormView from './FormView';
@@ -29,6 +31,7 @@ const validateFunctionsFormInputs = {
   author: validateAuthor,
   editorial: validateEditorial,
   typeId: validateTypeId,
+  unitMeasureProgressId: validateUnitMeasureProgressId,
   totalVideos: validateTotalVideos,
   totalHours: validateTotalHours,
   totalPages: validateTotalPages,
@@ -41,21 +44,24 @@ interface Props {
 export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const dispatch = useAppDispatch();
   const [comboTypeData, setComboTypeData] = useState<Settings[]>([]);
+  const [comboUnitMeasureProgressData, setComboUnitMeasureProgressData] = useState<Settings[]>([]);
   const { recourseError, addValidationError, recourseActive, resetValidationError, cleanSelectedRecourse } = useRecourse();
-  const { settingsType } = useAppSelector((state: RootState) => state.settings);
+  const { settingsType, settingsUnitMeasureProgress } = useAppSelector((state: RootState) => state.settings);
   const [disabledButton, setDisabledButton] = useState(false);
 
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   // TODO QUeda cargar las etiquetas del recurso
+  // recourseType usado en las funciones de validaciones del formulario
   const initialState = {
     id: recourseActive?.id ?? 0,
     name: recourseActive?.name ?? '',
     source: recourseActive?.source ?? '',
     author: recourseActive?.author ?? '',
     editorial: recourseActive?.editorial ?? '',
-    typeId: recourseActive?.typeId ?? settingsType[0].id,
+    typeId: recourseActive?.typeId ?? settingsType[0]?.id ?? 0,
+    unitMeasureProgressId: recourseActive?.unitMeasureProgressId ?? settingsUnitMeasureProgress[0]?.id ?? 0,
     totalVideos: recourseActive?.totalVideos ?? 0,
     totalHours: recourseActive?.totalHours ?? "00:00:00",
     totalPages: recourseActive?.totalPages ?? 0,
@@ -82,6 +88,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     author,
     editorial,
     typeId,
+    unitMeasureProgressId,
     totalVideos,
     totalHours,
     totalPages,
@@ -92,6 +99,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   useEffect(() => {
     if (settingsType !== null) {
       setComboTypeData(settingsType);
+      // setComboUnitMeasureProgressData(settingsUnitMeasureProgress);
       reset();
     }
   }, [settingsType]);
@@ -106,6 +114,18 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     addValidationError({ totalChapters: null });
     addValidationError({ totalPages: null });
     // TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
+    // Cambiar los valores de unidad de medida segun el typeId 
+    // TODO ver una forma de no usar datos quemados en el filtrado de la unidad de medida de progreso
+    let dataUnitMeasureProgres: Settings[] = [];
+    if (
+      parseInt(typeId) ===
+      settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id) {
+      dataUnitMeasureProgres = settingsUnitMeasureProgress.filter((unit) => unit.key === 'UNIT_PAGES' || unit.key === 'UNIT_CHAPTERS');
+    } else {
+      dataUnitMeasureProgres = settingsUnitMeasureProgress.filter((unit) => unit.key === 'UNIT_HOURS' || unit.key === 'UNIT_VIDEOS');
+    }
+    setComboUnitMeasureProgressData(dataUnitMeasureProgres);
+    // TODO Existe problema al cambiar el typeId visiblmente el componente cambia, pero internamente el valor de unitMeasureProgressId se mantiene pegado
   }, [typeId]);
 
   // TODO Probar esta funcionalidad
@@ -117,12 +137,14 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   }, [recourseActive]);
 
   useEffect(() => {
+    dispatch(changeTitle(recourseActive !== null ? 'Edición de Recurso' : "Registro de Recurso"));
     return () => {
       resetValidationError();
     }
   }, []);
 
   const handleSubmit = async (): Promise<void> => {
+    console.log(formValues.unitMeasureProgressId);
     try {
       dispatch(isLoading(true));
       setDisabledButton(true);
@@ -150,12 +172,14 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           author: formValues.author,
           editorial: formValues.editorial,
           type_id: formValues.typeId,
+          unit_measure_progress_id: formValues.unitMeasureProgressId,
           total_pages: formValues.totalPages,
           total_chapters: formValues.totalChapters,
           total_videos: formValues.totalVideos,
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
         }
+        console.log(recourseToSend);
 
         let response;
         if (recourseActive === null) {
@@ -163,11 +187,15 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
         } else {
           let resultDialog = true;
 
-
           if (recourseActive.typeId !== formValues.typeId) {
             resultDialog = await toastNotifications().modalCustomDialogQuestion(
               'Se modificó el tipo del Recurso',
               'Si cambio el tipo del recurso, los progresos existentes se resetearan a 0\n¿desea continuar con la actualización?'
+            )
+          } else if (recourseActive.unitMeasureProgressId !== formValues.unitMeasureProgressId) {
+            resultDialog = await toastNotifications().modalCustomDialogQuestion(
+              'Se modificó la unidad de medida de progreso Recurso',
+              'Si cambio la unidad de medida de progreso del recurso, los progresos existentes se resetearan a 0\n¿desea continuar con la actualización?'
             )
           } else {
             const isTypeLibro = parseInt(formValues.typeId) ===
@@ -230,6 +258,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       handleChangeType={handleInputChange}
       name={name}
       typeId={typeId}
+      unitMeasureProgressId={unitMeasureProgressId}
       editorial={editorial}
       totalPages={totalPages}
       totalVideos={totalVideos}
@@ -239,6 +268,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       source={source}
       recourseError={recourseError}
       dataSelectType={comboTypeData}
+      dataSelectUnitMeasureProgressData={comboUnitMeasureProgressData}
       isShow={isShow}
       selectedTags={selectedTags}
       setSelectedTags={setSelectedTags}

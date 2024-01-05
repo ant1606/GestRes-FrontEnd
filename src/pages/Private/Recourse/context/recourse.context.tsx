@@ -27,6 +27,7 @@ type typeValidationError =
   | 'author'
   | 'editorial'
   | 'typeId'
+  | 'unitMeasureProgressId'
   | 'totalPages'
   | 'totalChapters'
   | 'totalVideos'
@@ -53,6 +54,7 @@ const initialState: InitialState = {
     author: null,
     editorial: null,
     typeId: null,
+    unitMeasureProgressId: null,
     totalPages: null,
     totalChapters: null,
     totalVideos: null,
@@ -117,6 +119,7 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
           author: null,
           editorial: null,
           typeId: null,
+          unitMeasureProgressId: null,
           totalPages: null,
           totalChapters: null,
           totalVideos: null,

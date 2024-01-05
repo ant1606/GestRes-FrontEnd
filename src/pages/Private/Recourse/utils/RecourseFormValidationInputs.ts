@@ -61,6 +61,15 @@ export const validateTypeId = (values: RecourseFormData): ValidationInputResult 
   return null;
 };
 
+export const validateUnitMeasureProgressId = (values: RecourseFormData): ValidationInputResult => {
+  // const validateTypeId = parseInt(values.typeId);
+  // const isValidTypeId = values.recourseType.some((type) => type.id === validateTypeId);
+
+  // if (!isValidTypeId) return 'Debe seleccionar el Tipo de Recurso válido.';
+
+  return null;
+};
+
 export const validateTotalPages = (values: RecourseFormData): ValidationInputResult => {
   // TODO aplicar regex para que sólo se admitan numeros enteros
   const validateTotalPages = parseInt(values.totalPages);

@@ -42,7 +42,10 @@ const AppRouter: React.FC = () => {
       dispatch(
         loadSettings({
           settingsType: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_TYPE),
-          settingsStatus: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_STATUS)
+          settingsStatus: params.filter((val) => val.type === import.meta.env.VITE_SETTINGS_STATUS),
+          settingsUnitMeasureProgress: params.filter(
+            (val) => val.type === import.meta.env.VITE_SETTINGS_UNIT_MEASURE_PROGRESS
+          )
         })
       );
       resolve();

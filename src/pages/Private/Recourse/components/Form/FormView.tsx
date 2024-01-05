@@ -20,6 +20,7 @@ interface Props {
   handleChangeType: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   name: string;
   typeId: number;
+  unitMeasureProgressId: number;
   editorial: string;
   totalPages: number;
   totalVideos: number;
@@ -29,6 +30,7 @@ interface Props {
   source: string;
   recourseError: Record<string, string | null>;
   dataSelectType: SelectType[];
+  dataSelectUnitMeasureProgressData: SelectType[];
   isShow: boolean;
   selectedTags: number[];
   setSelectedTags: React.Dispatch<React.SetStateAction<number[]>>;
@@ -42,6 +44,7 @@ const FormView: React.FC<Props> = ({
   handleChangeType,
   name,
   typeId,
+  unitMeasureProgressId,
   editorial,
   totalPages,
   totalVideos,
@@ -51,6 +54,7 @@ const FormView: React.FC<Props> = ({
   source,
   recourseError,
   dataSelectType,
+  dataSelectUnitMeasureProgressData,
   isShow,
   selectedTags,
   setSelectedTags,
@@ -62,110 +66,24 @@ const FormView: React.FC<Props> = ({
 
   const handleClickCancel = (): void => {
     navigate('/app/recourse');
-  }
+  };
 
   if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-      <div className="flex w-full gap-10 my-5">
+    <form className="flex flex-col" onSubmit={handleSubmit}>
+      <div className="flex w-full my-6">
         <Field
           type="text"
           label="Nombre"
           name="name"
-          classBox="basis-3/4"
+          classBox="w-full"
           handleChange={handleInputChange}
           value={name}
           errorInput={recourseError?.name}
           readonly={isShow}
         />
-
-        <Combobox
-          name="typeId"
-          label="Tipo"
-          options={dataSelectType}
-          filter={false}
-          classBox="basis-1/4"
-          handleChange={handleChangeType}
-          value={typeId}
-          errorCombo={recourseError?.typeId}
-          isDisabled={isShow}
-        />
       </div>
-      <div className="flex gap-10 my-5">
-        <Field
-          type="text"
-          label="Editorial"
-          name="editorial"
-          classBox="basis-3/4"
-          handleChange={handleInputChange}
-          value={editorial}
-          errorInput={recourseError?.editorial}
-          readonly={isShow}
-        />
-
-        {typeId ===
-          settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
-          <Field
-            type="text"
-            label="Total Paginas"
-            name="totalPages"
-            classBox="basis-1/4"
-            handleChange={handleInputChange}
-            value={totalPages}
-            errorInput={recourseError.totalPages}
-            readonly={isShow}
-          />
-        ) : (
-          <Field
-            type="text"
-            label="Total Videos"
-            name="totalVideos"
-            classBox="basis-1/4"
-            handleChange={handleInputChange}
-            value={totalVideos}
-            errorInput={recourseError.totalVideos}
-            readonly={isShow}
-          />
-        )}
-      </div>
-      <div className="flex gap-10 my-5">
-        <Field
-          type="text"
-          label="Autor"
-          name="author"
-          classBox="basis-3/4"
-          handleChange={handleInputChange}
-          value={author}
-          errorInput={recourseError.author}
-          readonly={isShow}
-        />
-
-        {typeId ===
-          settingsType?.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
-          <Field
-            type="text"
-            label="Total Capitulos"
-            name="totalChapters"
-            classBox="basis-1/4"
-            handleChange={handleInputChange}
-            value={totalChapters}
-            errorInput={recourseError.totalChapters}
-            readonly={isShow}
-          />
-        ) : (
-          <Field
-            type="text"
-            label="Total Horas"
-            name="totalHours"
-            classBox="basis-1/4"
-            handleChange={handleInputChange}
-            value={totalHours}
-            errorInput={recourseError.totalHours}
-            readonly={isShow}
-          />
-        )}
-      </div>
-      <div className="my-5">
+      <div className="flex  my-6">
         <Field
           type="text"
           label="Ruta"
@@ -173,37 +91,132 @@ const FormView: React.FC<Props> = ({
           handleChange={handleInputChange}
           value={source}
           errorInput={recourseError.source}
-          classBox=""
+          classBox="w-full"
           readonly={isShow}
         />
       </div>
-      <div className="mt-5 mb-24">
-        {
-          !isShow ? (
-            <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
-          ) : (
-            <div className="flex flex-1 justify-start items-start flex-wrap gap-2 leading-1">
-              {recourseSelected?.tags.map((tag) => (
-                <div
-                  key={tag.id}
-                  className={`${tag.style} m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase`}>
-                  {tag.name}
-                </div>
-              ))}
-            </div>
-          )
-        }
-      </div>
-      {!isShow ?
-        (
-          <div className="flex justify-around gap-14">
-            <Button type="submit" text="Registrar" btnType="main" isDisabled={submitIsDisabled} />
-            <Button btnType="danger" text="Cancelar" type="button" onClick={handleClickCancel} />
-          </div>
-        ) :
-        (<></>)
-      }
+      <div className="flex gap-10 my-6">
+        <Combobox
+          name="typeId"
+          label="Tipo"
+          options={dataSelectType}
+          filter={false}
+          classBox="basis-2/4"
+          handleChange={handleChangeType}
+          value={typeId}
+          errorCombo={recourseError?.typeId}
+          isDisabled={isShow}
+        />
+        <Combobox
+          name="unitMeasureProgressId"
+          label="Unidad de Medida de Progreso"
+          options={dataSelectUnitMeasureProgressData}
+          filter={false}
+          classBox="basis-2/4"
+          handleChange={handleChangeType}
+          value={unitMeasureProgressId}
+          errorCombo={recourseError?.unitMeasureProgressId}
+          isDisabled={isShow}
+        />
 
+      </div>
+      <div className="flex gap-10 my-6">
+        {parseInt(typeId) ===
+          settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
+          <>
+            <Field
+              type="text"
+              label="Total Paginas"
+              name="totalPages"
+              classBox="basis-2/4"
+              handleChange={handleInputChange}
+              value={totalPages}
+              errorInput={recourseError.totalPages}
+              readonly={isShow}
+            />
+            <Field
+              type="text"
+              label="Total Capitulos"
+              name="totalChapters"
+              classBox="basis-2/4"
+              handleChange={handleInputChange}
+              value={totalChapters}
+              errorInput={recourseError.totalChapters}
+              readonly={isShow}
+            />
+          </>
+        ) : (
+          <>
+            <Field
+              type="text"
+              label="Total Videos"
+              name="totalVideos"
+              classBox="basis-2/4"
+              handleChange={handleInputChange}
+              value={totalVideos}
+              errorInput={recourseError.totalVideos}
+              readonly={isShow}
+            />
+            <Field
+              type="text"
+              label="Total Horas"
+              name="totalHours"
+              classBox="basis-2/4"
+              handleChange={handleInputChange}
+              value={totalHours}
+              errorInput={recourseError.totalHours}
+              readonly={isShow}
+            />
+          </>
+        )}
+
+      </div>
+      <div className="flex gap-10 my-6">
+        <Field
+          type="text"
+          label="Autor"
+          name="author"
+          classBox="basis-2/4"
+          handleChange={handleInputChange}
+          value={author}
+          errorInput={recourseError.author}
+          readonly={isShow}
+        />
+
+        <Field
+          type="text"
+          label="Editorial"
+          name="editorial"
+          classBox="basis-2/4"
+          handleChange={handleInputChange}
+          value={editorial}
+          errorInput={recourseError?.editorial}
+          readonly={isShow}
+        />
+      </div>
+      <div className="mt-5 mb-20">
+        {!isShow ? (
+          <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
+        ) : (
+          <div className="flex flex-1 justify-start items-start flex-wrap gap-2 leading-1">
+            {recourseSelected?.tags.map((tag) => (
+              <div
+                key={tag.id}
+                className={`${tag.style} m-0 h-7 shrink px-4 py-1 text-sm font-bold text-white rounded-2xl transform-uppercase`}>
+                {tag.name}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      {!isShow ? (
+        <div className="flex justify-around gap-20">
+          <Button type="submit" text="Registrar" btnType="main" isDisabled={submitIsDisabled} />
+          <Button btnType="danger" text="Cancelar" type="button" onClick={handleClickCancel} />
+        </div>
+      ) : (
+        <></>
+      )}
     </form>
   );
 };

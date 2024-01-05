@@ -4,11 +4,13 @@ import { type RootState } from '../store';
 interface SettingsState {
   settingsType: Settings[];
   settingsStatus: Settings[];
+  settingsUnitMeasureProgress: Settings[];
 }
 
 const initialState: SettingsState = {
   settingsType: [],
-  settingsStatus: []
+  settingsStatus: [],
+  settingsUnitMeasureProgress: []
 };
 
 export const settingsSlice = createSlice({
@@ -18,6 +20,7 @@ export const settingsSlice = createSlice({
     loadSettings: (state, action: PayloadAction<SettingsState>) => {
       state.settingsType = action.payload.settingsType;
       state.settingsStatus = action.payload.settingsStatus;
+      state.settingsUnitMeasureProgress = action.payload.settingsUnitMeasureProgress;
     }
   }
 });
