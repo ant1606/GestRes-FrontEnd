@@ -48,7 +48,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const { recourseError, addValidationError, recourseActive, resetValidationError, cleanSelectedRecourse } = useRecourse();
   const { settingsType, settingsUnitMeasureProgress } = useAppSelector((state: RootState) => state.settings);
   const [disabledButton, setDisabledButton] = useState(false);
-  console.log("Desde FormContainer", recourseActive);
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
@@ -144,7 +143,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   }, []);
 
   const handleSubmit = async (): Promise<void> => {
-    console.log(formValues.unitMeasureProgressId);
     try {
       dispatch(isLoading(true));
       setDisabledButton(true);
@@ -179,7 +177,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
         }
-        console.log(recourseToSend);
+        console.log("Enviando el recurso", recourseToSend);
 
         let response;
         if (recourseActive === null) {

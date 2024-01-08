@@ -135,13 +135,13 @@ export const validateTotalHours = (values: RecourseFormData): ValidationInputRes
 
   if (isTipoVideo) {
     const validateTotalHours = values.totalHours;
-    const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
-    if (validateTotalHours.length === 0) return 'Total Horas es requerido';
+    // const isValidTime = /^([0-9]{1,3}):([0-5][0-9]):([0-5][0-9])$/.test(value);
+    // const regex = /(\d+):([0-5][0-9]):([0-5][0-9])/;
+    // if (validateTotalHours.length === 0) return 'Total Horas es requerido';
 
-    // if(validateTotalHours === "00:00:00")
-    //     return "Total Horas debe tener un valor distinto a 0";
+    if (validateTotalHours === '00:00:00') return 'Total Horas no puede ser 00:00:00';
 
-    if (!regex.test(validateTotalHours)) return 'Total Horas debe ser en formato hh:mm:ss ';
+    // if (!regex.test(validateTotalHours)) return 'Total Horas debe ser en formato hh:mm:ss ';
   }
 
   return null;

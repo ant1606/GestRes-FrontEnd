@@ -8,6 +8,7 @@ import { type RootState } from '#/redux/store';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import SelectorTag from '../SelectorTag/SelectorTag';
+import TimeInput from '../TimeInput';
 
 interface SelectType {
   id: number;
@@ -119,8 +120,8 @@ const FormView: React.FC<Props> = ({
           isDisabled={isShow}
         />
 
-      </div>
-      <div className="flex gap-10 my-6">
+        {/* </div>
+      <div className="flex gap-10 my-6"> */}
         {parseInt(typeId) ===
           settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
           <>
@@ -157,6 +158,16 @@ const FormView: React.FC<Props> = ({
               errorInput={recourseError.totalVideos}
               readonly={isShow}
             />
+            <TimeInput
+              handleChange={handleInputChange}
+              // timeValue={totalHours}
+              name="totalHours"
+              outInputFocus="author"
+              label="Total Horas"
+              classBox="basis-2/4"
+              errorInput={recourseError.totalHours}
+            />
+            {/*             
             <Field
               type="text"
               label="Total Horas"
@@ -166,7 +177,7 @@ const FormView: React.FC<Props> = ({
               value={totalHours}
               errorInput={recourseError.totalHours}
               readonly={isShow}
-            />
+            /> */}
           </>
         )}
 
