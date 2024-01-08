@@ -160,7 +160,7 @@ const FormView: React.FC<Props> = ({
             />
             <TimeInput
               handleChange={handleInputChange}
-              // timeValue={totalHours}
+              timeValue={totalHours}
               name="totalHours"
               outInputFocus="author"
               label="Total Horas"

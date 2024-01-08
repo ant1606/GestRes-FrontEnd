@@ -1,5 +1,5 @@
 import ErrorMessage from '#/components/ErrorMessage';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 /**
  * Casos de prueba para el componente
@@ -34,6 +34,7 @@ interface Props {
   classBox: string;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   name: string;
+  timeValue: string;
 }
 interface CustomEvent {
   target: {
@@ -52,13 +53,17 @@ export const TimeInputSplitted: React.FC<Props> = ({
   errorInput,
   classBox,
   handleChange,
-  name
+  name,
+  timeValue
 }) => {
-  const [hour, setHour] = useState('00');
-  const [minute, setMinute] = useState('00');
-  const [second, setSecond] = useState('00');
+  const [timeValueHour, timeValueMinute, timeValueSecond] = timeValue.split(':').map(String);
+  const [hour, setHour] = useState(timeValueHour);
+  const [minute, setMinute] = useState(timeValueMinute);
+  const [second, setSecond] = useState(timeValueSecond);
 
   const LengthError = validateLengthError(errorInput);
+  const minuteRef = useRef(null);
+  const secondRef = useRef(null);
 
   // Llamamos al método handleChange del parent para modificar el estado del customHook
   // Necesita el name de la propiedad para que sea enlazada en el customHook
@@ -130,12 +135,13 @@ export const TimeInputSplitted: React.FC<Props> = ({
     }
   };
 
+  // nextInputId: 'minute' | 'second' | string
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    nextInputId: 'minute' | 'second' | string
+    nextInputRef: React.MutableRefObject<null>
   ): void => {
     if (e.key === 'Enter') {
-      document.getElementById(nextInputId)?.focus();
+      nextInputRef.current?.focus();
     }
     if (e.key === 'ArrowRight') {
       // Obtenemos la posición del cursor en el input mediante la propiedad selecctionStart
@@ -143,7 +149,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
         (e.target as HTMLInputElement).selectionStart ===
         (e.target as HTMLInputElement).value.length
       ) {
-        document.getElementById(nextInputId)?.focus();
+        nextInputRef.current?.focus();
       }
     }
   };
@@ -227,7 +233,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
                 handleInputChange(e, 'hour');
               }}
               onKeyDown={(e) => {
-                handleKeyDown(e, 'minute');
+                handleKeyDown(e, minuteRef);
               }}
               onBlur={(e) => {
                 handleBlur(e, 'hour');
@@ -248,7 +254,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
                 handleInputChange(e, 'minute');
               }}
               onKeyDown={(e) => {
-                handleKeyDown(e, 'second');
+                handleKeyDown(e, secondRef);
               }}
               onBlur={(e) => {
                 handleBlur(e, 'minute');
@@ -257,6 +263,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
                 handleFocus(e, 'minute');
               }}
               className="max-w-[2.3rem] text-center px-1 border-none outline-none"
+              ref={minuteRef}
             />
             <span className="font-bold">:</span>
             <input
@@ -268,7 +275,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
                 handleInputChange(e, 'second');
               }}
               onKeyDown={(e) => {
-                handleKeyDown(e, outInputFocus);
+                handleKeyDown(e, secondRef);
               }}
               onBlur={(e) => {
                 handleBlur(e, 'second');
@@ -277,6 +284,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
                 handleFocus(e, 'second');
               }}
               className="max-w-[2.3rem] text-center px-1 border-none outline-none"
+              ref={secondRef}
             />
           </div>
           <span

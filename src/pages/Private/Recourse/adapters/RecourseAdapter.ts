@@ -12,7 +12,7 @@ import {
 } from '../index.types';
 
 const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
-  console.log(recourse);
+  // console.log(recourse);
   return {
     id: parseInt(recourse.identificador),
     name: recourse.nombre,
@@ -46,7 +46,7 @@ export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessR
 };
 
 export const recoursesAdapter = (response: any): RecoursesSuccessResponse => {
-  console.log('Desde recourses Adapter, del servicio getRecourses', response);
+  // console.log('Desde recourses Adapter, del servicio getRecourses', response);
   if (response.data.length === 0) return { meta: null, links: null, data: [] };
   return {
     meta: {

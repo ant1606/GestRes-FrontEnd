@@ -10,6 +10,8 @@ import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { getRecourse } from '#/services/recourse.services';
+import { useAppSelector } from '#/hooks/redux';
+import { type RootState } from '#/redux/store';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -18,6 +20,7 @@ interface ReactPaginaOnPageChangeArgument {
 export const ProgressContainer: React.FC = () => {
   const { recourseActive, selectedRecourse } = useRecourse();
   const { setProgresses } = useProgress();
+  const { settingsType } = useAppSelector((state: RootState) => state.settings);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const navigate = useNavigate();
@@ -52,6 +55,7 @@ export const ProgressContainer: React.FC = () => {
             <ProgressForm
               modalRef={modalRef.current}
               recourseParent={recourseActive}
+              listTypes={settingsType}
               onFormSubmit={(pending) => {
                 handleFormSubmit(pending);
               }}
@@ -82,7 +86,6 @@ export const ProgressContainer: React.FC = () => {
     const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
     setProgresses(progressData);
     const recourseRefreshed = await getRecourse(recourseActive.id);
-    console.log('RecourseResreshed', recourseRefreshed);
     selectedRecourse(recourseRefreshed.data);
   };
 

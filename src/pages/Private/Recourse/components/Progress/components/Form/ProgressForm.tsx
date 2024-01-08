@@ -13,9 +13,11 @@ import {
   validateDate,
   validateDoneAmount
 } from '../../utils/ProgressFormValidationInputs';
+import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
+import TimeInputSplitted from '../../../TimeInput';
 
+// done: validateDoneAmount,
 const validateFunctionsFormInputs = {
-  done: validateDoneAmount,
   date: validateDate,
   comment: validateComment,
   advanced: validateAdvancedAmount
@@ -24,20 +26,33 @@ const validateFunctionsFormInputs = {
 interface Props {
   modalRef: any;
   recourseParent: Recourse;
+  listTypes: Settings[];
   onFormSubmit: (pending: number) => void;
 }
 
-const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit }) => {
+const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, onFormSubmit }) => {
   const { addValidationError, progressError, resetValidationError, cleanSelectedProgress } =
     useProgress();
   const [disabledButton, setDisabledButton] = useState(false);
+  const [isTypeVideo, setIsTypeVideo] = useState(false);
+
+  useEffect(() => {
+    setIsTypeVideo(
+      parseInt(recourseParent.typeId) ===
+      listTypes.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_VIDEO)?.id
+    );
+  }, []);
+
+  useEffect(() => {
+    reset();
+  }, [isTypeVideo]);
 
   const initialState = {
-    done: 0,
     date: moment().format('YYYY-MM-DD'),
-    advanced: recourseParent.progress.advanced + 1,
+    advanced: recourseParent.progress.advanced,
     comment: '',
-    lastProgress: recourseParent.progress
+    lastProgress: recourseParent.progress,
+    isTypeVideo
   };
   const {
     values: formValues,
@@ -49,7 +64,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
     validateFunctionsFormInputs as Record<string, (values: unknown) => string | null>,
     addValidationError
   );
-  const { done, date, comment, advanced } = formValues;
+  const { date, comment, advanced } = formValues;
   const progressErrorRef = useRef<Record<string, string | null>>({});
 
   useEffect(() => {
@@ -123,33 +138,74 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
   const minDate = (): string => {
     return recourseParent.progress.date ?? new Date().toISOString().split('T')[0];
   };
+
+  // TODO EXtraer esta lógica
+  const processHours = (hora1, hora2, isSubtract = true) => {
+    // console.log('desde processHours', hora1, hora2);
+    const [horas1, minutos1, segundos1] = hora1.split(':').map(Number);
+    const [horas2, minutos2, segundos2] = hora2.split(':').map(Number);
+
+    const totalSegundos1 = horas1 * 3600 + minutos1 * 60 + segundos1;
+    const totalSegundos2 = horas2 * 3600 + minutos2 * 60 + segundos2;
+
+    const totalSegundos = isSubtract
+      ? totalSegundos1 - totalSegundos2
+      : totalSegundos1 + totalSegundos2;
+
+    const nuevasHoras = Math.floor(totalSegundos / 3600);
+    const nuevosMinutos = Math.floor((totalSegundos % 3600) / 60);
+    const nuevosSegundos = totalSegundos % 60;
+
+    return `${String(abs(nuevasHoras)).padStart(2, '0')}:${String(abs(nuevosMinutos)).padStart(
+      2,
+      '0'
+    )}:${String(abs(nuevosSegundos)).padStart(2, '0')}`;
+  };
+
+  // Función auxiliar para obtener el valor absoluto
+  const abs = (value) => {
+    return value < 0 ? -value : value;
+  };
+
   return (
     <form onSubmit={handleSubmitWrapper}>
-      <div className="flex flex-col py-8 gap-10">
+      <div className="flex flex-col py-8 gap-12">
+        {/* <div className="flex gap-10"> */}
         <Field
           type="date"
           label="Fecha"
           name="date"
-          classBox=""
+          classBox="basis-full"
           value={date}
           errorInput={progressError.date}
           handleChange={handleInputChange}
           min={minDate()}
         />
-        <div className="flex gap-10">
+        {isTypeVideo ? (
+          <TimeInputSplitted
+            handleChange={handleInputChange}
+            timeValue={advanced}
+            name="advanced"
+            outInputFocus="comment"
+            label="Avanzado hasta"
+            classBox="basis-full"
+            errorInput={progressError.advanced}
+          />
+        ) : (
           <Field
-            type="number"
+            type="text"
             label="Avance hasta"
-            classBox="w-full"
+            classBox="basis-full"
             errorInput={progressError.advanced}
             handleChange={handleInputChange}
             name="advanced"
             value={advanced}
           />
-        </div>
+        )}
+        {/* </div> */}
         <div className="flex gap-10">
           <Field
-            type="number"
+            type="text"
             label="Pendiente"
             classBox=""
             errorInput={''}
@@ -157,11 +213,15 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
               return null;
             }}
             name="pending"
-            value={recourseParent.progress.total - advanced}
+            value={
+              isTypeVideo
+                ? processHours(recourseParent.progress.total, advanced)
+                : recourseParent.progress.total - advanced
+            }
             disabled
           />
           <Field
-            type="number"
+            type="text"
             label="Realizado"
             classBox=""
             errorInput={''}
@@ -169,7 +229,11 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, onFormSubmit 
               return null;
             }}
             name="pending"
-            value={advanced - recourseParent.progress.advanced}
+            value={
+              isTypeVideo
+                ? processHours(advanced, recourseParent.progress.advanced)
+                : advanced - recourseParent.progress.advanced
+            }
             disabled
           />
         </div>

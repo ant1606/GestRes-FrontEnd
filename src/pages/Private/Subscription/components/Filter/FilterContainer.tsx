@@ -29,7 +29,6 @@ export const FilterContainer: React.FC = () => {
 
   const execFilter = async (): Promise<void> => {
     try {
-      console.log('Ejecutando execFilter');
       searchParams.delete('searchTitle');
       searchParams.delete('searchTags[]');
       searchParams.delete('perPage');

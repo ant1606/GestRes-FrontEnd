@@ -177,7 +177,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
         }
-        console.log("Enviando el recurso", recourseToSend);
+        // console.log("Enviando el recurso", recourseToSend);
 
         let response;
         if (recourseActive === null) {

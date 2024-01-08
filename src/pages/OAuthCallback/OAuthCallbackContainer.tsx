@@ -18,17 +18,17 @@ export const OAuthCallbackContainer: React.FC = () => {
     const params = new URLSearchParams(location.hash.split('#')[1]);
     dispatch(userAccessOAuthGoogle(!params.has('error')));
     if (!params.has('error')) {
-      console.log('Comunicar conel enpodint');
+      // console.log('Comunicar conel enpodint');
       const accessToken = params.get('access_token') ?? '';
-      console.log('Iniciamos llamada a endpoint', performance.now());
+      // console.log('Iniciamos llamada a endpoint', performance.now());
       // TODO Existe un problema que al momento de llamar al endpoint, existe una demora en la redirección
       // El flujo de alguna forma esta haciendo que al momento de llamar a authGuard se demore más de 10 segundos en redireccionar
       // Ver resultados del loggin abajo
-      console.log('Porbando el state global', orderSortApiYoutube);
+      // console.log('Porbando el state global', orderSortApiYoutube);
       savingSubscriptions(accessToken, orderSortApiYoutube);
-      console.log('Finalizo llamada a endpoint', performance.now());
+      // console.log('Finalizo llamada a endpoint', performance.now());
     }
-    console.log('Navegando a subscription');
+    // console.log('Navegando a subscription');
     navigate('/app/subscription');
   }, []);
 

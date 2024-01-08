@@ -16,7 +16,7 @@ const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => 
 
   // TODO Agregar loader a los paneles
   const handleClickShow = (recourse: RecourseTop5): void => {
-    console.log(`ir a pagina show ${recourse.id} de  ${recourse.name}`);
+    // console.log(`ir a pagina show ${recourse.id} de  ${recourse.name}`);
   };
   return (
     <div className="flex flex-col shadow-2xl rounded-2xl col-span-4 h-fit">

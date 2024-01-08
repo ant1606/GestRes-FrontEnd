@@ -31,7 +31,6 @@ export const statusAdapter = (status: ApiResponseStatus): StatusSuccessResponse 
 };
 
 export const adapterStatusesData = (statuses: ApiResponseStatus[]): Status[] => {
-  console.log('Desde adapterStatusesData', statuses);
   return statuses?.map((status: ApiResponseStatus) => adapterStatus(status));
 };
 
