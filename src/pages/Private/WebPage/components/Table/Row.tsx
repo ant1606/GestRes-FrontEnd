@@ -36,13 +36,12 @@ const Row: React.FC<Prop> = ({ webPage }) => {
 
   const handleClickEdit = (webPage: WebPage): void => {
     resetValidationError();
-    selectedWebPage(webPage);
     // TODO: Implementar el modal en el componente Table para evitar múltiples renderizados en Row, y manipular los datos
     // por medio del contexto. Se inteno renderizar el modal con SweetAlert mediante una renderización condicional pero no funciono
     // Intentar hacer lo mismo pero com un componente Modal
     // Este cambio sugerido es para verificar la performance
     MySwal.fire({
-      title: 'Editar Etiquetas',
+      title: 'Editar Página Web',
       html: (
         <BrowserRouter>
           <WebPageProvider>
@@ -159,8 +158,7 @@ const Row: React.FC<Prop> = ({ webPage }) => {
         </td>
         <td className="max-h-14 max-w-xs">
           <div className="flex justify-start items-center">
-            <span
-              className={`m-0 h-7 shrink px-4 py-1 text-sm font-bold rounded-2xl transform-uppercase`}>
+            <span className="m-0 h-7 shrink px-4 py-1 text-base font-bold rounded-2xl transform-uppercase">
               {webPage.name}
             </span>
           </div>
@@ -170,11 +168,11 @@ const Row: React.FC<Prop> = ({ webPage }) => {
           <p>{webPage.description}</p>
         </div>
       </td> */}
-        <td className="max-h-14 max-w-xs">
+        {/* <td className="max-h-14 max-w-xs">
           <div className="px-3 text-center text-lg text-gray-900 font-semibold">
             <p>{webPage.countVisits}</p>
           </div>
-        </td>
+        </td> */}
       </tr>
 
       {/* Fila de Detalles */}

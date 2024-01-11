@@ -56,7 +56,8 @@ const WebPageView: React.FC = () => {
   const handleFormSubmit = async (): Promise<void> => {
     modalRef.current?.close();
     toastNotifications().toastSucces();
-    // TODO Recargar datos de paginación
+    const webPages = await getWebPages(searchParams.toString());
+    setWebPages(webPages);
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {

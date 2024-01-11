@@ -25,7 +25,7 @@ const validateFunctionsFormInputs = {
   description: validateDescription
 };
 
-const Form: React.FC<Props> = ({ modalRef, onFormSubmit, webPage }) => {
+const Form: React.FC<Props> = ({ modalRef, onFormSubmit, webPage = null }) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [disabledButton, setDisabledButton] = useState(false);
   const { addValidationError, webPageError, resetValidationError } = useWebPage();

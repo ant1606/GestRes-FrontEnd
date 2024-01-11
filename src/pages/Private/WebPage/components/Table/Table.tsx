@@ -14,7 +14,7 @@ export const Table: React.FC = () => {
           <th>IR A LINK</th>
           <th>NOMBRE</th>
           {/* <th>DESCRIPCIÓN</th> */}
-          <th># VISITAS</th>
+          {/* <th># VISITAS</th> */}
         </tr>
       </thead>
       <tbody>
