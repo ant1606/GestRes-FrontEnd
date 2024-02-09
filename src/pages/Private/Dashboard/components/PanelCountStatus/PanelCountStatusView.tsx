@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { type settingsDashboard } from './index.type';
+import { type AmountByStateData } from './index.type';
 
 interface Props {
-  statusList: settingsDashboard[];
+  summaryStatus: AmountByStateData[];
 }
-const PanelCountStatusView: React.FC<Props> = ({ statusList }) => {
+const PanelCountStatusView: React.FC<Props> = ({ summaryStatus }) => {
   return (
     <div className="flex flex-col shadow-2xl rounded-2xl col-span-2">
       <div className="bg-gray-900 text-gray-50 rounded-t-2xl py-1  text-3xl font-bold uppercase text-center">
@@ -20,14 +20,14 @@ const PanelCountStatusView: React.FC<Props> = ({ statusList }) => {
             </tr>
           </thead>
           <tbody>
-            {statusList.map((status) => (
-              <tr key={status.key} className="hover:bg-slate-100 hover:cursor-pointer">
+            {summaryStatus.map((status) => (
+              <tr key={status.status} className="hover:bg-slate-100 hover:cursor-pointer">
                 <td className="w-40 h-11 px-2">
                   <div
-                    className={`${status.value2.split(' ')[0]
+                    className={`${status.styles.split(' ')[0]
                       } flex justify-center items-center w-38 px-4 py-1 rounded-2xl`}>
-                    <span className={`${status.value2.split(' ')[1]} text-sm font-bold  uppercase`}>
-                      {status.value}
+                    <span className={`${status.styles.split(' ')[1]} text-sm font-bold  uppercase`}>
+                      {status.status}
                     </span>
                   </div>
                 </td>

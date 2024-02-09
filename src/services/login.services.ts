@@ -1,8 +1,13 @@
 import {
   loginErrorResponseAdapter,
-  loginSuccessResponseAdapter
+  loginSuccessResponseAdapter,
+  logoutSuccessResponseAdapter
 } from '#/pages/Login/adapters/LoginAdapter';
-import { type LoginSuccessResponse, type LoginErrorResponse } from '#/pages/Login/index.types';
+import {
+  type LoginSuccessResponse,
+  type LoginErrorResponse,
+  type LogoutSuccessResponse
+} from '#/pages/Login/index.types';
 import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import fetch from 'cross-fetch';
@@ -32,6 +37,7 @@ export const logginUser = async (
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
 };
 
+// TODO Refactorizar este servicio y sus adapter para su caso de USO
 export const refreshUserFromRememberToken = async (
   rememberToken: string | null
 ): Promise<LoginSuccessResponse | LoginErrorResponse> => {
@@ -53,7 +59,7 @@ export const refreshUserFromRememberToken = async (
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
 };
 
-export const loggoutUser = async (): Promise<ApiSuccessResponse | LoginErrorResponse> => {
+export const loggoutUser = async (): Promise<LogoutSuccessResponse | LoginErrorResponse> => {
   const bearerToken = getBearerToken();
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/logout`, {
     method: 'POST',
@@ -67,6 +73,6 @@ export const loggoutUser = async (): Promise<ApiSuccessResponse | LoginErrorResp
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then(async (data) => data)
+    .then(async (data) => logoutSuccessResponseAdapter(await data))
     .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
 };

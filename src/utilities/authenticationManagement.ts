@@ -56,10 +56,10 @@ export const savePersistenDataUser = (response: Record<string, string | any>): v
   //   expires: dateFixedTime
   // });
   // Cookies.set('bearerToken', response.data?.bearerToken);
-  sessionStorage.setItem(BEARER_TOKEN, response.data?.bearerToken);
-  localStorage.setItem('user', encryptUserData(JSON.stringify(response.data?.user)));
-  if (typeof response.data?.user.rememberToken === 'string')
-    localStorage.setItem(REMEMBER_ME_TOKEN, response.data?.user.rememberToken);
+  sessionStorage.setItem(BEARER_TOKEN, response?.bearerToken);
+  localStorage.setItem('user', encryptUserData(JSON.stringify(response?.user)));
+  if (typeof response?.user.rememberToken === 'string')
+    localStorage.setItem(REMEMBER_ME_TOKEN, response?.user.rememberToken);
 };
 
 export const encryptUserData = (userData: string): string => {

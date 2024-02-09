@@ -1,45 +1,30 @@
 import {
-  type RecourseTop5,
-  type ApiResponseRecourse,
-  type RecourseErrorResponse,
-  type RecourseSuccessResponse,
-  type RecoursesSuccessResponse
+  type ApiResponseTop5Recourse,
+  type Top5RecoursesErrorResponse,
+  type Top5RecoursesSuccessResponse,
+  type Top5Recourse
 } from '../index.type';
 
-const adapterRecourse = (recourse: ApiResponseRecourse): RecourseTop5 => {
+export const top5RecoursesAdapter = (response: any): Top5RecoursesSuccessResponse => {
   return {
-    id: parseInt(recourse.identificador),
-    name: recourse.nombre,
-    typeId: parseInt(recourse.tipoId),
-    currentStatusName: recourse.nombreEstadoActual,
-    typeName: recourse.tipoNombre
+    status: response.status,
+    code: response.code,
+    data: response.data.length === 0 ? [] : adapterTop5RecoursesData(response.data)
   };
 };
 
-const adapterRecoursesData = (recourses: ApiResponseRecourse[]): RecourseTop5[] => {
-  return recourses.map((recourse: ApiResponseRecourse) => adapterRecourse(recourse));
+const adapterTop5RecoursesData = (recourses: ApiResponseTop5Recourse[]): Top5Recourse[] => {
+  return recourses.map((recourse: ApiResponseTop5Recourse) => ({
+    id: parseInt(recourse.id),
+    name: recourse.name
+  }));
 };
 
-export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
+export const top5RecourseErrorResponseAdapter = (error: any): Top5RecoursesErrorResponse => {
   return {
-    data: adapterRecourse(recourse.data)
-  };
-};
-
-export const recoursesAdapter = (response: any): RecoursesSuccessResponse => {
-  if (response.data.length === 0) return { data: [] };
-  return {
-    data: adapterRecoursesData(response.data)
-  };
-};
-
-export const recourseErrorResponseAdapter = (error: any): RecourseErrorResponse => {
-  return {
-    error: {
-      status: error.error.status,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null
-      }
-    }
+    status: error.status,
+    code: error.code,
+    message: error.message,
+    details: error.details
   };
 };

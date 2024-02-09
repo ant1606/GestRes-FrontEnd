@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import PanelCountStatusView from './PanelCountStatusView';
-import { useAppSelector } from '#/hooks/redux';
-import { type RootState } from '#/redux/store';
-import { getAmountByState } from '#/services/dashboard.services';
-import { type settingsDashboard } from './index.type';
+import { getAmountsByState } from '#/services/dashboard.services';
+import {
+  type AmountByStateSuccessResponse,
+  type AmountByStateData,
+  type AmountByStateErrorResponse
+} from './index.type';
 
 export const PanelCountStatusContainer: React.FC = () => {
-  const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
-  const [statusList, setStatusList] = useState<settingsDashboard[]>([]);
+  const [summaryStatus, setSummaryStatus] = useState<AmountByStateData[]>([]);
 
   useEffect(() => {
-    const response = async (): Promise<void> => {
-      const res = await getAmountByState();
-      const newSettings = settingsStatus.map((status) => {
-        return { ...status, amount: res.data[status.value] };
-      });
-      setStatusList(newSettings);
+    const getData = async (): Promise<void> => {
+      const response = await getAmountsByState();
+      if (response.status === 'error') {
+        const responseError = response as AmountByStateErrorResponse;
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
+        const responseSuccess = response as AmountByStateSuccessResponse;
+        setSummaryStatus(responseSuccess.data);
+      }
     };
 
-    response();
-  }, [settingsStatus]);
+    getData();
+  }, []);
 
-  return <PanelCountStatusView statusList={statusList} />;
+  return <PanelCountStatusView summaryStatus={summaryStatus} />;
 };

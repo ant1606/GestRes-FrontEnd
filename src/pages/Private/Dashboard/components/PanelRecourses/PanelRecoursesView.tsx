@@ -2,12 +2,12 @@ import React from 'react';
 import { IconContext } from 'react-icons';
 import { FaEye } from 'react-icons/fa6';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
-import { type RecourseTop5 } from './index.type';
+import { type Top5Recourse } from './index.type';
 import { NavLink } from 'react-router-dom';
 
 interface Prop {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
-  listRecourses: RecourseTop5[];
+  listRecourses: Top5Recourse[];
 }
 
 const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => {
@@ -15,9 +15,6 @@ const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => 
   // Ya que yo cargo los datos mostrados en la tabla y paso la informacion del recurso al formulario por medio del state y context
 
   // TODO Agregar loader a los paneles
-  const handleClickShow = (recourse: RecourseTop5): void => {
-    // console.log(`ir a pagina show ${recourse.id} de  ${recourse.name}`);
-  };
   return (
     <div className="flex flex-col shadow-2xl rounded-2xl col-span-4 h-fit">
       <div className="flex justify-between items-end">
@@ -37,11 +34,7 @@ const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => 
             <li key={recourse.id} className="flex">
               <div className="inline-block p-2">
                 <NavLink to={`/app/recourse/${recourse.id}`}>
-                  <button
-                    className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg"
-                    onClick={() => {
-                      handleClickShow(recourse);
-                    }}>
+                  <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
                     <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
                       <FaEye />
                     </IconContext.Provider>

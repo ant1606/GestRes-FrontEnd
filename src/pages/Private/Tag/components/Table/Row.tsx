@@ -8,6 +8,7 @@ import { focusInput } from '#/utilities/manipulationDom';
 import { destroyTag, getTags } from '#/services/tag.services';
 import { IconContext } from 'react-icons';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
+import { type TagErrorResponse } from '../../index.types';
 
 interface Prop {
   tag: Tag;
@@ -31,7 +32,20 @@ const Row: React.FC<Prop> = ({ tag }) => {
 
       dispatch(isLoading(true));
       const response = await destroyTag(tag);
-      if ('data' in response) {
+      if (response.status === 'error') {
+        const responseError = response as TagErrorResponse;
+        // Errores de validación de campos por parte del backend
+        const inputsValidationFromBackend = responseError.details;
+        Object.keys(inputsValidationFromBackend).forEach((key) => {
+          addValidationError({ [key]: inputsValidationFromBackend[key] });
+        });
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
+        // const responseSuccess = response as TagSuccessResponse;
         resetValidationError();
         toastNotifications().toastSuccesCustomize(
           `Se elimino la etiqueta ${tag.name} satisfactoriamente`
@@ -39,18 +53,6 @@ const Row: React.FC<Prop> = ({ tag }) => {
         cleanSelectedTag();
         const tags = await getTags(searchParams.toString());
         setTags(tags);
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        Object.keys(errorsDetail).forEach((key) => {
-          if (key !== 'apiResponseMessageError') {
-            addValidationError({ [key]: errorsDetail[key] });
-          }
-        });
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
-        }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

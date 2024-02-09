@@ -7,6 +7,10 @@ import { toastNotifications } from '#/utilities/notificationsSwal';
 import { deletePersistenDataUser } from '#/utilities/authenticationManagement';
 import { useAppDispatch } from '#/hooks/redux';
 import { userIsLogout } from '#/redux/slice/authenticationSlice';
+import {
+  type TagPaginatedErrorResponse,
+  type TagsPaginatedSuccessResponse
+} from '../../index.types';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,25 +31,37 @@ export const FilterContainer: React.FC = () => {
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getTags(searchParams.toString());
-      // console.log(tags);
-      //
-      if ('data' in response) {
-        setTags(response);
-      } else if ('error' in response) {
-        // TODO Ver como encapsular esta lógica en todas las llamadas al endpoint
-        if (response.error.status === '404') {
+
+      if (response.status === 'error') {
+        const responseError = response as TagPaginatedErrorResponse;
+
+        // TODO Ver como encapsular esta lógica de verificación de login en todas las llamadas al endpoint
+        if (responseError.code === 404) {
           toastNotifications().notificationError('Ocurrió un error, será redirigido al Login');
           deletePersistenDataUser();
           dispatch(userIsLogout());
           navigate('/login', { replace: true });
         }
 
-        const errorsDetail = response.error.detail;
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
         }
+
+        // Para que no interrumpa el UX, seríá mejor validar el campo de search en frontend o agregar un boton de busqueda
+        if (!Object.values(responseError.details).every((value) => value === null)) {
+          const message = Object.values(responseError.details).reduce((acc, val) => {
+            if (val !== null) {
+              acc += val + ' ';
+            }
+            return acc;
+          }, '');
+
+          throw new Error(message);
+        }
+      } else {
+        const responseSuccess = response as TagsPaginatedSuccessResponse;
+        setTags(responseSuccess);
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

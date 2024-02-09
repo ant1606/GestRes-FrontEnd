@@ -9,6 +9,7 @@ import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useNavigate } from 'react-router-dom';
 import { deletePersistenDataUser } from '#/utilities/authenticationManagement';
 import { type RootState } from '#/redux/store';
+import { type LogoutSuccessResponse, type LoginErrorResponse } from '#/pages/Login/index.types';
 
 const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,18 +23,20 @@ const Titlebar: React.FC = () => {
       dispatch(isLoading(true));
       const response = await loggoutUser();
 
-      if ('data' in response) {
-        deletePersistenDataUser();
-        dispatch(userIsLogout());
-        toastNotifications().toastSuccesCustomize(response.data.message);
-        navigate('/login', { replace: true });
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
+      if (response.status === 'error') {
+        const responseError = response as LoginErrorResponse;
+        const errorsDetail = responseError.details;
         if ('apiResponse' in errorsDetail) {
           if (errorsDetail.apiResponse !== null) throw new Error(errorsDetail.apiResponse);
         }
+      } else {
+        const responseSuccess = response as LogoutSuccessResponse;
+        deletePersistenDataUser();
+        dispatch(userIsLogout());
+        toastNotifications().toastSuccesCustomize(responseSuccess.message);
+        navigate('/login', { replace: true });
       }
-    } catch (error) {
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));

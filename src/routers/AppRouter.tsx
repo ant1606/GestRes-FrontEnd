@@ -55,6 +55,7 @@ const AppRouter: React.FC = () => {
   const initApp = async (): Promise<void> => {
     try {
       const settings = await getSettings();
+      console.log(settings);
       await settingsLoadedInPromise(settings.data);
     } catch (error) {
       console.log(error);

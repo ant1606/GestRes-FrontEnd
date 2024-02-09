@@ -97,7 +97,17 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
         );
 
         if ('data' in response) {
-          const pendingAmount = recourseParent.progress.total - advanced;
+
+          const pendingAmount = isTypeVideo
+              ? processHours(recourseParent.progress.total,advanced)
+              : recourseParent.progress.total - advanced;
+
+          console.log({
+            isTypeVideo,
+            total: recourseParent.progress.total,
+            advanced,
+            pendingAmount
+          });
           // pendingAmount === 0
           //   ? toastNotifications().notificationSuccess(
           //     `Finalizó el recurso ${recourseParent.name}, Felicidades`
@@ -108,7 +118,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
 
           cleanSelectedProgress();
 
-          onFormSubmit(pendingAmount);
+          onFormSubmit(convertHourToSeconds(pendingAmount));
         } else if ('error' in response) {
           const errorsDetail = response.error.detail;
           Object.keys(errorsDetail).forEach((key) => {
@@ -141,7 +151,6 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
 
   // TODO EXtraer esta lógica
   const processHours = (hora1, hora2, isSubtract = true) => {
-    // console.log('desde processHours', hora1, hora2);
     const [horas1, minutos1, segundos1] = hora1.split(':').map(Number);
     const [horas2, minutos2, segundos2] = hora2.split(':').map(Number);
 
@@ -161,6 +170,15 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
       '0'
     )}:${String(abs(nuevosSegundos)).padStart(2, '0')}`;
   };
+
+  // TODO EXtraer esta lógica
+
+  const convertHourToSeconds = (hour)=>
+  {
+    const [horas, minutos, segundos] = hour.split(':').map(Number);
+    return horas * 3600 + minutos * 60 + segundos;
+  }
+
 
   // Función auxiliar para obtener el valor absoluto
   const abs = (value) => {

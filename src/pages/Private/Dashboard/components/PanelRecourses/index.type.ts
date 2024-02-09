@@ -1,33 +1,25 @@
-// Detalles de error de Validación
-export interface RecourseErrorResponse {
-  error: {
-    status: string;
-    detail: ApiErrorResponse;
-  };
-}
-
-// Respuesta sanitizada y paginada de recursos
-export interface RecoursesSuccessResponse {
-  data: RecourseTop5[];
-}
-
-export interface RecourseSuccessResponse {
-  data: RecourseTop5;
+export interface Top5Recourse {
+  id: number;
+  name: string;
 }
 
 // Respuesta no sanitizada obtenida desde el API
-export interface ApiResponseRecourse {
-  identificador: string;
-  nombre: string;
-  tipoId: string;
-  tipoNombre: string;
-  nombreEstadoActual: string;
+export interface ApiResponseTop5Recourse {
+  id: string;
+  name: string;
 }
 
-export interface RecourseTop5 {
-  id: number;
-  name: string;
-  typeId: number;
-  currentStatusName?: string;
-  typeName?: string;
+// Detalles de error de Validación
+export interface Top5RecoursesErrorResponse {
+  status: string;
+  code: number;
+  message: string;
+  details: ApiErrorResponse;
+}
+
+// Respuesta sanitizada y paginada de recursos
+export interface Top5RecoursesSuccessResponse {
+  status: string;
+  code: number;
+  data: Top5Recourse[];
 }

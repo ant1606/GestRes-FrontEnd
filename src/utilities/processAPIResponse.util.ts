@@ -5,8 +5,8 @@
  * a "mensajeError1/nmensajeError2"
  */
 export const processErrorResponse = (error: any): Record<string, string | any> => {
-  const errorDetailToArray = Object.entries(error.error?.detail);
-  const errorDetailSanitized = errorDetailToArray.reduce((acc, current) => {
+  const errorDetailToArray = Object.entries(error.error?.details);
+  const errorDetailsSanitized = errorDetailToArray.reduce((acc, current) => {
     let value = current[1];
     if (Array.isArray(value)) {
       value = value.join('\n');
@@ -25,9 +25,9 @@ export const processErrorResponse = (error: any): Record<string, string | any> =
   }, {});
 
   return {
-    error: {
-      status: error.error.status,
-      detail: { ...errorDetailSanitized }
-    }
+    status: error.status,
+    code: error.code,
+    message: error.error.message,
+    details: { ...errorDetailsSanitized }
   };
 };

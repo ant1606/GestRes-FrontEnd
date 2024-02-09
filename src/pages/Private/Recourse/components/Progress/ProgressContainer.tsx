@@ -69,7 +69,7 @@ export const ProgressContainer: React.FC = () => {
   };
   const handleFormSubmit = async (pendingAmount: number): Promise<void> => {
     // TODO Hacer que cuando se halla finalizado el recurso( el valor pendiente sea 0), pase a la pantalla principal de recursos
-    if (pendingAmount === 0) {
+    if (pendingAmount === 0  ) {
       navigate('/app/recourse');
       const nameRecourse = recourseActive.name as string;
       toastNotifications().notificationSuccess(

@@ -12,10 +12,10 @@ interface AuthenticationState {
   email: string;
   isVerified: boolean;
   isLogged?: boolean;
-  isLoaded: boolean;
-  isOAuthAccess: boolean;
-  comeFromOAuthCallback: boolean;
-  orderSortApiYoutube: SortApiYoutube;
+  isLoaded?: boolean;
+  isOAuthAccess?: boolean;
+  comeFromOAuthCallback?: boolean;
+  orderSortApiYoutube?: SortApiYoutube;
 }
 
 const initialState: AuthenticationState = {

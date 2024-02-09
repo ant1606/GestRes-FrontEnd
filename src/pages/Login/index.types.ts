@@ -5,22 +5,29 @@ export interface LoginFormData {
   password: string;
 }
 export interface LoginSuccessResponse {
+  status: string;
+  code: number;
   data: {
     bearerToken: string;
     bearerExpire: string;
     user: User;
   };
 }
-export interface LoginErrorDetailResponse extends ApiErrorResponse {
+export interface LogoutSuccessResponse {
+  status: string;
+  code: number;
+  message: string;
+}
+export interface LoginErrorDetailResponse {
   email: string | null;
   password: string | null;
   [key: string]: string | null; // Agrega esta firma de índice
 }
 export interface LoginErrorResponse {
-  error: {
-    status: string;
-    detail: LoginErrorDetailResponse;
-  };
+  status: string;
+  code: number;
+  message: string;
+  details: LoginErrorDetailResponse;
 }
 
 export interface LoginProviderProps {

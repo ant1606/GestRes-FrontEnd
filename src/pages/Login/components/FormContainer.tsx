@@ -11,6 +11,7 @@ import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import FormView from './FormView.js';
 import { userIsLoggin } from '#/redux/slice/authenticationSlice.js';
 import { savePersistenDataUser } from '#/utilities/authenticationManagement.js';
+import { type LoginSuccessResponse, type LoginErrorResponse } from '../index.types.js';
 
 const validateFunctionsFormInputs = {
   email: validateUserEmail,
@@ -69,9 +70,6 @@ const FormContainer: React.FC = () => {
     try {
       dispatch(isLoading(true));
       await validatedSubmitForm();
-      // const existValidationMessage = Object.keys(loginErrorRef.current).every(
-      //   (el) => loginErrorRef.current[el] === null
-      // );
       const existValidationMessage = Object.values(loginErrorRef.current).every(
         (el) => el === null
       );
@@ -82,24 +80,26 @@ const FormContainer: React.FC = () => {
           remember_me: rememberMe
         });
 
-        if ('data' in response) {
-          response.data.user.rememberToken = rememberMe ? response.data.user.rememberToken : null;
-          savePersistenDataUser(response);
-          await userIsLoggedInPromise(response.data.user);
-          navigate('/app/dashboard', { replace: true });
-        } else if ('error' in response) {
-          const errorsDetail = response.error.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            // TODO colocar el nombre apiResponse de manera global en una constante o cambiar nombre
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
+        if (response.status === 'error') {
+          const responseError = response as LoginErrorResponse;
+          // Errores de validación de campos por parte del backend
+          const inputsValidationFromBackend = responseError.details;
+          Object.keys(inputsValidationFromBackend).forEach((key) => {
+            addValidationError({ [key]: inputsValidationFromBackend[key] });
           });
 
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
           }
+        } else {
+          const responseSuccess = response as LoginSuccessResponse;
+          responseSuccess.data.user.rememberToken = rememberMe
+            ? responseSuccess.data.user.rememberToken
+            : null;
+          savePersistenDataUser(responseSuccess.data);
+          await userIsLoggedInPromise(responseSuccess.data.user);
+          navigate('/app/dashboard', { replace: true });
         }
       }
     } catch (error: any) {

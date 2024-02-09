@@ -1,5 +1,5 @@
 import { type ReactNode, createContext, useReducer, useContext, type Reducer } from 'react';
-import { type TagsSuccessResponse } from '../index.types';
+import { type TagsPaginatedSuccessResponse } from '../index.types';
 
 const TagContext = createContext({});
 
@@ -8,7 +8,7 @@ interface TagProviderProps {
 }
 interface ActionReducer {
   type: string;
-  payload: Record<string, unknown> | boolean | number | Tag | TagsSuccessResponse;
+  payload: Record<string, unknown> | boolean | number | Tag | TagsPaginatedSuccessResponse;
 }
 
 type typeValidationError = 'name';
@@ -49,7 +49,7 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
   let payloadValue;
   switch (action.type) {
     case TAG_LOADED:
-      payloadValue = action.payload as TagsSuccessResponse;
+      payloadValue = action.payload as TagsPaginatedSuccessResponse;
       return {
         ...state,
         tags: [...payloadValue.data],
@@ -121,7 +121,7 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     });
   };
 
-  const setTags = (tags: TagsSuccessResponse): void => {
+  const setTags = (tags: TagsPaginatedSuccessResponse): void => {
     dispatch({
       type: TAG_LOADED,
       payload: tags

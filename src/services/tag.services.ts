@@ -1,19 +1,22 @@
 import {
   tagAdapter,
   tagErrorResponseAdapter,
-  tagsAdapter
+  tagsErrorPaginatedAdapter,
+  tagsPaginatedAdapter
 } from '#/pages/Private/Tag/adapters/TagAdapter';
 import {
   type TagSuccessResponse,
   type TagErrorResponse,
-  type TagsSuccessResponse
+  type TagsPaginatedSuccessResponse,
+  type TagsSelectorSuccessResponse,
+  type TagPaginatedErrorResponse
 } from '#/pages/Private/Tag/index.types';
 import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getTags = async (
   queryParams: string
-): Promise<TagsSuccessResponse | TagErrorResponse> => {
+): Promise<TagsPaginatedSuccessResponse | TagPaginatedErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag?${queryParams}`, {
@@ -28,11 +31,13 @@ export const getTags = async (
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then(async (data) => tagsAdapter(await data))
-    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+    .then(async (data) => tagsPaginatedAdapter(await data))
+    .catch(async (error) => tagsErrorPaginatedAdapter(processErrorResponse(await error)));
 };
 
-export const getTagsForTagSelector = async (): Promise<TagsSuccessResponse | TagErrorResponse> => {
+export const getTagsForTagSelector = async (): Promise<
+  TagsSelectorSuccessResponse | TagErrorResponse
+> => {
   const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/getTagsForTagSelector`, {
