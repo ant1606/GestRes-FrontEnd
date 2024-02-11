@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
-// TODO AParece error al momento de registrar un recursos, suele salir el error de CORS
+// TODO ESTA DANDO PROBLEMAS ACTUALIAR UN RECURSO CON CUALQUIER TIPO DE UNIDAD DE MEDIDA HACIA UNO CON 
+// LA UNIDAD DE MEDIDA EN HORAS
 import React, { useEffect, useRef, useState } from 'react';
-
 import { useRecourse } from '../../context/recourse.context';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '#/hooks/useForm';
@@ -24,6 +24,7 @@ import { changeTitle, isLoading } from '#/redux/slice/uiSlice';
 import { savingRecourse, updatingRecourse } from '#/services/recourse.services';
 import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
 import FormView from './FormView';
+import { type RecourseErrorResponse } from '../../index.types';
 
 const validateFunctionsFormInputs = {
   name: validateName,
@@ -51,7 +52,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
-  // TODO QUeda cargar las etiquetas del recurso
   // recourseType usado en las funciones de validaciones del formulario
   const initialState = {
     id: recourseActive?.id ?? 0,
@@ -124,6 +124,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       dataUnitMeasureProgres = settingsUnitMeasureProgress.filter((unit) => unit.key === 'UNIT_HOURS' || unit.key === 'UNIT_VIDEOS');
     }
     setComboUnitMeasureProgressData(dataUnitMeasureProgres);
+    // TODO ARREGLAR ESTO URGENTEMENTE
     // TODO Existe problema al cambiar el typeId visiblmente el componente cambia, pero internamente el valor de unitMeasureProgressId se mantiene pegado
   }, [typeId]);
 
@@ -163,7 +164,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           formValues.totalChapters = null;
         }
 
-        const recourseToSend = {
+        const requestBody = {
           recourse_id: formValues.id,
           name: formValues.name,
           source: formValues.source,
@@ -177,11 +178,11 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           total_hours: formValues.totalHours,
           tags: selectedTags ?? [],
         }
-        // console.log("Enviando el recurso", recourseToSend);
+
 
         let response;
         if (recourseActive === null) {
-          response = await savingRecourse(recourseToSend);
+          response = await savingRecourse(requestBody);
         } else {
           let resultDialog = true;
 
@@ -208,11 +209,25 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
               )
             }
           }
-          if (!resultDialog) throw new Error("Se cancelo la actualización");
-          response = await updatingRecourse(recourseToSend);
+
+          if (!resultDialog)
+            throw new Error("Se cancelo la actualización");
+
+          response = await updatingRecourse(requestBody);
         }
 
-        if ('data' in response) {
+        if (response.status === 'error') {
+          const responseError = response as RecourseErrorResponse;
+          // Errores de validación de campos por parte del backend
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
+          });
+
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
+          }
+        } else {
           const message =
             recourseActive === null
               ? 'Se registró el recurso correctamente .'
@@ -222,18 +237,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedRecourse();
           navigate('/app/recourse');
-        } else if ('error' in response) {
-          const errorsDetail = response.error.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
-          });
-
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
-          }
         }
       }
     } catch (error: any) {

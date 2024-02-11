@@ -3,6 +3,7 @@ import Button from '#/components/Button';
 import SelectorTag from '../SelectorTag/SelectorTag';
 import { updatingSubscription } from '#/services/subscriptions.services';
 import { toastNotifications } from '#/utilities/notificationsSwal';
+import { type YoutubeSubscriptionErrorResponse } from '../../index.types';
 
 interface Props {
   modalRef: any;
@@ -26,20 +27,17 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
     try {
       // TODO Ver como añadir un loader al modal
       setDisabledButton(true);
-      const response = await updatingSubscription({
-        tags: selectedTags,
-        id: subscription.id
-      });
-      console.log(response);
-      if ('data' in response) {
+      const response = await updatingSubscription(subscription.id, selectedTags);
+
+      if (response.status === 'error') {
+        const responseError = response as YoutubeSubscriptionErrorResponse;
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
         toastNotifications().toastSucces();
         onFormSubmit();
-      } else if ('error' in response) {
-        const errorsDetail = response.error.detail;
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
-        }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

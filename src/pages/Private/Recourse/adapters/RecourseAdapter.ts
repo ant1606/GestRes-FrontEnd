@@ -1,18 +1,76 @@
 import { adapterTagsData } from '../../Tag/adapters/TagAdapter';
-import {
-  adapterProgress,
-  adapterProgressesData
-} from '../components/Progress/adapters/ProgressAdapter';
-import { adapterStatus, adapterStatusesData } from '../components/Status/adapters/StatusAdapter';
+import { adapterProgress } from '../components/Progress/adapters/ProgressAdapter';
+import { adapterStatus } from '../components/Status/adapters/StatusAdapter';
 import {
   type RecourseSuccessResponse,
   type ApiResponseRecourse,
   type RecourseErrorResponse,
-  type RecoursesSuccessResponse
+  type RecoursesPaginatedSuccessResponse,
+  type RecoursePaginatedErrorResponse,
+  type ApiResponseSuccessRecourse
 } from '../index.types';
 
+export const recoursesPaginatedAdapter = (response: any): RecoursesPaginatedSuccessResponse => {
+  if (response.data.length === 0)
+    return {
+      code: response.code,
+      status: response.status,
+      meta: null,
+      links: null,
+      data: []
+    };
+  return {
+    code: response.code,
+    status: response.status,
+    meta: {
+      path: response.meta.path,
+      currentPage: response.meta.currentPage,
+      perPage: response.meta.perPage,
+      totalPages: response.meta.totalPages,
+      from: response.meta.from,
+      to: response.meta.to,
+      total: response.meta.total
+    },
+    links: {
+      self: response.links.self,
+      first: response.links.first,
+      last: response.links.last,
+      next: response.links.next,
+      prev: response.links.prev
+    },
+    data: adapterRecoursesData(response.data)
+  };
+};
+
+const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
+  return recourses?.map((recourse: ApiResponseRecourse) => adapterRecourse(recourse));
+};
+
+export const recoursePaginatedErrorResponseAdapter = (
+  error: any
+): RecoursePaginatedErrorResponse => {
+  return {
+    status: error.status,
+    code: error.code,
+    message: error.message,
+    details: {
+      searchEstado: error.details.searchEstado ?? null,
+      searchNombre: error.details.searchNombre ?? null,
+      searchTags: error.details.searchTags ?? null,
+      searchTipo: error.details.searchTipo ?? null
+    }
+  };
+};
+
+export const recourseAdapter = (response: ApiResponseSuccessRecourse): RecourseSuccessResponse => {
+  return {
+    code: response.code,
+    status: response.status,
+    data: Array.isArray(response.data) ? [] : adapterRecourse(response.data)
+  };
+};
+
 const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
-  // console.log(recourse);
   return {
     id: parseInt(recourse.identificador),
     name: recourse.nombre,
@@ -35,57 +93,22 @@ const adapterRecourse = (recourse: ApiResponseRecourse): Recourse => {
   };
 };
 
-const adapterRecoursesData = (recourses: ApiResponseRecourse[]): Recourse[] => {
-  return recourses?.map((recourse: ApiResponseRecourse) => adapterRecourse(recourse));
-};
-
-export const recourseAdapter = (recourse: ApiResponseRecourse): RecourseSuccessResponse => {
-  return {
-    data: adapterRecourse(recourse.data)
-  };
-};
-
-export const recoursesAdapter = (response: any): RecoursesSuccessResponse => {
-  // console.log('Desde recourses Adapter, del servicio getRecourses', response);
-  if (response.data.length === 0) return { meta: null, links: null, data: [] };
-  return {
-    meta: {
-      path: response.meta.path,
-      currentPage: response.meta.currentPage,
-      perPage: response.meta.perPage,
-      totalPages: response.meta.totalPages,
-      from: response.meta.from,
-      to: response.meta.to,
-      total: response.meta.total
-    },
-    links: {
-      self: response.links.self,
-      first: response.links.first,
-      last: response.links.last,
-      next: response.links.next,
-      prev: response.links.prev
-    },
-    data: adapterRecoursesData(response.data)
-  };
-};
-
 export const recourseErrorResponseAdapter = (error: any): RecourseErrorResponse => {
   return {
-    error: {
-      status: error.error.status,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null,
-        name: error.error.detail.name ?? null,
-        source: error.error.detail.source ?? null,
-        author: error.error.detail.author ?? null,
-        editorial: error.error.detail.editorial ?? null,
-        typeId: error.error.detail.type_id ?? null,
-        unitMeasureProgressId: error.error.detail.unit_measure_progress_id ?? null,
-        totalPages: error.error.detail.total_pages ?? null,
-        totalChapters: error.error.detail.total_chapters ?? null,
-        totalVideos: error.error.detail.total_videos ?? null,
-        totalHours: error.error.detail.total_hours ?? null
-      }
+    status: error.status,
+    code: error.code,
+    message: error.message,
+    details: {
+      name: error.details.name ?? null,
+      source: error.details.source ?? null,
+      author: error.details.author ?? null,
+      editorial: error.details.editorial ?? null,
+      typeId: error.details.type_id ?? null,
+      unitMeasureProgressId: error.details.unit_measure_progress_id ?? null,
+      totalPages: error.details.total_pages ?? null,
+      totalChapters: error.details.total_chapters ?? null,
+      totalVideos: error.details.total_videos ?? null,
+      totalHours: error.details.total_hours ?? null
     }
   };
 };

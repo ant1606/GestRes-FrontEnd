@@ -1,8 +1,8 @@
 import { type Reducer } from 'react';
 import {
-  type YoutubeSubscriptionsSuccessResponse,
   type ActionReducer,
-  type InitialState
+  type InitialState,
+  type YoutubeSubscriptionsPaginatedSuccessResponse
 } from '../index.types';
 import {
   SET_YOUTUBE_SUBSCRIPTIONS_PER_PAGE,
@@ -21,7 +21,7 @@ export const youtubeSubscriptionReducer: Reducer<InitialState, ActionReducer> = 
   let payloadValue;
   switch (action.type) {
     case YOUTUBE_SUBSCRIPTION_LOADED:
-      payloadValue = action.payload as YoutubeSubscriptionsSuccessResponse;
+      payloadValue = action.payload as YoutubeSubscriptionsPaginatedSuccessResponse;
       return {
         ...state,
         youtubeSubscriptions: [...payloadValue.data],

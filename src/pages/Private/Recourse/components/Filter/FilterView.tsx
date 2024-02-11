@@ -14,7 +14,7 @@ interface Props {
   searchName: string;
   searchType: number;
   searchStatus: number;
-  searchTag: [];
+  searchTag: number[] | never[];
   recoursePerPage: string | number | readonly string[] | undefined;
   dataFilterType: FilterData[];
   dataFilterStatus: FilterData[];

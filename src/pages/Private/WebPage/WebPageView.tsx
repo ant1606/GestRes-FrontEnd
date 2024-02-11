@@ -10,15 +10,18 @@ import FooterTable from '#/components/FooterTable';
 import Filter from './components/Filter';
 import { getWebPages } from '#/services/webPage.services';
 import perPageItemsValue from '#/config/perPageItemsValue';
-import { useAppDispatch } from '#/hooks/redux';
+import { useAppDispatch, useAppSelector } from '#/hooks/redux';
 import { changeTitle } from '#/redux/slice/uiSlice';
 import Table from './components/Table';
+import Loader from '#/components/Loader';
+import { type RootState } from '#/redux/store';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
 }
 
 const WebPageView: React.FC = () => {
+  const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   const { webPages, webPageMeta, setWebPages, webPagePerPage, setWebPagePerPage } = useWebPage();
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
@@ -31,9 +34,6 @@ const WebPageView: React.FC = () => {
   }, []);
 
   const handleClick = (): void => {
-    // TODO Crear contextWebPage
-    // TODO Crear formulario para registro/edicion
-
     MySwal.fire({
       title: 'Registrar Páginas Web',
       html: (
@@ -67,7 +67,7 @@ const WebPageView: React.FC = () => {
     searchParams.append('perPage', webPagePerPage);
     searchParams.sort();
     setSearchParams(searchParams);
-    // TODO Generar Servicio para obtener WebPages
+
     const webPages = await getWebPages(searchParams.toString());
     setWebPages(webPages);
   };
@@ -78,6 +78,7 @@ const WebPageView: React.FC = () => {
 
   return (
     <>
+      {uiLoading && <Loader />}
       <Button btnType="main" text="Registrar" type="button" onClick={handleClick} />
       <Filter />
       {webPages.length === 0 ? (

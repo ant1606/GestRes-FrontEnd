@@ -9,7 +9,7 @@ interface Props {
   handleChangeSearchTags: React.Dispatch<React.SetStateAction<number[]>>;
   handleChangeCombo: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   searchValue: string;
-  searchTag: [];
+  searchTag: [] | never[];
   webPagePerPage: string | number | readonly string[] | undefined;
 }
 const FilterView: React.FC<Props> = ({

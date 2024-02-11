@@ -9,6 +9,8 @@ import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
 import { getRecourse } from '#/services/recourse.services';
 import { FaTrashAlt } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
+import { type ProgressErrorResponse } from '../../indext.types';
+import { type RecourseSuccessResponse } from '#/pages/Private/Recourse/index.types';
 
 interface Props {
   isLastProgress: boolean;
@@ -39,25 +41,25 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
 
       dispatch(isLoading(true));
       const response = await destroyProgress(progress);
-      if ('data' in response) {
+
+      if (response.status === 'error') {
+        const responseError = response as ProgressErrorResponse;
+        // Errores de validación de campos por parte del backend
+        Object.entries(responseError.details).forEach(([key, value]) => {
+          addValidationError({ [key]: value });
+        });
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
 
         const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
         setProgresses(progressData);
-        const recourseRefreshed = await getRecourse(recourseActive.id);
+        const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
         selectedRecourse(recourseRefreshed.data);
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        Object.keys(errorsDetail).forEach((key) => {
-          if (key !== 'apiResponseMessageError') {
-            addValidationError({ [key]: errorsDetail[key] });
-          }
-        });
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
-        }
       }
     } catch (error: any) {
       console.log(error);

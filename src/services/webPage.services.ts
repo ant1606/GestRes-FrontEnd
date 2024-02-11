@@ -1,19 +1,22 @@
 import {
   webPageAdapter,
   webPageErrorResponseAdapter,
-  webPagesAdapter
+  webPagePaginatedErrorResponseAdapter,
+  webPagesPaginatedAdapter
 } from '#/pages/Private/WebPage/adapters/WebPageAdapter';
 import {
-  type WebPagesSuccessResponse,
+  type WebPagePaginatedErrorResponse,
+  type WebPagesPaginatedSuccessResponse,
   type WebPageErrorResponse,
-  type WebPageSuccessResponse
+  type WebPageSuccessResponse,
+  type WebPageRequestBody
 } from '#/pages/Private/WebPage/index.types';
 import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getWebPages = async (
   queryParams: string
-): Promise<WebPagesSuccessResponse | WebPageErrorResponse> => {
+): Promise<WebPagesPaginatedSuccessResponse | WebPagePaginatedErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/webpage?${queryParams}`, {
@@ -28,12 +31,14 @@ export const getWebPages = async (
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then(async (data) => webPagesAdapter(await data))
-    .catch(async (error) => webPageErrorResponseAdapter(processErrorResponse(await error)));
+    .then(async (data) => webPagesPaginatedAdapter(await data))
+    .catch(async (error) =>
+      webPagePaginatedErrorResponseAdapter(processErrorResponse(await error))
+    );
 };
 
 export const savingWebPage = async (
-  webpage: any
+  webpage: WebPageRequestBody
 ): Promise<WebPageSuccessResponse | WebPageErrorResponse> => {
   const bearerToken = getBearerToken();
 
@@ -55,7 +60,7 @@ export const savingWebPage = async (
 };
 
 export const updatingWebPage = async (
-  webpage: any
+  webpage: WebPageRequestBody
 ): Promise<WebPageSuccessResponse | WebPageErrorResponse> => {
   const bearerToken = getBearerToken();
 

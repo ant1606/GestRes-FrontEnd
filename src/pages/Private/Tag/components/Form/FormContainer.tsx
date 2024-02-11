@@ -79,9 +79,8 @@ export const FormContainer: React.FC = () => {
         if (response.status === 'error') {
           const responseError = response as TagErrorResponse;
           // Errores de validación de campos por parte del backend
-          const inputsValidationFromBackend = responseError.details;
-          Object.keys(inputsValidationFromBackend).forEach((key) => {
-            addValidationError({ [key]: inputsValidationFromBackend[key] });
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
           });
 
           // Mensaje de error general por parte del backend

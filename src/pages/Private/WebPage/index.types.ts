@@ -1,25 +1,39 @@
 import { type ReactNode } from 'react';
 import { type ApiResponseTag } from '../Tag/index.types';
 
-export interface WebPagesSuccessResponse {
+export interface WebPagesPaginatedSuccessResponse {
+  status: string;
+  code: number;
   meta: PaginateResultMeta | null;
   data: WebPage[];
   links: PaginateResultLinks | null;
 }
 
+export interface WebPagePaginatedErrorResponse {
+  status: string;
+  code: number;
+  message: string;
+  details: {
+    searchNombre?: string;
+    searchTags?: string;
+  };
+}
+
 export interface WebPageSuccessResponse {
+  status: string;
+  code: number;
   data: WebPage;
 }
 
 export interface WebPageErrorResponse {
-  error: {
-    status: string;
-    detail: WebPageErrorDetailResponse;
-  };
+  status: string;
+  code: number;
+  message: string;
+  details: WebPageErrorDetailResponse;
 }
 
 // Detalles de error de Validación
-export interface WebPageErrorDetailResponse extends ApiErrorResponse {
+export interface WebPageErrorDetailResponse {
   name: string | null;
   url: string | null;
   description: string | null;
@@ -44,7 +58,7 @@ export type payloadReducerType =
   | WebPage
   | WebPage[]
   | WebPageSuccessResponse
-  | WebPagesSuccessResponse;
+  | WebPagesPaginatedSuccessResponse;
 
 export interface ActionReducer {
   type: string;
@@ -64,6 +78,12 @@ export interface InitialState {
 
 /** ADAPTERS */
 
+export interface ApiResponseSuccessWebPage {
+  status: string;
+  code: number;
+  data: ApiResponseWebPage;
+}
+
 export interface ApiResponseWebPage {
   identificador: number;
   url: string;
@@ -71,4 +91,13 @@ export interface ApiResponseWebPage {
   descripcion: string;
   totalVisitas: number;
   tags: ApiResponseTag[];
+}
+
+export interface WebPageRequestBody {
+  id: number;
+  url: string;
+  name: string;
+  description: string;
+  count_visits: number;
+  tags: number[] | never[];
 }

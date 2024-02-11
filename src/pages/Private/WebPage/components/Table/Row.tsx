@@ -15,19 +15,18 @@ import { destroyWebPage, getWebPages } from '#/services/webPage.services';
 import Form from '../Form/Form';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import {
+  type WebPagesPaginatedSuccessResponse,
+  type WebPageErrorResponse
+} from '../../index.types';
 
 interface Prop {
   webPage: WebPage;
 }
 
 const Row: React.FC<Prop> = ({ webPage }) => {
-  const {
-    selectedWebPage,
-    resetValidationError,
-    cleanSelectedWebPage,
-    setWebPages,
-    addValidationError
-  } = useWebPage();
+  const { resetValidationError, cleanSelectedWebPage, setWebPages, addValidationError } =
+    useWebPage();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const [viewDetail, setviewDetail] = useState(false);
@@ -84,25 +83,29 @@ const Row: React.FC<Prop> = ({ webPage }) => {
       if (!result) return;
       dispatch(isLoading(true));
       const response = await destroyWebPage(webPage);
-      if ('data' in response) {
+
+      if (response.status === 'error') {
+        const responseError = response as WebPageErrorResponse;
+
+        // Errores de validación de campos por parte del backend
+        Object.entries(responseError.details).forEach(([key, value]) => {
+          addValidationError({ [key]: value });
+        });
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
         resetValidationError();
         toastNotifications().toastSuccesCustomize(
           `Se elimino la Página Web ${webPage.name} satisfactoriamente`
         );
         cleanSelectedWebPage();
-        const webPages = await getWebPages(searchParams.toString());
+        const webPages = (await getWebPages(
+          searchParams.toString()
+        )) as WebPagesPaginatedSuccessResponse;
         setWebPages(webPages);
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        Object.keys(errorsDetail).forEach((key) => {
-          if (key !== 'apiResponseMessageError') {
-            addValidationError({ [key]: errorsDetail[key] });
-          }
-        });
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
-        }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

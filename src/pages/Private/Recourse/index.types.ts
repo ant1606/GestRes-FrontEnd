@@ -1,6 +1,7 @@
 import { type ApiResponseTag } from '../Tag/index.types';
-import { type ApiResponseProgress } from './components/Progress/adapters/ProgressAdapter';
-import { type ApiResponseStatus } from './components/Status/adapters/StatusAdapter';
+import { type ApiResponseProgress } from './components/Progress/indext.types';
+
+import { type ApiResponseStatus } from './components/Status/index.types';
 
 export interface RecourseFormData {
   id: string;
@@ -16,40 +17,30 @@ export interface RecourseFormData {
   totalChapters: string;
   recourseType: Settings[];
 }
-// Detalles de error de Validación
-export interface RecourseErrorDetailResponse extends ApiErrorResponse {
-  name: string | null;
-  source: string | null;
-  author: string | null;
-  editorial: string | null;
-  typeId: string | null;
-  unitMeasureProgressId: string | null;
-  totalPages: string | null;
-  totalChapters: string | null;
-  totalVideos: string | null;
-  totalHours: string | null;
-  [key: string]: string | null;
+
+export interface RecourseRequestBody {
+  recourse_id: number;
+  name: string;
+  source: string;
+  author: string;
+  editorial: string;
+  type_id: number;
+  unit_measure_progress_id: number;
+  total_pages: number;
+  total_chapters: number;
+  total_videos: number;
+  total_hours: string;
+  tags: number[] | [];
 }
 
-export interface RecourseErrorResponse {
-  error: {
-    status: string;
-    detail: RecourseErrorDetailResponse;
-  };
-}
+/** ADAPTERS **/
 
-// Respuesta sanitizada y paginada de recursos
-export interface RecoursesSuccessResponse {
-  meta: PaginateResultMeta | null;
-  data: Recourse[];
-  links: PaginateResultLinks | null;
+// MAPEO DE DATOS DE LA RESPUESTA RECIBIDA POR LA API DE LA ENTIDAD RECOURSE
+export interface ApiResponseSuccessRecourse {
+  status: string;
+  code: number;
+  data: ApiResponseRecourse | [];
 }
-
-export interface RecourseSuccessResponse {
-  data: Recourse;
-}
-
-// Respuesta no sanitizada obtenida desde el API
 export interface ApiResponseRecourse {
   identificador: string;
   nombre: string;
@@ -68,4 +59,56 @@ export interface ApiResponseRecourse {
   status: ApiResponseStatus;
   progress: ApiResponseProgress;
   tags: ApiResponseTag[];
+}
+
+// MAPEO DE DATOS DE RESPUESTA DE DATOS PAGINADOS CON RECOURSE
+export interface RecoursesPaginatedSuccessResponse {
+  status: string;
+  code: number;
+  meta: PaginateResultMeta | null;
+  data: Recourse[];
+  links: PaginateResultLinks | null;
+}
+
+export interface RecoursePaginatedErrorResponse {
+  status: string;
+  code: number;
+  message: string;
+  details: RecoursePaginatedErrorDetailResponse | never[];
+}
+
+export interface RecoursePaginatedErrorDetailResponse {
+  searchTags: string;
+  searchNombre: string;
+  searchTipo: string;
+  searchEstado: string;
+}
+
+// MAPEO DE DATOS DE RESPUESTA DE SÓLO UNA ENTIDAD RECOURSE
+
+export interface RecourseSuccessResponse {
+  code: number;
+  status: string;
+  data: Recourse | [];
+}
+
+export interface RecourseErrorResponse {
+  code: number;
+  status: string;
+  message: string;
+  details: RecourseErrorDetailResponse;
+}
+
+export interface RecourseErrorDetailResponse {
+  name: string | null;
+  source: string | null;
+  author: string | null;
+  editorial: string | null;
+  typeId: string | null;
+  unitMeasureProgressId: string | null;
+  totalPages: string | null;
+  totalChapters: string | null;
+  totalVideos: string | null;
+  totalHours: string | null;
+  [key: string]: string | null;
 }

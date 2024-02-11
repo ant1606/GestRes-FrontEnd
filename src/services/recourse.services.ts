@@ -1,19 +1,23 @@
 import {
   recourseAdapter,
-  recourseErrorResponseAdapter
+  recourseErrorResponseAdapter,
+  recoursePaginatedErrorResponseAdapter,
+  recoursesPaginatedAdapter
 } from './../pages/Private/Recourse/adapters/RecourseAdapter';
-import { recoursesAdapter } from '#/pages/Private/Recourse/adapters/RecourseAdapter';
+
 import {
   type RecourseSuccessResponse,
   type RecourseErrorResponse,
-  type RecoursesSuccessResponse
+  type RecoursesPaginatedSuccessResponse,
+  type RecoursePaginatedErrorResponse,
+  type RecourseRequestBody
 } from '#/pages/Private/Recourse/index.types';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import { getBearerToken } from '#/utilities/authenticationManagement';
 
 export const getRecourses = async (
   queryParams: string
-): Promise<RecoursesSuccessResponse | RecourseErrorResponse> => {
+): Promise<RecoursesPaginatedSuccessResponse | RecoursePaginatedErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses?${queryParams}`, {
@@ -28,8 +32,10 @@ export const getRecourses = async (
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then(async (data) => recoursesAdapter(await data))
-    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+    .then(async (data) => recoursesPaginatedAdapter(await data))
+    .catch(async (error) =>
+      recoursePaginatedErrorResponseAdapter(processErrorResponse(await error))
+    );
 };
 
 export const getRecourse = async (
@@ -54,7 +60,7 @@ export const getRecourse = async (
 };
 
 export const savingRecourse = async (
-  recourse: any
+  recourse: RecourseRequestBody
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
   const bearerToken = getBearerToken();
 
@@ -76,7 +82,7 @@ export const savingRecourse = async (
 };
 
 export const updatingRecourse = async (
-  recourse: any
+  recourse: RecourseRequestBody
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
   const bearerToken = getBearerToken();
 
@@ -85,8 +91,7 @@ export const updatingRecourse = async (
     {
       method: 'PUT',
       body: JSON.stringify({
-        ...recourse,
-        identificador: recourse.id
+        ...recourse
       }),
       headers: {
         'Content-Type': 'application/json',

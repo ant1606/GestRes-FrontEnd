@@ -16,8 +16,9 @@ export const validateEstadoId = (values: StatusFormData): ValidationInputResult 
 };
 
 export const validateComentario = (values: StatusFormData): ValidationInputResult => {
-  const stateName = values.recourseStatus?.filter((status) => status.id === values.statusId)[0]
-    .value;
+  const stateName = values.recourseStatus?.filter(
+    (status) => status.id === parseInt(values.statusId as string)
+  )[0].value;
   if (
     stateName === GLOBAL_STATUS_RECOURSE.DESCARTADO ||
     stateName === GLOBAL_STATUS_RECOURSE.DESFASADO

@@ -19,7 +19,7 @@ const MultiValue = (props) => (
 
 interface Props {
   handleChange: React.Dispatch<React.SetStateAction<number[]>>;
-  value: [];
+  value: [] | never[];
 }
 const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
   // const [selected, setSelected] = useState([]);

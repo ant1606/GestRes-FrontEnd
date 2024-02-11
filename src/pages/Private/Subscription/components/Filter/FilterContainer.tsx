@@ -7,6 +7,7 @@ import { useAppDispatch } from '#/hooks/redux';
 import { userIsLogout } from '#/redux/slice/authenticationSlice';
 import { useYoutubeSubscription } from '../../context/subscription.context';
 import { getSubscriptions } from '#/services/subscriptions.services';
+import { type YoutubeSubscriptionsPaginatedErrorResponse } from '../../index.types';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,23 +42,38 @@ export const FilterContainer: React.FC = () => {
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getSubscriptions(searchParams.toString());
-      if ('data' in response) {
-        setYoutubeSubscriptions(response);
-      } else if ('error' in response) {
-        // TODO Ver como encapsular esta lógica en todas las llamadas al endpoint
-        if (response.error.status === '404') {
+
+      if (response.status === 'error') {
+        const responseError = response as YoutubeSubscriptionsPaginatedErrorResponse;
+
+        // TODO Ver como encapsular esta lógica de verificación de login en todas las llamadas al endpoint
+        if (responseError.code === 404) {
           toastNotifications().notificationError('Ocurrió un error, será redirigido al Login');
           deletePersistenDataUser();
           dispatch(userIsLogout());
           navigate('/login', { replace: true });
         }
 
-        const errorsDetail = response.error.detail;
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
         }
+
+        // Para que no interrumpa el UX, seríá mejor validar el campo de search en frontend o agregar un boton de busqueda
+        // TODO Son errores de validación de campos, ver si se maneja el filtrado como un formulario para mostrar los errores
+        // en los inputs
+        // if (!Object.values(responseError.details).every((value) => value === null)) {
+        //   const message = Object.values(responseError.details).reduce((acc, val) => {
+        //     if (val !== null) {
+        //       acc += val + ' ';
+        //     }
+        //     return acc;
+        //   }, '');
+
+        //   throw new Error(message);
+        // }
+      } else {
+        setYoutubeSubscriptions(response);
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

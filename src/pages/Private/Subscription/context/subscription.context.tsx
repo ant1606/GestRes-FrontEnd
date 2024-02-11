@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer } from 'react';
 import {
   type YoutubeSubscriptionProviderProps,
   initialState,
-  type YoutubeSubscriptionsSuccessResponse
+  type YoutubeSubscriptionsPaginatedSuccessResponse
 } from '../index.types';
 import { youtubeSubscriptionReducer } from './subscription.reducer';
 import {
@@ -44,7 +44,7 @@ export const SubscriptionYoutubeProvider = ({
   };
 
   const setYoutubeSubscriptions = (
-    youtubeSubscriptions: YoutubeSubscriptionsSuccessResponse
+    youtubeSubscriptions: YoutubeSubscriptionsPaginatedSuccessResponse
   ): void => {
     dispatch({
       type: YOUTUBE_SUBSCRIPTION_LOADED,

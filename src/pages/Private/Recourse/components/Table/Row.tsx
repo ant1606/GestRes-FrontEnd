@@ -14,6 +14,10 @@ import { TbWorldWww } from 'react-icons/tb';
 import { BsFillPersonFill } from 'react-icons/bs';
 import { MdDomain, MdOutlineLibraryBooks, MdOutlineTimer } from 'react-icons/md';
 import { BiSolidBookContent, BiSolidCameraMovie } from 'react-icons/bi';
+import {
+  type RecoursesPaginatedSuccessResponse,
+  type RecourseErrorResponse
+} from '../../index.types';
 
 interface Props {
   recourse: Recourse;
@@ -45,24 +49,26 @@ const Row: React.FC<Props> = ({ recourse }) => {
 
       dispatch(isLoading(true));
       const response = await destroyRecourse(recourse);
-      if ('data' in response) {
-        toastNotifications().toastSuccesCustomize(
-          `Se elimino la etiqueta ${recourse.name} satisfactoriamente`
-        );
-        const recourses = await getRecourses(searchParams.toString());
-        setRecourses(recourses);
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        Object.keys(errorsDetail).forEach((key) => {
-          if (key !== 'apiResponseMessageError') {
-            addValidationError({ [key]: errorsDetail[key] });
-          }
+
+      if (response.status === 'error') {
+        const responseError = response as RecourseErrorResponse;
+        // Errores de validación de campos por parte del backend
+        Object.entries(responseError.details).forEach(([key, value]) => {
+          addValidationError({ [key]: value });
         });
 
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
         }
+      } else {
+        toastNotifications().toastSuccesCustomize(
+          `Se elimino el recurso ${recourse.name} satisfactoriamente`
+        );
+        const recourses = (await getRecourses(
+          searchParams.toString()
+        )) as RecoursesPaginatedSuccessResponse;
+        setRecourses(recourses);
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

@@ -1,20 +1,23 @@
-import { type YoutubeSubscriptionErrorResponse } from './../pages/Private/Subscription/index.types';
 import {
-  youtubeSubscriptionsAdapter,
-  youtubeSubscriptionErrorResponseAdapter,
-  youtubeSubscriptionAdapter
-} from '#/pages/Private/Subscription/adapters/SubscriptionAdapter';
-import {
-  type YoutubeSubscriptionsSuccessResponse,
+  type YoutubeSubscriptionsPaginatedErrorResponse,
   type YoutubeSubscriptionErrorResponse,
+  type YoutubeSubscriptionsPaginatedSuccessResponse,
   type YoutubeSubscriptionSuccessResponse
-} from '#/pages/Private/Subscription/index.types';
+} from './../pages/Private/Subscription/index.types';
+import {
+  youtubeSubscriptionErrorResponseAdapter,
+  youtubeSubscriptionAdapter,
+  youtubeSubscriptionsPaginatedAdapter,
+  youtubeSubscriptionsPaginatedErrorResponseAdapter
+} from '#/pages/Private/Subscription/adapters/SubscriptionAdapter';
 import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getSubscriptions = async (
   queryParams: string
-): Promise<YoutubeSubscriptionsSuccessResponse | YoutubeSubscriptionErrorResponse> => {
+): Promise<
+  YoutubeSubscriptionsPaginatedSuccessResponse | YoutubeSubscriptionsPaginatedErrorResponse
+> => {
   const bearerToken = getBearerToken();
 
   return await fetch(
@@ -32,13 +35,13 @@ export const getSubscriptions = async (
       if (!res.ok) return await Promise.reject(res.json());
       return await res.json();
     })
-    .then(async (data) => youtubeSubscriptionsAdapter(await data))
+    .then(async (data) => youtubeSubscriptionsPaginatedAdapter(await data))
     .catch(async (error) =>
-      youtubeSubscriptionErrorResponseAdapter(processErrorResponse(await error))
+      youtubeSubscriptionsPaginatedErrorResponseAdapter(processErrorResponse(await error))
     );
 };
 
-export const savingSubscriptions = async (accessToken: string, order: string): Promise<void> => {
+export const importSubscriptions = async (accessToken: string, order: string): Promise<void> => {
   const bearerToken = getBearerToken();
 
   fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`, {
@@ -53,17 +56,17 @@ export const savingSubscriptions = async (accessToken: string, order: string): P
 };
 
 export const updatingSubscription = async (
-  subscription: any
+  subscriptionId: number,
+  tags: number[]
 ): Promise<YoutubeSubscriptionSuccessResponse | YoutubeSubscriptionErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${subscription.id}`,
+    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${subscriptionId}`,
     {
       method: 'PUT',
       body: JSON.stringify({
-        ...subscription,
-        identificador: subscription.id
+        tags
       }),
       headers: {
         'Content-Type': 'application/json',

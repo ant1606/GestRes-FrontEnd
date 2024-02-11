@@ -1,3 +1,4 @@
+import { type TagsSelectorSuccessResponse } from '#/pages/Private/Tag/index.types';
 import { getTagsForTagSelector } from '#/services/tag.services';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Select, { components } from 'react-select';
@@ -19,23 +20,22 @@ const MultiValue = (props) => (
 
 interface Props {
   handleChange: React.Dispatch<React.SetStateAction<number[]>>;
-  value: [];
+  value: number[] | never[];
 }
 const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
   // const [selected, setSelected] = useState([]);
-  const [listTags, setListTags] = useState<Tag[]>([]);
+  const [listTags, setListTags] = useState<Array<{ value: number; label: string }>>([]);
 
   useEffect(() => {
     const populateListTags = async (): Promise<void> => {
-      const response = await getTagsForTagSelector();
-      // console.log(response);
+      const response = (await getTagsForTagSelector()) as TagsSelectorSuccessResponse;
       setListTags(response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name })));
     };
 
     populateListTags();
   }, []);
 
-  const onSelectChange = (e) => {
+  const onSelectChange = (e: Array<{ value: number; label: string }>): void => {
     handleChange(e);
   };
 

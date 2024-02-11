@@ -45,14 +45,14 @@ interface Status {
 
 interface Progress {
   id: number;
-  done: number;
-  pending: number;
-  advanced: number;
+  done: string;
+  pending: string;
+  advanced: string;
   date: string;
   comment: string;
   recourseId?: number;
   isLastRecord: boolean;
-  total: number;
+  total: string;
 }
 
 interface Settings {

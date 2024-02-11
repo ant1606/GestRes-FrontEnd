@@ -12,6 +12,7 @@ import {
 } from '../../utils/WebPageFormValidationInputs';
 import { useWebPage } from '../../context/webPage.context';
 import { savingWebPage, updatingWebPage } from '#/services/webPage.services';
+import { type WebPageErrorResponse } from '../../index.types';
 
 interface Props {
   modalRef: any;
@@ -75,17 +76,18 @@ const Form: React.FC<Props> = ({ modalRef, onFormSubmit, webPage = null }) => {
       );
 
       if (existValidationMessage) {
-        const webPageToSend = {
+        const requestBody = {
+          id: 0,
           url: formValues.url,
           name: formValues.name,
           description: formValues.description,
           count_visits: 0,
           tags: selectedTags ?? []
         };
-        // TODO Evaluar si se registra o edita
         let response;
+
         if (webPage === null) {
-          response = await savingWebPage(webPageToSend);
+          response = await savingWebPage(requestBody);
         } else {
           let resultDialog = true;
           resultDialog = await toastNotifications().modalCustomDialogQuestion(
@@ -94,24 +96,23 @@ const Form: React.FC<Props> = ({ modalRef, onFormSubmit, webPage = null }) => {
           );
 
           if (!resultDialog) throw new Error('Se cancelo la actualización');
-          response = await updatingWebPage({ ...webPageToSend, id: webPage?.id });
+          response = await updatingWebPage({ ...requestBody, id: webPage?.id });
         }
 
-        // const response = await savingWebPage(webPageToSend);
-        if ('data' in response) {
-          onFormSubmit();
-        } else if ('error' in response) {
-          const errorsDetail = response.error.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
+        if (response.status === 'error') {
+          const responseError = response as WebPageErrorResponse;
+
+          // Errores de validación de campos por parte del backend
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
           });
 
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
           }
+        } else {
+          onFormSubmit();
         }
       }
     } catch (error: any) {

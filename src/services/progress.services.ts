@@ -1,20 +1,22 @@
 import {
   progressAdapter,
   progressErrorResponseAdapter,
-  progressesAdapter
+  progressPaginatedErrorResponseAdapter,
+  progressesPaginatedAdapter
 } from '#/pages/Private/Recourse/components/Progress/adapters/ProgressAdapter';
 import {
   type ProgressSuccessResponse,
   type ProgressErrorResponse,
-  type ProgressesSuccessResponse
+  type ProgressesPaginatedSuccessResponse,
+  type ProgressesPaginatedErrorResponse
 } from '#/pages/Private/Recourse/components/Progress/indext.types';
 import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getProgressPerRecourse = async (
   recourseId: number,
-  page: number
-): Promise<ProgressesSuccessResponse | ProgressErrorResponse> => {
+  page: number = 1
+): Promise<ProgressesPaginatedSuccessResponse | ProgressesPaginatedErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(
@@ -34,8 +36,10 @@ export const getProgressPerRecourse = async (
       if (!resp.ok) return await Promise.reject(resp.json());
       return await resp.json();
     })
-    .then(async (data) => progressesAdapter(await data))
-    .catch(async (error) => progressErrorResponseAdapter(processErrorResponse(await error)));
+    .then(async (data) => progressesPaginatedAdapter(await data))
+    .catch(async (error) =>
+      progressPaginatedErrorResponseAdapter(processErrorResponse(await error))
+    );
 };
 
 export const savingProgress = async (

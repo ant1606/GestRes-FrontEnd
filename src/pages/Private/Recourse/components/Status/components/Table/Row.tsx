@@ -9,6 +9,8 @@ import { type RootState } from '#/redux/store';
 import { getRecourse } from '#/services/recourse.services';
 import { IconContext } from 'react-icons';
 import { FaTrashAlt } from 'react-icons/fa';
+import { type StatusErrorResponse } from '../../index.types';
+import { type RecourseSuccessResponse } from '#/pages/Private/Recourse/index.types';
 
 interface Props {
   isLastStatus: boolean;
@@ -33,30 +35,32 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
 
       dispatch(isLoading(true));
       const response = await destroyStatus(status);
-      if ('data' in response) {
+
+      if (response.status === 'error') {
+        const responseError = response as StatusErrorResponse;
+        // Errores de validación de campos por parte del backend
+        Object.entries(responseError.details).forEach(([key, value]) => {
+          addValidationError({ [key]: value });
+        });
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
 
         const statusData = await getStatusPerRecourse(recourseActive?.id, 1);
         setStatuses(statusData);
-        const recourseRefreshed = await getRecourse(recourseActive.id);
+        const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
         selectedRecourse(recourseRefreshed.data);
 
-        const styleStatus = settingsStatus.find(
-          (val) => val.value === recourseRefreshed.data.currentStatusName
-        )?.value2;
-        dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
-        // TODO Change page 1 paginator
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        Object.keys(errorsDetail).forEach((key) => {
-          if (key !== 'apiResponseMessageError') {
-            addValidationError({ [key]: errorsDetail[key] });
-          }
-        });
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
+        if (!Array.isArray(recourseRefreshed.data)) {
+          const recourse = recourseRefreshed.data;
+          const styleStatus = settingsStatus.find(
+            (val) => val.value === recourse.currentStatusName
+          )?.value2;
+          dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
         }
       }
     } catch (error: any) {

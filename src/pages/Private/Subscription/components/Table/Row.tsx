@@ -3,8 +3,6 @@ import { BrowserRouter, useSearchParams } from 'react-router-dom';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useAppDispatch } from '#/hooks/redux';
 import { isLoading } from '#/redux/slice/uiSlice';
-import { focusInput } from '#/utilities/manipulationDom';
-import { destroyTag, getTags } from '#/services/tag.services';
 import { IconContext } from 'react-icons';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import {
@@ -17,6 +15,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Form from '../Form/Form';
 import { destroySubscription, getSubscriptions } from '#/services/subscriptions.services';
+import { type YoutubeSubscriptionErrorResponse } from '../../index.types';
 
 interface Prop {
   youtubeSubscription: YoutubeSubscription;
@@ -29,21 +28,10 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
   }
-  const {
-    resetValidationError,
-    cleanSelectedYoutubeSubscription,
-    setYoutubeSubscriptions,
-    addValidationError
-  } = useYoutubeSubscription();
+  const { resetValidationError, cleanSelectedYoutubeSubscription, setYoutubeSubscriptions } =
+    useYoutubeSubscription();
 
-  // const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-
-  // const handleClickEdit = (tag: Tag): void => {
-  //   resetValidationError();
-  //   selectedTag(tag);
-  //   focusInput('#name');
-  // };
 
   const handleClickDelete = async (youtubeSubscription: YoutubeSubscription): Promise<void> => {
     try {
@@ -52,7 +40,15 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
 
       dispatch(isLoading(true));
       const response = await destroySubscription(youtubeSubscription);
-      if ('data' in response) {
+
+      if (response.status === 'error') {
+        const responseError = response as YoutubeSubscriptionErrorResponse;
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
         resetValidationError();
         toastNotifications().toastSuccesCustomize(
           `Se elimino la suscripción ${youtubeSubscription.title} satisfactoriamente`
@@ -60,18 +56,6 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
         cleanSelectedYoutubeSubscription();
         const subscriptions = await getSubscriptions(searchParams.toString());
         setYoutubeSubscriptions(subscriptions);
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        Object.keys(errorsDetail).forEach((key) => {
-          if (key !== 'apiResponseMessageError') {
-            addValidationError({ [key]: errorsDetail[key] });
-          }
-        });
-
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
-        }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
@@ -110,8 +94,6 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
     toastNotifications().toastSuccesCustomize('Se actualizaron las etiquetas correctamente.');
     const youtubeSubscriptions = await getSubscriptions(searchParams.toString());
     setYoutubeSubscriptions(youtubeSubscriptions);
-    // const recourseRefreshed = await getRecourse(recourseActive.id);
-    // selectedRecourse(recourseRefreshed.data);
   };
 
   return (
@@ -172,22 +154,9 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
             <p>{youtubeSubscription.publishedAt}</p>
           </div>
         </td>
-        {/* <td className="max-h-14 max-w-xs">
-        <div className="px-3 text-center text-lg text-gray-900 font-semibold">
-          <p>{youtubeSubscription.description}</p>
-        </div>
-      </td> */}
       </tr>
 
-      {/* Fila de Detalles 
-      w-[${recourse.totalProgressPercentage}%]
-      */}
-      {/* <tr className={ ` ${!viewDetail ? "scale-y-0 row_viewDetail_collapse" : ""} origin-top bg-gray-100 duration-300 transition-all`}> */}
-      {/* <td className='max-h-14 max-w-xs'>
-          <div className='flex justify-center items-center'>
-            <p className='text-lg font-semibold text-gray-900 truncate '> Nombre del recurso 1 asdasdasdsadsadsa sadasdsa asdas asdasdasdas asd as adsasdasdasd dasdasd as dasd sad final</p>
-          </div>
-        </td> */}
+      {/* Fila de Detalles */}
       <tr className="">
         <td colSpan={5}>
           <div

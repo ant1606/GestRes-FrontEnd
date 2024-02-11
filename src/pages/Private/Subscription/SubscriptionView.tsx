@@ -5,7 +5,7 @@ import { type RootState } from '#/redux/store';
 import React, { useEffect } from 'react';
 import Button from '#/components/Button';
 import { resetOAuthGoogle, userSelectOrderSortApiYoutube } from '#/redux/slice/authenticationSlice';
-import { getStatusProcess, getSubscriptions } from '#/services/subscriptions.services';
+import { getSubscriptions } from '#/services/subscriptions.services';
 import { useYoutubeSubscription } from './context/subscription.context';
 import { useSearchParams } from 'react-router-dom';
 import Table from './components/Table';
@@ -14,6 +14,7 @@ import perPageItemsValue from '#/config/perPageItemsValue';
 import Filter from './components/Filter';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { oauthSignIn } from './utils/helpers';
+import { type YoutubeSubscriptionsPaginatedSuccessResponse } from './index.types';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -41,9 +42,10 @@ const SubscriptionView: React.FC = () => {
 
   useEffect(() => {
     const initSubscription = async (): Promise<void> => {
-      if (comeFromOAuthCallback) {
-        if (isOAuthAccess) {
-          pollProcessStatus();
+      if (comeFromOAuthCallback as boolean) {
+        if (isOAuthAccess as boolean) {
+          // TODO MOstrar un mensaje o toast de que se estan importando los canales mientras el resultado de la funcion sea "procesando"
+          // pollProcessStatus();
         } else {
           toastNotifications().toastErrorCustomize(
             'Operación Cancelada: Autorización denegada por el usuario'
@@ -56,17 +58,19 @@ const SubscriptionView: React.FC = () => {
     initSubscription();
   }, [comeFromOAuthCallback]);
 
-  const pollProcessStatus = async (): Promise<void> => {
-    const response = await getStatusProcess();
-    if (response.message === 'procesando') {
-      setTimeout(() => {
-        pollProcessStatus();
-      }, 5000);
-    } else {
-      const res = await getSubscriptions('');
-      setYoutubeSubscriptions(res);
-    }
-  };
+  // const pollProcessStatus = async (): Promise<void> => {
+  //   const response = (await getStatusProcess()) as { message: string };
+  //   if (response.message === 'procesando') {
+  //     setTimeout(() => {
+  //       pollProcessStatus();
+  //     }, 5000);
+  //   } else {
+  //     const responseData = (await getSubscriptions(
+  //       searchParams.toString()
+  //     )) as YoutubeSubscriptionsPaginatedSuccessResponse;
+  //     setYoutubeSubscriptions(responseData);
+  //   }
+  // };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
     searchParams.delete('page');
@@ -75,8 +79,10 @@ const SubscriptionView: React.FC = () => {
     searchParams.append('perPage', youtubeSubscriptionPerPage);
     searchParams.sort();
     setSearchParams(searchParams);
-    const youtubeSubscriptions = await getSubscriptions(searchParams.toString());
-    setYoutubeSubscriptions(youtubeSubscriptions);
+    const responseYoutubeSubscriptions = (await getSubscriptions(
+      searchParams.toString()
+    )) as YoutubeSubscriptionsPaginatedSuccessResponse;
+    setYoutubeSubscriptions(responseYoutubeSubscriptions);
   };
 
   const handlePageChangeWrapper = (e: ReactPaginaOnPageChangeArgument): void => {

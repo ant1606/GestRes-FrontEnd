@@ -12,7 +12,7 @@ interface Props {
   handleChangeSearchTags: React.Dispatch<React.SetStateAction<number[]>>;
   handleChangeRecordsPerPage: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   searchTitle: string;
-  searchTag: [];
+  searchTag: number[] | never[];
   youtubeSubscriptionPerPage: string | number | readonly string[] | undefined;
 }
 const FilterView: React.FC<Props> = ({

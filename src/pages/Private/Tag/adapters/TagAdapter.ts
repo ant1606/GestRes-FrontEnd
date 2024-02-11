@@ -45,7 +45,7 @@ export const tagsPaginatedAdapter = (response: any): TagsPaginatedSuccessRespons
       next: response.links?.next,
       prev: response.links?.prev
     },
-    data: response.data.length === 0 ? [] : adapterTagsData(response.data)
+    data: adapterTagsData(response.data)
   };
 };
 

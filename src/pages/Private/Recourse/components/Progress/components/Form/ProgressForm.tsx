@@ -10,11 +10,12 @@ import { savingProgress } from '#/services/progress.services';
 import {
   validateAdvancedAmount,
   validateComment,
-  validateDate,
-  validateDoneAmount
+  validateDate
 } from '../../utils/ProgressFormValidationInputs';
-import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
+import { GLOBAL_UNIT_MEASURE_PROGRESS } from '#/config/globalConstantes';
 import TimeInputSplitted from '../../../TimeInput';
+import { type ProgressErrorResponse } from '../../indext.types';
+import { convertHourToSeconds, processHours } from '#/utilities/timeHelpers';
 
 // done: validateDoneAmount,
 const validateFunctionsFormInputs = {
@@ -26,34 +27,40 @@ const validateFunctionsFormInputs = {
 interface Props {
   modalRef: any;
   recourseParent: Recourse;
-  listTypes: Settings[];
+  listUnitMeasure: Settings[];
   onFormSubmit: (pending: number) => void;
 }
 
-const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, onFormSubmit }) => {
+const ProgressForm: React.FC<Props> = ({
+  modalRef,
+  recourseParent,
+  listUnitMeasure,
+  onFormSubmit
+}) => {
   const { addValidationError, progressError, resetValidationError, cleanSelectedProgress } =
     useProgress();
   const [disabledButton, setDisabledButton] = useState(false);
-  const [isTypeVideo, setIsTypeVideo] = useState(false);
+  const [isHoursUnitMeasure, setIsHoursUnitMeasure] = useState(false);
 
   useEffect(() => {
-    setIsTypeVideo(
-      parseInt(recourseParent.typeId) ===
-      listTypes.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_VIDEO)?.id
-    );
+    const idUnitHoursMeasureProgress = listUnitMeasure.find(
+      (val) => val.value === GLOBAL_UNIT_MEASURE_PROGRESS.UNIT_HOURS
+    )?.id;
+    setIsHoursUnitMeasure(recourseParent.unitMeasureProgressId === idUnitHoursMeasureProgress);
   }, []);
 
   useEffect(() => {
     reset();
-  }, [isTypeVideo]);
+  }, [isHoursUnitMeasure]);
 
   const initialState = {
     date: moment().format('YYYY-MM-DD'),
-    advanced: recourseParent.progress.advanced,
+    advanced: (recourseParent.progress as Progress).advanced,
     comment: '',
     lastProgress: recourseParent.progress,
-    isTypeVideo
+    isHoursUnitMeasure
   };
+
   const {
     values: formValues,
     handleInputChange,
@@ -96,41 +103,26 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
           recourseParent.id
         );
 
-        if ('data' in response) {
-
-          const pendingAmount = isTypeVideo
-              ? processHours(recourseParent.progress.total,advanced)
-              : recourseParent.progress.total - advanced;
-
-          console.log({
-            isTypeVideo,
-            total: recourseParent.progress.total,
-            advanced,
-            pendingAmount
+        if (response.status === 'error') {
+          const responseError = response as ProgressErrorResponse;
+          // Errores de validación de campos por parte del backend
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
           });
-          // pendingAmount === 0
-          //   ? toastNotifications().notificationSuccess(
-          //     `Finalizó el recurso ${recourseParent.name}, Felicidades`
-          //   )
-          //   : toastNotifications().toastSucces();
+
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
+          }
+        } else {
+          const lastProgress = recourseParent.progress as Progress;
+          const pendingAmount = isHoursUnitMeasure
+            ? convertHourToSeconds(processHours(lastProgress.total, advanced as string))
+            : parseInt(lastProgress.total) - parseInt(advanced);
           reset();
           resetValidationError();
-
           cleanSelectedProgress();
-
-          onFormSubmit(convertHourToSeconds(pendingAmount));
-        } else if ('error' in response) {
-          const errorsDetail = response.error.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
-          });
-
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
-          }
+          onFormSubmit(pendingAmount);
         }
       }
     } catch (error: any) {
@@ -146,43 +138,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
   };
 
   const minDate = (): string => {
-    return recourseParent.progress.date ?? new Date().toISOString().split('T')[0];
-  };
-
-  // TODO EXtraer esta lógica
-  const processHours = (hora1, hora2, isSubtract = true) => {
-    const [horas1, minutos1, segundos1] = hora1.split(':').map(Number);
-    const [horas2, minutos2, segundos2] = hora2.split(':').map(Number);
-
-    const totalSegundos1 = horas1 * 3600 + minutos1 * 60 + segundos1;
-    const totalSegundos2 = horas2 * 3600 + minutos2 * 60 + segundos2;
-
-    const totalSegundos = isSubtract
-      ? totalSegundos1 - totalSegundos2
-      : totalSegundos1 + totalSegundos2;
-
-    const nuevasHoras = Math.floor(totalSegundos / 3600);
-    const nuevosMinutos = Math.floor((totalSegundos % 3600) / 60);
-    const nuevosSegundos = totalSegundos % 60;
-
-    return `${String(abs(nuevasHoras)).padStart(2, '0')}:${String(abs(nuevosMinutos)).padStart(
-      2,
-      '0'
-    )}:${String(abs(nuevosSegundos)).padStart(2, '0')}`;
-  };
-
-  // TODO EXtraer esta lógica
-
-  const convertHourToSeconds = (hour)=>
-  {
-    const [horas, minutos, segundos] = hour.split(':').map(Number);
-    return horas * 3600 + minutos * 60 + segundos;
-  }
-
-
-  // Función auxiliar para obtener el valor absoluto
-  const abs = (value) => {
-    return value < 0 ? -value : value;
+    return (recourseParent.progress as Progress).date ?? new Date().toISOString().split('T')[0];
   };
 
   return (
@@ -199,7 +155,7 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
           handleChange={handleInputChange}
           min={minDate()}
         />
-        {isTypeVideo ? (
+        {isHoursUnitMeasure ? (
           <TimeInputSplitted
             handleChange={handleInputChange}
             timeValue={advanced}
@@ -232,9 +188,9 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
             }}
             name="pending"
             value={
-              isTypeVideo
-                ? processHours(recourseParent.progress.total, advanced)
-                : recourseParent.progress.total - advanced
+              isHoursUnitMeasure
+                ? processHours((recourseParent.progress as Progress).total, advanced)
+                : parseInt((recourseParent.progress as Progress).total) - parseInt(advanced)
             }
             disabled
           />
@@ -248,9 +204,9 @@ const ProgressForm: React.FC<Props> = ({ modalRef, recourseParent, listTypes, on
             }}
             name="pending"
             value={
-              isTypeVideo
-                ? processHours(advanced, recourseParent.progress.advanced)
-                : advanced - recourseParent.progress.advanced
+              isHoursUnitMeasure
+                ? processHours(advanced, (recourseParent.progress as Progress).advanced)
+                : parseInt(advanced) - parseInt((recourseParent.progress as Progress).advanced)
             }
             disabled
           />

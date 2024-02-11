@@ -12,6 +12,7 @@ import { GLOBAL_STATUS_RECOURSE } from '#/config/globalConstantes';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { changeColorTitleBar } from '#/redux/slice/uiSlice';
 import { getRecourse } from '#/services/recourse.services';
+import { type RecourseSuccessResponse } from '../../index.types';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -105,10 +106,10 @@ export const StatusContainer: React.FC = () => {
     const statuses = await getStatusPerRecourse(recourseActive.id, 1);
     setStatuses(statuses);
 
-    // const lastStatus = statusData.data[statusData.data.length - 1];
+    // Obteniendo estilos del estado registrado para cambiar barra de titulo
     const styleStatus = settingsStatus.find((val) => val.id === statusIdRegistered)?.value2;
     dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
-    const recourseRefreshed = await getRecourse(recourseActive.id);
+    const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
     selectedRecourse(recourseRefreshed.data);
   };
 

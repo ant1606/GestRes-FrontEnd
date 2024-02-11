@@ -12,6 +12,8 @@ import { BrowserRouter, useNavigate } from 'react-router-dom';
 import { getRecourse } from '#/services/recourse.services';
 import { useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
+import { type RecourseSuccessResponse } from '../../index.types';
+import { type ProgressesPaginatedSuccessResponse } from './indext.types';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -20,14 +22,16 @@ interface ReactPaginaOnPageChangeArgument {
 export const ProgressContainer: React.FC = () => {
   const { recourseActive, selectedRecourse } = useRecourse();
   const { setProgresses } = useProgress();
-  const { settingsType } = useAppSelector((state: RootState) => state.settings);
+  const { settingsUnitMeasureProgress } = useAppSelector((state: RootState) => state.settings);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const navigate = useNavigate();
 
   useEffect(() => {
     const searchFirstTimeStatuses = async (): Promise<void> => {
-      const progresses = await getProgressPerRecourse(recourseActive.id, 1);
+      const progresses = (await getProgressPerRecourse(
+        recourseActive.id
+      )) as ProgressesPaginatedSuccessResponse;
       setProgresses(progresses);
     };
     searchFirstTimeStatuses();
@@ -55,7 +59,7 @@ export const ProgressContainer: React.FC = () => {
             <ProgressForm
               modalRef={modalRef.current}
               recourseParent={recourseActive}
-              listTypes={settingsType}
+              listUnitMeasure={settingsUnitMeasureProgress}
               onFormSubmit={(pending) => {
                 handleFormSubmit(pending);
               }}
@@ -69,7 +73,7 @@ export const ProgressContainer: React.FC = () => {
   };
   const handleFormSubmit = async (pendingAmount: number): Promise<void> => {
     // TODO Hacer que cuando se halla finalizado el recurso( el valor pendiente sea 0), pase a la pantalla principal de recursos
-    if (pendingAmount === 0  ) {
+    if (pendingAmount === 0) {
       navigate('/app/recourse');
       const nameRecourse = recourseActive.name as string;
       toastNotifications().notificationSuccess(
@@ -83,9 +87,11 @@ export const ProgressContainer: React.FC = () => {
 
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se registró el progreso correctamente.');
-    const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
+    const progressData = (await getProgressPerRecourse(
+      recourseActive?.id
+    )) as ProgressesPaginatedSuccessResponse;
     setProgresses(progressData);
-    const recourseRefreshed = await getRecourse(recourseActive.id);
+    const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
     selectedRecourse(recourseRefreshed.data);
   };
 

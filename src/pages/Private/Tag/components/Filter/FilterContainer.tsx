@@ -49,16 +49,18 @@ export const FilterContainer: React.FC = () => {
         }
 
         // Para que no interrumpa el UX, seríá mejor validar el campo de search en frontend o agregar un boton de busqueda
-        if (!Object.values(responseError.details).every((value) => value === null)) {
-          const message = Object.values(responseError.details).reduce((acc, val) => {
-            if (val !== null) {
-              acc += val + ' ';
-            }
-            return acc;
-          }, '');
+        // TODO Son errores de validación de campos, ver si se maneja el filtrado como un formulario para mostrar los errores
+        // en los inputs
+        // if (!Object.values(responseError.details).every((value) => value === null)) {
+        //   const message = Object.values(responseError.details).reduce((acc, val) => {
+        //     if (val !== null) {
+        //       acc += val + ' ';
+        //     }
+        //     return acc;
+        //   }, '');
 
-          throw new Error(message);
-        }
+        //   throw new Error(message);
+        // }
       } else {
         const responseSuccess = response as TagsPaginatedSuccessResponse;
         setTags(responseSuccess);

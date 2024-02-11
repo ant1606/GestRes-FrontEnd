@@ -1,20 +1,23 @@
 import {
   statusAdapter,
   statusErrorResponseAdapter,
-  statusesAdapter
+  statusesPaginatedAdapter,
+  statusesPaginatedErrorResponseAdapter
 } from '#/pages/Private/Recourse/components/Status/adapters/StatusAdapter';
-import {
-  type StatusesSuccessResponse,
-  type StatusErrorResponse,
-  type StatusSuccessResponse
-} from '#/pages/Private/Recourse/components/Status/index.types';
+
 import { getBearerToken } from '#/utilities/authenticationManagement';
 import { processErrorResponse } from '#/utilities/processAPIResponse.util';
+import {
+  type StatusErrorResponse,
+  type StatusSuccessResponse,
+  type StatusPaginatedErrorResponse,
+  type StatusesPaginatedSuccessResponse
+} from '#/pages/Private/Recourse/components/Status/index.types';
 
 export const getStatusPerRecourse = async (
   recourseId: number,
   page: number
-): Promise<StatusesSuccessResponse | StatusErrorResponse> => {
+): Promise<StatusesPaginatedSuccessResponse | StatusPaginatedErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(
@@ -32,8 +35,10 @@ export const getStatusPerRecourse = async (
       if (!resp.ok) return await Promise.reject(resp.json());
       return await resp.json();
     })
-    .then(async (data) => statusesAdapter(await data))
-    .catch(async (error) => statusErrorResponseAdapter(processErrorResponse(await error)));
+    .then(async (data) => statusesPaginatedAdapter(await data))
+    .catch(async (error) =>
+      statusesPaginatedErrorResponseAdapter(processErrorResponse(await error))
+    );
 };
 
 export const savingStatus = async (

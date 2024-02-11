@@ -1,45 +1,24 @@
 import {
+  type ProgressesPaginatedSuccessResponse,
   type ProgressErrorResponse,
-  type ProgressesSuccessResponse,
-  type ProgressSuccessResponse
+  type ProgressSuccessResponse,
+  type ApiResponseProgress,
+  type ProgressesPaginatedErrorResponse,
+  type ApiResponseSuccessProgress
 } from '../indext.types';
 
-export interface ApiResponseProgress {
-  identificador: number;
-  realizado: number;
-  pendiente: number;
-  avanzadoHasta: number;
-  fecha: string;
-  comentario: string;
-  esUltimoRegistro: boolean;
-  total: number;
-}
-
-export const adapterProgress = (progress: ApiResponseProgress): Progress => {
+export const progressesPaginatedAdapter = (response: any): ProgressesPaginatedSuccessResponse => {
+  if (response.data.length === 0)
+    return {
+      code: response.code,
+      status: response.status,
+      meta: null,
+      links: null,
+      data: []
+    };
   return {
-    id: progress.identificador,
-    done: progress.realizado,
-    advanced: progress.avanzadoHasta,
-    pending: progress.pendiente,
-    date: progress.fecha,
-    comment: progress.comentario,
-    isLastRecord: progress.esUltimoRegistro,
-    total: progress.total
-  };
-};
-
-export const progressAdapter = (progress: ApiResponseProgress): ProgressSuccessResponse => {
-  return {
-    data: adapterProgress(progress)
-  };
-};
-
-export const adapterProgressesData = (progresses: ApiResponseProgress[]): Progress[] => {
-  return progresses?.map((progress: ApiResponseProgress) => adapterProgress(progress));
-};
-
-export const progressesAdapter = (response: any): ProgressesSuccessResponse => {
-  return {
+    code: response.code,
+    status: response.status,
     meta: {
       path: response.meta.path,
       currentPage: response.meta.currentPage,
@@ -60,19 +39,54 @@ export const progressesAdapter = (response: any): ProgressesSuccessResponse => {
   };
 };
 
+export const adapterProgressesData = (progresses: ApiResponseProgress[]): Progress[] => {
+  return progresses?.map((progress: ApiResponseProgress) => adapterProgress(progress));
+};
+
+export const progressPaginatedErrorResponseAdapter = (
+  error: any
+): ProgressesPaginatedErrorResponse => {
+  return {
+    code: error.code,
+    message: error.message,
+    status: error.status
+  };
+};
+
+export const progressAdapter = (response: ApiResponseSuccessProgress): ProgressSuccessResponse => {
+  return {
+    code: response.code,
+    status: response.status,
+    data: Array.isArray(response.data) ? [] : adapterProgress(response.data)
+  };
+};
+
+export const adapterProgress = (progress: ApiResponseProgress): Progress => {
+  return {
+    id: progress.identificador,
+    done: progress.realizado.toString(),
+    advanced: progress.avanzadoHasta.toString(),
+    pending: progress.pendiente.toString(),
+    date: progress.fecha,
+    comment: progress.comentario,
+    isLastRecord: progress.esUltimoRegistro,
+    total: progress.total.toString()
+  };
+};
+
 export const progressErrorResponseAdapter = (error: any): ProgressErrorResponse => {
   return {
-    error: {
-      progress: error.error.progress,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null,
-        comment: error.error.detail.comment ?? null,
-        date: error.error.detail.date ?? null,
-        advanced: error.error.detail.advanced ?? null,
-        done: error.error.detail.done ?? null,
-        pending: error.error.detail.pending ?? null,
-        total: error.error.detail.total ?? null
-      }
+    code: error.code,
+    message: error.message,
+    status: error.status,
+    details: {
+      apiResponseMessageError: error.details.api_response ?? null,
+      comment: error.details.comment ?? null,
+      date: error.details.date ?? null,
+      advanced: error.details.advanced ?? null,
+      done: error.details.done ?? null,
+      pending: error.details.pending ?? null,
+      total: error.details.total ?? null
     }
   };
 };

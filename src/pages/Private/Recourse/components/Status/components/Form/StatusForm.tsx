@@ -13,6 +13,7 @@ import { useForm } from '#/hooks/useForm.js';
 import { useStatus } from '../../context/status.context.js';
 import { savingStatus } from '#/services/status.services.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
+import { type StatusErrorResponse } from '../../index.types.js';
 
 const validateFunctionsFormInputs = {
   date: validateFecha,
@@ -95,23 +96,22 @@ const StatusForm: React.FC<Props> = ({
           recourseParent.id
         );
 
-        if ('data' in response) {
+        if (response.status === 'error') {
+          const responseError = response as StatusErrorResponse;
+          // Errores de validación de campos por parte del backend
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
+          });
+
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
+          }
+        } else {
           reset();
           resetValidationError();
           cleanSelectedStatus();
-          onFormSubmit(formValues.statusId);
-        } else if ('error' in response) {
-          const errorsDetail = response.error.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
-          });
-
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
-          }
+          onFormSubmit(parseInt(formValues.statusId));
         }
       }
     } catch (error: any) {
@@ -127,7 +127,8 @@ const StatusForm: React.FC<Props> = ({
   };
 
   const minDate = (): string => {
-    return recourseParent.status.date ?? new Date().toISOString().split('T')[0];
+    const status = recourseParent.status as Status;
+    return status.date ?? new Date().toISOString().split('T')[0];
   };
 
   return (
