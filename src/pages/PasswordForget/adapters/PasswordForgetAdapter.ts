@@ -7,20 +7,19 @@ export const passwordForgetSuccessResponseAdapter = (
   response: any
 ): PasswordForgetSuccessResponse => {
   return {
-    data: {
-      message: response.data.message
-    }
+    code: response.code,
+    status: response.status,
+    message: response.message
   };
 };
 
 export const passwordForgetErrorResponseAdapter = (error: any): PasswordForgetErrorResponse => {
   return {
-    error: {
-      status: error.error.status,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null,
-        email: error.error.detail.email ?? null
-      }
+    status: error.status,
+    code: error.code,
+    message: error.message,
+    details: {
+      email: error.details.email ?? null
     }
   };
 };

@@ -3,6 +3,10 @@ import {
   resendLinkVerifyEmailSuccessResponseAdapter
 } from '#/pages/Private/ResendVerifyLinkEmail/adapters/resendLinkVerifyEmailAdapter';
 import {
+  type ResendLinkVerifyEmailErrorResponse,
+  type ResendLinkVerifyEmailSuccessResponse
+} from '#/pages/Private/ResendVerifyLinkEmail/index.types';
+import {
   verifyEmailErrorResponseAdapter,
   verifyEmailSuccessResponseAdapter
 } from '#/pages/VerifyEmail/adapters/VerifyEmailAdapter';
@@ -34,7 +38,7 @@ export const verifyUserEmail = async (
 
 export const resendLinkVerifyUserEmail = async (
   id: number
-): Promise<Record<string, string | any>> => {
+): Promise<ResendLinkVerifyEmailSuccessResponse | ResendLinkVerifyEmailErrorResponse> => {
   const bearerToken = getBearerToken();
 
   return await fetch(

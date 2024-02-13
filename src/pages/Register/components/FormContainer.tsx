@@ -12,6 +12,7 @@ import {
   validateUserPasswordConfirmation
 } from '../utils/validationInputs';
 import { useRegister } from '../context/register.context';
+import { type RegisterErrorResponse } from '../index.types';
 
 const validateFunctionsFormInputs = {
   name: validateUserName,
@@ -60,21 +61,37 @@ export const FormContainer: React.FC = () => {
           password,
           passwordConfirmation
         });
-        if ('data' in response) {
-          setUserWasRegistered(true);
-        } else if ('error' in response) {
-          const errorsDetail = response.error?.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
+
+        if (response.status === 'error') {
+          const responseError = response as RegisterErrorResponse;
+          // Errores de validación de campos por parte del backend
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
           });
 
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
           }
+        } else {
+          setUserWasRegistered(true);
         }
+
+        // if ('data' in response) {
+        //   setUserWasRegistered(true);
+        // } else if ('error' in response) {
+        //   const errorsDetail = response.error?.detail;
+        //   Object.keys(errorsDetail).forEach((key) => {
+        //     if (key !== 'apiResponseMessageError') {
+        //       addValidationError({ [key]: errorsDetail[key] });
+        //     }
+        //   });
+
+        //   if ('apiResponseMessageError' in errorsDetail) {
+        //     if (errorsDetail.apiResponseMessageError !== null)
+        //       throw new Error(errorsDetail.apiResponseMessageError);
+        //   }
+        // }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

@@ -12,6 +12,7 @@ import {
   validateUserPassword,
   validateUserPasswordConfirmation
 } from '../utils/validationInputs';
+import { type PasswordResetErrorResponse, type PasswordResetSuccessResponse } from '../index.types';
 
 const initialState = {
   email: '',
@@ -65,21 +66,22 @@ export const FormContainer: React.FC = () => {
           password_confirmation: passwordConfirmation,
           token: token ?? ''
         });
-        if ('data' in response) {
-          toastNotifications().toastSuccesCustomize('Su contraseña fue cambiada con éxito.');
-          navigate('/login', { replace: true });
-        } else if ('error' in response) {
-          const errorsDetail = response.error?.detail;
-          Object.keys(errorsDetail).forEach((key) => {
-            if (key !== 'apiResponseMessageError') {
-              addValidationError({ [key]: errorsDetail[key] });
-            }
+
+        if (response.status === 'error') {
+          const responseError = response as PasswordResetErrorResponse;
+          // Errores de validación de campos por parte del backend
+          Object.entries(responseError.details).forEach(([key, value]) => {
+            addValidationError({ [key]: value });
           });
 
-          if ('apiResponseMessageError' in errorsDetail) {
-            if (errorsDetail.apiResponseMessageError !== null)
-              throw new Error(errorsDetail.apiResponseMessageError);
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
           }
+        } else {
+          const responseSuccess = response as PasswordResetSuccessResponse;
+          toastNotifications().toastSuccesCustomize(responseSuccess.message);
+          navigate('/login', { replace: true });
         }
       }
     } catch (error: any) {

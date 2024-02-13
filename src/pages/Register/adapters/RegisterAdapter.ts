@@ -2,23 +2,22 @@ import { type RegisterErrorResponse, type RegisterSuccessResponse } from '../ind
 
 export const registerSuccessResponseAdapter = (response: any): RegisterSuccessResponse => {
   return {
-    data: {
-      message: response.data.message
-    }
+    code: response.code,
+    status: response.status,
+    message: response.message
   };
 };
 
 export const registerErrorResponseAdapter = (error: any): RegisterErrorResponse => {
   return {
-    error: {
-      status: error.error.status,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null,
-        name: error.error.detail.name ?? null,
-        email: error.error.detail.email ?? null,
-        password: error.error.detail.password ?? null,
-        passwordConfirmation: error.error.detail.password_confirmation ?? null
-      }
+    code: error.code,
+    message: error.message,
+    status: error.status,
+    details: {
+      name: error.details.name ?? null,
+      email: error.details.email ?? null,
+      password: error.details.password ?? null,
+      passwordConfirmation: error.details.password_confirmation ?? null
     }
   };
 };

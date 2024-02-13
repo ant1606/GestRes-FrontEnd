@@ -7,33 +7,46 @@ import { toastNotifications } from '#/utilities/notificationsSwal';
 import { resendLinkVerifyUserEmail } from '#/services/verifyEmail.services';
 import { type RootState } from '#/redux/store';
 import Loader from '#/components/Loader';
-
-interface ResponseAPI {
-  data?: Record<string, any>;
-  error?: Record<string, any>;
-}
+import {
+  type ResendLinkVerifyEmailErrorResponse,
+  type ResendLinkVerifyEmailSuccessResponse
+} from './index.types';
 
 export const ResendLinkVerifyEmail: React.FC = () => {
   const dispatch = useAppDispatch();
   const userAuthenticated = useAppSelector((state: RootState) => state.authentication);
-  const { value: uiLoading } = useAppSelector((state: RootState) => state.ui);
+  const { loadingState } = useAppSelector((state: RootState) => state.ui);
 
   const handleSubmit = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
 
-      const response: ResponseAPI = await resendLinkVerifyUserEmail(userAuthenticated.id);
-      if ('data' in response) {
-        toastNotifications().toastSuccesCustomize(
-          'Se reenvio el link de verificación a su correo.'
-        );
-      } else if ('error' in response) {
-        const errorsDetail = response.error?.detail;
-        if ('apiResponse' in errorsDetail) {
-          throw new Error(errorsDetail.apiResponse);
+      const response = await resendLinkVerifyUserEmail(userAuthenticated.id);
+
+      if (response.status === 'error') {
+        const responseError = response as ResendLinkVerifyEmailErrorResponse;
+        // Errores de validación de campos por parte del backend
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
         }
+      } else {
+        const responseSuccess = response as ResendLinkVerifyEmailSuccessResponse;
+        toastNotifications().toastSuccesCustomize(responseSuccess.message);
       }
-    } catch (error) {
+
+      // if ('data' in response) {
+      //   toastNotifications().toastSuccesCustomize(
+      //     'Se reenvio el link de verificación a su correo.'
+      //   );
+      // } else if ('error' in response) {
+      //   const errorsDetail = response.error?.detail;
+      //   if ('apiResponse' in errorsDetail) {
+      //     throw new Error(errorsDetail.apiResponse);
+      //   }
+      // }
+    } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {
       dispatch(isLoading(false));
@@ -47,7 +60,7 @@ export const ResendLinkVerifyEmail: React.FC = () => {
 
   return (
     <>
-      {uiLoading && <Loader />}
+      {loadingState && <Loader />}
       <AuthenticationTemplate>
         <p className="text-5xl leading-10 font-bold text-center">
           ¡Debes verificar tu correo electrónico!

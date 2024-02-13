@@ -1,16 +1,18 @@
 import { type VerifyEmailErrorResponse, type VerifyEmailSuccessResponse } from '../index.types';
 
-export const verifyEmailSuccessResponseAdapter = (user: any): VerifyEmailSuccessResponse => {
+export const verifyEmailSuccessResponseAdapter = (response: any): VerifyEmailSuccessResponse => {
   return {
+    code: response.code,
+    status: response.status,
     data: {
-      bearerToken: user.data.bearer_token,
-      bearerExpire: user.data.bearer_expire,
+      bearerToken: response.data.bearer_token,
+      bearerExpire: response.data.bearer_expire,
       user: {
-        id: user.data.user.id,
-        name: user.data.user.name,
-        email: user.data.user.email,
-        isVerified: user.data.user.is_verified,
-        rememberToken: user.data.user.remember_token
+        id: response.data.user.id,
+        name: response.data.user.name,
+        email: response.data.user.email,
+        isVerified: response.data.user.is_verified,
+        rememberToken: response.data.user.remember_token
       }
     }
   };
@@ -18,11 +20,8 @@ export const verifyEmailSuccessResponseAdapter = (user: any): VerifyEmailSuccess
 
 export const verifyEmailErrorResponseAdapter = (error: any): VerifyEmailErrorResponse => {
   return {
-    error: {
-      status: error.error.status,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null
-      }
-    }
+    status: error.status,
+    code: error.code,
+    message: error.message
   };
 };

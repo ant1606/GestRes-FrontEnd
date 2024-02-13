@@ -1,20 +1,15 @@
 export interface VerifyEmailSuccessResponse {
+  status: string;
+  code: number;
   data: {
     bearerToken: string;
     bearerExpire: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      isVerified: boolean;
-      rememberToken: string;
-    };
+    user: User;
   };
 }
 
 export interface VerifyEmailErrorResponse {
-  error: {
-    status: string;
-    detail: ApiErrorResponse;
-  };
+  status: string;
+  code: number;
+  message: string;
 }

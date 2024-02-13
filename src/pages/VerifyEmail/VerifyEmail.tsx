@@ -7,6 +7,7 @@ import { userIsLoggin } from '#/redux/slice/authenticationSlice.js';
 import { verifyUserEmail } from '#/services/verifyEmail.services.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { savePersistenDataUser } from '#/utilities/authenticationManagement.js';
+import { type VerifyEmailErrorResponse, type VerifyEmailSuccessResponse } from './index.types.js';
 
 export const VerifyEmail: React.FC = () => {
   const { id, hash } = useParams();
@@ -40,17 +41,19 @@ export const VerifyEmail: React.FC = () => {
         throw new Error('No se identifico al usuario');
 
       const response = await verifyUserEmail(id, hash);
-      if ('data' in response) {
-        savePersistenDataUser(response);
-        await userIsLoggedInPromise(response.data.user);
-        navigate('/app/dashboard', { replace: true });
-      } else if ('error' in response) {
-        const errorsDetail = response.error.detail;
 
-        if ('apiResponseMessageError' in errorsDetail) {
-          if (errorsDetail.apiResponseMessageError !== null)
-            throw new Error(errorsDetail.apiResponseMessageError);
+      if (response.status === 'error') {
+        const responseError = response as VerifyEmailErrorResponse;
+
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
         }
+      } else {
+        const responseError = response as VerifyEmailSuccessResponse;
+        savePersistenDataUser(responseError.data);
+        await userIsLoggedInPromise(responseError.data.user);
+        navigate('/app/dashboard', { replace: true });
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

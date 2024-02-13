@@ -4,22 +4,21 @@ export const passwordResetSuccessResponseAdapter = (
   response: any
 ): PasswordResetSuccessResponse => {
   return {
-    data: {
-      message: response.data.message
-    }
+    code: response.code,
+    status: response.status,
+    message: response.message
   };
 };
 
 export const passwordResetErrorResponseAdapter = (error: any): PasswordResetErrorResponse => {
   return {
-    error: {
-      status: error.error.status,
-      detail: {
-        apiResponseMessageError: error.error.detail.api_response ?? null,
-        email: error.error.detail.email ?? null,
-        password: error.error.detail.password ?? null,
-        passwordConfirmation: error.error.detail.password_confirmation ?? null
-      }
+    status: error.status,
+    code: error.code,
+    message: error.message,
+    details: {
+      email: error.details.email ?? null,
+      password: error.details.password ?? null,
+      passwordConfirmation: error.details.password_confirmation ?? null
     }
   };
 };
