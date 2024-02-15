@@ -34,7 +34,6 @@ const Combobox: React.FC<Props> = ({
   isDisabled = false
 }) => {
   const lengthError = validateLengthError(errorCombo);
-
   if (options?.length === 0 || options === null || options === undefined) {
     return <p>cargando datos</p>;
   }

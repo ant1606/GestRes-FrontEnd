@@ -53,14 +53,17 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   // recourseType usado en las funciones de validaciones del formulario
+
   const initialState = {
     id: recourseActive?.id ?? 0,
     name: recourseActive?.name ?? '',
     source: recourseActive?.source ?? '',
     author: recourseActive?.author ?? '',
     editorial: recourseActive?.editorial ?? '',
-    typeId: recourseActive?.typeId ?? settingsType[0]?.id ?? 0,
-    unitMeasureProgressId: recourseActive?.unitMeasureProgressId ?? settingsUnitMeasureProgress[0]?.id ?? 0,
+    // typeId: recourseActive?.typeId ?? settingsType[0]?.id ?? 0,
+    // unitMeasureProgressId: recourseActive?.unitMeasureProgressId ?? settingsUnitMeasureProgress[0]?.id ?? 0,
+    typeId: recourseActive?.typeId ?? 0,
+    unitMeasureProgressId: recourseActive?.unitMeasureProgressId ?? 0,
     totalVideos: recourseActive?.totalVideos ?? 0,
     totalHours: recourseActive?.totalHours ?? "00:00:00",
     totalPages: recourseActive?.totalPages ?? 0,
@@ -91,28 +94,44 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     totalVideos,
     totalHours,
     totalPages,
-    totalChapters
+    totalChapters,
+    recourseType
   } = formValues;
   const recourseErrorRef = useRef<Record<string, string | null>>({});
 
-  useEffect(() => {
-    if (settingsType !== null) {
-      setComboTypeData(settingsType);
-      // setComboUnitMeasureProgressData(settingsUnitMeasureProgress);
-      reset();
-    }
-  }, [settingsType]);
 
   useEffect(() => {
     recourseErrorRef.current = recourseError;
   }, [recourseError]);
 
   useEffect(() => {
+    if (settingsType !== null && settingsType.length > 0) {
+      setComboTypeData(settingsType);
+      reset();
+    }
+  }, [settingsType]);
+
+  useEffect(() => {
+    if (recourseType.length > 0) {
+      // Setear el typeId con el primer elemento de settingsType o el que se muestra primero en el combobox
+      const syntheticEvent = {
+        target: {
+          value: settingsType[0]?.id.toString(),
+          name: 'typeId'
+        }
+      };
+      handleInputChange(syntheticEvent as React.ChangeEvent<HTMLSelectElement>);
+    }
+  }, [recourseType])
+
+
+  useEffect(() => {
+
+    // TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
     addValidationError({ totalVideos: null });
     addValidationError({ totalHours: null });
     addValidationError({ totalChapters: null });
     addValidationError({ totalPages: null });
-    // TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
     // Cambiar los valores de unidad de medida segun el typeId 
     // TODO ver una forma de no usar datos quemados en el filtrado de la unidad de medida de progreso
     let dataUnitMeasureProgres: Settings[] = [];
@@ -124,9 +143,17 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       dataUnitMeasureProgres = settingsUnitMeasureProgress.filter((unit) => unit.key === 'UNIT_HOURS' || unit.key === 'UNIT_VIDEOS');
     }
     setComboUnitMeasureProgressData(dataUnitMeasureProgres);
-    // TODO ARREGLAR ESTO URGENTEMENTE
-    // TODO Existe problema al cambiar el typeId visiblmente el componente cambia, pero internamente el valor de unitMeasureProgressId se mantiene pegado
+    // Luego de poblar el combobox, debo hacer que se lance el enveto onchange del combo para modificar measureProgressId
+    const syntheticEvent = {
+      target: {
+        value: dataUnitMeasureProgres[0]?.id.toString(),
+        name: 'unitMeasureProgressId'
+      }
+    };
+    handleInputChange(syntheticEvent as React.ChangeEvent<HTMLSelectElement>);
   }, [typeId]);
+
+
 
   // TODO Probar esta funcionalidad
   useEffect(() => {
