@@ -8,6 +8,7 @@ import { toastNotifications } from '#/utilities/notificationsSwal';
 import { useAppDispatch } from '#/hooks/redux';
 import { userIsLogout } from '#/redux/slice/authenticationSlice';
 import { deletePersistenDataUser } from '#/utilities/authenticationManagement';
+import { useDebounce } from '#/hooks/useDebounce';
 
 export interface FilterData {
   id: number;
@@ -23,6 +24,9 @@ export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTags, setSearchTags] = useState<number[]>([]);
   const { setRecourses, recoursePerPage, setRecoursePerPage } = useRecourse();
+
+  const debouncedSearchNombre = useDebounce(searchNombre);
+  const debouncedSearchTags = useDebounce(searchTags);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -67,10 +71,11 @@ export const FilterContainer: React.FC = () => {
     searchParams.append('perPage', recoursePerPage);
     searchParams.delete('page');
     searchParams.append('page', '1');
-    if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
+    if (debouncedSearchNombre !== '') searchParams.append('searchNombre', debouncedSearchNombre);
     if (searchTipo > 0) searchParams.append('searchTipo', searchTipo.toString());
     if (searchEstado > 0) searchParams.append('searchEstado', searchEstado.toString());
-    if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
+    if (debouncedSearchTags.length > 0)
+      searchParams.append('searchTags[]', debouncedSearchTags.toString());
 
     searchParams.sort();
     setSearchParams(searchParams);
@@ -124,7 +129,7 @@ export const FilterContainer: React.FC = () => {
 
   useEffect(() => {
     if (recoursePerPage > 0) execFilter();
-  }, [searchNombre, searchTipo, searchEstado, recoursePerPage, searchTags]);
+  }, [debouncedSearchNombre, searchTipo, searchEstado, recoursePerPage, debouncedSearchTags]);
 
   return (
     <FilterView

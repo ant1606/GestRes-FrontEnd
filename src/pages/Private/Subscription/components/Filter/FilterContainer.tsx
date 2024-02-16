@@ -8,6 +8,7 @@ import { userIsLogout } from '#/redux/slice/authenticationSlice';
 import { useYoutubeSubscription } from '../../context/subscription.context';
 import { getSubscriptions } from '#/services/subscriptions.services';
 import { type YoutubeSubscriptionsPaginatedErrorResponse } from '../../index.types';
+import { useDebounce } from '#/hooks/useDebounce';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,6 +18,8 @@ export const FilterContainer: React.FC = () => {
   const navigate = useNavigate();
   const [searchTitle, setSearchTitle] = useState('');
   const [searchTags, setSearchTags] = useState([]);
+
+  const debouncedSearchTitle = useDebounce(searchTitle);
 
   const handleChangeSearchTitle = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchTitle(e.target.value);
@@ -36,7 +39,7 @@ export const FilterContainer: React.FC = () => {
       searchParams.append('perPage', youtubeSubscriptionPerPage);
       searchParams.delete('page');
       searchParams.append('page', '1');
-      if (searchTitle !== '') searchParams.append('searchTitle', searchTitle);
+      if (debouncedSearchTitle !== '') searchParams.append('searchTitle', debouncedSearchTitle);
       if (searchTags.length > 0) searchParams.append('searchTags[]', searchTags.toString());
 
       searchParams.sort();
@@ -82,7 +85,7 @@ export const FilterContainer: React.FC = () => {
 
   useEffect(() => {
     if (youtubeSubscriptionPerPage > 0) execFilter();
-  }, [youtubeSubscriptionPerPage, searchTags, searchTitle]);
+  }, [youtubeSubscriptionPerPage, searchTags, debouncedSearchTitle]);
 
   return (
     <FilterView

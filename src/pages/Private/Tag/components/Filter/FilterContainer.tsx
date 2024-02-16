@@ -11,6 +11,7 @@ import {
   type TagPaginatedErrorResponse,
   type TagsPaginatedSuccessResponse
 } from '../../index.types';
+import { useDebounce } from '#/hooks/useDebounce';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,6 +20,8 @@ export const FilterContainer: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const debouncedSearchNombre = useDebounce(searchNombre);
+
   const execFilter = async (): Promise<void> => {
     try {
       searchParams.delete('searchNombre');
@@ -26,7 +29,7 @@ export const FilterContainer: React.FC = () => {
       searchParams.append('perPage', tagPerPage);
       searchParams.delete('page');
       searchParams.append('page', '1');
-      if (searchNombre !== '') searchParams.append('searchNombre', searchNombre);
+      if (debouncedSearchNombre !== '') searchParams.append('searchNombre', debouncedSearchNombre);
 
       searchParams.sort();
       setSearchParams(searchParams);
@@ -72,7 +75,7 @@ export const FilterContainer: React.FC = () => {
 
   useEffect(() => {
     if (tagPerPage > 0) execFilter();
-  }, [tagPerPage, searchNombre]);
+  }, [tagPerPage, debouncedSearchNombre]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchNombre(e.target.value);
