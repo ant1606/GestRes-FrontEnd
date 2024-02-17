@@ -2,6 +2,7 @@ import Choices from 'choices.js';
 import React, { useEffect, useRef, useState } from 'react';
 import 'choices.js/src/styles/choices.scss';
 import { getTagsForTagSelector } from '#/services/tag.services';
+import { useFetch } from '#/hooks/useFetch';
 // TODO Ver si es combeniente cambiar el componente choices por react-select
 interface Props {
   setSelectValues: React.Dispatch<React.SetStateAction<number[]>>;
@@ -11,6 +12,7 @@ interface Props {
 const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
   const selectRef = useRef<HTMLSelectElement>(undefined);
   const selectedTagsRef = useRef(selectedTags);
+  const { fetchWithSessionHandling } = useFetch();
   // const [selectedValues, setSelectedValues] = useState<number[]>([]);
 
   useEffect(() => {
@@ -28,7 +30,7 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags }) => {
       maxItemCount: -1
     })
       .setChoices(async function () {
-        const response = await getTagsForTagSelector();
+        const response = await getTagsForTagSelector(fetchWithSessionHandling);
         return response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name }));
       })
       .then((instance) => {

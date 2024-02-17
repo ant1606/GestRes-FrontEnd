@@ -9,6 +9,7 @@ import { destroyTag, getTags } from '#/services/tag.services';
 import { IconContext } from 'react-icons';
 import { FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 import { type TagErrorResponse } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface Prop {
   tag: Tag;
@@ -18,6 +19,7 @@ const Row: React.FC<Prop> = ({ tag }) => {
     useTag();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
 
   const handleClickEdit = (tag: Tag): void => {
     resetValidationError();
@@ -31,7 +33,7 @@ const Row: React.FC<Prop> = ({ tag }) => {
       if (!result) return;
 
       dispatch(isLoading(true));
-      const response = await destroyTag(tag);
+      const response = await destroyTag(tag, fetchWithSessionHandling);
       if (response.status === 'error') {
         const responseError = response as TagErrorResponse;
         // Errores de validación de campos por parte del backend
@@ -51,7 +53,7 @@ const Row: React.FC<Prop> = ({ tag }) => {
           `Se elimino la etiqueta ${tag.name} satisfactoriamente`
         );
         cleanSelectedTag();
-        const tags = await getTags(searchParams.toString());
+        const tags = await getTags(searchParams.toString(), fetchWithSessionHandling);
         setTags(tags);
       }
     } catch (error: any) {

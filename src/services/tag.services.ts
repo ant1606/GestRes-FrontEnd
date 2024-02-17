@@ -11,110 +11,54 @@ import {
   type TagsSelectorSuccessResponse,
   type TagPaginatedErrorResponse
 } from '#/pages/Private/Tag/index.types';
-import { getBearerToken } from '#/utilities/authenticationManagement';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
+import { type FetchWithSessionHandlingType } from '../hooks/useFetch';
 
 export const getTags = async (
-  queryParams: string
+  queryParams: string,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<TagsPaginatedSuccessResponse | TagPaginatedErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag?${queryParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => tagsPaginatedAdapter(await data))
-    .catch(async (error) => tagsErrorPaginatedAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag?${queryParams}`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? tagsPaginatedAdapter(response)
+    : tagsErrorPaginatedAdapter(response);
 };
 
-export const getTagsForTagSelector = async (): Promise<
-  TagsSelectorSuccessResponse | TagErrorResponse
-> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/getTagsForTagSelector`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => data)
-    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+export const getTagsForTagSelector = async (
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<TagsSelectorSuccessResponse | TagErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/getTagsForTagSelector`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success' ? response : tagErrorResponseAdapter(response);
 };
 
-export const savingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag`, {
-    method: 'POST',
-    body: JSON.stringify(tag),
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
-    })
-    .then(async (data) => tagAdapter(await data))
-    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+export const savingTag = async (
+  tag: Tag,
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<TagSuccessResponse | TagErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify(tag));
+  return response.status === 'success' ? tagAdapter(response) : tagErrorResponseAdapter(response);
 };
 
-export const updatingTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
-    method: 'PUT',
-    body: JSON.stringify({
-      ...tag,
-      identificador: tag.id
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
-    })
-    .then(async (data) => tagAdapter(await data))
-    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+export const updatingTag = async (
+  tag: Tag,
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<TagSuccessResponse | TagErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`;
+  const body = JSON.stringify({
+    ...tag,
+    identificador: tag.id
+  });
+  const response = await fetchCallback(url, 'PUT', body);
+  return response.status === 'success' ? tagAdapter(response) : tagErrorResponseAdapter(response);
 };
 
-export const destroyTag = async (tag: Tag): Promise<TagSuccessResponse | TagErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`, {
-    method: 'delete',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-
-      return await resp.json();
-    })
-    .then(async (data) => tagAdapter(await data))
-    .catch(async (error) => tagErrorResponseAdapter(processErrorResponse(await error)));
+export const destroyTag = async (
+  tag: Tag,
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<TagSuccessResponse | TagErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/tag/${tag.id}`;
+  const response = await fetchCallback(url, 'DELETE');
+  return response.status === 'success' ? tagAdapter(response) : tagErrorResponseAdapter(response);
 };

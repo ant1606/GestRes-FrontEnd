@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import FilterView from './FilterView';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useTag } from '../../context/tag.context';
 import { getTags } from '#/services/tag.services';
 import { toastNotifications } from '#/utilities/notificationsSwal';
-import { deletePersistenDataUser } from '#/utilities/authenticationManagement';
-import { useAppDispatch } from '#/hooks/redux';
-import { userIsLogout } from '#/redux/slice/authenticationSlice';
+
 import {
   type TagPaginatedErrorResponse,
   type TagsPaginatedSuccessResponse
 } from '../../index.types';
 import { useDebounce } from '#/hooks/useDebounce';
+import { useFetch } from '#/hooks/useFetch';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchNombre, setSearchNombre] = useState('');
   const { tagPerPage, setTagPerPage, setTags } = useTag();
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
+  const { fetchWithSessionHandling } = useFetch();
   const debouncedSearchNombre = useDebounce(searchNombre);
 
   const execFilter = async (): Promise<void> => {
@@ -33,18 +30,9 @@ export const FilterContainer: React.FC = () => {
 
       searchParams.sort();
       setSearchParams(searchParams);
-      const response = await getTags(searchParams.toString());
-
+      const response = await getTags(searchParams.toString(), fetchWithSessionHandling);
       if (response.status === 'error') {
         const responseError = response as TagPaginatedErrorResponse;
-
-        // TODO Ver como encapsular esta lógica de verificación de login en todas las llamadas al endpoint
-        if (responseError.code === 404) {
-          toastNotifications().notificationError('Ocurrió un error, será redirigido al Login');
-          deletePersistenDataUser();
-          dispatch(userIsLogout());
-          navigate('/login', { replace: true });
-        }
 
         // Mensaje de error general por parte del backend
         if (responseError.message !== '') {
@@ -54,16 +42,16 @@ export const FilterContainer: React.FC = () => {
         // Para que no interrumpa el UX, seríá mejor validar el campo de search en frontend o agregar un boton de busqueda
         // TODO Son errores de validación de campos, ver si se maneja el filtrado como un formulario para mostrar los errores
         // en los inputs
-        // if (!Object.values(responseError.details).every((value) => value === null)) {
-        //   const message = Object.values(responseError.details).reduce((acc, val) => {
-        //     if (val !== null) {
-        //       acc += val + ' ';
-        //     }
-        //     return acc;
-        //   }, '');
+        if (!Object.values(responseError.details).every((value) => value === null)) {
+          const message = Object.values(responseError.details).reduce((acc, val) => {
+            if (val !== null) {
+              acc += val + ' ';
+            }
+            return acc;
+          }, '');
 
-        //   throw new Error(message);
-        // }
+          throw new Error(message);
+        }
       } else {
         const responseSuccess = response as TagsPaginatedSuccessResponse;
         setTags(responseSuccess);

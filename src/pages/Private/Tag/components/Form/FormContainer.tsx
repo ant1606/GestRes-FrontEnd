@@ -11,6 +11,7 @@ import { focusInput } from '#/utilities/manipulationDom';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { getTags, savingTag, updatingTag } from '#/services/tag.services';
 import { type TagsPaginatedSuccessResponse, type TagErrorResponse } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 const validateFunctionsFormInputs = {
   name: validateTagNombre
@@ -33,6 +34,7 @@ export const FormContainer: React.FC = () => {
   const initialState = tagActive !== null ? tagActive : initialStateGlobal;
   const [searchParams] = useSearchParams();
   const [disabledButton, setDisabledButton] = useState(false);
+  const { fetchWithSessionHandling } = useFetch();
 
   const {
     values: formValues,
@@ -73,8 +75,8 @@ export const FormContainer: React.FC = () => {
 
         const response =
           tagActive === null
-            ? await savingTag(requestBody)
-            : await updatingTag(requestBody);
+            ? await savingTag(requestBody, fetchWithSessionHandling)
+            : await updatingTag(requestBody, fetchWithSessionHandling);
 
         if (response.status === 'error') {
           const responseError = response as TagErrorResponse;
@@ -97,7 +99,7 @@ export const FormContainer: React.FC = () => {
               : 'Se actualizó la etiqueta';
           toastNotifications().toastSuccesCustomize(message);
           cleanSelectedTag();
-          const tags = await getTags(searchParams.toString()) as TagsPaginatedSuccessResponse;
+          const tags = await getTags(searchParams.toString(), fetchWithSessionHandling) as TagsPaginatedSuccessResponse;
           setTags(tags);
         }
 

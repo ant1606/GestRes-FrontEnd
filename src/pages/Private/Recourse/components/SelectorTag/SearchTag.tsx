@@ -1,3 +1,4 @@
+import { useFetch } from '#/hooks/useFetch';
 import { type TagsSelectorSuccessResponse } from '#/pages/Private/Tag/index.types';
 import { getTagsForTagSelector } from '#/services/tag.services';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -24,11 +25,14 @@ interface Props {
 }
 const SearchTag: React.FC<Props> = ({ handleChange, value }) => {
   // const [selected, setSelected] = useState([]);
+  const { fetchWithSessionHandling } = useFetch();
   const [listTags, setListTags] = useState<Array<{ value: number; label: string }>>([]);
 
   useEffect(() => {
     const populateListTags = async (): Promise<void> => {
-      const response = (await getTagsForTagSelector()) as TagsSelectorSuccessResponse;
+      const response = (await getTagsForTagSelector(
+        fetchWithSessionHandling
+      )) as TagsSelectorSuccessResponse;
       setListTags(response.data.map((tag: Tag) => ({ value: tag.id, label: tag.name })));
     };
 
