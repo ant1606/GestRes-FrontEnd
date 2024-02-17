@@ -19,6 +19,7 @@ import {
   type WebPagesPaginatedSuccessResponse,
   type WebPageErrorResponse
 } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface Prop {
   webPage: WebPage;
@@ -29,6 +30,7 @@ const Row: React.FC<Prop> = ({ webPage }) => {
     useWebPage();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
   const [viewDetail, setviewDetail] = useState(false);
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
@@ -47,6 +49,7 @@ const Row: React.FC<Prop> = ({ webPage }) => {
             <Form
               modalRef={modalRef.current}
               webPage={webPage}
+              fetchWithSessionHandling={fetchWithSessionHandling}
               onFormSubmit={() => {
                 handleFormSubmit();
               }}
@@ -65,7 +68,7 @@ const Row: React.FC<Prop> = ({ webPage }) => {
     modalRef.current?.close();
     cleanSelectedWebPage();
     toastNotifications().toastSuccesCustomize('Se actualizaron las etiquetas correctamente.');
-    const webPages = await getWebPages(searchParams.toString());
+    const webPages = await getWebPages(searchParams.toString(), fetchWithSessionHandling);
     setWebPages(webPages);
     // const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
     // setProgresses(progressData);
@@ -82,7 +85,7 @@ const Row: React.FC<Prop> = ({ webPage }) => {
       const result = await toastNotifications().modalDeleteConfirm(webPage.name);
       if (!result) return;
       dispatch(isLoading(true));
-      const response = await destroyWebPage(webPage);
+      const response = await destroyWebPage(webPage, fetchWithSessionHandling);
 
       if (response.status === 'error') {
         const responseError = response as WebPageErrorResponse;
@@ -103,7 +106,8 @@ const Row: React.FC<Prop> = ({ webPage }) => {
         );
         cleanSelectedWebPage();
         const webPages = (await getWebPages(
-          searchParams.toString()
+          searchParams.toString(),
+          fetchWithSessionHandling
         )) as WebPagesPaginatedSuccessResponse;
         setWebPages(webPages);
       }

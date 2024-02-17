@@ -1,8 +1,8 @@
 import Combobox from '#/components/Combobox';
 import Field from '#/components/Field';
+import SearchTag from '#/components/SelectorTag/SearchTag';
 import perPageItemsValue from '#/config/perPageItemsValue';
 import React from 'react';
-import SearchTag from '../SelectorTag/SearchTag';
 
 interface Props {
   handleChangeInput: (event: React.ChangeEvent<HTMLInputElement>) => void;

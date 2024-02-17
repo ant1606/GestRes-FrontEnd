@@ -15,6 +15,7 @@ import { changeTitle } from '#/redux/slice/uiSlice';
 import Table from './components/Table';
 import Loader from '#/components/Loader';
 import { type RootState } from '#/redux/store';
+import { useFetch } from '#/hooks/useFetch';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -27,6 +28,7 @@ const WebPageView: React.FC = () => {
   const modalRef = useRef(MySwal);
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     setWebPagePerPage(perPageItemsValue[0].id);
@@ -41,6 +43,7 @@ const WebPageView: React.FC = () => {
           <WebPageProvider>
             <Form
               modalRef={modalRef.current}
+              fetchWithSessionHandling={fetchWithSessionHandling}
               onFormSubmit={() => {
                 handleFormSubmit();
               }}
@@ -56,7 +59,7 @@ const WebPageView: React.FC = () => {
   const handleFormSubmit = async (): Promise<void> => {
     modalRef.current?.close();
     toastNotifications().toastSucces();
-    const webPages = await getWebPages(searchParams.toString());
+    const webPages = await getWebPages(searchParams.toString(), fetchWithSessionHandling);
     setWebPages(webPages);
   };
 
@@ -68,7 +71,7 @@ const WebPageView: React.FC = () => {
     searchParams.sort();
     setSearchParams(searchParams);
 
-    const webPages = await getWebPages(searchParams.toString());
+    const webPages = await getWebPages(searchParams.toString(), fetchWithSessionHandling);
     setWebPages(webPages);
   };
 
