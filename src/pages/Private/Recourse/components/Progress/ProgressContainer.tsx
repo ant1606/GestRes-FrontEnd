@@ -14,6 +14,7 @@ import { useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
 import { type RecourseSuccessResponse } from '../../index.types';
 import { type ProgressesPaginatedSuccessResponse } from './indext.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -26,11 +27,13 @@ export const ProgressContainer: React.FC = () => {
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const navigate = useNavigate();
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     const searchFirstTimeStatuses = async (): Promise<void> => {
       const progresses = (await getProgressPerRecourse(
-        recourseActive.id
+        recourseActive.id,
+        fetchWithSessionHandling
       )) as ProgressesPaginatedSuccessResponse;
       setProgresses(progresses);
     };
@@ -60,6 +63,7 @@ export const ProgressContainer: React.FC = () => {
               modalRef={modalRef.current}
               recourseParent={recourseActive}
               listUnitMeasure={settingsUnitMeasureProgress}
+              fetchWithSessionHandling={fetchWithSessionHandling}
               onFormSubmit={(pending) => {
                 handleFormSubmit(pending);
               }}
@@ -88,15 +92,23 @@ export const ProgressContainer: React.FC = () => {
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se registró el progreso correctamente.');
     const progressData = (await getProgressPerRecourse(
-      recourseActive?.id
+      recourseActive?.id,
+      fetchWithSessionHandling
     )) as ProgressesPaginatedSuccessResponse;
     setProgresses(progressData);
-    const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
+    const recourseRefreshed = (await getRecourse(
+      recourseActive.id,
+      fetchWithSessionHandling
+    )) as RecourseSuccessResponse;
     selectedRecourse(recourseRefreshed.data);
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
-    const statuses = await getProgressPerRecourse(recourseActive.id, e.selected + 1);
+    const statuses = await getProgressPerRecourse(
+      recourseActive.id,
+      fetchWithSessionHandling,
+      e.selected + 1
+    );
     setProgresses(statuses);
   };
 

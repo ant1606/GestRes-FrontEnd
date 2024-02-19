@@ -10,10 +10,12 @@ import { useNavigate } from 'react-router-dom';
 import { deletePersistenDataUser } from '#/utilities/authenticationManagement';
 import { type RootState } from '#/redux/store';
 import { type LogoutSuccessResponse, type LoginErrorResponse } from '#/pages/Login/index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 const Titlebar: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { fetchWithSessionHandling } = useFetch();
   const { titleBarContent, titleBarColor, collapseSidebar } = useAppSelector(
     (state: RootState) => state.ui
   );
@@ -21,7 +23,7 @@ const Titlebar: React.FC = () => {
   const handleExitAppClick = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
-      const response = await loggoutUser();
+      const response = await loggoutUser(fetchWithSessionHandling);
 
       if (response.status === 'error') {
         const responseError = response as LoginErrorResponse;

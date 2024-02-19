@@ -12,6 +12,7 @@ import FormView from './FormView.js';
 import { userIsLoggin } from '#/redux/slice/authenticationSlice.js';
 import { savePersistenDataUser } from '#/utilities/authenticationManagement.js';
 import { type LoginSuccessResponse, type LoginErrorResponse } from '../index.types.js';
+import { useFetch } from '#/hooks/useFetch.js';
 
 const validateFunctionsFormInputs = {
   email: validateUserEmail,
@@ -37,6 +38,7 @@ const FormContainer: React.FC = () => {
   const { email, password } = formValues;
 
   const navigate = useNavigate();
+  const { fetchWithoutAuthorizationRequiredHandling } = useFetch();
   const [rememberMe, setRememberMe] = useState(false);
   const loginErrorRef = useRef<Record<string, string | null>>({});
 
@@ -74,11 +76,14 @@ const FormContainer: React.FC = () => {
         (el) => el === null
       );
       if (existValidationMessage) {
-        const response = await logginUser({
-          email,
-          password,
-          remember_me: rememberMe
-        });
+        const response = await logginUser(
+          {
+            email,
+            password,
+            remember_me: rememberMe
+          },
+          fetchWithoutAuthorizationRequiredHandling
+        );
 
         if (response.status === 'error') {
           const responseError = response as LoginErrorResponse;

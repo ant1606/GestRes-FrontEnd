@@ -3,7 +3,7 @@ import Field from '#/components/Field';
 import perPageItemsValue from '#/config/perPageItemsValue';
 import React from 'react';
 import { type FilterData } from './FilterContainer';
-import SearchTag from '../SelectorTag/SearchTag';
+import SearchTag from '#/components/SelectorTag/SearchTag';
 
 interface Props {
   handleChangeSearchName: (event: React.ChangeEvent<HTMLInputElement>) => void;

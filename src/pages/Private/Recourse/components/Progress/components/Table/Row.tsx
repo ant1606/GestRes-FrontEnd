@@ -11,6 +11,7 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { type ProgressErrorResponse } from '../../indext.types';
 import { type RecourseSuccessResponse } from '#/pages/Private/Recourse/index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface Props {
   isLastProgress: boolean;
@@ -21,6 +22,8 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
   const { selectedRecourse, recourseActive } = useRecourse();
   const dispatch = useAppDispatch();
   const { addValidationError, setProgresses } = useProgress();
+  const { fetchWithSessionHandling } = useFetch();
+
   const handleClickDeleteWrapper = (progress: Progress): void => {
     handleClickDelete(progress);
   };
@@ -40,7 +43,7 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
       if (!result) return;
 
       dispatch(isLoading(true));
-      const response = await destroyProgress(progress);
+      const response = await destroyProgress(progress, fetchWithSessionHandling);
 
       if (response.status === 'error') {
         const responseError = response as ProgressErrorResponse;
@@ -56,9 +59,16 @@ const Row: React.FC<Props> = ({ isLastProgress, progress }) => {
       } else {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
 
-        const progressData = await getProgressPerRecourse(recourseActive?.id, 1);
+        const progressData = await getProgressPerRecourse(
+          recourseActive?.id,
+          fetchWithSessionHandling,
+          1
+        );
         setProgresses(progressData);
-        const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
+        const recourseRefreshed = (await getRecourse(
+          recourseActive.id,
+          fetchWithSessionHandling
+        )) as RecourseSuccessResponse;
         selectedRecourse(recourseRefreshed.data);
       }
     } catch (error: any) {

@@ -13,6 +13,7 @@ import {
   validateUserPasswordConfirmation
 } from '../utils/validationInputs';
 import { type PasswordResetErrorResponse, type PasswordResetSuccessResponse } from '../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 const initialState = {
   email: '',
@@ -39,6 +40,7 @@ export const FormContainer: React.FC = () => {
   );
   const { email, password, passwordConfirmation } = formValues;
   const dispatch = useAppDispatch();
+  const { fetchWithoutAuthorizationRequiredHandling } = useFetch();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const passwordResetErrorRef = useRef<Record<string, string | null>>({});
@@ -60,12 +62,15 @@ export const FormContainer: React.FC = () => {
         if (token?.trim().length === 0 || token === null) {
           throw new Error('Token no válido');
         }
-        const response = await passwordReset({
-          email,
-          password,
-          password_confirmation: passwordConfirmation,
-          token: token ?? ''
-        });
+        const response = await passwordReset(
+          {
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+            token: token ?? ''
+          },
+          fetchWithoutAuthorizationRequiredHandling
+        );
 
         if (response.status === 'error') {
           const responseError = response as PasswordResetErrorResponse;

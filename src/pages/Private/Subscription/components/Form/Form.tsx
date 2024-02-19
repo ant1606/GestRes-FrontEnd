@@ -1,33 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import Button from '#/components/Button';
-import SelectorTag from '../SelectorTag/SelectorTag';
+
 import { updatingSubscription } from '#/services/subscriptions.services';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { type YoutubeSubscriptionErrorResponse } from '../../index.types';
+import { type FetchWithSessionHandlingType } from '#/hooks/useFetch';
+import SelectorTag from '#/components/SelectorTag/SelectorTag';
+import { type TagsSelectorSuccessResponse } from '#/pages/Private/Tag/index.types';
+import { getTagsForTagSelector } from '#/services';
 
 interface Props {
   modalRef: any;
   subscription: YoutubeSubscription;
   onFormSubmit: () => void;
+  fetchWithSessionHandling: FetchWithSessionHandlingType;
 }
 
-const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
+const Form: React.FC<Props> = ({
+  modalRef,
+  subscription,
+  onFormSubmit,
+  fetchWithSessionHandling
+}) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const [disabledButton, setDisabledButton] = useState(false);
-
-  useEffect(() => {
-    setSelectedTags(subscription.tags?.map((tag: Tag) => tag.id));
-  }, [subscription]);
+  const [choicesTagData, setChoicesTagData] = useState<Array<{ value: number; label: string }>>([]);
 
   const handleClickCancel = (): void => {
     modalRef.close();
   };
 
+  useEffect(() => {
+    const loadingTagsForSelector = async (): Promise<void> => {
+      if (fetchWithSessionHandling !== undefined) {
+        const response = (await getTagsForTagSelector(
+          fetchWithSessionHandling
+        )) as TagsSelectorSuccessResponse;
+        const dataTag = response.data.map((tag: Tag) => ({
+          value: tag.id,
+          label: tag.name,
+          selected: false
+        }));
+        setChoicesTagData(dataTag);
+      }
+    };
+    loadingTagsForSelector();
+  }, [fetchWithSessionHandling]);
+
+  useEffect(() => {
+    setSelectedTags(subscription.tags?.map((tag: Tag) => tag.id));
+  }, [subscription]);
+
   const handleSubmit = async (): Promise<void> => {
     try {
       // TODO Ver como añadir un loader al modal
       setDisabledButton(true);
-      const response = await updatingSubscription(subscription.id, selectedTags);
+      const response = await updatingSubscription(
+        subscription.id,
+        selectedTags,
+        fetchWithSessionHandling
+      );
 
       if (response.status === 'error') {
         const responseError = response as YoutubeSubscriptionErrorResponse;
@@ -46,6 +78,7 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
       // dispatch(isLoading(false));
     }
   };
+
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     handleSubmit();
@@ -71,7 +104,11 @@ const Form: React.FC<Props> = ({ modalRef, subscription, onFormSubmit }) => {
           </div>
         </div>
 
-        <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
+        <SelectorTag
+          setSelectValues={setSelectedTags}
+          selectedTags={selectedTags}
+          choicesData={choicesTagData}
+        />
         <div className="flex justify-around gap-12">
           <Button type="submit" text="Registrar" btnType="main" isDisabled={disabledButton} />
 

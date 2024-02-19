@@ -8,12 +8,13 @@ import { verifyUserEmail } from '#/services/verifyEmail.services.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { savePersistenDataUser } from '#/utilities/authenticationManagement.js';
 import { type VerifyEmailErrorResponse, type VerifyEmailSuccessResponse } from './index.types.js';
+import { useFetch } from '#/hooks/useFetch.js';
 
 export const VerifyEmail: React.FC = () => {
   const { id, hash } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const { fetchWithoutAuthorizationRequiredHandling } = useFetch();
   useEffect(() => {
     verifyEmail();
   });
@@ -40,7 +41,7 @@ export const VerifyEmail: React.FC = () => {
       if (hash?.trim() === '' || hash === '' || hash === undefined)
         throw new Error('No se identifico al usuario');
 
-      const response = await verifyUserEmail(id, hash);
+      const response = await verifyUserEmail(id, hash, fetchWithoutAuthorizationRequiredHandling);
 
       if (response.status === 'error') {
         const responseError = response as VerifyEmailErrorResponse;

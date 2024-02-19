@@ -16,28 +16,18 @@ import ResendLinkVerifyEmail from '#/pages/Private/ResendVerifyLinkEmail';
 import { getSettings } from '#/services/settings.services';
 import { loadSettings } from '#/redux/slice/settingsSlice';
 import OAuthCallback from '#/pages/OAuthCallback';
-
-// interface ResponseAPI {
-//   data?: Record<string, any>;
-//   error?: Record<string, any>;
-// }
-// interface UserLoginParams {
-//   email: string;
-//   id: number;
-//   isVerified: boolean;
-//   name: string;
-// }
+import { useFetch } from '#/hooks/useFetch';
 
 const AppRouter: React.FC = () => {
   const userLoggin = useAppSelector(authenticatedUser);
   const dispatch = useAppDispatch();
+  const { fetchWithoutAuthorizationRequiredHandling } = useFetch();
 
   useEffect(() => {
     initApp();
   }, []);
 
-  const settingsLoadedInPromise = async (params): Promise<void> => {
-    // TODO Ver si puedo refactorizar más esta parte del settings y su service
+  const settingsLoadedInPromise = async (params: Settings[]): Promise<void> => {
     await new Promise<void>((resolve) => {
       dispatch(
         loadSettings({
@@ -54,7 +44,8 @@ const AppRouter: React.FC = () => {
 
   const initApp = async (): Promise<void> => {
     try {
-      const settings = await getSettings();
+      // TODO Hacer validación de error y tipado de respuesta
+      const settings = (await getSettings(fetchWithoutAuthorizationRequiredHandling)) as any;
       await settingsLoadedInPromise(settings.data);
     } catch (error) {
       console.log(error);

@@ -1,3 +1,4 @@
+import { type FetchWithSessionHandlingType } from '#/hooks/useFetch';
 import {
   progressAdapter,
   progressErrorResponseAdapter,
@@ -10,82 +11,40 @@ import {
   type ProgressesPaginatedSuccessResponse,
   type ProgressesPaginatedErrorResponse
 } from '#/pages/Private/Recourse/components/Progress/indext.types';
-import { getBearerToken } from '#/utilities/authenticationManagement';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const getProgressPerRecourse = async (
   recourseId: number,
+  fetchCallback: FetchWithSessionHandlingType,
   page: number = 1
 ): Promise<ProgressesPaginatedSuccessResponse | ProgressesPaginatedErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_ENDPOINT
-    }/v1/recourses/${recourseId}/progress?page=${page}&perPage=5`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      }
-    }
-  )
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
-    })
-    .then(async (data) => progressesPaginatedAdapter(await data))
-    .catch(async (error) =>
-      progressPaginatedErrorResponseAdapter(processErrorResponse(await error))
-    );
+  const url = `${
+    import.meta.env.VITE_BACKEND_ENDPOINT
+  }/v1/recourses/${recourseId}/progress?page=${page}&perPage=5`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? progressesPaginatedAdapter(response)
+    : progressPaginatedErrorResponseAdapter(response);
 };
 
 export const savingProgress = async (
   progress: any,
-  recourseId: number
+  recourseId: number,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<ProgressSuccessResponse | ProgressErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/progress`,
-    {
-      method: 'POST',
-      body: JSON.stringify(progress),
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      }
-    }
-  )
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
-    })
-    .then(async (data) => progressAdapter(await data))
-    .catch(async (error) => progressErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourseId}/progress`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify(progress));
+  return response.status === 'success'
+    ? progressAdapter(response)
+    : progressErrorResponseAdapter(response);
 };
 
 export const destroyProgress = async (
-  progress: Progress
+  progress: Progress,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<ProgressSuccessResponse | ProgressErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/progress/${progress.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-
-      return await resp.json();
-    })
-    .then(async (data) => progressAdapter(await data))
-    .catch(async (error) => progressErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/progress/${progress.id}`;
+  const response = await fetchCallback(url, 'DELETE');
+  return response.status === 'success'
+    ? progressAdapter(response)
+    : progressErrorResponseAdapter(response);
 };

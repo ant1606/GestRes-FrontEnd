@@ -1,20 +1,9 @@
 // import { getBearerToken } from '#/utilities/authenticationManagement';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
+import { type FetchWithoutAuthorizationRequiredHandlingType } from '#/hooks/useFetch';
 
-export const getSettings = async (): Promise<Record<string, string>> => {
-  // const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/settings`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then((data) => data)
-    .catch(async (error) => processErrorResponse(await error));
+export const getSettings = async (
+  fetchCallback: FetchWithoutAuthorizationRequiredHandlingType
+): Promise<Record<string, string>> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/settings`;
+  return await fetchCallback(url, 'GET');
 };

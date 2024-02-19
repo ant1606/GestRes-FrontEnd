@@ -11,6 +11,7 @@ import { IconContext } from 'react-icons';
 import { FaTrashAlt } from 'react-icons/fa';
 import { type StatusErrorResponse } from '../../index.types';
 import { type RecourseSuccessResponse } from '#/pages/Private/Recourse/index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface Props {
   isLastStatus: boolean;
@@ -21,6 +22,7 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
   const { addValidationError, setStatuses } = useStatus();
   const { settingsStatus } = useAppSelector((state: RootState) => state.settings);
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
   // TOOD ver como hacer de esto una funcion global o util para obtener el estilo
   const styleStatus = settingsStatus.find((val) => val.value === status.statusName)?.value2;
 
@@ -34,7 +36,7 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
       if (!result) return;
 
       dispatch(isLoading(true));
-      const response = await destroyStatus(status);
+      const response = await destroyStatus(status, fetchWithSessionHandling);
 
       if (response.status === 'error') {
         const responseError = response as StatusErrorResponse;
@@ -50,9 +52,12 @@ const Row: React.FC<Props> = ({ isLastStatus, status }) => {
       } else {
         toastNotifications().toastSuccesCustomize(`Se elimino el registro`);
 
-        const statusData = await getStatusPerRecourse(recourseActive?.id, 1);
+        const statusData = await getStatusPerRecourse(recourseActive?.id, fetchWithSessionHandling);
         setStatuses(statusData);
-        const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
+        const recourseRefreshed = (await getRecourse(
+          recourseActive.id,
+          fetchWithSessionHandling
+        )) as RecourseSuccessResponse;
         selectedRecourse(recourseRefreshed.data);
 
         if (!Array.isArray(recourseRefreshed.data)) {

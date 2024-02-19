@@ -16,6 +16,7 @@ import { GLOBAL_UNIT_MEASURE_PROGRESS } from '#/config/globalConstantes';
 import TimeInputSplitted from '../../../TimeInput';
 import { type ProgressErrorResponse } from '../../indext.types';
 import { convertHourToSeconds, processHours } from '#/utilities/timeHelpers';
+import { type FetchWithSessionHandlingType } from '#/hooks/useFetch';
 
 // done: validateDoneAmount,
 const validateFunctionsFormInputs = {
@@ -29,13 +30,15 @@ interface Props {
   recourseParent: Recourse;
   listUnitMeasure: Settings[];
   onFormSubmit: (pending: number) => void;
+  fetchWithSessionHandling: FetchWithSessionHandlingType;
 }
 
 const ProgressForm: React.FC<Props> = ({
   modalRef,
   recourseParent,
   listUnitMeasure,
-  onFormSubmit
+  onFormSubmit,
+  fetchWithSessionHandling
 }) => {
   const { addValidationError, progressError, resetValidationError, cleanSelectedProgress } =
     useProgress();
@@ -100,7 +103,8 @@ const ProgressForm: React.FC<Props> = ({
             comment: formValues.comment,
             date: formValues.date
           },
-          recourseParent.id
+          recourseParent.id,
+          fetchWithSessionHandling
         );
 
         if (response.status === 'error') {
@@ -132,6 +136,7 @@ const ProgressForm: React.FC<Props> = ({
       setDisabledButton(false);
     }
   };
+
   const handleSubmitWrapper = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     handleSubmit();

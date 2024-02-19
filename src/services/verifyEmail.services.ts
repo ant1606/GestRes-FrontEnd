@@ -1,4 +1,8 @@
 import {
+  type FetchWithoutAuthorizationRequiredHandlingType,
+  type FetchWithSessionHandlingType
+} from '#/hooks/useFetch';
+import {
   resendLinkVerifyEmailErrorResponseAdapter,
   resendLinkVerifyEmailSuccessResponseAdapter
 } from '#/pages/Private/ResendVerifyLinkEmail/adapters/resendLinkVerifyEmailAdapter';
@@ -14,53 +18,26 @@ import {
   type VerifyEmailErrorResponse,
   type VerifyEmailSuccessResponse
 } from '#/pages/VerifyEmail/index.types';
-import { getBearerToken } from '#/utilities/authenticationManagement';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const verifyUserEmail = async (
   id: string,
-  hash: string
+  hash: string,
+  fetchCallback: FetchWithoutAuthorizationRequiredHandlingType
 ): Promise<VerifyEmailSuccessResponse | VerifyEmailErrorResponse> => {
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/email/verify/${id}/${hash}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => verifyEmailSuccessResponseAdapter(await data))
-    .catch(async (error) => verifyEmailErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/email/verify/${id}/${hash}`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? verifyEmailSuccessResponseAdapter(response)
+    : verifyEmailErrorResponseAdapter(response);
 };
 
 export const resendLinkVerifyUserEmail = async (
-  id: number
+  id: number,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<ResendLinkVerifyEmailSuccessResponse | ResendLinkVerifyEmailErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/email/verification-notification`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      },
-      body: JSON.stringify({
-        id
-      })
-    }
-  )
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => resendLinkVerifyEmailSuccessResponseAdapter(await data))
-    .catch(async (error) =>
-      resendLinkVerifyEmailErrorResponseAdapter(processErrorResponse(await error))
-    );
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/email/verification-notification`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify({ id }));
+  return response.status === 'success'
+    ? resendLinkVerifyEmailSuccessResponseAdapter(response)
+    : resendLinkVerifyEmailErrorResponseAdapter(response);
 };

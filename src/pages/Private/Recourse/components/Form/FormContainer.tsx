@@ -25,6 +25,9 @@ import { savingRecourse, updatingRecourse } from '#/services/recourse.services';
 import { GLOBAL_TYPES_RECOURSE } from '#/config/globalConstantes';
 import FormView from './FormView';
 import { type RecourseErrorResponse } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
+import { getTagsForTagSelector } from '#/services';
+import { type TagsSelectorSuccessResponse } from '#/pages/Private/Tag/index.types';
 
 const validateFunctionsFormInputs = {
   name: validateName,
@@ -51,6 +54,8 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const [disabledButton, setDisabledButton] = useState(false);
   const navigate = useNavigate();
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
+  const { fetchWithSessionHandling } = useFetch();
+  const [choicesTagData, setChoicesTagData] = useState<Array<{ value: number; label: string }>>([]);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   // recourseType usado en las funciones de validaciones del formulario
 
@@ -60,8 +65,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     source: recourseActive?.source ?? '',
     author: recourseActive?.author ?? '',
     editorial: recourseActive?.editorial ?? '',
-    // typeId: recourseActive?.typeId ?? settingsType[0]?.id ?? 0,
-    // unitMeasureProgressId: recourseActive?.unitMeasureProgressId ?? settingsUnitMeasureProgress[0]?.id ?? 0,
     typeId: recourseActive?.typeId ?? 0,
     unitMeasureProgressId: recourseActive?.unitMeasureProgressId ?? 0,
     totalVideos: recourseActive?.totalVideos ?? 0,
@@ -71,8 +74,6 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     recourseType: settingsType
   };
 
-  // TODO El campo Tipo Recurso aun no se carga correctamente, al igual que los valores del formulario, generar un meetodo para cargarlos
-  // dependiendo de la existencia del recourseActive
   const {
     values: formValues,
     handleInputChange,
@@ -94,11 +95,33 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     totalVideos,
     totalHours,
     totalPages,
-    totalChapters,
-    recourseType
+    totalChapters
   } = formValues;
   const recourseErrorRef = useRef<Record<string, string | null>>({});
 
+
+  useEffect(() => {
+    dispatch(changeTitle(recourseActive !== null ? 'Edición de Recurso' : "Registro de Recurso"));
+    const loadingTagsForSelector = async (): Promise<void> => {
+      if (fetchWithSessionHandling !== undefined) {
+        const response = (await getTagsForTagSelector(
+          fetchWithSessionHandling
+        )) as TagsSelectorSuccessResponse;
+        const dataTag = response.data.map((tag: Tag) => ({
+          value: tag.id,
+          label: tag.name,
+          selected: false
+        }));
+        setChoicesTagData(dataTag);
+      }
+    };
+
+    loadingTagsForSelector();
+
+    return () => {
+      resetValidationError();
+    }
+  }, []);
 
   useEffect(() => {
     recourseErrorRef.current = recourseError;
@@ -111,8 +134,9 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     }
   }, [settingsType]);
 
+
   useEffect(() => {
-    if (recourseType.length > 0) {
+    if (comboTypeData.length > 0 && recourseActive === null) {
       // Setear el typeId con el primer elemento de settingsType o el que se muestra primero en el combobox
       const syntheticEvent = {
         target: {
@@ -122,7 +146,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       };
       handleInputChange(syntheticEvent as React.ChangeEvent<HTMLSelectElement>);
     }
-  }, [recourseType])
+  }, [comboTypeData])
 
 
   useEffect(() => {
@@ -163,12 +187,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     }
   }, [recourseActive]);
 
-  useEffect(() => {
-    dispatch(changeTitle(recourseActive !== null ? 'Edición de Recurso' : "Registro de Recurso"));
-    return () => {
-      resetValidationError();
-    }
-  }, []);
+
 
   const handleSubmit = async (): Promise<void> => {
     try {
@@ -209,7 +228,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
 
         let response;
         if (recourseActive === null) {
-          response = await savingRecourse(requestBody);
+          response = await savingRecourse(requestBody, fetchWithSessionHandling);
         } else {
           let resultDialog = true;
 
@@ -240,7 +259,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
           if (!resultDialog)
             throw new Error("Se cancelo la actualización");
 
-          response = await updatingRecourse(requestBody);
+          response = await updatingRecourse(requestBody, fetchWithSessionHandling);
         }
 
         if (response.status === 'error') {
@@ -302,6 +321,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       setSelectedTags={setSelectedTags}
       recourseSelected={recourseActive}
       submitIsDisabled={disabledButton}
+      choicesTagData={choicesTagData}
     />
   );
 };

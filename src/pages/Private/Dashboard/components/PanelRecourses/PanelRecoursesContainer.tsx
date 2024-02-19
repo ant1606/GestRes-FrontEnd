@@ -6,10 +6,12 @@ import {
   type Top5RecoursesSuccessResponse,
   type Top5Recourse
 } from './index.type';
+import { useFetch } from '#/hooks/useFetch';
 
 export const PanelRecoursesContainer: React.FC = () => {
   const [isPorEmpezar, setIsPorEmpezar] = useState<boolean>(true);
   const [listRecourses, setListRecourses] = useState<Top5Recourse[]>([]);
+  const { fetchWithSessionHandling } = useFetch();
 
   const handleCheckChange = (): void => {
     setIsPorEmpezar(!isPorEmpezar);
@@ -17,7 +19,7 @@ export const PanelRecoursesContainer: React.FC = () => {
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
-      const response = await getTop5Recourses(isPorEmpezar);
+      const response = await getTop5Recourses(isPorEmpezar, fetchWithSessionHandling);
       if (response.status === 'error') {
         const responseError = response as Top5RecoursesErrorResponse;
         // Mensaje de error general por parte del backend

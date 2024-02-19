@@ -5,7 +5,7 @@ import { FaMagnifyingGlass } from 'react-icons/fa6';
 
 import React from 'react';
 import { IconContext } from 'react-icons';
-import SearchTag from '../SelectorTag/SearchTag';
+import SearchTag from '#/components/SelectorTag/SearchTag';
 
 interface Props {
   handleChangeSearchTitle: (event: React.ChangeEvent<HTMLInputElement>) => void;

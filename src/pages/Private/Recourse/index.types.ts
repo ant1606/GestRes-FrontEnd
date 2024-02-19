@@ -74,7 +74,12 @@ export interface RecoursePaginatedErrorResponse {
   status: string;
   code: number;
   message: string;
-  details: RecoursePaginatedErrorDetailResponse | never[];
+  details: {
+    searchTags?: string;
+    searchNombre?: string;
+    searchTipo?: string;
+    searchEstado?: string;
+  };
 }
 
 export interface RecoursePaginatedErrorDetailResponse {

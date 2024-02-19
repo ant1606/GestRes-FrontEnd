@@ -1,5 +1,5 @@
 import { type ReactNode, createContext, useContext, type Reducer, useReducer } from 'react';
-import { type RecoursesSuccessResponse } from '../index.types';
+import { type RecoursesPaginatedSuccessResponse } from '../index.types';
 
 const RecourseContext = createContext({});
 
@@ -12,7 +12,7 @@ type payloadReducerType =
   | number
   | Recourse
   | Recourse[]
-  | RecoursesSuccessResponse
+  | RecoursesPaginatedSuccessResponse
   | Status[]
   | Progress[];
 
@@ -79,7 +79,7 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
   let payloadValue;
   switch (action.type) {
     case RECOURSE_LOADED:
-      payloadValue = action.payload as RecoursesSuccessResponse;
+      payloadValue = action.payload as RecoursesPaginatedSuccessResponse;
       return {
         ...state,
         recourses: [...payloadValue.data],

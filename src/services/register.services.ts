@@ -1,3 +1,4 @@
+import { type FetchWithoutAuthorizationRequiredHandlingType } from '#/hooks/useFetch';
 import {
   registerErrorResponseAdapter,
   registerSuccessResponseAdapter
@@ -7,26 +8,19 @@ import {
   type RegisterErrorResponse,
   type RegisterSuccessResponse
 } from '#/pages/Register/index.types';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 
 export const savingUser = async (
-  registerUserData: RegisterFormData
+  registerUserData: RegisterFormData,
+  fetchCallback: FetchWithoutAuthorizationRequiredHandlingType
 ): Promise<RegisterSuccessResponse | RegisterErrorResponse> => {
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
-    },
-    body: JSON.stringify({
-      ...registerUserData,
-      password_confirmation: registerUserData.passwordConfirmation
-    })
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => registerSuccessResponseAdapter(await data))
-    .catch(async (error) => registerErrorResponseAdapter(processErrorResponse(await error)));
+  // TODO Validar los escenarios cuando no se pueda enviar el email de verificación por alguna razón
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/register`;
+  const body = JSON.stringify({
+    ...registerUserData,
+    password_confirmation: registerUserData.passwordConfirmation
+  });
+  const response = await fetchCallback(url, 'POST', body);
+  return response.status === 'success'
+    ? registerSuccessResponseAdapter(response)
+    : registerErrorResponseAdapter(response);
 };

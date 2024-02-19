@@ -10,6 +10,9 @@ import ProgressRecourse from '../../components/Progress';
 import { useParams } from 'react-router-dom';
 import { getRecourse } from '#/services';
 import { type RootState } from '#/redux/store';
+import { useFetch } from '#/hooks/useFetch';
+import { type RecourseErrorResponse, type RecourseSuccessResponse } from '../../index.types';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 
 export const ShowPage: React.FC = () => {
   const { cleanSelectedRecourse, selectedRecourse, recourseActive } = useRecourse();
@@ -17,23 +20,47 @@ export const ShowPage: React.FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
   const dispatch = useAppDispatch();
   const { idrecurso } = useParams();
+  const { fetchWithSessionHandling } = useFetch();
 
   // TODO ver como hacer de esto una funcion global o util para obtener el estilo
 
   useEffect(() => {
     const getRecourseData = async (): Promise<void> => {
       try {
-        const idRecurso = parseInt(idrecurso);
-        const recourse = await getRecourse(idRecurso);
-        // TODO Hacer validación si se obtiene el recurso o si se obtiene error
-        const styleStatus = settingsStatus.find(
-          (val) => val.value === recourse.data.currentStatusName
-        )?.value2;
-        dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
-        dispatch(changeTitle(recourse.data.name));
-        selectedRecourse(recourse.data);
-      } catch (error) {
-        console.log('Hubo un error al obtener los datos');
+        const idRecurso = parseInt(idrecurso as string);
+        const response = await getRecourse(idRecurso, fetchWithSessionHandling);
+
+        if (response.status === 'error') {
+          const responseError = response as RecourseErrorResponse;
+
+          // Mensaje de error general por parte del backend
+          if (responseError.message !== '') {
+            throw new Error(responseError.message);
+          }
+        } else {
+          const responseSuccess = response as RecourseSuccessResponse;
+          const styleStatus = settingsStatus.find(
+            (val) => val.value === (responseSuccess.data as Recourse).currentStatusName
+          )?.value2;
+          dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+          dispatch(changeTitle((responseSuccess.data as Recourse).name));
+          selectedRecourse(responseSuccess.data);
+        }
+
+        // const recourse = (await getRecourse(
+        //   idRecurso,
+        //   fetchWithSessionHandling
+        // )) as RecourseSuccessResponse;
+        // // TODO Hacer validación si se obtiene el recurso o si se obtiene error
+        // const styleStatus = settingsStatus.find(
+        //   (val) => val.value === (recourse.data as Recourse).currentStatusName
+        // )?.value2;
+        // dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
+        // dispatch(changeTitle((recourse.data as Recourse).name));
+        // selectedRecourse(recourse.data);
+      } catch (error: any) {
+        // console.log('Hubo un error al obtener los datos');
+        toastNotifications().notificationError(error.message);
       }
     };
 
@@ -86,7 +113,7 @@ export const ShowPage: React.FC = () => {
         </div>
 
         <div className={`${toggleTab === 2 ? '' : 'hidden'}`}>
-          {recourseActive && (
+          {recourseActive !== null && (
             <StatusProvider>
               <StatusRecourse />
             </StatusProvider>
@@ -95,7 +122,7 @@ export const ShowPage: React.FC = () => {
 
         <div className={`${toggleTab === 3 ? '' : 'hidden'}`}>
           <div>
-            {recourseActive && (
+            {recourseActive !== null && (
               <ProgressProvider>
                 <ProgressRecourse />
               </ProgressProvider>

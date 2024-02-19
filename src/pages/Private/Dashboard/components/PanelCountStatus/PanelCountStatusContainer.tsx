@@ -6,13 +6,15 @@ import {
   type AmountByStateData,
   type AmountByStateErrorResponse
 } from './index.type';
+import { useFetch } from '#/hooks/useFetch';
 
 export const PanelCountStatusContainer: React.FC = () => {
   const [summaryStatus, setSummaryStatus] = useState<AmountByStateData[]>([]);
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
-      const response = await getAmountsByState();
+      const response = await getAmountsByState(fetchWithSessionHandling);
       if (response.status === 'error') {
         const responseError = response as AmountByStateErrorResponse;
         // Mensaje de error general por parte del backend

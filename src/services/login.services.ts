@@ -1,4 +1,8 @@
 import {
+  type FetchWithSessionHandlingType,
+  type FetchWithoutAuthorizationRequiredHandlingType
+} from '#/hooks/useFetch';
+import {
   loginErrorResponseAdapter,
   loginSuccessResponseAdapter,
   logoutSuccessResponseAdapter
@@ -8,9 +12,7 @@ import {
   type LoginErrorResponse,
   type LogoutSuccessResponse
 } from '#/pages/Login/index.types';
-import { getBearerToken } from '#/utilities/authenticationManagement';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import fetch from 'cross-fetch';
+// import fetch from 'cross-fetch';
 
 interface LoginCredentials {
   email: string;
@@ -19,60 +21,34 @@ interface LoginCredentials {
 }
 
 export const logginUser = async (
-  credentials: LoginCredentials
+  credentials: LoginCredentials,
+  fetchCallback: FetchWithoutAuthorizationRequiredHandlingType
 ): Promise<LoginSuccessResponse | LoginErrorResponse> => {
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => loginSuccessResponseAdapter(await data))
-    .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/login`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify(credentials));
+  return response.status === 'success'
+    ? loginSuccessResponseAdapter(response)
+    : loginErrorResponseAdapter(response);
 };
 
 // TODO Refactorizar este servicio y sus adapter para su caso de USO
 export const refreshUserFromRememberToken = async (
-  rememberToken: string | null
+  rememberToken: string | null,
+  fetchCallback: FetchWithoutAuthorizationRequiredHandlingType
 ): Promise<LoginSuccessResponse | LoginErrorResponse> => {
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
-    },
-    body: JSON.stringify({
-      remember_me: rememberToken
-    })
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => loginSuccessResponseAdapter(await data))
-    .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/remember`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify({ remember_me: rememberToken }));
+  return response.status === 'success'
+    ? loginSuccessResponseAdapter(response)
+    : loginErrorResponseAdapter(response);
 };
 
-export const loggoutUser = async (): Promise<LogoutSuccessResponse | LoginErrorResponse> => {
-  const bearerToken = getBearerToken();
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/logout`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => logoutSuccessResponseAdapter(await data))
-    .catch(async (error) => loginErrorResponseAdapter(processErrorResponse(await error)));
+export const loggoutUser = async (
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<LogoutSuccessResponse | LoginErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/logout`;
+  const response = await fetchCallback(url, 'POST');
+  return response.status === 'success'
+    ? logoutSuccessResponseAdapter(response)
+    : loginErrorResponseAdapter(response);
 };

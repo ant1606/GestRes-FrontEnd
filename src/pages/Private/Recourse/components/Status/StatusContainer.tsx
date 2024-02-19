@@ -13,6 +13,7 @@ import { toastNotifications } from '#/utilities/notificationsSwal';
 import { changeColorTitleBar } from '#/redux/slice/uiSlice';
 import { getRecourse } from '#/services/recourse.services';
 import { type RecourseSuccessResponse } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -25,10 +26,11 @@ export const StatusContainer: React.FC = () => {
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     const searchFirstTimeStatuses = async (): Promise<void> => {
-      const statuses = await getStatusPerRecourse(recourseActive.id, 1);
+      const statuses = await getStatusPerRecourse(recourseActive.id, fetchWithSessionHandling);
       setStatuses(statuses);
     };
     searchFirstTimeStatuses();
@@ -58,6 +60,7 @@ export const StatusContainer: React.FC = () => {
             listStatus={statusAvailable}
             modalRef={modalRef.current}
             recourseParent={recourseActive}
+            fetchWithSessionHandling={fetchWithSessionHandling}
             onFormSubmit={(statusIdRegistered) => {
               handleFormSubmit(statusIdRegistered);
             }}
@@ -103,18 +106,25 @@ export const StatusContainer: React.FC = () => {
   const handleFormSubmit = async (statusIdRegistered: number): Promise<void> => {
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se registró el estado correctamente.');
-    const statuses = await getStatusPerRecourse(recourseActive.id, 1);
+    const statuses = await getStatusPerRecourse(recourseActive.id, fetchWithSessionHandling);
     setStatuses(statuses);
 
     // Obteniendo estilos del estado registrado para cambiar barra de titulo
     const styleStatus = settingsStatus.find((val) => val.id === statusIdRegistered)?.value2;
     dispatch(changeColorTitleBar(styleStatus === undefined ? null : styleStatus));
-    const recourseRefreshed = (await getRecourse(recourseActive.id)) as RecourseSuccessResponse;
+    const recourseRefreshed = (await getRecourse(
+      recourseActive.id,
+      fetchWithSessionHandling
+    )) as RecourseSuccessResponse;
     selectedRecourse(recourseRefreshed.data);
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
-    const statuses = await getStatusPerRecourse(recourseActive.id, e.selected + 1);
+    const statuses = await getStatusPerRecourse(
+      recourseActive.id,
+      fetchWithSessionHandling,
+      e.selected + 1
+    );
     setStatuses(statuses);
   };
 

@@ -70,7 +70,6 @@ const Form: React.FC<Props> = ({
   useEffect(() => {
     const loadingTagsForSelector = async (): Promise<void> => {
       if (fetchWithSessionHandling !== undefined) {
-        console.log(selectedTags);
         const response = (await getTagsForTagSelector(
           fetchWithSessionHandling
         )) as TagsSelectorSuccessResponse;

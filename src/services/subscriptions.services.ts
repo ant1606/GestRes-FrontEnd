@@ -10,125 +10,68 @@ import {
   youtubeSubscriptionsPaginatedAdapter,
   youtubeSubscriptionsPaginatedErrorResponseAdapter
 } from '#/pages/Private/Subscription/adapters/SubscriptionAdapter';
-import { getBearerToken } from '#/utilities/authenticationManagement';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
+import {
+  type fetchWithoutReturnHandlingType,
+  type FetchWithSessionHandlingType
+} from '#/hooks/useFetch';
 
 export const getSubscriptions = async (
-  queryParams: string
+  queryParams: string,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<
   YoutubeSubscriptionsPaginatedSuccessResponse | YoutubeSubscriptionsPaginatedErrorResponse
 > => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription?${queryParams}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      }
-    }
-  )
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => youtubeSubscriptionsPaginatedAdapter(await data))
-    .catch(async (error) =>
-      youtubeSubscriptionsPaginatedErrorResponseAdapter(processErrorResponse(await error))
-    );
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription?${queryParams}`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? youtubeSubscriptionsPaginatedAdapter(response)
+    : youtubeSubscriptionsPaginatedErrorResponseAdapter(response);
 };
 
-export const importSubscriptions = async (accessToken: string, order: string): Promise<void> => {
-  const bearerToken = getBearerToken();
-
-  fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`, {
-    method: 'POST',
-    body: JSON.stringify({ access_token: accessToken, order }),
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  });
+export const importSubscriptions = async (
+  accessToken: string,
+  order: string,
+  fetchCallback: fetchWithoutReturnHandlingType
+): Promise<void> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`;
+  const body = JSON.stringify({ access_token: accessToken, order });
+  fetchCallback(url, 'POST', body);
 };
 
 export const updatingSubscription = async (
   subscriptionId: number,
-  tags: number[]
+  tags: number[],
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<YoutubeSubscriptionSuccessResponse | YoutubeSubscriptionErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${subscriptionId}`,
-    {
-      method: 'PUT',
-      body: JSON.stringify({
-        tags
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      }
-    }
-  )
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
-    })
-    .then(async (data) => youtubeSubscriptionAdapter(await data))
-    .catch(async (error) =>
-      youtubeSubscriptionErrorResponseAdapter(processErrorResponse(await error))
-    );
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${subscriptionId}`;
+  const body = JSON.stringify({
+    tags
+  });
+  const response = await fetchCallback(url, 'PUT', body);
+  return response.status === 'success'
+    ? youtubeSubscriptionAdapter(response)
+    : youtubeSubscriptionErrorResponseAdapter(response);
 };
 
 export const destroySubscription = async (
-  youtubeSubscription: YoutubeSubscription
+  youtubeSubscription: YoutubeSubscription,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<YoutubeSubscriptionSuccessResponse | YoutubeSubscriptionErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${youtubeSubscription.id}`,
-    {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      }
-    }
-  )
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-
-      return await resp.json();
-    })
-    .then(async (data) => youtubeSubscriptionAdapter(await data))
-    .catch(async (error) =>
-      youtubeSubscriptionErrorResponseAdapter(processErrorResponse(await error))
-    );
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/${
+    youtubeSubscription.id
+  }`;
+  const response = await fetchCallback(url, 'DELETE');
+  return response.status === 'success'
+    ? youtubeSubscriptionAdapter(response)
+    : youtubeSubscriptionErrorResponseAdapter(response);
 };
 
-export const getStatusProcess = async (): Promise<string | YoutubeSubscriptionErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then((data) => data)
-    .catch(async (error) =>
-      youtubeSubscriptionErrorResponseAdapter(processErrorResponse(await error))
-    );
+export const getStatusProcess = async (
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<string | YoutubeSubscriptionErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? response
+    : youtubeSubscriptionErrorResponseAdapter(response);
 };

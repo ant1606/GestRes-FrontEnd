@@ -11,21 +11,25 @@ import {
   type ResendLinkVerifyEmailErrorResponse,
   type ResendLinkVerifyEmailSuccessResponse
 } from './index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 export const ResendLinkVerifyEmail: React.FC = () => {
   const dispatch = useAppDispatch();
   const userAuthenticated = useAppSelector((state: RootState) => state.authentication);
   const { loadingState } = useAppSelector((state: RootState) => state.ui);
+  const { fetchWithSessionHandling } = useFetch();
 
   const handleSubmit = async (): Promise<void> => {
     try {
       dispatch(isLoading(true));
 
-      const response = await resendLinkVerifyUserEmail(userAuthenticated.id);
+      const response = await resendLinkVerifyUserEmail(
+        userAuthenticated.id,
+        fetchWithSessionHandling
+      );
 
       if (response.status === 'error') {
         const responseError = response as ResendLinkVerifyEmailErrorResponse;
-        // Errores de validación de campos por parte del backend
 
         // Mensaje de error general por parte del backend
         if (responseError.message !== '') {
@@ -35,17 +39,6 @@ export const ResendLinkVerifyEmail: React.FC = () => {
         const responseSuccess = response as ResendLinkVerifyEmailSuccessResponse;
         toastNotifications().toastSuccesCustomize(responseSuccess.message);
       }
-
-      // if ('data' in response) {
-      //   toastNotifications().toastSuccesCustomize(
-      //     'Se reenvio el link de verificación a su correo.'
-      //   );
-      // } else if ('error' in response) {
-      //   const errorsDetail = response.error?.detail;
-      //   if ('apiResponse' in errorsDetail) {
-      //     throw new Error(errorsDetail.apiResponse);
-      //   }
-      // }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);
     } finally {

@@ -12,6 +12,7 @@ import { useSearchParams } from 'react-router-dom';
 import { getTags } from '#/services/tag.services';
 import perPageItemsValue from '#/config/perPageItemsValue';
 import { changeTitle } from '#/redux/slice/uiSlice';
+import { useFetch } from '#/hooks/useFetch';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -22,6 +23,7 @@ const TagView: React.FC = () => {
   const dispatch = useAppDispatch();
   const { tags, tagMeta, setTags, setTagPerPage, tagPerPage } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     setTagPerPage(perPageItemsValue[0].id);
@@ -35,7 +37,7 @@ const TagView: React.FC = () => {
     searchParams.append('perPage', tagPerPage);
     searchParams.sort();
     setSearchParams(searchParams);
-    const tags = await getTags(searchParams.toString());
+    const tags = await getTags(searchParams.toString(), fetchWithSessionHandling);
     setTags(tags);
   };
 

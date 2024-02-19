@@ -11,19 +11,31 @@ export type FetchWithSessionHandlingType = (
   method: methodType,
   body?: string
 ) => Promise<any>;
+export type fetchWithoutReturnHandlingType = (
+  url: string,
+  method: methodType,
+  body?: string
+) => Promise<void>;
 
+export type FetchWithoutAuthorizationRequiredHandlingType = (
+  url: string,
+  method: methodType,
+  body?: string
+) => Promise<any>;
 interface optionsFetch {
   method: methodType;
   body?: string | null;
   headers: {
     'Content-Type': string;
     accept: string;
-    Authorization: string;
+    Authorization?: string;
   };
 }
 
 interface useFetchOutput {
   fetchWithSessionHandling: FetchWithSessionHandlingType;
+  fetchWithoutReturnHandling: fetchWithoutReturnHandlingType;
+  fetchWithoutAuthorizationRequiredHandling: FetchWithoutAuthorizationRequiredHandlingType;
 }
 
 export const useFetch = (): useFetchOutput => {
@@ -65,5 +77,51 @@ export const useFetch = (): useFetchOutput => {
     return response;
   };
 
-  return { fetchWithSessionHandling };
+  const fetchWithoutReturnHandling = async (
+    url: string,
+    method: methodType,
+    body?: string | null
+  ): Promise<void> => {
+    const bearerToken = getBearerToken();
+    const requestOptions: optionsFetch = {
+      method,
+      body,
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json',
+        Authorization: `Bearer ${bearerToken}`
+      }
+    };
+
+    fetch(url, requestOptions);
+  };
+
+  const fetchWithoutAuthorizationRequiredHandling = async (
+    url: string,
+    method: methodType,
+    body?: string | null
+  ): Promise<any> => {
+    const requestOptions: optionsFetch = {
+      method,
+      body,
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/json'
+      }
+    };
+
+    return await fetch(url, requestOptions)
+      .then(async (res) => {
+        if (!res.ok) return await Promise.reject(res.json());
+        return await res.json();
+      })
+      .then(async (data) => data)
+      .catch(async (error) => processErrorResponse(await error));
+  };
+
+  return {
+    fetchWithSessionHandling,
+    fetchWithoutReturnHandling,
+    fetchWithoutAuthorizationRequiredHandling
+  };
 };

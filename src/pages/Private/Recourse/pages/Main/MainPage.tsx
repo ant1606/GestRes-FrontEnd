@@ -11,6 +11,7 @@ import perPageItemsValue from '#/config/perPageItemsValue';
 import FooterTable from '#/components/FooterTable';
 import Filter from '../../components/Filter';
 import { changeTitle } from '#/redux/slice/uiSlice';
+import { useFetch } from '#/hooks/useFetch';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -22,6 +23,7 @@ export const MainPage: React.FC = () => {
     useRecourse();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     setRecoursePerPage(perPageItemsValue[0].id);
@@ -35,7 +37,7 @@ export const MainPage: React.FC = () => {
     searchParams.append('perPage', recoursePerPage);
     searchParams.sort();
     setSearchParams(searchParams);
-    const recourses = await getRecourses(searchParams.toString());
+    const recourses = await getRecourses(searchParams.toString(), fetchWithSessionHandling);
     setRecourses(recourses);
   };
 

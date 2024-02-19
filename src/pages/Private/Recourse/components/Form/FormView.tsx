@@ -7,8 +7,9 @@ import { useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import SelectorTag from '../SelectorTag/SelectorTag';
+
 import TimeInput from '../TimeInput';
+import SelectorTag from '#/components/SelectorTag/SelectorTag';
 
 interface SelectType {
   id: number;
@@ -37,6 +38,7 @@ interface Props {
   setSelectedTags: React.Dispatch<React.SetStateAction<number[]>>;
   recourseSelected: Recourse;
   submitIsDisabled: boolean;
+  choicesTagData: Array<{ value: number; label: string }>
 }
 
 const FormView: React.FC<Props> = ({
@@ -60,7 +62,8 @@ const FormView: React.FC<Props> = ({
   selectedTags,
   setSelectedTags,
   recourseSelected,
-  submitIsDisabled
+  submitIsDisabled,
+  choicesTagData
 }) => {
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
   const navigate = useNavigate();
@@ -122,7 +125,7 @@ const FormView: React.FC<Props> = ({
 
         {/* </div>
       <div className="flex gap-10 my-6"> */}
-        {parseInt(typeId) ===
+        {parseInt(typeId.toString()) ===
           settingsType.find((val) => val.key === GLOBAL_TYPES_RECOURSE.RECOURSE_TYPE_LIBRO)?.id ? (
           <>
             <Field
@@ -207,7 +210,7 @@ const FormView: React.FC<Props> = ({
       </div>
       <div className="mt-5 mb-20">
         {!isShow ? (
-          <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} />
+          <SelectorTag setSelectValues={setSelectedTags} selectedTags={selectedTags} choicesData={choicesTagData} />
         ) : (
           <div className="flex flex-1 justify-start items-start flex-wrap gap-2 leading-1">
             {recourseSelected?.tags.map((tag) => (

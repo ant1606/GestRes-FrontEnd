@@ -1,4 +1,3 @@
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
 import {
   passwordResetErrorResponseAdapter,
   passwordResetSuccessResponseAdapter
@@ -7,6 +6,7 @@ import {
   type PasswordResetErrorResponse,
   type PasswordResetSuccessResponse
 } from '#/pages/PasswordReset/index.types';
+import { type FetchWithoutAuthorizationRequiredHandlingType } from '#/hooks/useFetch';
 
 interface PasswordResetData {
   email: string;
@@ -16,20 +16,12 @@ interface PasswordResetData {
 }
 
 export const passwordReset = async (
-  data: PasswordResetData
+  data: PasswordResetData,
+  fetchCallback: FetchWithoutAuthorizationRequiredHandlingType
 ): Promise<PasswordResetSuccessResponse | PasswordResetErrorResponse> => {
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/reset-password`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => passwordResetSuccessResponseAdapter(await data))
-    .catch(async (error) => passwordResetErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/reset-password`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify(data));
+  return response.status === 'success'
+    ? passwordResetSuccessResponseAdapter(response)
+    : passwordResetErrorResponseAdapter(response);
 };

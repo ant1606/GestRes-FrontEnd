@@ -12,120 +12,65 @@ import {
   type RecoursePaginatedErrorResponse,
   type RecourseRequestBody
 } from '#/pages/Private/Recourse/index.types';
-import { processErrorResponse } from '#/utilities/processAPIResponse.util';
-import { getBearerToken } from '#/utilities/authenticationManagement';
+import { type FetchWithSessionHandlingType } from '#/hooks/useFetch';
 
 export const getRecourses = async (
-  queryParams: string
+  queryParams: string,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<RecoursesPaginatedSuccessResponse | RecoursePaginatedErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses?${queryParams}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => recoursesPaginatedAdapter(await data))
-    .catch(async (error) =>
-      recoursePaginatedErrorResponseAdapter(processErrorResponse(await error))
-    );
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses?${queryParams}`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? recoursesPaginatedAdapter(response)
+    : recoursePaginatedErrorResponseAdapter(response);
 };
 
 export const getRecourse = async (
-  id: number
+  id: number,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${id}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (res) => {
-      if (!res.ok) return await Promise.reject(res.json());
-      return await res.json();
-    })
-    .then(async (data) => recourseAdapter(await data))
-    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${id}`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? recourseAdapter(response)
+    : recourseErrorResponseAdapter(response);
 };
 
 export const savingRecourse = async (
-  recourse: RecourseRequestBody
+  recourse: RecourseRequestBody,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses`, {
-    method: 'POST',
-    body: JSON.stringify(recourse),
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
-    })
-    .then(async (data) => recourseAdapter(await data))
-    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses`;
+  const response = await fetchCallback(url, 'POST', JSON.stringify(recourse));
+  return response.status === 'success'
+    ? recourseAdapter(response)
+    : recourseErrorResponseAdapter(response);
 };
 
 export const updatingRecourse = async (
-  recourse: RecourseRequestBody
+  recourse: RecourseRequestBody,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(
-    `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.recourse_id}`,
-    {
-      method: 'PUT',
-      body: JSON.stringify({
-        ...recourse
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        accept: 'application/json',
-        Authorization: `Bearer ${bearerToken}`
-      }
-    }
-  )
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-      return await resp.json();
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.recourse_id}`;
+  const response = await fetchCallback(
+    url,
+    'PUT',
+    JSON.stringify({
+      ...recourse
     })
-    .then(async (data) => recourseAdapter(await data))
-    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+  );
+  return response.status === 'success'
+    ? recourseAdapter(response)
+    : recourseErrorResponseAdapter(response);
 };
 
 export const destroyRecourse = async (
-  recourse: Recourse
+  recourse: Recourse,
+  fetchCallback: FetchWithSessionHandlingType
 ): Promise<RecourseSuccessResponse | RecourseErrorResponse> => {
-  const bearerToken = getBearerToken();
-
-  return await fetch(`${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      accept: 'application/json',
-      Authorization: `Bearer ${bearerToken}`
-    }
-  })
-    .then(async (resp) => {
-      if (!resp.ok) return await Promise.reject(resp.json());
-
-      return await resp.json();
-    })
-    .then(async (data) => recourseAdapter(await data))
-    .catch(async (error) => recourseErrorResponseAdapter(processErrorResponse(await error)));
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/recourses/${recourse.id}`;
+  const response = await fetchCallback(url, 'DELETE');
+  return response.status === 'success'
+    ? recourseAdapter(response)
+    : recourseErrorResponseAdapter(response);
 };

@@ -14,6 +14,7 @@ import { useStatus } from '../../context/status.context.js';
 import { savingStatus } from '#/services/status.services.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { type StatusErrorResponse } from '../../index.types.js';
+import { type FetchWithSessionHandlingType } from '#/hooks/useFetch.js';
 
 const validateFunctionsFormInputs = {
   date: validateFecha,
@@ -27,6 +28,7 @@ interface Props {
   modalRef: any;
   recourseParent: Recourse;
   onFormSubmit: (statusIdRegistered: number) => void;
+  fetchWithSessionHandling: FetchWithSessionHandlingType;
 }
 
 const StatusForm: React.FC<Props> = ({
@@ -34,13 +36,14 @@ const StatusForm: React.FC<Props> = ({
   modalRef,
   recourseParent,
   onFormSubmit,
-  recourseStatus
+  recourseStatus,
+  fetchWithSessionHandling
 }) => {
   const { addValidationError, statusError, resetValidationError, cleanSelectedStatus } =
     useStatus();
   const [disabledButton, setDisabledButton] = useState(false);
-
   const [comboStatusData, setComboStatusData] = useState<Settings[]>([]);
+
   const initialState = {
     date: moment().format('YYYY-MM-DD'),
     statusId: listStatus[0].id,
@@ -69,7 +72,6 @@ const StatusForm: React.FC<Props> = ({
 
   useEffect(() => {
     addValidationError({ comment: null });
-    // TODO Al momento de cambiar el tipoId, los valores cambiados de totalXXXXX no se reinicializan
   }, [statusId]);
 
   const handleClickCancel = (): void => {
@@ -93,7 +95,8 @@ const StatusForm: React.FC<Props> = ({
             date: formValues.date,
             status_id: formValues.statusId
           },
-          recourseParent.id
+          recourseParent.id,
+          fetchWithSessionHandling
         );
 
         if (response.status === 'error') {

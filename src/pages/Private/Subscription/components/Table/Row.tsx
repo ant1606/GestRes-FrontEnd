@@ -16,6 +16,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Form from '../Form/Form';
 import { destroySubscription, getSubscriptions } from '#/services/subscriptions.services';
 import { type YoutubeSubscriptionErrorResponse } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface Prop {
   youtubeSubscription: YoutubeSubscription;
@@ -25,6 +26,8 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const [searchParams] = useSearchParams();
+  const { fetchWithSessionHandling } = useFetch();
+
   function toggleviewDetail(): void {
     setviewDetail(!viewDetail);
   }
@@ -39,7 +42,7 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
       if (!result) return;
 
       dispatch(isLoading(true));
-      const response = await destroySubscription(youtubeSubscription);
+      const response = await destroySubscription(youtubeSubscription, fetchWithSessionHandling);
 
       if (response.status === 'error') {
         const responseError = response as YoutubeSubscriptionErrorResponse;
@@ -54,7 +57,10 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
           `Se elimino la suscripción ${youtubeSubscription.title} satisfactoriamente`
         );
         cleanSelectedYoutubeSubscription();
-        const subscriptions = await getSubscriptions(searchParams.toString());
+        const subscriptions = await getSubscriptions(
+          searchParams.toString(),
+          fetchWithSessionHandling
+        );
         setYoutubeSubscriptions(subscriptions);
       }
     } catch (error: any) {
@@ -77,6 +83,7 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
             <Form
               modalRef={modalRef.current}
               subscription={youtubeSubscription}
+              fetchWithSessionHandling={fetchWithSessionHandling}
               onFormSubmit={() => {
                 handleFormSubmit();
               }}
@@ -92,7 +99,10 @@ const Row: React.FC<Prop> = ({ youtubeSubscription }) => {
   const handleFormSubmit = async (): Promise<void> => {
     modalRef.current?.close();
     toastNotifications().toastSuccesCustomize('Se actualizaron las etiquetas correctamente.');
-    const youtubeSubscriptions = await getSubscriptions(searchParams.toString());
+    const youtubeSubscriptions = await getSubscriptions(
+      searchParams.toString(),
+      fetchWithSessionHandling
+    );
     setYoutubeSubscriptions(youtubeSubscriptions);
   };
 

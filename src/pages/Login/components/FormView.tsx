@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { type loginValidationError } from '../context/login.context';
 import Button from '#/components/Button';
 import Field from '#/components/Field';
 import { RiAccountCircleFill, RiLock2Fill } from 'react-icons/ri';
@@ -13,7 +12,7 @@ interface Props {
   email: string;
   password: string;
   rememberMe: boolean;
-  loginError: loginValidationError;
+  loginError: Record<string, string | null>;
 }
 const FormView: React.FC<Props> = ({
   handleSubmit,

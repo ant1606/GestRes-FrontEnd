@@ -18,6 +18,7 @@ import {
   type RecoursesPaginatedSuccessResponse,
   type RecourseErrorResponse
 } from '../../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface Props {
   recourse: Recourse;
@@ -29,6 +30,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
   const { setRecourses, selectedRecourse, addValidationError } = useRecourse();
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const { fetchWithSessionHandling } = useFetch();
 
   // TODO ver como hacer de esto una funcion global o util para obtener el estilo
   const styleStatus = settingsStatus.find(
@@ -48,7 +50,7 @@ const Row: React.FC<Props> = ({ recourse }) => {
       if (!result) return;
 
       dispatch(isLoading(true));
-      const response = await destroyRecourse(recourse);
+      const response = await destroyRecourse(recourse, fetchWithSessionHandling);
 
       if (response.status === 'error') {
         const responseError = response as RecourseErrorResponse;
@@ -66,7 +68,8 @@ const Row: React.FC<Props> = ({ recourse }) => {
           `Se elimino el recurso ${recourse.name} satisfactoriamente`
         );
         const recourses = (await getRecourses(
-          searchParams.toString()
+          searchParams.toString(),
+          fetchWithSessionHandling
         )) as RecoursesPaginatedSuccessResponse;
         setRecourses(recourses);
       }

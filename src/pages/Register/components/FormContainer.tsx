@@ -13,6 +13,7 @@ import {
 } from '../utils/validationInputs';
 import { useRegister } from '../context/register.context';
 import { type RegisterErrorResponse } from '../index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 const validateFunctionsFormInputs = {
   name: validateUserName,
@@ -41,6 +42,7 @@ export const FormContainer: React.FC = () => {
   );
   const { name, email, password, passwordConfirmation } = formValues;
   const dispatch = useAppDispatch();
+  const { fetchWithoutAuthorizationRequiredHandling } = useFetch();
   const registerErrorRef = useRef<Record<string, string | null>>({});
   useEffect(() => {
     registerErrorRef.current = registerError;
@@ -55,12 +57,15 @@ export const FormContainer: React.FC = () => {
         (el) => registerErrorRef.current[el] === null
       );
       if (existValidationMessage) {
-        const response = await savingUser({
-          name,
-          email,
-          password,
-          passwordConfirmation
-        });
+        const response = await savingUser(
+          {
+            name,
+            email,
+            password,
+            passwordConfirmation
+          },
+          fetchWithoutAuthorizationRequiredHandling
+        );
 
         if (response.status === 'error') {
           const responseError = response as RegisterErrorResponse;
@@ -76,22 +81,6 @@ export const FormContainer: React.FC = () => {
         } else {
           setUserWasRegistered(true);
         }
-
-        // if ('data' in response) {
-        //   setUserWasRegistered(true);
-        // } else if ('error' in response) {
-        //   const errorsDetail = response.error?.detail;
-        //   Object.keys(errorsDetail).forEach((key) => {
-        //     if (key !== 'apiResponseMessageError') {
-        //       addValidationError({ [key]: errorsDetail[key] });
-        //     }
-        //   });
-
-        //   if ('apiResponseMessageError' in errorsDetail) {
-        //     if (errorsDetail.apiResponseMessageError !== null)
-        //       throw new Error(errorsDetail.apiResponseMessageError);
-        //   }
-        // }
       }
     } catch (error: any) {
       toastNotifications().notificationError(error.message);

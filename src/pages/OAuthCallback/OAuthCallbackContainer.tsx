@@ -1,5 +1,6 @@
 import AuthenticationTemplate from '#/components/AuthenticationTemplate';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
+import { useFetch } from '#/hooks/useFetch';
 import { userAccessOAuthGoogle } from '#/redux/slice/authenticationSlice';
 import { type RootState } from '#/redux/store';
 import { importSubscriptions } from '#/services/subscriptions.services';
@@ -11,6 +12,7 @@ export const OAuthCallbackContainer: React.FC = () => {
     (state: RootState) => state.authentication.orderSortApiYoutube
   ) as string;
   const location = useLocation();
+  const { fetchWithSessionHandling } = useFetch();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ export const OAuthCallbackContainer: React.FC = () => {
       const accessToken = params.get('access_token') ?? '';
       // TODO Al momento de redireccionar correctamente a suscriptionView, mostrar un mensaje que se cargaron los datos
       // Y mostrar un loading o skeleton que muestre que se estarán cargando los datos en la tabla
-      importSubscriptions(accessToken, orderSortApiYoutube);
+      importSubscriptions(accessToken, orderSortApiYoutube, fetchWithSessionHandling);
     }
     // console.log('Navegando a subscription');
     navigate('/app/subscription');

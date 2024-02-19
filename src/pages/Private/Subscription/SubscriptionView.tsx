@@ -15,6 +15,7 @@ import Filter from './components/Filter';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { oauthSignIn } from './utils/helpers';
 import { type YoutubeSubscriptionsPaginatedSuccessResponse } from './index.types';
+import { useFetch } from '#/hooks/useFetch';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -34,6 +35,7 @@ const SubscriptionView: React.FC = () => {
   const { comeFromOAuthCallback, isOAuthAccess } = useAppSelector(
     (state: RootState) => state.authentication
   );
+  const { fetchWithSessionHandling } = useFetch();
 
   useEffect(() => {
     setYoutubeSubscriptionPerPage(perPageItemsValue[0].id);
@@ -80,7 +82,8 @@ const SubscriptionView: React.FC = () => {
     searchParams.sort();
     setSearchParams(searchParams);
     const responseYoutubeSubscriptions = (await getSubscriptions(
-      searchParams.toString()
+      searchParams.toString(),
+      fetchWithSessionHandling
     )) as YoutubeSubscriptionsPaginatedSuccessResponse;
     setYoutubeSubscriptions(responseYoutubeSubscriptions);
   };

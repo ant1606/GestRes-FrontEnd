@@ -8,6 +8,7 @@ import { passwordForget } from '#/services/passwordForget.services.js';
 import { toastNotifications } from '#/utilities/notificationsSwal.js';
 import { usePasswordForget } from '../context/passwordForget.context.js';
 import { type PasswordForgetErrorResponse } from '../index.types.js';
+import { useFetch } from '#/hooks/useFetch.js';
 
 const validateFunctionsFormInputs = {
   email: validateUserEmail
@@ -32,6 +33,7 @@ export const FormContainer: React.FC = () => {
 
   const { email } = formValues;
   const dispatch = useAppDispatch();
+  const { fetchWithoutAuthorizationRequiredHandling } = useFetch();
   const passwordForgetErrorRef = useRef<Record<string, string | null>>({});
   useEffect(() => {
     passwordForgetErrorRef.current = passwordForgetError;
@@ -46,7 +48,7 @@ export const FormContainer: React.FC = () => {
         (el) => passwordForgetErrorRef.current[el] === null
       );
       if (existValidationMessage) {
-        const response = await passwordForget(email);
+        const response = await passwordForget(email, fetchWithoutAuthorizationRequiredHandling);
 
         if (response.status === 'error') {
           const responseError = response as PasswordForgetErrorResponse;
