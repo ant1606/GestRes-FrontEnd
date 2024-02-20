@@ -84,7 +84,6 @@ const FormContainer: React.FC = () => {
           },
           fetchWithoutAuthorizationRequiredHandling
         );
-
         if (response.status === 'error') {
           const responseError = response as LoginErrorResponse;
           // Errores de validación de campos por parte del backend
@@ -102,6 +101,7 @@ const FormContainer: React.FC = () => {
           responseSuccess.data.user.rememberToken = rememberMe
             ? responseSuccess.data.user.rememberToken
             : null;
+
           savePersistenDataUser(responseSuccess.data);
           await userIsLoggedInPromise(responseSuccess.data.user);
           navigate('/app/dashboard', { replace: true });

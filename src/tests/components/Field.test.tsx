@@ -80,7 +80,7 @@ describe('Componente Field', () => {
   });
 
   test('Debe mostrar el valor inicial correctamente', () => {
-    const { getByTestId } = render(
+    const wrapper = render(
       <Field
         type="text"
         label="Name"
@@ -91,7 +91,7 @@ describe('Componente Field', () => {
         errorInput={null}
       />
     );
-    expect(getByTestId('name').nodeValue).toBe('John');
+    expect(wrapper.getByTestId('name')).toHaveValue('John');
   });
 
   test('Debe aplicar la clase de error al campo de entrada cuando hay un error', () => {

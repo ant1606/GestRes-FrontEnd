@@ -7,6 +7,7 @@ export const useCheckAuthenticationUser = (): any => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  // TODO IMplementar useFetch en este apartado
   const checkedUserLoggin = async (): Promise<void> => {
     await checkAuthentication()
       .then((res) => {

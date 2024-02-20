@@ -2,16 +2,17 @@ import endPoint from './handlersDependency';
 // Mock Data
 
 const success = {
+  status: 'success',
   data: {
     message: 'Se genero link de reset password'
   }
 };
 const error = {
+  status: 'error',
+  code: 404,
   error: {
-    status: 404,
-    detail: {
-      api_response: 'Hubo problemas en la comunicación con el servidor'
-    }
+    message: 'Hubo problemas en la comunicación con el servidor',
+    details: []
   }
 };
 

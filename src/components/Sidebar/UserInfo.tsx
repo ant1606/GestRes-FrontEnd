@@ -10,7 +10,7 @@ const UserInfo: React.FC = () => {
 
   return (
     <div className="flex items-center p-4 gap-2.5 text-sm uppercase font-black">
-      {/* <img src="https://picsum.photos/40/40" alt="user" className="rounded-xl" /> */}
+      <img src="https://picsum.photos/40/40" alt="user" className="rounded-xl" />
 
       <div className="flex flex-col gap-2">
         <p className={`${collapseSidebar ? 'scale-0' : ''} origin-left duration-300 truncate`}>

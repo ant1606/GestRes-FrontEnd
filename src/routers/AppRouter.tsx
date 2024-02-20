@@ -48,7 +48,7 @@ const AppRouter: React.FC = () => {
       const settings = (await getSettings(fetchWithoutAuthorizationRequiredHandling)) as any;
       await settingsLoadedInPromise(settings.data);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       // TODO Mostra mensaje de error al cargar Settings en aplicación
     }
   };

@@ -32,6 +32,7 @@ const Field: React.FC<Props> = (props) => {
     classInput = '',
     ...rest
   } = props;
+
   const LengthError = validateLengthError(errorInput);
   return (
     <>

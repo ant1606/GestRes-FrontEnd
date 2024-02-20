@@ -2,16 +2,16 @@ import endPoint from './handlersDependency';
 // Mock Data
 
 const success = {
-  data: {
-    message: 'Se cambio la contraseña'
-  }
+  status: 'success',
+  message: 'Su contraseña fue cambiada con éxito',
+  data: []
 };
 const error = {
+  status: 'error',
+  code: 404,
   error: {
-    status: 404,
-    detail: {
-      api_response: 'Hubo problemas en la comunicación con el servidor'
-    }
+    message: 'Hubo problemas en la comunicación con el servidor',
+    details: []
   }
 };
 

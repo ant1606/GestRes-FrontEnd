@@ -18,6 +18,7 @@ import endPoint from './handlersDependency';
 */
 
 const settings = {
+  status: 'success',
   data: [
     { id: '1', key: 'TYPE_LIBRO', type: 'SETTINGS_TYPE', value: 'LIBRO ELECTRONICO', value2: null }
   ]

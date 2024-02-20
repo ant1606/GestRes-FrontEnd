@@ -32,6 +32,7 @@ export const setserviceLoginUserWithRememberToken = (value: boolean): void => {
 
 // Mock Data
 const userVerified = {
+  status: 'success',
   data: {
     bearer_token: 'miToken',
     bearer_expire: '2023-07-04T16:18:05.000Z',
@@ -45,6 +46,7 @@ const userVerified = {
   }
 };
 const userNoVerified = {
+  status: 'success',
   data: {
     bearer_token: 'miToken',
     bearer_expire: '2023-07-04T16:18:05.000Z',
@@ -58,11 +60,11 @@ const userNoVerified = {
   }
 };
 const error = {
+  status: 'error',
+  code: 404,
   error: {
-    status: 404,
-    detail: {
-      api_response: 'No se encontro el remembertoken'
-    }
+    message: 'No se encontro el remembertoken',
+    details: []
   }
 };
 
