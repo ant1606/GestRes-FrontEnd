@@ -8,21 +8,35 @@ pipeline {
   }
   stages {
     stage('Copiando archivo .env') {
-      sh 'cp /home/scm/gestorRecursos/frontend/.env /.env'
+      steps{
+        script{
+          sh 'cp /home/scm/gestorRecursos/frontend/.env /.env'
+        }
+      }
+      
     }
     stage('Levantando contenedor de desarrollo y generando carpeta dist') {
-      sh '''
-      docker build /containers/development -t pygestorrecursos-spa:dev
-      docker exec -dp 3500:3000 --name pygestorrecursos-spa-dev-jenkins -v .:/app pygestorrecursos-spa:dev  yarn build
-      docker rm pygestorrecursos-spa-dev-jenkins
-      docker rm pygestorrecursos-spa:dev
-      '''
+      steps{
+        script{
+          sh '''
+            docker build /containers/development -t pygestorrecursos-spa:dev
+            docker exec -dp 3500:3000 --name pygestorrecursos-spa-dev-jenkins -v .:/app pygestorrecursos-spa:dev  yarn build
+            docker rm pygestorrecursos-spa-dev-jenkins
+            docker rm pygestorrecursos-spa:dev
+          '''
+        }
+      }
+      
     }
     stage('Generando imagen para producción'){
-      sh 'cp /home/scm/gestorRecursos/frontend/DockerFile /Dockerfile'
-      sh '''
-      docker build . -t pygestorrecursos-spa:production
-      '''
+      steps{
+        script{
+          sh 'cp /home/scm/gestorRecursos/frontend/DockerFile /Dockerfile'
+          sh '''
+            docker build . -t pygestorrecursos-spa:production
+          '''
+        }
+      }
     }
   }
 }
