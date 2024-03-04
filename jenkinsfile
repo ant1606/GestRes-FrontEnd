@@ -1,40 +1,95 @@
 pipeline {
   agent any
-  parameters {
-    // string(name:'name_container', defaultValue: 'gestorrecursos-frontend', description: 'nombre del container')
-    // string(name:'name_imagen', defaultValue: 'pygestorrecursos_frontend', description: 'nombre del container')
-    // string(name:'tag_imagen', defaultValue: 'latest', description: 'nombre del container')
-    // string(name:'puerto_imagen', defaultValue: '3500', description: 'nombre del container')
+  environment {
+      HOST_PATH = '/home/laptop/DesarrolloSoftware/ci_cd/jenkins/jenkins-data'
+      PRODUCTION_PATH = '/home/proyectosDeploy'
+      WORKSPACE_PATH = sh(script: "echo ${WORKSPACE} | sed 's@/var/jenkins_home@${HOST_PATH}@g'", returnStdout: true).trim()
+      IMAGE_PRODUCTION = 'pygestorrecursos_frontend:node_current-alpine3.16'
+      CONTAINER_PRODUCTION = 'prodlocal_pygestorrecursos_frontend'
+      IMAGE_BUILD = 'pygestorrecursos-spa:dev'
+      CONTAINER_BUILD = 'pygestorrecursos-spa-dev-jenkins'
+      SERVICE_NAME_PRODUCTION = 'prodlocal_pygestorrecursos_frontend'
   }
   stages {
-    stage('Copiando archivo .env') {
-      steps{
-        script{
-          sh 'cp /home/scm/gestorRecursos/frontend/.env /.env'
+    stage('Deteniendo container frontend en producción') {
+      when {
+        expression { 
+          CONTAINER_EXIST = sh(returnStdout: true, script: "docker ps -q --filter name=${CONTAINER_PRODUCTION}").trim()
+          return CONTAINER_EXIST != '' 
         }
       }
-      
+      steps {
+        script {
+          sh """
+            docker stop ${CONTAINER_PRODUCTION}
+            docker rm ${CONTAINER_PRODUCTION}
+          """
+        }
+      }
+    }    
+    stage('Eliminando imagen frontend de producción') {
+      when {
+        expression { 
+          IMAGE_EXIST = sh(returnStdout: true, script: "docker image ls --filter=reference=${IMAGE_PRODUCTION} -q").trim()
+          return IMAGE_EXIST != '' 
+        }
+      }
+      steps {
+        script {
+          sh """
+            docker image rm ${IMAGE_PRODUCTION}
+          """
+        }
+      }
+    }
+    stage('Limpiando imagen frontend para generar el build del proyecto') {
+      when {
+        expression { 
+          IMAGE_EXIST = sh(returnStdout: true, script: "docker image ls --filter=reference=${IMAGE_BUILD} -q").trim()
+          return IMAGE_EXIST != '' 
+        }
+      }
+      steps {
+        script {
+          sh """
+            docker image rm ${IMAGE_BUILD}
+          """
+        }
+      }
+    }
+    stage('Copiando archivo .env') {
+      steps {
+        script {
+          sh 'cp /home/scm/gestorRecursos/frontend/.env .env'
+        }
+      }
     }
     stage('Levantando contenedor de desarrollo y generando carpeta dist') {
-      steps{
-        script{
-          sh '''
-            docker build /containers/development -t pygestorrecursos-spa:dev
-            docker exec -dp 3500:3000 --name pygestorrecursos-spa-dev-jenkins -v .:/app pygestorrecursos-spa:dev  yarn build
-            docker rm pygestorrecursos-spa-dev-jenkins
-            docker rm pygestorrecursos-spa:dev
-          '''
+      steps {
+        script {
+          sh "docker build ${WORKSPACE}/containers/development/ -t ${IMAGE_BUILD}"
+          sh "docker run --rm --name ${CONTAINER_BUILD} -v ${WORKSPACE_PATH}/:/app -w /app ${IMAGE_BUILD} yarn install"
+          sh "docker run --rm --name ${CONTAINER_BUILD} -v ${WORKSPACE_PATH}/:/app -w /app ${IMAGE_BUILD} yarn build"
+          sh "docker image rm ${IMAGE_BUILD}"
         }
       }
-      
     }
-    stage('Generando imagen para producción'){
-      steps{
-        script{
-          sh 'cp /home/scm/gestorRecursos/frontend/DockerFile /Dockerfile'
-          sh '''
-            docker build . -t pygestorrecursos-spa:production
-          '''
+    stage('Generando imagen para producción') {
+      steps {
+        script {
+          sh 'cp /home/scm/gestorRecursos/frontend/Dockerfile Dockerfile'
+          sh """
+            docker build . -t ${IMAGE_PRODUCTION}
+          """
+        }
+      }
+    }
+    stage('Ejecutar Docker Compose en entorno de producción') {
+      steps {
+        script {
+          sh """
+            cd ${PRODUCTION_PATH}/gestorRecursos && docker compose -f "docker-compose.yml" up -d --build ${SERVICE_NAME_PRODUCTION}
+          """
         }
       }
     }
