@@ -20,7 +20,7 @@ export const ShowPage: React.FC = () => {
   const [toggleTab, setToggleTab] = useState(1);
   const dispatch = useAppDispatch();
   const { idrecurso } = useParams();
-  const { fetchWithSessionHandling } = useFetch();
+  const { fetchWithSessionHandling, controller } = useFetch();
 
   // TODO ver como hacer de esto una funcion global o util para obtener el estilo
 
@@ -59,7 +59,7 @@ export const ShowPage: React.FC = () => {
         // dispatch(changeTitle((recourse.data as Recourse).name));
         // selectedRecourse(recourse.data);
       } catch (error: any) {
-        // console.log('Hubo un error al obtener los datos');
+        if (error instanceof DOMException && error.name === 'AbortError') return;
         toastNotifications().notificationError(error.message);
       }
     };
@@ -69,6 +69,8 @@ export const ShowPage: React.FC = () => {
     return () => {
       dispatch(changeColorTitleBar(null));
       cleanSelectedRecourse();
+      // Abortando la petición al endpoint al momento de cambiar de página
+      controller.abort();
     };
   }, []);
 
