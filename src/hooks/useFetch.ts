@@ -30,17 +30,21 @@ interface optionsFetch {
     accept: string;
     Authorization?: string;
   };
+  signal?: AbortSignal;
 }
 
 interface useFetchOutput {
   fetchWithSessionHandling: FetchWithSessionHandlingType;
   fetchWithoutReturnHandling: fetchWithoutReturnHandlingType;
   fetchWithoutAuthorizationRequiredHandling: FetchWithoutAuthorizationRequiredHandlingType;
+  controller: AbortController;
 }
 
 export const useFetch = (): useFetchOutput => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  // Usando AbortController para abortar las peticiones al endpoint
+  const controller = new AbortController();
 
   const fetchWithSessionHandling = async (
     url: string,
@@ -55,7 +59,8 @@ export const useFetch = (): useFetchOutput => {
         'Content-Type': 'application/json',
         accept: 'application/json',
         Authorization: `Bearer ${bearerToken}`
-      }
+      },
+      signal: controller.signal
     };
 
     const response = await fetch(url, requestOptions)
@@ -64,7 +69,11 @@ export const useFetch = (): useFetchOutput => {
         return await res.json();
       })
       .then(async (data) => data)
-      .catch(async (error) => processErrorResponse(await error));
+      .catch(async (error) => {
+        if (error.name === 'AbortError') throw error;
+
+        processErrorResponse(await error);
+      });
 
     // Verificando errores de autorización
     if (response.code === 401) {
@@ -122,6 +131,7 @@ export const useFetch = (): useFetchOutput => {
   return {
     fetchWithSessionHandling,
     fetchWithoutReturnHandling,
-    fetchWithoutAuthorizationRequiredHandling
+    fetchWithoutAuthorizationRequiredHandling,
+    controller
   };
 };
