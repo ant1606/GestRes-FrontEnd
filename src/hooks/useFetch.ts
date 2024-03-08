@@ -71,8 +71,7 @@ export const useFetch = (): useFetchOutput => {
       .then(async (data) => data)
       .catch(async (error) => {
         if (error.name === 'AbortError') throw error;
-
-        processErrorResponse(await error);
+        return processErrorResponse(await error);
       });
 
     // Verificando errores de autorización
