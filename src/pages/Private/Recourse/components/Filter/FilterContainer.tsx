@@ -8,6 +8,7 @@ import { useDebounce } from '#/hooks/useDebounce';
 import { useFetch } from '#/hooks/useFetch';
 import { useAppSelector } from '#/hooks/redux';
 import { type RootState } from '#/redux/store';
+import { toastNotifications } from '#/utilities/notificationsSwal';
 
 export interface FilterData {
   id: number;
@@ -47,48 +48,52 @@ export const FilterContainer: React.FC = () => {
   };
 
   const execFilter = async (): Promise<void> => {
-    // TODO cambiar el filtro de tipo y estado  para evitar enviar en las queryString el ID de los valores
-    searchParams.delete('searchNombre');
-    searchParams.delete('searchTipo');
-    searchParams.delete('searchEstado');
-    searchParams.delete('searchTags[]');
-    searchParams.delete('perPage');
-    searchParams.append('perPage', recoursePerPage);
-    searchParams.delete('page');
-    searchParams.append('page', '1');
-    if (debouncedSearchNombre !== '') searchParams.append('searchNombre', debouncedSearchNombre);
-    if (searchTipo > 0) searchParams.append('searchTipo', searchTipo.toString());
-    if (searchEstado > 0) searchParams.append('searchEstado', searchEstado.toString());
-    if (debouncedSearchTags.length > 0)
-      searchParams.append('searchTags[]', debouncedSearchTags.toString());
+    try {
+      // TODO cambiar el filtro de tipo y estado  para evitar enviar en las queryString el ID de los valores
+      searchParams.delete('searchNombre');
+      searchParams.delete('searchTipo');
+      searchParams.delete('searchEstado');
+      searchParams.delete('searchTags[]');
+      searchParams.delete('perPage');
+      searchParams.append('perPage', recoursePerPage);
+      searchParams.delete('page');
+      searchParams.append('page', '1');
+      if (debouncedSearchNombre !== '') searchParams.append('searchNombre', debouncedSearchNombre);
+      if (searchTipo > 0) searchParams.append('searchTipo', searchTipo.toString());
+      if (searchEstado > 0) searchParams.append('searchEstado', searchEstado.toString());
+      if (debouncedSearchTags.length > 0)
+        searchParams.append('searchTags[]', debouncedSearchTags.toString());
 
-    searchParams.sort();
-    setSearchParams(searchParams);
-    const response = await getRecourses(searchParams.toString(), fetchWithSessionHandling);
+      searchParams.sort();
+      setSearchParams(searchParams);
+      const response = await getRecourses(searchParams.toString(), fetchWithSessionHandling);
 
-    if (response.status === 'error') {
-      const responseError = response as RecoursePaginatedErrorResponse;
-      // Mensaje de error general por parte del backend
-      if (responseError.message !== '') {
-        throw new Error(responseError.message);
+      if (response.status === 'error') {
+        const responseError = response as RecoursePaginatedErrorResponse;
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+
+        // Para que no interrumpa el UX, seríá mejor validar el campo de search en frontend o agregar un boton de busqueda
+        // TODO Son errores de validación de campos, ver si se maneja el filtrado como un formulario para mostrar los errores
+        // en los inputs
+        if (!Object.values(responseError.details).every((value) => value === null)) {
+          const message = Object.values(responseError.details).reduce((acc, val) => {
+            if (val !== null) {
+              acc += val + ' ';
+            }
+            return acc;
+          }, '');
+
+          throw new Error(message);
+        }
+      } else {
+        // const responseSuccess = response as TagsPaginatedSuccessResponse;
+        setRecourses(response);
       }
-
-      // Para que no interrumpa el UX, seríá mejor validar el campo de search en frontend o agregar un boton de busqueda
-      // TODO Son errores de validación de campos, ver si se maneja el filtrado como un formulario para mostrar los errores
-      // en los inputs
-      if (!Object.values(responseError.details).every((value) => value === null)) {
-        const message = Object.values(responseError.details).reduce((acc, val) => {
-          if (val !== null) {
-            acc += val + ' ';
-          }
-          return acc;
-        }, '');
-
-        throw new Error(message);
-      }
-    } else {
-      // const responseSuccess = response as TagsPaginatedSuccessResponse;
-      setRecourses(response);
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
     }
   };
 
