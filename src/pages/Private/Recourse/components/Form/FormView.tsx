@@ -172,18 +172,8 @@ const FormView: React.FC<Props> = ({
               label="Total Horas"
               classBox="basis-2/4"
               errorInput={recourseError.totalHours}
+              readonly={isShow || statusIsCulminado}
             />
-            {/*             
-            <Field
-              type="text"
-              label="Total Horas"
-              name="totalHours"
-              classBox="basis-2/4"
-              handleChange={handleInputChange}
-              value={totalHours}
-              errorInput={recourseError.totalHours}
-              readonly={isShow}
-            /> */}
           </>
         )}
 
