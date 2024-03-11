@@ -30,20 +30,27 @@ const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => 
       </div>
       <div className="">
         <ol className="py-4 px-4">
-          {listRecourses.map((recourse) => (
-            <li key={recourse.id} className="flex">
-              <div className="inline-block p-2">
-                <NavLink to={`/app/recourse/${recourse.id}`}>
-                  <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
-                    <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
-                      <FaEye />
-                    </IconContext.Provider>
-                  </button>
-                </NavLink>
-              </div>
-              <span className="p-2 text-lg leading-7 font-semibold truncate">{recourse.name}</span>
-            </li>
-          ))}
+          {listRecourses.length === 0 ? (
+            // TODO Dar estilos a este componente
+            <p>No se encontraron resultados</p>
+          ) : (
+            listRecourses.map((recourse) => (
+              <li key={recourse.id} className="flex">
+                <div className="inline-block p-2">
+                  <NavLink to={`/app/recourse/${recourse.id}`}>
+                    <button className="w-8 h-8  flex justify-center items-center bg-blue-700 rounded-lg">
+                      <IconContext.Provider value={{ size: '1.25em', color: 'white' }}>
+                        <FaEye />
+                      </IconContext.Provider>
+                    </button>
+                  </NavLink>
+                </div>
+                <span className="p-2 text-lg leading-7 font-semibold truncate">
+                  {recourse.name}
+                </span>
+              </li>
+            ))
+          )}
         </ol>
       </div>
     </div>
