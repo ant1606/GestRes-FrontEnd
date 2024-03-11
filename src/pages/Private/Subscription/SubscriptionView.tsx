@@ -16,6 +16,7 @@ import { toastNotifications } from '#/utilities/notificationsSwal';
 import { oauthSignIn } from './utils/helpers';
 import { type YoutubeSubscriptionsPaginatedSuccessResponse } from './index.types';
 import { useFetch } from '#/hooks/useFetch';
+import Dropdown from './components/Dropdown/Dropdown';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -36,6 +37,29 @@ const SubscriptionView: React.FC = () => {
     (state: RootState) => state.authentication
   );
   const { fetchWithSessionHandling } = useFetch();
+  const dropDownOptions = [
+    {
+      name: 'Alfabético',
+      action: (option) => {
+        dispatch(userSelectOrderSortApiYoutube('alphabetical'));
+        oauthSignIn();
+      }
+    },
+    {
+      name: 'Relevante',
+      action: (option) => {
+        dispatch(userSelectOrderSortApiYoutube('relevance'));
+        oauthSignIn();
+      }
+    },
+    {
+      name: 'Actividad',
+      action: (option) => {
+        dispatch(userSelectOrderSortApiYoutube('unread'));
+        oauthSignIn();
+      }
+    }
+  ];
 
   useEffect(() => {
     setYoutubeSubscriptionPerPage(perPageItemsValue[0].id);
@@ -96,7 +120,9 @@ const SubscriptionView: React.FC = () => {
     <>
       {uiLoading && <Loader />}
       <div className="flex justify-between gap-10">
-        <Button
+        <Dropdown options={dropDownOptions} />
+
+        {/* <Button
           text="Importar de Google - Alfabético"
           onClick={() => {
             dispatch(userSelectOrderSortApiYoutube('alphabetical'));
@@ -125,7 +151,7 @@ const SubscriptionView: React.FC = () => {
           btnType="warning"
           type="button"
           classButton="text-lg px-2 text-gray-900"
-        />
+        /> */}
       </div>
       <Filter />
       {youtubeSubscriptions.length === 0 ? (
