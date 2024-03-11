@@ -35,6 +35,7 @@ interface Props {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   name: string;
   timeValue: string;
+  readonly?: boolean;
 }
 interface CustomEvent {
   target: {
@@ -54,7 +55,8 @@ export const TimeInputSplitted: React.FC<Props> = ({
   classBox,
   handleChange,
   name,
-  timeValue
+  timeValue,
+  readonly
 }) => {
   const [timeValueHour, timeValueMinute, timeValueSecond] = timeValue.split(':').map(String);
   const [hour, setHour] = useState(timeValueHour);
@@ -242,6 +244,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
                 handleFocus(e, 'hour');
               }}
               className="max-w-[2.3rem] text-center px-1 border-none outline-none focus:border-b-2 focus:border-gray-900"
+              readOnly={readonly}
             />
             <span className="font-bold">:</span>
             <input
@@ -264,6 +267,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
               }}
               className="max-w-[2.3rem] text-center px-1 border-none outline-none"
               ref={minuteRef}
+              readOnly={readonly}
             />
             <span className="font-bold">:</span>
             <input
@@ -285,6 +289,7 @@ export const TimeInputSplitted: React.FC<Props> = ({
               }}
               className="max-w-[2.3rem] text-center px-1 border-none outline-none"
               ref={secondRef}
+              readOnly={readonly}
             />
           </div>
           <span
