@@ -20,6 +20,7 @@ interface InitialState {
   tagLinks: PaginateResultLinks | null;
   tagPerPage: number;
   validationError: Record<typeValidationError, string | null>;
+  tagSearchLoading: boolean;
 }
 
 const initialState: InitialState = {
@@ -30,7 +31,8 @@ const initialState: InitialState = {
   tagPerPage: 0,
   validationError: {
     name: null
-  }
+  },
+  tagSearchLoading: true
 };
 
 const ADD_VALIDATION_ERROR = 'add validation error';
@@ -39,6 +41,7 @@ const SET_TAGS_PER_PAGE = 'set tags per page';
 const SELECT_TAG_ACTIVE = 'select tag active';
 const CLEAN_SELECT_TAG = 'clean select tag active';
 const TAG_LOADED = 'loaded Tags from API';
+const SET_TAG_SEARCH_LOADING = 'set status of tag searching from api';
 
 // TAG REDUCER
 const tagReducer: Reducer<InitialState, ActionReducer> = (
@@ -92,6 +95,12 @@ const tagReducer: Reducer<InitialState, ActionReducer> = (
         ...state,
         tagActive: null
       };
+    case SET_TAG_SEARCH_LOADING:
+      payloadValue = action.payload as boolean;
+      return {
+        ...state,
+        tagSearchLoading: payloadValue
+      };
   }
   throw new Error(`Action desconocida del tipo ${action.type}`);
 };
@@ -142,18 +151,27 @@ export const TagProvider = ({ children }: TagProviderProps): JSX.Element => {
     });
   };
 
+  const setTagSearchLoading = (statusLoading: boolean): void => {
+    dispatch({
+      type: SET_TAG_SEARCH_LOADING,
+      payload: statusLoading
+    });
+  };
+
   const tagActions = {
     tags: state.tags,
     tagMeta: state.tagMeta,
     tagError: state.validationError,
     tagPerPage: state.tagPerPage,
     tagActive: state.tagActive,
+    tagSearchLoading: state.tagSearchLoading,
     setTagPerPage,
     selectedTag,
     addValidationError,
     setTags,
     resetValidationError,
-    cleanSelectedTag
+    cleanSelectedTag,
+    setTagSearchLoading
   };
 
   return <TagContext.Provider value={tagActions}>{children}</TagContext.Provider>;
