@@ -13,6 +13,7 @@ import { getTags } from '#/services/tag.services';
 import perPageItemsValue from '#/config/perPageItemsValue';
 import { changeTitle } from '#/redux/slice/uiSlice';
 import { useFetch } from '#/hooks/useFetch';
+import TableSkeleton from '#/components/Skeleton/TableSkeleton';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -21,7 +22,15 @@ interface ReactPaginaOnPageChangeArgument {
 const TagView: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
   const dispatch = useAppDispatch();
-  const { tags, tagMeta, setTags, setTagPerPage, tagPerPage } = useTag();
+  const {
+    tags,
+    tagMeta,
+    setTags,
+    setTagPerPage,
+    tagPerPage,
+    tagSearchLoading,
+    setTagSearchLoading
+  } = useTag();
   const [searchParams, setSearchParams] = useSearchParams();
   const { fetchWithSessionHandling } = useFetch();
 
@@ -31,6 +40,7 @@ const TagView: React.FC = () => {
   }, []);
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    setTagSearchLoading(true);
     searchParams.delete('page');
     searchParams.append('page', (e.selected + 1).toString());
     searchParams.delete('perPage');
@@ -38,6 +48,7 @@ const TagView: React.FC = () => {
     searchParams.sort();
     setSearchParams(searchParams);
     const tags = await getTags(searchParams.toString(), fetchWithSessionHandling);
+    setTagSearchLoading(false);
     setTags(tags);
   };
 
@@ -50,7 +61,9 @@ const TagView: React.FC = () => {
       {uiLoading && <Loader />}
       <Form />
       <Filter />
-      {tags.length === 0 ? (
+      {(tagSearchLoading as boolean) ? (
+        <TableSkeleton />
+      ) : tags.length === 0 ? (
         <p>No se encontraron resultados</p>
       ) : (
         <>

@@ -15,12 +15,13 @@ import { useFetch } from '#/hooks/useFetch';
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchNombre, setSearchNombre] = useState('');
-  const { tagPerPage, setTagPerPage, setTags } = useTag();
+  const { tagPerPage, setTagPerPage, setTags, setTagSearchLoading } = useTag();
   const { fetchWithSessionHandling } = useFetch();
   const debouncedSearchNombre = useDebounce(searchNombre);
 
   const execFilter = async (): Promise<void> => {
     try {
+      setTagSearchLoading(true);
       searchParams.delete('searchNombre');
       searchParams.delete('perPage');
       searchParams.append('perPage', tagPerPage);
@@ -31,6 +32,7 @@ export const FilterContainer: React.FC = () => {
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getTags(searchParams.toString(), fetchWithSessionHandling);
+      setTagSearchLoading(false);
       if (response.status === 'error') {
         const responseError = response as TagPaginatedErrorResponse;
 
