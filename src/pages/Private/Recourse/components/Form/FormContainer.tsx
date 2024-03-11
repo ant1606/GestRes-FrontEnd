@@ -56,6 +56,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
   const { fetchWithSessionHandling } = useFetch();
   const [choicesTagData, setChoicesTagData] = useState<Array<{ value: number; label: string }>>([]);
+  const statusIsCulminado = useRef(false);
   // TODO Los valores diferentes al tipo de recurso salen como false en el formulario de show
   // recourseType usado en las funciones de validaciones del formulario
 
@@ -184,6 +185,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
     reset();
     if (recourseActive !== null) {
       setSelectedTags(recourseActive.tags?.map((tag: Tag) => tag.id));
+      statusIsCulminado.current = recourseActive.status.statusName === "CULMINADO";
     }
   }, [recourseActive]);
 
@@ -322,6 +324,7 @@ export const FormContainer: React.FC<Props> = ({ isShow = false }) => {
       recourseSelected={recourseActive}
       submitIsDisabled={disabledButton}
       choicesTagData={choicesTagData}
+      statusIsCulminado={statusIsCulminado.current}
     />
   );
 };

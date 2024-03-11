@@ -39,6 +39,7 @@ interface Props {
   recourseSelected: Recourse;
   submitIsDisabled: boolean;
   choicesTagData: Array<{ value: number; label: string }>
+  statusIsCulminado: boolean;
 }
 
 const FormView: React.FC<Props> = ({
@@ -63,7 +64,8 @@ const FormView: React.FC<Props> = ({
   setSelectedTags,
   recourseSelected,
   submitIsDisabled,
-  choicesTagData
+  choicesTagData,
+  statusIsCulminado
 }) => {
   const { settingsType } = useAppSelector((state: RootState) => state.settings);
   const navigate = useNavigate();
@@ -71,6 +73,7 @@ const FormView: React.FC<Props> = ({
   const handleClickCancel = (): void => {
     navigate('/app/recourse');
   };
+
 
   if (settingsType === undefined) return <>No se cargaron los datos iniciales</>;
   return (
@@ -109,7 +112,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleChangeType}
           value={typeId}
           errorCombo={recourseError?.typeId}
-          isDisabled={isShow}
+          isDisabled={isShow || statusIsCulminado}
         />
         <Combobox
           name="unitMeasureProgressId"
@@ -120,7 +123,7 @@ const FormView: React.FC<Props> = ({
           handleChange={handleChangeType}
           value={unitMeasureProgressId}
           errorCombo={recourseError?.unitMeasureProgressId}
-          isDisabled={isShow}
+          isDisabled={isShow || statusIsCulminado}
         />
 
         {/* </div>
@@ -136,7 +139,7 @@ const FormView: React.FC<Props> = ({
               handleChange={handleInputChange}
               value={totalPages}
               errorInput={recourseError.totalPages}
-              readonly={isShow}
+              readonly={isShow || statusIsCulminado}
             />
             <Field
               type="text"
@@ -146,7 +149,7 @@ const FormView: React.FC<Props> = ({
               handleChange={handleInputChange}
               value={totalChapters}
               errorInput={recourseError.totalChapters}
-              readonly={isShow}
+              readonly={isShow || statusIsCulminado}
             />
           </>
         ) : (
@@ -159,7 +162,7 @@ const FormView: React.FC<Props> = ({
               handleChange={handleInputChange}
               value={totalVideos}
               errorInput={recourseError.totalVideos}
-              readonly={isShow}
+              readonly={isShow || statusIsCulminado}
             />
             <TimeInput
               handleChange={handleInputChange}

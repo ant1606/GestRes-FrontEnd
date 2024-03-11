@@ -18,7 +18,6 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags, choicesDa
 
   useEffect(() => {
     const handleChange = (event: CustomEvent): void => {
-      console.log('Desde hanldeChange', event);
       setSelectValues((prevState) => {
         const existValue = prevState.find(
           (val) => val.toString() === event.detail.value.toString()
@@ -50,7 +49,6 @@ const SelectorTag: React.FC<Props> = ({ setSelectValues, selectedTags, choicesDa
       });
     }
 
-    console.log('Viendo el choiceData', choicesDataTmp);
     const choices = new Choices(selectRef.current, {
       allowHTML: false,
       placeholder: true,
