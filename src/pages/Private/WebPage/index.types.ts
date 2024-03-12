@@ -74,6 +74,7 @@ export interface InitialState {
   webPageLinks: PaginateResultLinks | null;
   webPagePerPage: number;
   validationError: Record<typeValidationError, string | null>;
+  webPageSearchLoading: boolean;
 }
 
 /** ADAPTERS */

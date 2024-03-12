@@ -18,7 +18,8 @@ const initialState: InitialState = {
     url: null,
     name: null,
     description: null
-  }
+  },
+  webPageSearchLoading: true
 };
 
 const WEB_PAGE_LOADED = 'loaded WebPages from API';
@@ -27,6 +28,7 @@ const ADD_VALIDATION_ERROR = 'add validation error';
 const RESET_VALIDATION_ERROR = 'reset validation error';
 const SELECT_WEB_PAGE_ACTIVE = 'select webPage active';
 const CLEAN_SELECT_WEB_PAGE = 'clean select webPage active';
+const SET_WEB_PAGE_SEARCH_LOADING = 'set status of webPage searching from api';
 
 const webPageReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
@@ -81,6 +83,12 @@ const webPageReducer: Reducer<InitialState, ActionReducer> = (
         ...state,
         webPageActive: null
       };
+    case SET_WEB_PAGE_SEARCH_LOADING:
+      payloadValue = action.payload as boolean;
+      return {
+        ...state,
+        webPageSearchLoading: payloadValue
+      };
   }
 
   throw new Error(`Action desconocida del tipo ${action.type}`);
@@ -128,18 +136,27 @@ export const WebPageProvider = ({ children }: WebPageProviderProps): JSX.Element
     });
   };
 
+  const setWebPageSearchLoading = (statusLoading: boolean): void => {
+    dispatch({
+      type: SET_WEB_PAGE_SEARCH_LOADING,
+      payload: statusLoading
+    });
+  };
+
   const webPageActions = {
     webPages: state.webPages,
     webPagePerPage: state.webPagePerPage,
     webPageMeta: state.webPageMeta,
     webPageError: state.validationError,
     webPageActive: state.webPageActive,
+    webPageSearchLoading: state.webPageSearchLoading,
     setWebPages,
     setWebPagePerPage,
     addValidationError,
     resetValidationError,
     selectedWebPage,
-    cleanSelectedWebPage
+    cleanSelectedWebPage,
+    setWebPageSearchLoading
   };
   return <WebPageContext.Provider value={webPageActions}>{children}</WebPageContext.Provider>;
 };
