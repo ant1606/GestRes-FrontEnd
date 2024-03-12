@@ -15,13 +15,14 @@ export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchNombre, setSearchNombre] = useState('');
   const [searchTags, setSearchTags] = useState([]);
-  const { webPagePerPage, setWebPagePerPage, setWebPages } = useWebPage();
+  const { webPagePerPage, setWebPagePerPage, setWebPages, setWebPageSearchLoading } = useWebPage();
 
   const { fetchWithSessionHandling } = useFetch();
   const debouncedSearchNombre = useDebounce(searchNombre);
 
   const execFilter = async (): Promise<void> => {
     try {
+      setWebPageSearchLoading(true);
       searchParams.delete('searchNombre');
       searchParams.delete('perPage');
       searchParams.delete('searchTags[]');
@@ -34,7 +35,7 @@ export const FilterContainer: React.FC = () => {
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getWebPages(searchParams.toString(), fetchWithSessionHandling);
-
+      setWebPageSearchLoading(false);
       if (response.status === 'error') {
         const responseError = response as WebPagePaginatedErrorResponse;
 

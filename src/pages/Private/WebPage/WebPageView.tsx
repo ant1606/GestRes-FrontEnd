@@ -16,6 +16,7 @@ import Table from './components/Table';
 import Loader from '#/components/Loader';
 import { type RootState } from '#/redux/store';
 import { useFetch } from '#/hooks/useFetch';
+import TableSkeleton from '#/components/Skeleton/TableSkeleton';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -23,7 +24,15 @@ interface ReactPaginaOnPageChangeArgument {
 
 const WebPageView: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
-  const { webPages, webPageMeta, setWebPages, webPagePerPage, setWebPagePerPage } = useWebPage();
+  const {
+    webPages,
+    webPageMeta,
+    setWebPages,
+    webPagePerPage,
+    setWebPagePerPage,
+    webPageSearchLoading,
+    setWebPageSearchLoading
+  } = useWebPage();
   const MySwal = withReactContent(Swal);
   const modalRef = useRef(MySwal);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,6 +73,7 @@ const WebPageView: React.FC = () => {
   };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    setWebPageSearchLoading(true);
     searchParams.delete('page');
     searchParams.append('page', (e.selected + 1).toString());
     searchParams.delete('perPage');
@@ -72,6 +82,7 @@ const WebPageView: React.FC = () => {
     setSearchParams(searchParams);
 
     const webPages = await getWebPages(searchParams.toString(), fetchWithSessionHandling);
+    setWebPageSearchLoading(false);
     setWebPages(webPages);
   };
 
@@ -84,7 +95,9 @@ const WebPageView: React.FC = () => {
       {uiLoading && <Loader />}
       <Button btnType="main" text="Registrar" type="button" onClick={handleClick} />
       <Filter />
-      {webPages.length === 0 ? (
+      {(webPageSearchLoading as boolean) ? (
+        <TableSkeleton />
+      ) : webPages.length === 0 ? (
         <p>No se encontraron resultados</p>
       ) : (
         <>
