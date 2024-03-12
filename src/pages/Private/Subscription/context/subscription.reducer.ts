@@ -10,7 +10,8 @@ import {
   SELECT_YOUTUBE_SUBSCRIPTION_ACTIVE,
   ADD_VALIDATION_ERROR,
   RESET_VALIDATION_ERROR,
-  CLEAN_SELECT_YOUTUBE_SUBSCRIPTION
+  CLEAN_SELECT_YOUTUBE_SUBSCRIPTION,
+  SET_YOUTUBE_SUBSCRIPTION_SEARCH_LOADING
 } from './types';
 
 export const youtubeSubscriptionReducer: Reducer<InitialState, ActionReducer> = (
@@ -63,6 +64,12 @@ export const youtubeSubscriptionReducer: Reducer<InitialState, ActionReducer> = 
       return {
         ...state,
         youtubeSubscriptionActive: null
+      };
+    case SET_YOUTUBE_SUBSCRIPTION_SEARCH_LOADING:
+      payloadValue = action.payload as boolean;
+      return {
+        ...state,
+        youtubeSubscriptionSearchLoading: payloadValue
       };
   }
   throw new Error(`Action desconocida del tipo ${action.type}`);

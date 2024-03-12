@@ -11,6 +11,7 @@ import {
   RESET_VALIDATION_ERROR,
   SELECT_YOUTUBE_SUBSCRIPTION_ACTIVE,
   SET_YOUTUBE_SUBSCRIPTIONS_PER_PAGE,
+  SET_YOUTUBE_SUBSCRIPTION_SEARCH_LOADING,
   YOUTUBE_SUBSCRIPTION_LOADED
 } from './types';
 
@@ -66,18 +67,27 @@ export const SubscriptionYoutubeProvider = ({
     });
   };
 
+  const setYoutubeSubscriptionSearchLoading = (statusLoading: boolean): void => {
+    dispatch({
+      type: SET_YOUTUBE_SUBSCRIPTION_SEARCH_LOADING,
+      payload: statusLoading
+    });
+  };
+
   const youtubeSubscriptionActions = {
     youtubeSubscriptions: state.youtubeSubscriptions,
     youtubeSubscriptionMeta: state.youtubeSubscriptionMeta,
     youtubeSubscriptionError: state.validationError,
     youtubeSubscriptionPerPage: state.youtubeSubscriptionPerPage,
     youtubeSubscriptionActive: state.youtubeSubscriptionActive,
+    youtubeSubscriptionSearchLoading: state.youtubeSubscriptionSearchLoading,
     setYoutubeSubscriptionPerPage,
     selectedYoutubeSubscription,
     addValidationError,
     setYoutubeSubscriptions,
     resetValidationError,
-    cleanSelectedYoutubeSubscription
+    cleanSelectedYoutubeSubscription,
+    setYoutubeSubscriptionSearchLoading
   };
 
   return (

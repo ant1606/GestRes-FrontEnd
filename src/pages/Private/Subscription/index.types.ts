@@ -25,6 +25,7 @@ export interface InitialState {
   youtubeSubscriptionLinks: PaginateResultLinks | null;
   youtubeSubscriptionPerPage: number;
   validationError: Record<typeValidationError, string | null>;
+  youtubeSubscriptionSearchLoading: boolean;
 }
 
 export const initialState: InitialState = {
@@ -35,7 +36,8 @@ export const initialState: InitialState = {
   youtubeSubscriptionPerPage: 0,
   validationError: {
     message: null
-  }
+  },
+  youtubeSubscriptionSearchLoading: true
 };
 
 /** ADAPTERS **/
