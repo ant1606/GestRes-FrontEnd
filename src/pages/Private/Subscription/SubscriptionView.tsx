@@ -17,6 +17,7 @@ import { oauthSignIn } from './utils/helpers';
 import { type YoutubeSubscriptionsPaginatedSuccessResponse } from './index.types';
 import { useFetch } from '#/hooks/useFetch';
 import Dropdown from './components/Dropdown/Dropdown';
+import TableSkeleton from '#/components/Skeleton/TableSkeleton';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -30,7 +31,9 @@ const SubscriptionView: React.FC = () => {
     youtubeSubscriptionMeta,
     setYoutubeSubscriptions,
     youtubeSubscriptionPerPage,
-    setYoutubeSubscriptionPerPage
+    setYoutubeSubscriptionPerPage,
+    youtubeSubscriptionSearchLoading,
+    setYoutubeSubscriptionSearchLoading
   } = useYoutubeSubscription();
   const [searchParams, setSearchParams] = useSearchParams();
   const { comeFromOAuthCallback, isOAuthAccess } = useAppSelector(
@@ -99,6 +102,7 @@ const SubscriptionView: React.FC = () => {
   // };
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    setYoutubeSubscriptionSearchLoading(true);
     searchParams.delete('page');
     searchParams.append('page', (e.selected + 1).toString());
     searchParams.delete('perPage');
@@ -109,6 +113,7 @@ const SubscriptionView: React.FC = () => {
       searchParams.toString(),
       fetchWithSessionHandling
     )) as YoutubeSubscriptionsPaginatedSuccessResponse;
+    setYoutubeSubscriptionSearchLoading(false);
     setYoutubeSubscriptions(responseYoutubeSubscriptions);
   };
 
@@ -121,40 +126,11 @@ const SubscriptionView: React.FC = () => {
       {uiLoading && <Loader />}
       <div className="flex justify-between gap-10">
         <Dropdown options={dropDownOptions} />
-
-        {/* <Button
-          text="Importar de Google - Alfabético"
-          onClick={() => {
-            dispatch(userSelectOrderSortApiYoutube('alphabetical'));
-            oauthSignIn();
-          }}
-          btnType="default"
-          type="button"
-          classButton="text-lg px-2"
-        />
-        <Button
-          text="Importar de Google - Relevante"
-          onClick={() => {
-            dispatch(userSelectOrderSortApiYoutube('relevance'));
-            oauthSignIn();
-          }}
-          btnType="main"
-          type="button"
-          classButton="text-lg px-2"
-        />
-        <Button
-          text="Importar de Google - Actividad"
-          onClick={() => {
-            dispatch(userSelectOrderSortApiYoutube('unread'));
-            oauthSignIn();
-          }}
-          btnType="warning"
-          type="button"
-          classButton="text-lg px-2 text-gray-900"
-        /> */}
       </div>
       <Filter />
-      {youtubeSubscriptions.length === 0 ? (
+      {(youtubeSubscriptionSearchLoading as boolean) ? (
+        <TableSkeleton />
+      ) : youtubeSubscriptions.length === 0 ? (
         <p>No se encontraron resultados</p>
       ) : (
         <>

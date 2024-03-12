@@ -10,8 +10,12 @@ import { useFetch } from '#/hooks/useFetch';
 
 export const FilterContainer: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { youtubeSubscriptionPerPage, setYoutubeSubscriptionPerPage, setYoutubeSubscriptions } =
-    useYoutubeSubscription();
+  const {
+    youtubeSubscriptionPerPage,
+    setYoutubeSubscriptionPerPage,
+    setYoutubeSubscriptions,
+    setYoutubeSubscriptionSearchLoading
+  } = useYoutubeSubscription();
   const [searchTitle, setSearchTitle] = useState('');
   const [searchTags, setSearchTags] = useState([]);
 
@@ -30,6 +34,7 @@ export const FilterContainer: React.FC = () => {
 
   const execFilter = async (): Promise<void> => {
     try {
+      setYoutubeSubscriptionSearchLoading(true);
       searchParams.delete('searchTitle');
       searchParams.delete('searchTags[]');
       searchParams.delete('perPage');
@@ -42,7 +47,7 @@ export const FilterContainer: React.FC = () => {
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getSubscriptions(searchParams.toString(), fetchWithSessionHandling);
-
+      setYoutubeSubscriptionSearchLoading(false);
       if (response.status === 'error') {
         const responseError = response as YoutubeSubscriptionsPaginatedErrorResponse;
 
