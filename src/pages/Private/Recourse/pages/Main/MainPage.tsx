@@ -12,6 +12,7 @@ import FooterTable from '#/components/FooterTable';
 import Filter from '../../components/Filter';
 import { changeTitle } from '#/redux/slice/uiSlice';
 import { useFetch } from '#/hooks/useFetch';
+import TableSkeleton from '#/components/Skeleton/TableSkeleton';
 
 interface ReactPaginaOnPageChangeArgument {
   selected: number;
@@ -19,8 +20,15 @@ interface ReactPaginaOnPageChangeArgument {
 
 export const MainPage: React.FC = () => {
   const uiLoading = useAppSelector((state: RootState) => state.ui.loadingState);
-  const { recourses, setRecourses, setRecoursePerPage, recourseMeta, recoursePerPage } =
-    useRecourse();
+  const {
+    recourses,
+    setRecourses,
+    setRecoursePerPage,
+    recourseMeta,
+    recoursePerPage,
+    recourseSearchLoading,
+    setRecourseSearchLoading
+  } = useRecourse();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const { fetchWithSessionHandling } = useFetch();
@@ -31,6 +39,7 @@ export const MainPage: React.FC = () => {
   }, []);
 
   const handlePageChange = async (e: ReactPaginaOnPageChangeArgument): Promise<void> => {
+    setRecourseSearchLoading(true);
     searchParams.delete('page');
     searchParams.append('page', (e.selected + 1).toString());
     searchParams.delete('perPage');
@@ -38,6 +47,7 @@ export const MainPage: React.FC = () => {
     searchParams.sort();
     setSearchParams(searchParams);
     const recourses = await getRecourses(searchParams.toString(), fetchWithSessionHandling);
+    setRecourseSearchLoading(false);
     setRecourses(recourses);
   };
 
@@ -59,7 +69,9 @@ export const MainPage: React.FC = () => {
 
       <Filter />
 
-      {recourses?.length === 0 ? (
+      {(recourseSearchLoading as boolean) ? (
+        <TableSkeleton />
+      ) : recourses?.length === 0 ? (
         // TODO Crear un componente que indique que no se encontraron resultados
         <p>No se encontraron resultados</p>
       ) : (

@@ -23,7 +23,8 @@ export const FilterContainer: React.FC = () => {
   const [searchEstado, setSearchEstado] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTags, setSearchTags] = useState<number[]>([]);
-  const { setRecourses, recoursePerPage, setRecoursePerPage } = useRecourse();
+  const { setRecourses, recoursePerPage, setRecoursePerPage, setRecourseSearchLoading } =
+    useRecourse();
 
   const debouncedSearchNombre = useDebounce(searchNombre);
   const debouncedSearchTags = useDebounce(searchTags);
@@ -49,6 +50,7 @@ export const FilterContainer: React.FC = () => {
 
   const execFilter = async (): Promise<void> => {
     try {
+      setRecourseSearchLoading(true);
       // TODO cambiar el filtro de tipo y estado  para evitar enviar en las queryString el ID de los valores
       searchParams.delete('searchNombre');
       searchParams.delete('searchTipo');
@@ -67,7 +69,7 @@ export const FilterContainer: React.FC = () => {
       searchParams.sort();
       setSearchParams(searchParams);
       const response = await getRecourses(searchParams.toString(), fetchWithSessionHandling);
-
+      setRecourseSearchLoading(false);
       if (response.status === 'error') {
         const responseError = response as RecoursePaginatedErrorResponse;
         // Mensaje de error general por parte del backend
