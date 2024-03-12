@@ -40,6 +40,7 @@ interface InitialState {
   recourseLinks: PaginateResultLinks | null;
   recoursePerPage: number;
   validationError: Record<typeValidationError, string | null>;
+  recourseSearchLoading: boolean;
 }
 
 const initialState: InitialState = {
@@ -59,7 +60,8 @@ const initialState: InitialState = {
     totalChapters: null,
     totalVideos: null,
     totalHours: null
-  }
+  },
+  recourseSearchLoading: true
 };
 
 const RECOURSE_LOADED = 'loaded Recourses from API';
@@ -70,6 +72,7 @@ const SELECT_RECOURSE_ACTIVE = 'select recourse active';
 const CLEAN_SELECT_RECOURSE = 'clean select recourse active';
 const GET_STATUS_PER_RECOURSE = 'get statuses from api per recourse active';
 const GET_PROGRESS_PER_RECOURSE = 'get progresses from api per recourse active';
+const SET_RECOURSE_SEARCH_LOADING = 'set status of recourse searching from api';
 
 const recourseReducer: Reducer<InitialState, ActionReducer> = (
   state: InitialState,
@@ -155,6 +158,12 @@ const recourseReducer: Reducer<InitialState, ActionReducer> = (
           progress: [...payloadValue.data] as Progress[]
         }
       };
+    case SET_RECOURSE_SEARCH_LOADING:
+      payloadValue = action.payload as boolean;
+      return {
+        ...state,
+        recourseSearchLoading: payloadValue
+      };
   }
 
   throw new Error(`Action desconocida del tipo ${action.type}`);
@@ -216,12 +225,20 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
     });
   };
 
+  const setRecourseSearchLoading = (statusLoading: boolean): void => {
+    dispatch({
+      type: SET_RECOURSE_SEARCH_LOADING,
+      payload: statusLoading
+    });
+  };
+
   const recourseActions = {
     recourses: state.recourses,
     recoursePerPage: state.recoursePerPage,
     recourseMeta: state.recourseMeta,
     recourseError: state.validationError,
     recourseActive: state.recourseActive,
+    recourseSearchLoading: state.recourseSearchLoading,
     setRecourses,
     setRecoursePerPage,
     addValidationError,
@@ -229,7 +246,8 @@ export const RecourseProvider = ({ children }: RecourseProviderProps): JSX.Eleme
     selectedRecourse,
     cleanSelectedRecourse,
     setStatusesPerRecourse,
-    setProgressesPerRecourse
+    setProgressesPerRecourse,
+    setRecourseSearchLoading
   };
   return <RecourseContext.Provider value={recourseActions}>{children}</RecourseContext.Provider>;
 };
