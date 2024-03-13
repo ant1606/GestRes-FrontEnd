@@ -11,10 +11,13 @@ import { useFetch } from '#/hooks/useFetch';
 export const PanelCountStatusContainer: React.FC = () => {
   const [summaryStatus, setSummaryStatus] = useState<AmountByStateData[]>([]);
   const { fetchWithSessionHandling } = useFetch();
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
+      setIsLoadingSearch(true);
       const response = await getAmountsByState(fetchWithSessionHandling);
+      setIsLoadingSearch(false);
       if (response.status === 'error') {
         const responseError = response as AmountByStateErrorResponse;
         // Mensaje de error general por parte del backend
@@ -30,5 +33,5 @@ export const PanelCountStatusContainer: React.FC = () => {
     getData();
   }, []);
 
-  return <PanelCountStatusView summaryStatus={summaryStatus} />;
+  return <PanelCountStatusView summaryStatus={summaryStatus} isLoadingSearch={isLoadingSearch} />;
 };
