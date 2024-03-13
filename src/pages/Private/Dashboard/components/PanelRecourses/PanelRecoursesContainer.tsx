@@ -11,6 +11,7 @@ import { useFetch } from '#/hooks/useFetch';
 export const PanelRecoursesContainer: React.FC = () => {
   const [isPorEmpezar, setIsPorEmpezar] = useState<boolean>(true);
   const [listRecourses, setListRecourses] = useState<Top5Recourse[]>([]);
+  const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const { fetchWithSessionHandling } = useFetch();
 
   const handleCheckChange = (): void => {
@@ -19,7 +20,9 @@ export const PanelRecoursesContainer: React.FC = () => {
 
   useEffect(() => {
     const getData = async (): Promise<void> => {
+      setIsLoadingSearch(true);
       const response = await getTop5Recourses(isPorEmpezar, fetchWithSessionHandling);
+      setIsLoadingSearch(false);
       if (response.status === 'error') {
         const responseError = response as Top5RecoursesErrorResponse;
         // Mensaje de error general por parte del backend
@@ -35,5 +38,11 @@ export const PanelRecoursesContainer: React.FC = () => {
     getData();
   }, [isPorEmpezar]);
 
-  return <PanelRecoursesView handleChange={handleCheckChange} listRecourses={listRecourses} />;
+  return (
+    <PanelRecoursesView
+      handleChange={handleCheckChange}
+      listRecourses={listRecourses}
+      isLoadingSearch={isLoadingSearch}
+    />
+  );
 };

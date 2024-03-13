@@ -4,13 +4,16 @@ import { FaEye } from 'react-icons/fa6';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { type Top5Recourse } from './index.type';
 import { NavLink } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 interface Prop {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   listRecourses: Top5Recourse[];
+  isLoadingSearch: boolean;
 }
 
-const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => {
+const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses, isLoadingSearch }) => {
   // TODO Parece que para poder vincular el boton del recurso con la pagina, tendré que cambiar la lógica en la pagina show de recourse
   // Ya que yo cargo los datos mostrados en la tabla y paso la informacion del recurso al formulario por medio del state y context
 
@@ -30,7 +33,9 @@ const PanelRecoursesView: React.FC<Prop> = ({ handleChange, listRecourses }) => 
       </div>
       <div className="">
         <ol className="py-4 px-4">
-          {listRecourses.length === 0 ? (
+          {isLoadingSearch ? (
+            <Skeleton count={5} height="2.25rem" className="mb-2" />
+          ) : listRecourses.length === 0 ? (
             // TODO Dar estilos a este componente
             <p>No se encontraron resultados</p>
           ) : (
