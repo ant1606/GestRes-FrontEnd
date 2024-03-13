@@ -69,7 +69,8 @@ export const toastNotifications = () => {
       title: message,
       showConfirmButton: false,
       timer: 3000,
-      toast: true
+      toast: true,
+      timerProgressBar: true
     });
   };
 

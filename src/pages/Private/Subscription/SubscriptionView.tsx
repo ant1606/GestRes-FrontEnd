@@ -73,8 +73,8 @@ const SubscriptionView: React.FC = () => {
     const initSubscription = async (): Promise<void> => {
       if (comeFromOAuthCallback as boolean) {
         if (isOAuthAccess as boolean) {
-          // TODO MOstrar un mensaje o toast de que se estan importando los canales mientras el resultado de la funcion sea "procesando"
           // pollProcessStatus();
+          toastNotifications().toastSuccesCustomize('Estamos procesando tus canales suscritos...');
         } else {
           toastNotifications().toastErrorCustomize(
             'Operación Cancelada: Autorización denegada por el usuario'
