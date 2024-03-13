@@ -1,3 +1,4 @@
+import Loader from '#/components/Loader';
 import { useAppSelector } from '#/hooks/redux';
 import { useCheckAuthenticationUser } from '#/hooks/useCheckAuthenticationUser';
 import { authenticatedUser } from '#/redux/slice/authenticationSlice';
@@ -19,7 +20,7 @@ const AuthGuard: React.FC = () => {
   }, [initProccessGuard, userLoggin]);
 
   if (userLoggin.isLoaded) {
-    return <p>Cargando...</p>;
+    return <Loader />;
   } else {
     if (userLoggin.isLogged === true) {
       return <Outlet />;
@@ -27,12 +28,6 @@ const AuthGuard: React.FC = () => {
       return <Navigate replace to="/login" />;
     }
   }
-
-  // if (userLoggin.isLoaded) {
-  //   return <p>Cargando...</p>;
-  // }
-
-  // return userLoggin.isLogged === true ? <Outlet /> : <Navigate replace to="/login" />;
 };
 
 export default AuthGuard;
