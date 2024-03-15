@@ -1,11 +1,14 @@
 import Loader from '#/components/Loader';
 import { useAppDispatch, useAppSelector } from '#/hooks/redux';
-import { changeTitle } from '#/redux/slice/uiSlice';
+import { changeTitle, isLoading } from '#/redux/slice/uiSlice';
 import { type RootState } from '#/redux/store';
 import React, { useEffect } from 'react';
-import Button from '#/components/Button';
-import { resetOAuthGoogle, userSelectOrderSortApiYoutube } from '#/redux/slice/authenticationSlice';
-import { getSubscriptions } from '#/services/subscriptions.services';
+import {
+  type SortApiYoutube,
+  resetOAuthGoogle,
+  userSelectOrderSortApiYoutube
+} from '#/redux/slice/authenticationSlice';
+import { getLimitQuotaAPIYoutube, getSubscriptions } from '#/services/subscriptions.services';
 import { useYoutubeSubscription } from './context/subscription.context';
 import { useSearchParams } from 'react-router-dom';
 import Table from './components/Table';
@@ -14,7 +17,10 @@ import perPageItemsValue from '#/config/perPageItemsValue';
 import Filter from './components/Filter';
 import { toastNotifications } from '#/utilities/notificationsSwal';
 import { oauthSignIn } from './utils/helpers';
-import { type YoutubeSubscriptionsPaginatedSuccessResponse } from './index.types';
+import {
+  type YoutubeSubscriptionErrorResponse,
+  type YoutubeSubscriptionsPaginatedSuccessResponse
+} from './index.types';
 import { useFetch } from '#/hooks/useFetch';
 import Dropdown from './components/Dropdown/Dropdown';
 import TableSkeleton from '#/components/Skeleton/TableSkeleton';
@@ -43,26 +49,45 @@ const SubscriptionView: React.FC = () => {
   const dropDownOptions = [
     {
       name: 'Alfabético',
-      action: (option) => {
-        dispatch(userSelectOrderSortApiYoutube('alphabetical'));
-        oauthSignIn();
+      action: () => {
+        handleClickImportSubscription('alphabetical');
       }
     },
     {
       name: 'Relevante',
-      action: (option) => {
-        dispatch(userSelectOrderSortApiYoutube('relevance'));
-        oauthSignIn();
+      action: () => {
+        handleClickImportSubscription('relevance');
       }
     },
     {
       name: 'Actividad',
-      action: (option) => {
-        dispatch(userSelectOrderSortApiYoutube('unread'));
-        oauthSignIn();
+      action: () => {
+        handleClickImportSubscription('unread');
       }
     }
   ];
+
+  const handleClickImportSubscription = async (order: SortApiYoutube): Promise<void> => {
+    try {
+      dispatch(isLoading(true));
+      const response = await getLimitQuotaAPIYoutube(fetchWithSessionHandling);
+
+      if (response.status === 'error') {
+        const responseError = response as YoutubeSubscriptionErrorResponse;
+        // Mensaje de error general por parte del backend
+        if (responseError.message !== '') {
+          throw new Error(responseError.message);
+        }
+      } else {
+        dispatch(userSelectOrderSortApiYoutube(order));
+        oauthSignIn();
+      }
+    } catch (error: any) {
+      toastNotifications().notificationError(error.message);
+    } finally {
+      dispatch(isLoading(false));
+    }
+  };
 
   useEffect(() => {
     setYoutubeSubscriptionPerPage(perPageItemsValue[0].id);

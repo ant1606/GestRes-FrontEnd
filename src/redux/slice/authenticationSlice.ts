@@ -5,7 +5,7 @@ import { type RootState } from '../store';
 
 // TODO Extraer propiedades de Autorización de Google a otro context
 // isOAuthAccess y comeFromOAuthCallback
-type SortApiYoutube = 'alphabetical' | 'relevance' | 'unread';
+export type SortApiYoutube = 'alphabetical' | 'relevance' | 'unread';
 interface AuthenticationState {
   id: number;
   name: string;

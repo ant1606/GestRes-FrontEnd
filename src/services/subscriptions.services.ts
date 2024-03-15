@@ -69,7 +69,17 @@ export const destroySubscription = async (
 export const getStatusProcess = async (
   fetchCallback: FetchWithSessionHandlingType
 ): Promise<string | YoutubeSubscriptionErrorResponse> => {
-  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription`;
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/checkStatus`;
+  const response = await fetchCallback(url, 'GET');
+  return response.status === 'success'
+    ? response
+    : youtubeSubscriptionErrorResponseAdapter(response);
+};
+
+export const getLimitQuotaAPIYoutube = async (
+  fetchCallback: FetchWithSessionHandlingType
+): Promise<YoutubeSubscriptionSuccessResponse | YoutubeSubscriptionErrorResponse> => {
+  const url = `${import.meta.env.VITE_BACKEND_ENDPOINT}/v1/youtube-subscription/checkQuota`;
   const response = await fetchCallback(url, 'GET');
   return response.status === 'success'
     ? response
