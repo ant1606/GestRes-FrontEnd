@@ -1,8 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
+export interface DropDownOption {
+  name: string;
+  action: () => void;
+}
 
-const Dropdown: React.FC = ({ options }) => {
+interface Props {
+  options: DropDownOption[];
+}
+const Dropdown: React.FC<Props> = ({ options }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const toggleDropdown = (): void => {
     setIsOpen(!isOpen);
@@ -10,11 +17,10 @@ const Dropdown: React.FC = ({ options }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: any): void => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (dropdownRef.current != null && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
@@ -55,7 +61,7 @@ const Dropdown: React.FC = ({ options }) => {
               <button
                 key={index}
                 onClick={() => {
-                  option.action(option);
+                  option.action();
                   setIsOpen(false);
                 }}
                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

@@ -22,7 +22,7 @@ import {
   type YoutubeSubscriptionsPaginatedSuccessResponse
 } from './index.types';
 import { useFetch } from '#/hooks/useFetch';
-import Dropdown from './components/Dropdown/Dropdown';
+import Dropdown, { type DropDownOption } from './components/Dropdown/Dropdown';
 import TableSkeleton from '#/components/Skeleton/TableSkeleton';
 
 interface ReactPaginaOnPageChangeArgument {
@@ -46,7 +46,7 @@ const SubscriptionView: React.FC = () => {
     (state: RootState) => state.authentication
   );
   const { fetchWithSessionHandling } = useFetch();
-  const dropDownOptions = [
+  const dropDownOptions: DropDownOption[] = [
     {
       name: 'Alfabético',
       action: () => {
